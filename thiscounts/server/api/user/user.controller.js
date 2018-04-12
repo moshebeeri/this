@@ -233,7 +233,9 @@ exports.create = function (req, res, next) {
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
-  newUser.phone_number = utils.clean_phone_number(newUser.phone_number);
+  newUser.phone_number = countryCode.validateNormalize(newUser.phone_number, newUser.country_code);
+  if(!newUser.phone_number)
+    return res.status(500).json(`validateNormalize number is null ${newUser.country_code}-${newUser.phone_number} `);
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
@@ -296,52 +298,63 @@ exports.create = function (req, res, next) {
  * class  ContactsContract.CommonDataKinds.Nickname
  * class  ContactsContract.CommonDataKinds.Phone
  */
+const countryCode = require('../../components/counrtycode');
+
 exports.phonebook = function (req, res) {
   const phonebook = req.body;
   const userId = req.user._id;
-
-  mongoose.connection.db.collection('phonebooks', function (err, collection) {
+  User.findById(userId).exec((err, user) =>{
     if (err) return handleError(res, err);
-    collection.save({
-      _id: userId,
-      phonebook: phonebook.phonebook
-    }, function (err) {
+    if(!user) return res.status(404).send(`user not found`);
+
+    mongoose.connection.db.collection('phonebooks', function (err, collection) {
       if (err) return handleError(res, err);
-      //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
-      //For each phone number store the users that has it in their phonebook
-      mongoose.connection.db.collection('phonenumbers', function (err, collection) {
-        if (err) return logger.error(err.message);
-        phonebook.phonebook.forEach(contact => {
-          if (utils.defined(contact.normalized_number) && utils.defined(contact.name)) {
-            collection.findAndModify(
-              {_id: utils.clean_phone_number(contact.normalized_number)},
-              [['_id', 'asc']],
-              {
-                $addToSet: {
-                  contacts: {
-                    userId: `${userId}`,
-                    nick: contact.name
+      collection.save({
+        _id: userId,
+        phonebook: phonebook.phonebook
+      }, function (err) {
+        if (err) return handleError(res, err);
+        //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
+        //For each phone number store the users that has it in their phonebook
+        mongoose.connection.db.collection('phonenumbers', function (err, collection) {
+          if (err) return logger.error(err.message);
+          phonebook.phonebook.forEach(contact => {
+            if (utils.defined(contact.normalized_number) && utils.defined(contact.name)) {
+
+              const valid_phone_number = countryCode.validateNormalize(contact.normalized_number, user.country_code);
+              if(valid_phone_number === null)
+                return;
+
+              collection.findAndModify(
+                {_id: valid_phone_number},
+                [['_id', 'asc']],
+                {
+                  $addToSet: {
+                    contacts: {
+                      userId: `${userId}`,
+                      nick: contact.name
+                    }
                   }
-                }
-              },
-              {upsert: true, new: true},
-              function (err, object) {
-                if (err) {
-                  console.error(err.message);
-                } else {
-                  let phone_number = object.value;
-                  if (utils.defined(phone_number.owner)) {
-                    console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
-                    graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
-                      if (err) return logger.error(err.message);
-                      graphModel.owner_followers_follow_business(userId, phone_number.owner);
-                    });
+                },
+                {upsert: true, new: true},
+                function (err, object) {
+                  if (err) {
+                    console.error(err.message);
+                  } else {
+                    let phone_number = object.value;
+                    if (utils.defined(phone_number.owner)) {
+                      console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
+                      graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
+                        if (err) return logger.error(err.message);
+                        graphModel.owner_followers_follow_business(userId, phone_number.owner);
+                      });
+                    }
                   }
-                }
-              });
-          }
+                });
+            }
+          });
+          return res.status(200).send('phonebook received');
         });
-        return res.status(200).send('phonebook received');
       });
     });
   });

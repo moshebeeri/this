@@ -7,6 +7,53 @@ let graphModel = graphTools.createGraphModel('test');
 let activity = require('../../components/activity').createActivity();
 let logger = require('../../components/logger').createLogger();
 const utils = require('../../components/utils').createUtils();
+const countryCode = require('../../components/counrtycode');
+
+const p2 = [
+  { normalized_number: '001 888 552 0893',
+    number: '001 888 552 0893',
+    name: 'mexico' },
+  { normalized_number: '+001-800-633 2152',
+    number: '+001-800-633 2152',
+    name: 'some usa number' },
+  { normalized_number: '1-800-MY-APPLE',
+    number: '1-800-MY-APPLE',
+    name: 'Apple Inc. null' },
+  { normalized_number: '1 408 974 4897',
+    number: '1 408 974 4897',
+    name: 'some usa number' },
+  { normalized_number: '1414*',
+    number: '1414*',
+    name: 'Car - Zehava' },
+  { normalized_number: '*3242',
+    number: '*3242',
+    name: 'Taxi - Castele' },
+  { normalized_number: '3621',
+    number: '3621',
+    name: 'Poalim Yashir' },
+  { normalized_number: '0', number: '0', name: 'Aaa null' },
+  { normalized_number: '2369', number: '2369', name: 'Door null' },
+  { normalized_number: '1 836 *',
+    number: '1 836 *',
+     name: 'Car Caspion' }
+];
+
+// Get list of tests
+exports.test = function(req, res) {
+  let country_code = '972';
+  let changed = '';
+  p2.forEach(p => {
+    changed = countryCode.validateNormalize(p.normalized_number, country_code);
+    if(changed !== null) {
+      console.log(changed);
+      if(changed.length < 11 ) {
+        console.log(p);
+        console.log(changed);
+      }
+    }
+  });
+  return res.status(200).send();//.json(phonebook);
+};
 
 // Get list of tests
 exports.index = function(req, res) {
@@ -38,13 +85,13 @@ function test_activity(test, action) {
     test: test._id,
     action: action
   };
-  if (test.entity_type == 'USER')
+  if (test.entity_type === 'USER')
     act.actor_user = test.creator;
-  else if (test.entity_type == 'CHAIN')
+  else if (test.entity_type === 'CHAIN')
     act.actor_chain = test.creator;
-  else if (test.entity_type == 'BUSINESS')
+  else if (test.entity_type === 'BUSINESS')
     act.actor_business = test.creator;
-  else if (test.entity_type == 'MALL')
+  else if (test.entity_type === 'MALL')
     act.actor_mall = test.creator;
   user_activity(act);
 }
