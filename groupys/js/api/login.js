@@ -4,10 +4,11 @@ import PhoneUtils from '../utils/phoneUtils'
 import serverRequestHandler from './serverRequestHandler';
 
 class LoginApi {
-    async login(phoneNumber, password) {
-        let normalizePhoneNumber = PhoneUtils.clean_phone_number(phoneNumber);
-        let callingCode = await CallingCallUtils.getCallingCode();
-        let email = callingCode + normalizePhoneNumber + "@low.la";
+    async login(phone, password,callingCode) {
+        let phoneNumber =  callingCode + phone;
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, callingCode );
+        let normalizePhoneNumber = PhoneUtils.clean_phone_number(normalizedPhone);
+        let email = PhoneUtils.clean_phone_number(callingCode) + normalizePhoneNumber + "@low.la";
         return serverRequestHandler.fetch_handler(`${server_host}/auth/local`, {
             method: 'POST',
             headers: {
@@ -26,11 +27,11 @@ class LoginApi {
         return newPhone;
     }
 
-    async signup(phone, password, firstName, lastName) {
-        let callingCode = await CallingCallUtils.getCallingCode();
-        let phoneNumber = '+' + callingCode + phone;
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, '+' + callingCode);
-        let cleanPhone = PhoneUtils.clean_phone_number(normalizedPhone);
+    async signup(phone, password, firstName, lastName,callingCode) {
+        let phoneNumber =  callingCode + phone;
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, callingCode );
+        let normalizePhoneNumber = PhoneUtils.clean_phone_number(normalizedPhone);
+        let email = PhoneUtils.clean_phone_number(callingCode) + normalizePhoneNumber + "@low.la";
         return serverRequestHandler.fetch_handler(`${server_host}/api/users`, {
                 method: 'POST',
                 headers: {
@@ -38,10 +39,10 @@ class LoginApi {
                     'Content-Type': 'application/json;charset=utf-8',
                 },
                 body: JSON.stringify({
-                    country_code: '+' + callingCode,
+                    country_code: callingCode,
                     name: firstName + ' ' + lastName,
-                    phone_number: cleanPhone,
-                    email: callingCode + cleanPhone + "@low.la",
+                    phone_number: phone,
+                    email: email,
                     password: password
                 })
             }

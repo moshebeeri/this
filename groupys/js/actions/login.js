@@ -19,14 +19,14 @@ const resetAction = NavigationActions.reset({
     ]
 });
 
-export function login(phone, password, navigation) {
+export function login(phone, password, navigation,callingCode) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.LOGIN_PROCESS,
                 value: true
             });
-            let response = await loginApi.login(phone, password);
+            let response = await loginApi.login(phone, password,callingCode);
             if (response.token) {
                 await store.save("token", response.token)
                 dispatch({
@@ -80,14 +80,14 @@ export function login(phone, password, navigation) {
     }
 }
 
-export function signup(phone, password, firstName, lastName, navigation) {
+export function signup(phone, password, firstName, lastName, navigation,callingCode) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: true
             });
-            let response = await loginApi.signup(phone, password, firstName, lastName);
+            let response = await loginApi.signup(phone, password, firstName, lastName,callingCode);
             await store.save("token", response.token)
             dispatch({
                 type: actions.SAVE_USER_TOKEN,

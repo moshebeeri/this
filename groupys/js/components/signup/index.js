@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {TermsOfUse, ThisText} from "../../ui/index"
 import navigationUtils from '../../utils/navigationUtils'
+import CallingCodeUtils from '../../utils/LocalToCallingCode'
 
 const {width, height} = Dimensions.get('window')
 const thisLogo = require('../../../images/this-logo.png');
@@ -45,13 +46,17 @@ class Signup extends Component {
             verifyPassword: '',
             badPassword: false,
             showPopup: true,
+            callingCode: ''
         };
     }
 
     replaceRoute(route) {
         navigationUtils.doNavigation(this.props.navigation, route);
     }
-
+    async componentWillMount(){
+        let callingCode = await CallingCodeUtils.getCallingCode();
+        this.setState({callingCode: '+' + callingCode})
+    }
     signup() {
         if (this.state.password && this.state.phoneNumber) {
             if (this.state.password === this.state.verifyPassword) {
@@ -59,7 +64,7 @@ class Signup extends Component {
                     badPassword: false
                 })
                 Keyboard.dismiss();
-                this.props.actions.signup(this.state.phoneNumber, this.state.password, this.state.name, this.state.lastname, this.props.navigation)
+                this.props.actions.signup(this.state.phoneNumber, this.state.password, this.state.name, this.state.lastname, this.props.navigation,this.state.callingCode)
             } else {
                 this.setState({
                     badPassword: true
@@ -183,25 +188,44 @@ class Signup extends Component {
                                 </View>
 
                                 <KeyboardAvoidingView behavior={'position'}>
-                                <View style={styles.phoneTextInput} regular>
-                                    <TextInput keyboardType='phone-pad' value={this.state.phoneNumber}
-                                               ref='name'
-                                               blurOnSubmit={true} returnKeyType='next'
-                                               onSubmitEditing={this.focusNextField.bind(this, "password")}
-                                               underlineColorAndroid={'transparent'}
-                                               onChangeText={(phoneNumber) => this.setState({phoneNumber})}
-                                               placeholderTextColor={'white'}
-                                               style={{
-                                                   width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
-                                                   color: 'white',
-                                                   height: StyleUtils.scale(40),
-                                                   fontSize: StyleUtils.scale(20),
-                                                   borderBottomWidth: 1,
-                                                   borderColor: 'white',
-                                               }}
-                                               selectionColor={'black'}
-                                               placeholder={strings.PhoneNumber}/>
-                                </View>
+                                    <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row',width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
+                                        <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
+                                                   blurOnSubmit={true} returnKeyType='next'
+                                                   onSubmitEditing={this.focusNextField.bind(this, "phone")}
+                                                   underlineColorAndroid={'transparent'}
+                                                   onChangeText={(callingCode) => this.setState({callingCode})}
+                                                   placeholderTextColor={'white'}
+                                                   selectionColor={'black'}
+                                                   style={{
+                                                       width:  StyleUtils.scale(60),
+                                                       color: 'white',
+                                                       borderColor: 'white',
+                                                       height: StyleUtils.scale(40),
+                                                       fontSize: StyleUtils.scale(20),
+                                                       borderBottomWidth: 1
+                                                   }}
+                                        />
+                                        <TextInput focus={true} keyboardType='phone-pad' value={this.state.phoneNumber}
+                                                   blurOnSubmit={true} returnKeyType='next'
+                                                   ref='phone'
+                                                   onSubmitEditing={this.focusNextField.bind(this, "password")}
+                                                   underlineColorAndroid={'transparent'}
+                                                   onChangeText={(phoneNumber) => this.setState({phoneNumber})}
+                                                   placeholderTextColor={'white'}
+                                                   selectionColor={'black'}
+                                                   style={{
+                                                       width: StyleUtils.scale(200),
+                                                       color: 'white',
+                                                       borderColor: 'white',
+                                                       height: StyleUtils.scale(40),
+                                                       fontSize: StyleUtils.scale(20),
+                                                       borderBottomWidth: 1
+                                                   }}
+                                                   placeholder={strings.PhoneNumber}/>
+
+                                    </View>
+
+
                                 <View style={styles.passwordTextInput} regular>
 
                                     <TextInput
