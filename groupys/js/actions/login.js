@@ -115,14 +115,7 @@ export function signup(phone, password, firstName, lastName, navigation,callingC
             dispatch({
                 type: actions.SIGNUP_SUCSESS,
             });
-            let user = await userApi.getUser(response.token);
-            await store.save("user_id", user._id);
-            user.locale = FormUtils.getLocale();
-            userApi.saveUserDetails(user,null , response.token, null);
-            dispatch({
-                type: actions.SET_USER,
-                user: user
-            });
+
             navigation.navigate('Register');
             dispatch({
                 type: actions.SIGNUP_PROCESS,
@@ -184,13 +177,23 @@ export function focusSignupForm(focus) {
 }
 
 export function verifyCode(code, navigation, resetAction) {
-    return async function (dispatch,) {
+    return async function (dispatch,getState) {
         try {
             dispatch({
                 type: actions.REGISTER_PROCESS,
                 value: true
             });
             await loginApi.verifyCode(code);
+            const token = getState().authentication.token;
+            let user = await userApi.getUser(token);
+            await store.save("user_id", user._id);
+            user.locale = FormUtils.getLocale();
+            userApi.saveUserDetails(user,null ,token, null);
+            dispatch({
+                type: actions.SET_USER,
+                user: user
+            });
+
             dispatch({
                 type: actions.REGISTER_CODE_SUCSSES,
             });
