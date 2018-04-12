@@ -2,6 +2,7 @@ import {call, put, throttle} from 'redux-saga/effects'
 import ProfileApi from "../api/profile";
 import {setSavedPromotions} from "../actions/myPromotions";
 import * as segaActions from './segaActions';
+import * as actions from '../reducers/reducerActions';
 
 let profileApi = new ProfileApi();
 
@@ -37,9 +38,22 @@ function* saveMyPromotionsSingleRequest(action) {
     }
 }
 
+function* updateSavedInstance(action) {
+    try {
+        let response = yield call(profileApi.getSavedInstance, action.token, action.savedInstanceId);
+        yield put({
+            type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
+            item: response
+        })
+    } catch (error) {
+        console.log("failed saveMyPromotionsRequest");
+    }
+}
+
 function* myPromotionsSega() {
-    yield throttle(10000,segaActions.SAVE_MYPROMOTIONS_REQUEST, saveMyPromotionsRequest);
-    yield throttle(2000,segaActions.SAVE_SINGLE_MYPROMOTIONS_REQUEST, saveMyPromotionsSingleRequest);
+    yield throttle(10000, segaActions.SAVE_MYPROMOTIONS_REQUEST, saveMyPromotionsRequest);
+    yield throttle(2000, segaActions.SAVE_SINGLE_MYPROMOTIONS_REQUEST, saveMyPromotionsSingleRequest);
+    yield throttle(2000, segaActions.UPDATE_SINGLE_MYPROMOTIONS_REQUEST, updateSavedInstance);
 }
 
 export default myPromotionsSega;

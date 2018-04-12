@@ -33,6 +33,11 @@ class AsyncListeners {
         }
     }
 
+    delete(event,eventKey){
+        irebase.database().ref('events').child(key).delete(eventKey)
+    }
+
+
     syncChange(key,value) {
        firebase.database().ref('events').child(key).push(value);
 
