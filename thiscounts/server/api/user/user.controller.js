@@ -233,7 +233,9 @@ exports.create = function (req, res, next) {
   newUser.provider = 'local';
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
-  newUser.phone_number = (newUser.country_code + newUser.phone_number).replace(/\D/g, '');
+  newUser.phone_number = countryCode.validateNormalize(newUser.phone_number, newUser.country_code);
+  if(!newUser.phone_number)
+    return res.status(500).json(`validateNormalize number is null ${newUser.country_code}-${newUser.phone_number} `);
 
   User.findOne({phone_number: newUser.phone_number}, function (err, user) {
     if (user) {
