@@ -8,7 +8,8 @@ const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('instance');
 const randomstring = require('randomstring');
 const QRCode = require('qrcode');
-let MongodbSearch = require('../../components/mongo-search');
+const MongodbSearch = require('../../components/mongo-search');
+const fireEvent = require('../../components/firebaseEvent');
 
 
 exports.search = MongodbSearch.create(Instance);
@@ -605,9 +606,9 @@ function realizeSavedInstance(user, savedInstance, rel, res, data) {
     if (!saved) return handleError(res, new Error('no saved Instance found'));
     handleRealizeBySavedInstanceType(saved, data, function (err, status) {
       if (err) return handleError(res, err);
-      console.log(`realizeSavedInstance: ${JSON.stringify(status)}`);
       let terminate = status.terminate;
       let savedInstance = status.savedInstance;
+      fireEvent.info('user', user._id, 'saved_instance_realized', {savedInstance: savedInstance._id.toString()  });
       if (terminate) {
         graphModel.relate_ids(user._id, 'REALIZED', savedInstance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`, function (err) {
           if (err) return handleError(res, err);
