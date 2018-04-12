@@ -68,73 +68,19 @@ exports.create = function (req, res) {
 
   Phonebook.findOne({userId: userId}, function (err, user) {
     if (user) {
-      /*Phonebook.update({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
-        if(err) { console.log("ERRRRRRRRRRRRRROR"); return handleError(res, err); }
-        checkPhones(phonebook.phonebook, res);
-      });*/
       let query = {'userId':userId};
       Phonebook.findOneAndUpdate(query, phonebook.phonebook, {upsert:true}, function(err, doc){
         if (err) return res.status(500).send(err);
         checkPhones(phonebook.phonebook, res);
       });
-
     } else {
       Phonebook.create({userId: userId, phonebook: phonebook.phonebook}, function(err, phonebook) {
         if(err) { return handleError(res, err); }
-        checkPhones(phonebook.phonebook, res);
+        res.status(200).send();
+        //checkPhones(phonebook.phonebook, res);
       });
     }
   });
-
-
-
-
-  /*
-  mongoose.connection.db.collection('phonebook', function (err, collection) {
-    if (err) return logger.error(err.message);
-    collection.save({
-      _id: userId,
-      phonebook: phonebook.phonebook
-    });
-    //TODO: implement this way http://stackoverflow.com/questions/5794834/how-to-access-a-preexisting-collection-with-mongoose
-    //for each phone number store the users that has it in their phone book
-
-    mongoose.connection.db.collection('phone_numbers', function (err, collection) {
-      if (err) return logger.error(err.message);
-      phonebook.phonebook.forEach(function (contact, index, array) {
-        ////console.log(JSON.stringify(contact));
-
-        ////identifyPhoneByTwilio(contact.normalized_number,'972');
-
-
-
-        //collection.update({_id: element.normalized_number}, {$addToSet: {userIds: userId}}, {upsert: true});
-        collection.findAndModify(
-          {_id: utils.clean_phone_number(contact.normalized_number)},
-          [['_id', 'asc']],
-          {
-            $addToSet: {
-              contacts: {
-                userId: userId,
-                nick: contact.name
-              }
-            }
-          },
-          {upsert: true, new: true},
-          function (err, object) {
-            if (err) {
-              console.warn(err.message);
-            } else {
-              console.dir(object);
-              owner_follow(object.value)
-            }
-          });
-      });
-    });
-  });
-  checkPhones(phonebook.phonebook, res);
-  */
-
 };
 
 /**
