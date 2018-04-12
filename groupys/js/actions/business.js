@@ -38,7 +38,7 @@ async function get(dispatch, token, id) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'get - business')
-        logger.actionFailed("business_get");
+        await logger.actionFailed("business_get");
     }
 }
 
@@ -55,7 +55,7 @@ async function getBusinessCategories(dispatch, gid, token) {
         }
     } catch (error) {
         handler.handleError(error, dispatch, 'getBusinessCategories')
-        logger.actionFailed("business_get_Categories", gid);
+        await logger.actionFailed("business_get_Categories", gid);
     }
 }
 
@@ -68,7 +68,7 @@ async function dispatchSearchBusiness(dispatch, business, token) {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
         handler.handleError(error, dispatch, 'dispatchSearchBusiness')
-        logger.actionFailed("business_search_business", business);
+        await logger.actionFailed("business_search_business", business);
     }
 }
 
@@ -90,7 +90,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
         dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
     } catch (error) {
         handler.handleError(error, dispatch, 'dispatchFollowByQrcode')
-        logger.actionFailed("business_search_by_qrcode");
+        await logger.actionFailed("business_search_by_qrcode");
     }
 }
 
@@ -129,7 +129,7 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
             //navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'UserBusinessesByPhoneNumber');
-            logger.actionFailed('UserBusinessesByPhoneNumber');
+            await logger.actionFailed('UserBusinessesByPhoneNumber');
         }
     }
 }
@@ -177,7 +177,7 @@ export function followBusiness(businessId) {
             dispatch({type: actions.RESET_FOLLOW_FORM})
         } catch (error) {
             handler.handleError(error, dispatch, 'followBusiness')
-            logger.actionFailed("business_followBusiness", businessId)
+            await logger.actionFailed("business_followBusiness", businessId)
         }
     }
 }
@@ -189,7 +189,7 @@ export function unFollowBusiness(businessId) {
             await businessApi.unFollowBusiness(businessId, token);
         } catch (error) {
             handler.handleError(error, dispatch, 'unFollowBusiness')
-            logger.actionFailed("business_followBusiness", businessId)
+            await logger.actionFailed("business_followBusiness", businessId)
         }
     }
 }
@@ -202,7 +202,7 @@ export function groupFollowBusiness(groupid, businessId, navigation) {
             navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'groupFollowBusiness')
-            logger.actionFailed("business_groupFollowBusiness", businessId)
+            await logger.actionFailed("business_groupFollowBusiness", businessId)
         }
     }
 }
@@ -233,7 +233,7 @@ export function setBusinessUsers(businessId) {
             });
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessUsers')
-            logger.actionFailed("users_getBusinessUsers", businessId);
+            await logger.actionFailed("users_getBusinessUsers", businessId);
         }
     }
 }
@@ -256,7 +256,7 @@ export function setBusinessProducts(businessId) {
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessProducts')
-            logger.actionFailed("product_findByBusinessId", businessId);
+            await logger.actionFailed("product_findByBusinessId", businessId);
         }
     }
 }
@@ -283,7 +283,7 @@ export function setBusinessPromotions(businessId) {
                 type: actions.PROMOTION_LOADING_DONE,
                 businessId: businessId
             });
-            logger.actionFailed("promotion_findByBusinessId", businessId);
+            await logger.actionFailed("promotion_findByBusinessId", businessId);
         }
     }
 }
@@ -302,7 +302,7 @@ async function updateBusinessPromotions(businessId, token, dispatch) {
                 type: actions.NETWORK_IS_OFFLINE,
             });
         }
-        logger.actionFailed("promotion_getAllByBusinessId", businessId);
+        await logger.actionFailed("promotion_getAllByBusinessId", businessId);
     }
 }
 
@@ -339,7 +339,7 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
-            logger.actionFailed("create_business", business);
+            await logger.actionFailed("create_business", business);
         }
     }
 }
@@ -368,7 +368,7 @@ export function updateBusiness(business, navigation) {
             navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'update_business')
-            logger.actionFailed("update_business", business);
+            await logger.actionFailed("update_business", business);
         }
     }
 }
@@ -399,7 +399,7 @@ export function setBusinessQrCode(business) {
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessQrCode')
-            logger.actionFailed("business_getBusinessQrCodeImage", business);
+            await logger.actionFailed("business_getBusinessQrCodeImage", business);
         }
     }
 }

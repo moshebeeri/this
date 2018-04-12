@@ -29,7 +29,7 @@ export function sendMessage(groupId, instanceId, message) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-sendMessage\'')
-            logger.actionFailed('instance-group-sendMessage')
+            await logger.actionFailed('instance-group-sendMessage')
         }
     }
 }
@@ -70,7 +70,7 @@ export function setNextFeeds(group, instance) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-setNextFeeds')
-            logger.actionFailed('instance-group-setNextFeeds')
+            await logger.actionFailed('instance-group-setNextFeeds')
         }
     }
 }

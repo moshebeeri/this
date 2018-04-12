@@ -33,7 +33,7 @@ export function createPost(post, navigation) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'posts-createPost')
-            logger.actionFailed('posts-createPost')
+            await logger.actionFailed('posts-createPost')
         }
     }
 }
@@ -69,7 +69,7 @@ export function createGroupPost(post, navigation, group) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'posts-createGroupPost')
-            logger.actionFailed('posts-createGroupPost')
+            await logger.actionFailed('posts-createGroupPost')
         }
     }
 }
@@ -99,7 +99,7 @@ async function fetchPostById(id, token, dispatch) {
         });
     } catch (error) {
         handler.handleError(error, dispatch, 'posts-fetchPostById')
-        logger.actionFailed('posts-fetchPostById')
+        await logger.actionFailed('posts-fetchPostById')
     }
 }
 

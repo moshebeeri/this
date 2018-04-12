@@ -29,7 +29,7 @@ async function getAll(dispatch, id, token, loading) {
         }
     } catch (error) {
         handler.handleError(error, dispatch)
-        logger.actionFailed('promotions-getAll')
+        await logger.actionFailed('promotions-getAll')
     }
 }
 
@@ -45,7 +45,7 @@ async function getAllProducts(dispatch, id, token, loading) {
         }
     } catch (error) {
         handler.handleError(error, dispatch)
-        logger.actionFailed('promotions-getAllProducts')
+        await logger.actionFailed('promotions-getAllProducts')
     }
 }
 
@@ -75,7 +75,7 @@ export function realizePromotion(code) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
-            logger.actionFailed('promotions-realizePromotion')
+            await logger.actionFailed('promotions-realizePromotion')
         }
     }
 }
@@ -92,7 +92,7 @@ export function setPromotionDescription(code) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
-            logger.actionFailed('promotions-setPromotionDescription')
+            await logger.actionFailed('promotions-setPromotionDescription')
         }
     }
 }
@@ -165,7 +165,7 @@ export function savePromotion(promotion, businessId, navigation, simpleProductPe
             dispatch({
                 type: actions.PROMOTION_SAVING_DONE,
             });
-            logger.actionFailed('promotions-savePromotion')
+            await logger.actionFailed('promotions-savePromotion')
         }
     }
 }
@@ -193,7 +193,7 @@ export function updatePromotion(promotion, businessId, navigation, itemId) {
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch)
-            logger.actionFailed('promotions-updatePromotion')
+            await logger.actionFailed('promotions-updatePromotion')
         }
     }
 }
@@ -213,7 +213,7 @@ async function refershBusinessPromotion(item, businessId, token, dispatch) {
         }
     } catch (error) {
         handler.handleError(error, dispatch)
-        logger.actionFailed('promotions-fetchPromotionById')
+        await logger.actionFailed('promotions-fetchPromotionById')
     }
 }
 
@@ -228,7 +228,7 @@ async function fetchPromotionById(id, token, dispatch) {
         });
     } catch (error) {
         handler.handleError(error, dispatch)
-        logger.actionFailed('promotions-fetchPromotionById')
+        await logger.actionFailed('promotions-fetchPromotionById')
     }
 }
 
