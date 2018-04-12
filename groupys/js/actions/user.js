@@ -234,17 +234,6 @@ async function updateUserTask(dispatch, token, newUser) {
     }
 }
 
-export function testError() {
-    return function (dispatch, getState) {
-        try {
-            userApi.testError();
-        } catch (error) {
-            handler.handleError(error, dispatch, 'updateUser')
-            await logger.actionFailed('users-updateUser')
-        }
-    }
-}
-
 export default {
     updateUserLocale,
     updateUserToken,
