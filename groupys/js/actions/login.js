@@ -66,14 +66,22 @@ export function login(phone, password, navigation,callingCode) {
                 value: false
             });
         } catch (error) {
+            if(error === errors.NETWORK_ERROR){
+                dispatch({
+                    type: actions.LOGIN_FAILED,
+                    message: strings.networkErrorMessage
+                });
+            }else{
+                dispatch({
+                    type: actions.LOGIN_FAILED,
+                    message: strings.LoginFailedMessage
+                });
+            }
             dispatch({
                 type: actions.LOGIN_PROCESS,
                 value: false
             });
-            dispatch({
-                type: actions.LOGIN_FAILED,
-                message: strings.LoginFailedMessage
-            });
+
             handler.handleError(error, dispatch, 'login')
             logger.actionFailed('login')
         }
@@ -88,6 +96,17 @@ export function signup(phone, password, firstName, lastName, navigation,callingC
                 value: true
             });
             let response = await loginApi.signup(phone, password, firstName, lastName,callingCode);
+            if(response === 'user already exist'){
+                dispatch({
+                    type: actions.SIGNUP_PROCESS,
+                    value: false
+                });
+                dispatch({
+                    type: actions.SIGNUP_FAILED,
+                    message: strings.SignUpUserExist
+                });
+                return;
+            }
             await store.save("token", response.token)
             dispatch({
                 type: actions.SAVE_USER_TOKEN,
@@ -117,6 +136,12 @@ export function signup(phone, password, firstName, lastName, navigation,callingC
                     message: strings.invalidPhoneNumber
                 });
             } else {
+                if(error === errors.NETWORK_ERROR){
+                    dispatch({
+                        type: actions.SIGNUP_FAILED,
+                        message: strings.networkErrorMessage
+                    });
+                }
                 handler.handleError(error, dispatch, 'signup')
             }
             dispatch({
