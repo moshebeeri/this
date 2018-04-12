@@ -10,11 +10,22 @@ firebase.initializeApp({
 class AsyncListeners {
 
     listeners = [];
+    managementInit = false;
 
     constructor(){
         firebase.auth().signInAnonymously()
     }
 
+    reset(){
+        this.listeners = [];
+    }
+
+    addManagement(callback){
+        if(!this.managementInit) {
+            firebase.database().ref('Management').on('value', callback);
+            this.managementInit = true;
+        }
+    }
     addListener(key, callback) {
         if(!this.listeners.includes(key)) {
             this.listeners.push(key);

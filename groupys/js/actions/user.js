@@ -122,15 +122,11 @@ export function* upSertUserSuccsess(newUser) {
     });
 }
 
-
-
-
 export function resetForm() {
     return function (dispatch) {
         dispatch({
             type: actions.SAVING_USER_DONE,
         });
-
     }
 }
 
@@ -252,5 +248,5 @@ export function testError() {
 export default {
     updateUserLocale,
     updateUserToken,
-    updateUserTask
+
 }

@@ -6,22 +6,38 @@ const store = getStore();
 
 class DataSync {
     syncData() {
-        //workaround  until redux stores values return from hibernate
-        if (Object.values(store.getState().instances.instances).length === 0) {
-            setTimeout(this.initSyncListeners.bind(this), 2000);
-        } else {
-            this.initSyncListeners();
+        if(store) {
+            //workaround  until redux stores values return from hibernate
+            if (Object.values(store.getState().instances.instances).length === 0) {
+                setTimeout(this.initSyncListeners.bind(this), 2000);
+            } else {
+                this.initSyncListeners();
+            }
         }
     }
 
     initSyncListeners() {
+        this.syncManage();
+        this.initDataLysteners();
+       }
+
+    initDataLysteners(){
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
+
     }
 
+    syncManage(){
+        let initFunction = this.initDataLysteners.bind(this);
+        asyncListener.addManagement((snap) => {
+            asyncListener.reset();
+            initFunction();
+
+        })
+    }
     syncUser(state, dispatch, user) {
         if (user) {
             asyncListener.addListener('user_' + user._id, (snap) => {
@@ -46,7 +62,12 @@ class DataSync {
     }
 
     parseSnap(snap){
-        if(snap.node_ && snap.node_.children_ && snap.node_.children_.root && snap.node_.children_.root_.value ) {
+        if(snap.node_ && snap.node_.children_ && snap.node_.children_.root_ && snap.node_.children_.root_.value ) {
+            if( snap.node_.children_.root_.value.value_.value_){
+                return {
+                    type: snap.node_.children_.root_.value.value_.value_,
+                };
+            }
             return {
                 type: snap.node_.children_.root_.value.value_,
             };

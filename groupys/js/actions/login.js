@@ -7,6 +7,7 @@ import store from "react-native-simple-store";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import strings from "../i18n/i18n"
+import FormUtils from '../utils/fromUtils';
 
 let loginApi = new LoginApi();
 let userApi = new UserApi();
@@ -36,10 +37,14 @@ export function login(phone, password, navigation) {
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
+                user.locale =  FormUtils.getLocale();
+                userApi.saveUserDetails(user,null , response.token, null);
                 dispatch({
                     type: actions.SET_USER,
                     user: user
                 });
+
+
                 await  store.save("user_id", user._id)
                 if (!user.sms_verified) {
                     navigation.navigate('Register');
@@ -93,6 +98,8 @@ export function signup(phone, password, firstName, lastName, navigation) {
             });
             let user = await userApi.getUser(response.token);
             await store.save("user_id", user._id);
+            user.locale = FormUtils.getLocale();
+            userApi.saveUserDetails(user,null , response.token, null);
             dispatch({
                 type: actions.SET_USER,
                 user: user

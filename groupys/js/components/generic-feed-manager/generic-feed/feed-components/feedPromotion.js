@@ -37,7 +37,6 @@ import {
 } from '../../../../ui/index';
 import FormUtils from "../../../../utils/fromUtils";
 import strings from "../../../../i18n/i18n"
-import PageRefresher from '../../../../refresh/pageRefresher'
 
 const {width, height} = Dimensions.get('window');
 const vh = height / 100;
@@ -48,13 +47,12 @@ export default class FeedPromotion extends Component {
 
     componentWillMount() {
         const {item} = this.props;
-        PageRefresher.createFeedSocialState(item.id);
     }
 
     visited(visible) {
         const {item, actions, group} = this.props;
         if (visible && actions && actions.setSocialState) {
-           // actions.setSocialState(item);
+            // actions.setSocialState(item);
             if (group) {
                 actions.setVisibleItem(item.fid, group._id);
             } else {
@@ -236,15 +234,15 @@ export default class FeedPromotion extends Component {
                     height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 10)),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(10, 5) : StyleUtils.relativeHeight(25,30)),
+                    top: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(10, 5) : StyleUtils.relativeHeight(25, 30)),
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
                     {item.promotion === 'PUNCH_CARD' &&
-                        <View style={{marginBottom:StyleUtils.scale(20)}}>
-                    <PunchView numberRealized={item.realizedPunches} feed={this.props.feed}
-                               numberOfPunches={item.punches}/>
-                        </View>}
+                    <View style={{marginBottom: StyleUtils.scale(20)}}>
+                        <PunchView numberRealized={item.realizedPunches} feed={this.props.feed}
+                                   numberOfPunches={item.punches}/>
+                    </View>}
 
                     {item.business &&
                     <BusinessHeader navigation={this.props.navigation} business={item.business}

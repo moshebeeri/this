@@ -24,7 +24,6 @@ import {
 import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
 import {ActivityReport, ImageController, SocialState, ThisText, UrlPreview, Video} from '../../../../ui/index';
-import PageRefresher from '../../../../refresh/pageRefresher'
 import strings from "../../../../i18n/i18n"
 
 export default class FeedPost extends Component {
@@ -42,7 +41,6 @@ export default class FeedPost extends Component {
             containLink: containLink,
             visible: false,
         })
-        PageRefresher.createFeedSocialState(item.id);
     }
 
     shouldComponentUpdate() {
@@ -67,7 +65,7 @@ export default class FeedPost extends Component {
         }
         if (visible) {
             if (visible && actions && actions.setSocialState) {
-               // actions.setSocialState(item);
+                // actions.setSocialState(item);
             }
             if (group) {
                 actions.setVisibleItem(item.fid, group._id);
