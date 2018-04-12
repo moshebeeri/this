@@ -101,7 +101,7 @@ export default class DocumentPicker extends Component {
                     <ImagePicker logo name={imageRef} mandatory
                                  image={<Icon2 size={StyleUtils.scale(35)} color={iconColor}
                                                name='ios-document-outline'/>}
-                                 color='black' pickFromCamera
+                                 color='black' pickFromCamera cropDisable={true}
                                  setImage={this.setDocument.bind(this)}/>
                 </View>
             </View>
