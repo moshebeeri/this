@@ -13,7 +13,7 @@ export default class GroupChat extends Component {
 
     claim() {
         const {actions, item} = this.props;
-        actions.save(item.instance.id)
+        actions.saveFeed(item.instance.id)
     }
 
     realize() {

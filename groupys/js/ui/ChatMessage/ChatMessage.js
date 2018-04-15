@@ -16,11 +16,19 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import strings from "../../i18n/i18n"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import instanceUtils from '../../utils/instanceUtils'
+
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {saved: false}
+    }
+
     claim() {
         const {claim} = this.props;
+        this.setState({saved: true});
         claim();
+
     }
 
     realize() {
@@ -89,7 +97,6 @@ export default class ChatMessage extends Component {
                                         borderBottomColor: '#E6E6E6',
                                         paddingTop: 2,
                                         marginTop: 10,
-
                                         paddingBottom: 10,
                                         paddingRight: 5,
                                         borderBottomWidth: 1,
@@ -101,15 +108,17 @@ export default class ChatMessage extends Component {
                                         <ThisText style={{
                                             fontSize: StyleUtils.scale(14),
                                             color: '#616F70',
-                                            maxWidth:StyleUtils.scale(200)
+                                            maxWidth: StyleUtils.scale(200)
                                         }}>{item.instance.promotionTerm}</ThisText>
-                                        {instanceUtils.showClaim(item.instance) && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showClaim(item.instance, this.state.saved) &&
+                                        <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={45}
-                                                           title={strings.Claim.toUpperCase()} color={'#2db6c8'}
+                                                          title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                                           onPress={() => this.claim()}/>
                                         </View>}
-                                        {instanceUtils.showRedeem(item.instance) &&  <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeem(item.instance, this.state.saved) &&
+                                        <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={65}
                                                           title={strings.Realize.toUpperCase()} color={'#2db6c8'}
@@ -151,7 +160,8 @@ export default class ChatMessage extends Component {
                                         borderBottomWidth: 1,
                                         flexDirection: 'row'
                                     }}>
-                                        <Ionicons size={StyleUtils.scale(25)} style={{marginRight: 12,}} color={'#2db6c8'}
+                                        <Ionicons size={StyleUtils.scale(25)} style={{marginRight: 12,}}
+                                                  color={'#2db6c8'}
                                                   name="ios-person-outline"/>
                                         <ThisText style={{
                                             fontSize: StyleUtils.scale(14),
@@ -215,7 +225,6 @@ export default class ChatMessage extends Component {
                                         paddingRight: 5,
                                         marginTop: 10,
                                         paddingBottom: 10,
-
                                         borderBottomWidth: 1,
                                         flexDirection: 'row'
                                     }}>
@@ -223,37 +232,39 @@ export default class ChatMessage extends Component {
                                         <ThisText style={{
                                             fontSize: StyleUtils.scale(14),
                                             color: 'white',
-                                            maxWidth:StyleUtils.scale(200)
+                                            maxWidth: StyleUtils.scale(200)
                                         }}>{item.instance.promotionTerm}</ThisText>
 
 
-                                        {instanceUtils.showClaim(item.instance) && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showClaim(item.instance, this.state.saved) &&
+                                        <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={45}
                                                           title={strings.Claim.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'white'}
                                                           onPress={() => this.claim()}/>
                                         </View>}
-                                        {instanceUtils.showRedeem(item.instance) && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeem(item.instance, this.state.saved) &&
+                                        <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={65}
                                                           title={strings.Realize.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'white'}
                                                           onPress={() => this.realize()}/>
                                         </View>}
-                                        {instanceUtils.showRedeemed(item.instance)  && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showRedeemed(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={75} disabled
                                                           title={strings.Realized.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'#cccccc'}/>
                                         </View>}
-                                        {instanceUtils.showExpired(item.instance)  && <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showExpired(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={75} disabled
                                                           title={strings.Expired.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'#cccccc'}/>
                                         </View>}
-                                        {instanceUtils.showInActive(item.instance)  &&  <View style={{marginLeft: 10,}}>
+                                        {instanceUtils.showInActive(item.instance) && <View style={{marginLeft: 10,}}>
 
                                             <SubmitButton fontSize={12} height={25} width={75} disabled
                                                           title={strings.InActive.toUpperCase()} textColor={'#2db6c8'}
