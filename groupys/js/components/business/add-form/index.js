@@ -14,16 +14,7 @@ import styles from './styles'
 import * as businessAction from "../../../actions/business";
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {
-    AddressInput,
-    CategoryPicker,
-    DocumentPicker,
-    FormHeader,
-    ImagePicker,
-    Spinner,
-    TextInput,
-    ThisText
-} from '../../../ui/index';
+import {AddressInput, DocumentPicker, FormHeader, ImagePicker, Spinner, TextInput, ThisText} from '../../../ui/index';
 import FormUtils from "../../../utils/fromUtils";
 import strings from '../../../i18n/i18n';
 import StyleUtils from "../../../utils/styleUtils";
@@ -75,7 +66,7 @@ class AddBusiness extends Component {
                 categories: [Number(category), Number(subcategory)],
                 formData: {},
                 coverImage: source,
-                saving:false
+                saving: false
             };
         } else {
             let categories = [];
@@ -128,7 +119,7 @@ class AddBusiness extends Component {
                 location: templateBusiness.location,
                 IdIdentifierImage: templateBusiness.IdIdentifierImage,
                 LetterOfIncorporationImage: templateBusiness.LetterOfIncorporationImage,
-                saving:false
+                saving: false
             };
         }
     }
@@ -153,27 +144,35 @@ class AddBusiness extends Component {
         })
     }
 
-    saveFormData() {
+    saveFormData(address) {
         let formIsValid = this.validateForm(this.saveFormData.bind(this));
         Keyboard.dismiss();
         if (formIsValid) {
-            if(!this.state.location){
+            if (!this.state.location) {
+                if(address){
+                    this.props.saveBusiness(this.createBusiness(address), this.props.navigation);
+                }
                 return;
             }
             this.props.saveBusiness(this.createBusiness(), this.props.navigation);
         }
     }
 
-    createBusiness() {
+    createBusiness(address) {
+
+        let businessAddress = this.state;
+        if(!businessAddress.location && address){
+            businessAddress = address;
+        }
         let business = {
-            address: this.state.address,
+            address: businessAddress.address ,
             category: 246843,
             subcategory: 246950,
-            city: this.state.city,
-            country: this.state.country,
+            city: businessAddress.city,
+            country: businessAddress.country,
             image: this.state.coverImage,
             email: this.state.email,
-            location: this.state.location,
+            location: businessAddress.location,
             name: this.state.name,
             tax_id: this.state.tax_id,
             type: this.state.type,
@@ -190,11 +189,10 @@ class AddBusiness extends Component {
 
     async setReduxState(value) {
         this.setState(value);
-
         if (value.name) {
             return;
         }
-        if(value.address){
+        if (value.address) {
             return;
         }
         if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.updating) {
@@ -220,21 +218,18 @@ class AddBusiness extends Component {
     }
 
     updateLocation(location) {
-
         this.setReduxState({
             location: location.location,
             city: location.city,
             address: location.address,
             country: location.country,
         })
-
         this.setState({
             location: location.location,
             city: location.city,
             address: location.address,
             country: location.country,
         });
-
     }
 
     setImage(image) {
@@ -242,7 +237,6 @@ class AddBusiness extends Component {
             image: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
             path: image.path
         });
-
     }
 
     setCoverImage(image) {
@@ -271,7 +265,7 @@ class AddBusiness extends Component {
     }
 
     setIdDocument(image) {
-        if(image) {
+        if (image) {
             this.setState({
                 IdIdentifierImage: image
             });
@@ -279,11 +273,10 @@ class AddBusiness extends Component {
                 IdIdentifierImage: image
             })
         }
-
     }
 
     setLetterDocument(image) {
-        if(image) {
+        if (image) {
             this.setReduxState({
                 LetterOfIncorporationImage: image
             })
@@ -298,7 +291,8 @@ class AddBusiness extends Component {
             if (coverPic) {
                 return <View onPress={this.openLogoMenu.bind(this)} style={styles.business_upper_image_container}>
                     <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory
-                                 image={<Image resizeMode="cover" style={{width:  StyleUtils.scale(111), height:  StyleUtils.scale(105)}}
+                                 image={<Image resizeMode="cover"
+                                               style={{width: StyleUtils.scale(111), height: StyleUtils.scale(105)}}
                                                source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
@@ -307,7 +301,8 @@ class AddBusiness extends Component {
             } else {
                 return <View style={styles.business_no_pic_no_cover_upper_image_container}>
                     <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory
-                                 image={<Image resizeMode="cover" style={{width:  StyleUtils.scale(111), height:  StyleUtils.scale(105)}}
+                                 image={<Image resizeMode="cover"
+                                               style={{width: StyleUtils.scale(111), height: StyleUtils.scale(105)}}
                                                source={{uri: this.state.path}}/>}
                                  color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
@@ -351,7 +346,12 @@ class AddBusiness extends Component {
                 <View>
                     <Image
                         resizeMode="cover"
-                        style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30,30), alignSelf: 'stretch', borderColor: 'white'}}
+                        style={{
+                            width: StyleUtils.getWidth(),
+                            height: StyleUtils.relativeHeight(30, 30),
+                            alignSelf: 'stretch',
+                            borderColor: 'white'
+                        }}
                         source={{uri: this.state.coverImage.uri}}
                     >
 
@@ -467,7 +467,7 @@ class AddBusiness extends Component {
                                     setDocument={this.setLetterDocument.bind(this)}/>
 
                 </View>}
-                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+                <View style={{height: StyleUtils.scale(30), width: StyleUtils.getWidth()}}></View>
 
             </ScrollView>
 
