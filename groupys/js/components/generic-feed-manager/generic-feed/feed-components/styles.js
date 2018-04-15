@@ -166,7 +166,7 @@ module.exports = {
     },
     promotion_image_view: {
         width: StyleUtils.getWidth(),
-        height: StyleUtils.relativeHeight(40,40),
+        height: StyleUtils.getWidth() * 9 /16 ,
     },
     promotion_upperContainer: {
         backgroundColor: 'white',
@@ -412,7 +412,7 @@ module.exports = {
     promotionDetailsContainer: {
         flexDirection: 'row',
         backgroundColor: 'white',
-       marginTop:10,
+        paddingTop:10,
         marginBottom:10,
         alignItems: 'center',
         justifyContent: 'space-between',

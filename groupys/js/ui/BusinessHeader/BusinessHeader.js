@@ -153,11 +153,11 @@ class BusinessHeader extends Component {
         return <View style={{height: StyleUtils.scale(componentSize)}}>
             {!this.props.noProfile ?
                 <View>
-                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
+                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction)}
                 </View>
                 :
                 <View>
-                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
+                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction)}
                 </View>
             }
         </View>
@@ -175,11 +175,12 @@ class BusinessHeader extends Component {
             </View>
             {this.createBusinessLog()}
             <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
-                <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
+                <ThisText style={[nameTextStyle, {color: textColor,  fontWeight: 'bold'}]}
                           note>{businessName}</ThisText>
             </View>
-            {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
+            {showEdit ? <View style={{flexDirection: 'row',alignItems: 'center',}}>
                 <View style={{marginTop: 10}}>
+
                     {editButton}
                 </View>
                 <View style={{marginRight: 20, alignItems: 'center', justifyContent: 'center'}}>

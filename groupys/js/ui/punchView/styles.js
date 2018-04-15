@@ -36,7 +36,7 @@ module.exports = {
     container: {
         flexDirection: 'row',
         height: 30,
-        marginTop: styleUtils.scale(40),
+        marginTop: styleUtils.scale(30),
         alignItems: 'center',
         justifyContent: 'center',
     }

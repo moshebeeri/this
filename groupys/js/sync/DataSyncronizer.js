@@ -52,6 +52,7 @@ class DataSync {
                             });
                             break;
                         case "group_policy_changed":
+                        case "user_follow_group":
                         case "group_created":
                             dispatch({
                                 type: types.SAVE_GROUPS_REQUEST,
