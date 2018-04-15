@@ -49,7 +49,7 @@ function update_feeds(effected, activity) {
   if (_.includes(activity.audience, 'SELF')) {
     const actor = getActivityActor(activity);
     effected = effected.map(e=>e._id);
-    console.log(`update_feeds SELF ${JSON.stringify({activity, effected, actor, includes: effected.includes(actor)})} `);
+    console.log(`update_feeds SELF entity: ${actor} `);
     if (!effected.includes(actor)) {
       activity.distributions += 1;
       Feed.create({
