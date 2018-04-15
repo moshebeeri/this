@@ -37,7 +37,11 @@ export function validateAddress(address,onValid) {
                 }
             });
             if(onValid){
-                onValid();
+                address.location = {
+                    lat: response.lat,
+                    lng: response.lng
+                }
+                onValid(address);
             }
         }catch (error){
             await logger.actionFailed('business_checkAddress');

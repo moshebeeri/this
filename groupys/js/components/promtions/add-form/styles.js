@@ -13,9 +13,10 @@ module.exports = {
     },
     product_upper_container: {
         width: width,
-        height: StyleUtils.relativeHeight(30,30),
+        height: StyleUtils.getWidth() * 9 /16,
         backgroundColor: '#FA8559',
         marginBottom: 4,
+       paddingTop:10,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',

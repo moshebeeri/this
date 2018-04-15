@@ -228,12 +228,12 @@ export default class FeedPromotion extends Component {
                     height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 10)),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(10, 5) : StyleUtils.relativeHeight(25, 30)),
+                    top: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(2, -8) : StyleUtils.relativeHeight(17, 17)),
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
                     {item.promotion === 'PUNCH_CARD' &&
-                    <View style={{marginBottom: StyleUtils.scale(20)}}>
+                    <View style={{marginBottom: StyleUtils.scale(5)}}>
                         <PunchView numberRealized={item.realizedPunches} feed={this.props.feed}
                                    numberOfPunches={item.punches}/>
                     </View>}

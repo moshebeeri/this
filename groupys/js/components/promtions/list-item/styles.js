@@ -62,7 +62,7 @@ module.exports = {
         width: width,
         flex: 1,
         backgroundColor: 'white',
-        height: StyleUtils.relativeHeight(40, 40),
+        height: StyleUtils.getWidth() * 9/16,
     },
     promotionInformation: {
         width: width - 25,

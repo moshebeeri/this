@@ -51,16 +51,17 @@ export default class ImagePickerComponent extends Component {
         if(cropDisable){
             cropping = false;
         }
-        let width = 2000;
+        let width =  StyleUtils.getWidth() ;
         if (imageWidth) {
-            width = imageWidth;
+            width =  imageWidth;
         }
-        let height = 1400;
-        if (imageWidth) {
-            height = imageHeight;
+        let height = parseInt(StyleUtils.getWidth() * 9 /16);
+        if (imageHeight) {
+            height =  imageHeight;
         }
         if (logo) {
             height = 2000;
+            width =  2000;
         }
         try {
             let image = await ImagePicker.openCamera({
@@ -100,16 +101,17 @@ export default class ImagePickerComponent extends Component {
         if(cropDisable){
             cropping = false;
         }
-        let width = 2000;
+        let width =  StyleUtils.getWidth() ;
         if (imageWidth) {
-            width = imageWidth;
+            width =  imageWidth ;
         }
-        let height = 1400;
-        if (imageWidth) {
+        let height = parseInt(StyleUtils.getWidth() * 9 /16);
+        if (imageHeight) {
             height = imageHeight;
         }
         if (logo) {
-            height = 2000;
+            height = 200;
+            width =  200;
         }
         try {
             let image = await ImagePicker.openPicker({

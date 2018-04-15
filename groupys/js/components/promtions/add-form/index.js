@@ -947,11 +947,10 @@ class AddPromotion extends Component {
         if (this.state.image) {
             let coverImage = <Image
                 style={{
-                    width: width - 10,
-                    height: StyleUtils.relativeHeight(40, 40),
-                    borderWidth: 1,
-                    borderColor: 'white'
+                    width:StyleUtils.getWidth(),
+                    height:StyleUtils.getWidth() * 9 / 16
                 }}
+                resizeMode={'cover'}
                 source={{uri: this.state.image.path}}
             >
 
