@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Button, Dimensions, I18nManager, Image, Linking, TextInput, View,Text} from 'react-native';
-
+import {Image, Linking, View,TouchableOpacity} from 'react-native';
 import LinkPreview from 'react-native-link-preview';
+import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
+const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 
 export default class UrlPreview extends Component {
     constructor(props) {
@@ -32,25 +33,30 @@ export default class UrlPreview extends Component {
         }
         let image = undefined;
         if (this.state.data.images && this.state.data.images[0]) {
-            image = <Image resizeMode="cover" style={{height: 150}} source={{uri: this.state.data.images[0]}}/>
+            image =
+                <Image resizeMode="cover" style={{height: 80, width: 80}} source={{uri: this.state.data.images[0]}}/>
         }
-        return <View style={{justifyContent: 'flex-start', alignItems: "center"}}>
-            <View style={{backgroundColor: '#e5e3e3', flexDirection: 'row'}}>
+        return <View
+            style={{justifyContent: 'flex-start', alignItems: "center", paddingLeft: 5, paddingRight: 5, marginTop: 5}}>
+            <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
                 <View style={{flex: 1}}>
                     {image}
                 </View>
                 <View style={{flex: 3, marginRight: 5, marginLeft: 5, marginRight: 5}}>
-                    <ThisText>{this.state.data.title}</ThisText>
-                    <ThisText>{this.state.data.description}</ThisText>
+                    <ThisText numberOfLines={1} style={{fontWeight: 'bold'}}>{this.state.data.title}</ThisText>
+                    <ThisText note={true} numberOfLines={2}>{this.state.data.description}</ThisText>
+                    <ThisText numberOfLines={1} note={true}>{this.state.data.url}</ThisText>
                 </View>
 
             </View>
 
-            <View style={ {width:StyleUtils.getWidth(), alignItems: "flex-start"}}>
+            <View style={{width: StyleUtils.getWidth(), alignItems: "flex-start"}}>
 
-            <Button title={this.state.data.url} onPress={() => {
-                Linking.openURL(this.state.data.url)
-            }}/>
+                <TouchableOpacityFix style={{width:StyleUtils.getWidth(),alignItems:'center',justifyContent:'center'}}title={this.state.data.url} onPress={() => {
+                    Linking.openURL(this.state.data.url)
+                }}>
+                    <ThisText style={{paddingLeft:10,color:'#0000EE'}}>{this.state.data.url}</ThisText>
+                </TouchableOpacityFix>
             </View>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <ThisText>{this.state.postText}</ThisText>
