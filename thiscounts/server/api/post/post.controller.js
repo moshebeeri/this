@@ -86,7 +86,7 @@ exports.create = function(req, res) {
         pricing.balance(post.behalf, function (err, positiveBalance) {
           if (err) return handleError(res, err);
           if (!positiveBalance) return res.status(402).send(post);
-          console.log(`exports.create post ${JSON.stringify({act})}`);
+          //console.log(`exports.create post ${JSON.stringify({act})}`);
           activity.activity(act, function (err) {
             if (err) { return handleError(res, err);}
             pricing.chargeActivityDistribution(post.behalf, activity);
