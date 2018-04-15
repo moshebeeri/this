@@ -25,6 +25,7 @@ const MongodbSearch = require('../../components/mongo-search');
 const Role = require('../../components/role');
 const feed = require('../../components/feed-tools');
 const path = require('path');
+const countryCode = require('../../components/counrtycode');
 
 exports.search = MongodbSearch.create(User);
 
@@ -300,8 +301,6 @@ exports.create = function (req, res, next) {
  * class  ContactsContract.CommonDataKinds.Nickname
  * class  ContactsContract.CommonDataKinds.Phone
  */
-const countryCode = require('../../components/counrtycode');
-
 exports.phonebook = function (req, res) {
   const phonebook = req.body;
   const userId = req.user._id;
@@ -379,22 +378,34 @@ function new_user_follow(user) {
         owner: user._id,
         updated: Date.now(),
         contacts: []
-      }, function (err, phone_number) {
+      }, function (err) {
         if (err) console.log(err);
         //TODO: Suggests who to follow (All entities)
       });
     } else {
-      console.log(`new_user_follow phone_number: ${JSON.stringify(phone_number)}`);
       //We have this number, make user follow the users who have his number
-      phone_number.contacts.forEach( (contactX) => {
+      async.each(phone_number.contacts, (contactX, callback) => {
         //this line is redundant but solved some bug we could not understand since contact.userId was undefined value
         const contact = JSON.parse(JSON.stringify(contactX));
-        graphModel.follow_user_by_phone_number(user.phone_number, contact.userId);
-        activity_follow(user._id, {user: contact.userId});
+        graphModel.follow_user_by_phone_number(user.phone_number, contact.userId, err => {
+          if(err) return callback(err);
+          activity_follow(user._id, {user: contact.userId});
+          callback(null)
+        });
+      },(err) => {
+        if(err) console.error(err);
+        graphModel.owner_followers_follow_business(user._id);
+        phone_number.owner = user._id;
+        phone_number.save();
+
       });
-      graphModel.owner_followers_follow_business(user._id);
-      phone_number.owner = user._id;
-      phone_number.save();
+      //We have this number, make user follow the users who have his number
+      // phone_number.contacts.forEach( (contactX) => {
+      //   //this line is redundant but solved some bug we could not understand since contact.userId was undefined value
+      //   const contact = JSON.parse(JSON.stringify(contactX));
+      //   graphModel.follow_user_by_phone_number(user.phone_number, contact.userId);
+      //   activity_follow(user._id, {user: contact.userId});
+      // });
     }
   });
 }
