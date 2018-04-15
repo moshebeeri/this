@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem} from 'native-base';
-import {BackHandler, Image, ScrollView, View} from 'react-native';
+import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem,} from 'native-base';
+import {BackHandler, Image, Platform, ScrollView, View} from 'react-native';
 import PromotionApi from '../../api/promotion'
 import {BusinessHeader, PromotionColumnHeader, PromotionSeperator, ThisText} from '../../ui/index';
 import strings from "../../i18n/i18n"
@@ -80,7 +80,7 @@ class RealizePromotion extends Component {
         return (
             <ScrollView>
                 <BusinessHeader backAction={this.handleBack.bind(this)} showBack navigation={this.props.navigation}
-                                business={item.business}
+                                business={item.business} heaedrSize={Platform.OS === 'ios' ? 81 : 65}
                                 categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                 businessName={item.businessName}/>
 

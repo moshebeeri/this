@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity,Platform} from 'react-native';
 import {
     Button,
     Card,
@@ -17,6 +17,7 @@ import {
     Tabs,
     Thumbnail,
     Title,
+
     View
 } from 'native-base';
 import styles from './styles'
@@ -83,7 +84,7 @@ export default class BusinessListView extends Component {
         return ( <View style={{marginTop: 1, marginBottom: 9, backgroundColor: 'white'}}>
                 <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
-                                businessName={item.business.name} noMargin businessView
+                                businessName={item.business.name} noMargin businessView heaedrSize={Platform.OS === 'ios' ? 60 : 60}
                                 editButton={editButton}/>
 
 
