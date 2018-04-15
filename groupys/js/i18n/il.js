@@ -294,6 +294,7 @@ const il = {
     LoginFailedMessage                            : "כניסה נכשלה, סיסמא או משתמש אינם נכונים",
     SignUpUserExist                               : "רישום נכשל, משתמש כבר קיים במערכת",
     networkErrorMessage                           : "בקשה נכשלה, הרשת לא זמינה",
+    Free                                          : "חינם",
 
 
 };

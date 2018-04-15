@@ -25,7 +25,6 @@ class DataSync {
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
-        this.syncSavedInstances(store.getState().myPromotions.feeds, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
     }
@@ -43,7 +42,7 @@ class DataSync {
             asyncListener.addListener('user_' + user._id, (snap) => {
                 let response = snap.val();
                 const token = state.authentication.token;
-                if(response ){
+                if (response && !response.markAsRead) {
                     switch (response.type) {
                         case "saved_instance_realized":
                             dispatch({
@@ -65,6 +64,7 @@ class DataSync {
                                 token: token, user: user
                             });
                     }
+                    asyncListener.markAsRead(snap.key);
                 }
             })
         }
@@ -73,15 +73,19 @@ class DataSync {
     syncMainFeed(user, state, dispatch) {
         if (user) {
             asyncListener.addListener('feed_' + user._id, (snap) => {
-                const token = state.authentication.token;
-                const feedOrder = state.feeds.feedView;
-                if (feedOrder && feedOrder.length > 0) {
-                    dispatch({
-                        type: types.FEED_SET_TOP_FEED,
-                        lastId: feedOrder[0],
-                        token: token,
-                        user: user,
-                    });
+                let response = snap.val();
+                if (response && !response.markAsRead) {
+                    const token = state.authentication.token;
+                    const feedOrder = state.feeds.feedView;
+                    if (feedOrder && feedOrder.length > 0) {
+                        dispatch({
+                            type: types.FEED_SET_TOP_FEED,
+                            lastId: feedOrder[0],
+                            token: token,
+                            user: user,
+                        });
+                    }
+                    asyncListener.markAsRead(snap.key);
                 }
             })
         }
@@ -91,38 +95,25 @@ class DataSync {
         if (Object.values(promotions)) {
             Object.values(promotions).forEach(promotion => {
                     asyncListener.addListener('promotion_' + promotion._id, (snap) => {
-                        let promotionId = snap.key.substring('promotion_'.length);
-                        const token = state.authentication.token;
-                        let promotion = state.promotions.promotions[promotionId];
-                        if (promotion) {
-                            let businessId = promotion.entity.business;
-                            if (state.businesses.myBusinesses[businessId]) {
-                                dispatch({
-                                    type: types.UPDATE_PROMOTION,
-                                    token: token,
-                                    id: promotionId,
-                                    businessId: businessId,
-                                    item: promotion
-                                });
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            let promotionId = snap.key.substring('promotion_'.length);
+                            const token = state.authentication.token;
+                            let promotion = state.promotions.promotions[promotionId];
+                            if (promotion) {
+                                let businessId = promotion.entity.business;
+                                if (state.businesses.myBusinesses[businessId]) {
+                                    dispatch({
+                                        type: types.UPDATE_PROMOTION,
+                                        token: token,
+                                        id: promotionId,
+                                        businessId: businessId,
+                                        item: promotion
+                                    });
+                                }
                             }
+                            asyncListener.markAsRead(snap.key);
                         }
-                    })
-                }
-            )
-        }
-    }
-
-    syncSavedInstances(savedInstances, state, dispatch) {
-        if (Object.values(savedInstances)) {
-            Object.values(savedInstances).forEach(savedInstances => {
-                    asyncListener.addListener('Redeem' + savedInstances._id, (snap) => {
-                        let savedInstancesId = snap.key.substring('Redeem'.length);
-                        const token = state.authentication.token;
-                        dispatch({
-                            type: types.UPDATE_SINGLE_MYPROMOTIONS_REQUEST,
-                            token: token,
-                            savedInstanceId: savedInstancesId,
-                        });
                     })
                 }
             )
@@ -134,51 +125,66 @@ class DataSync {
             Object.values(instances).forEach(instance => {
                     // sync social
                     asyncListener.addListener('social_' + instance._id, (snap) => {
-                        let instanceId = snap.key.substring('social_'.length);
-                        const token = state.authentication.token;
-                        let feedInstance = state.instances.instances[instanceId];
-                        dispatch({
-                            type: types.FEED_SET_SOCIAL_STATE,
-                            token: token,
-                            feed: feedInstance,
-                            id: instanceId
-                        });
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            let instanceId = snap.key.substring('social_'.length);
+                            const token = state.authentication.token;
+                            let feedInstance = state.instances.instances[instanceId];
+                            dispatch({
+                                type: types.FEED_SET_SOCIAL_STATE,
+                                token: token,
+                                feed: feedInstance,
+                                id: instanceId
+                            });
+                            asyncListener.markAsRead(snap.key);
+                        }
+
                     })
                     asyncListener.addListener('Redeem' + instance._id, (snap) => {
-                        let instanceId = snap.key.substring('Redeem'.length);
-                        const token = state.authentication.token;
-                        let feedInstance = state.instances.instances[instanceId];
-                        dispatch({
-                            type: types.FEED_SET_SOCIAL_STATE,
-                            token: token,
-                            feed: feedInstance,
-                            id: instanceId
-                        });
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            let instanceId = snap.key.substring('Redeem'.length);
+                            const token = state.authentication.token;
+                            let feedInstance = state.instances.instances[instanceId];
+                            dispatch({
+                                type: types.FEED_SET_SOCIAL_STATE,
+                                token: token,
+                                feed: feedInstance,
+                                id: instanceId
+                            });
+                            asyncListener.markAsRead(snap.key);
+                        }
+
                     })
                     // sync instance comments
                     asyncListener.addListener('instanceMessage_' + instance._id, (snap) => {
-                        let instanceId = snap.key.substring('instanceMessage_'.length);
-                        const token = state.authentication.token;
-                        let entities = [];
-                        entities.push({instance: instance._id});
-                        let entitiesComents = state.entityComments.entityCommentsOrder[instanceId];
-                        if (entitiesComents) {
-                            dispatch({
-                                type: types.FEED_SYNC_CHAT,
-                                entities: entities,
-                                token: token,
-                                generalId: instanceId,
-                                lastChatId: entitiesComents[0]
-                            })
-                        } else {
-                            dispatch({
-                                type: types.FEED_SYNC_CHAT,
-                                entities: entities,
-                                token: token,
-                                generalId: instanceId,
-                                lastChatId: 0
-                            })
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            let instanceId = snap.key.substring('instanceMessage_'.length);
+                            const token = state.authentication.token;
+                            let entities = [];
+                            entities.push({instance: instance._id});
+                            let entitiesComents = state.entityComments.entityCommentsOrder[instanceId];
+                            if (entitiesComents) {
+                                dispatch({
+                                    type: types.FEED_SYNC_CHAT,
+                                    entities: entities,
+                                    token: token,
+                                    generalId: instanceId,
+                                    lastChatId: entitiesComents[0]
+                                })
+                            } else {
+                                dispatch({
+                                    type: types.FEED_SYNC_CHAT,
+                                    entities: entities,
+                                    token: token,
+                                    generalId: instanceId,
+                                    lastChatId: 0
+                                })
+                            }
+                            asyncListener.markAsRead(snap.key);
                         }
+
                     })
                 }
             )
@@ -190,43 +196,62 @@ class DataSync {
             Object.values(groups).forEach(group => {
                     //sync group chat
                     asyncListener.addListener("group_chat_" + group._id, (snap) => {
-                        let groupId = snap.key.substring('group_chat_'.length);
-                        const token = state.authentication.token;
-                        const groupsChats = state.comments.groupComments[groupId];
-                        const user = state.user.user;
-                        if (groupsChats) {
-                            this.setChatTop(groupsChats, groupId, user, token, dispatch)
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            let groupId = snap.key.substring('group_chat_'.length);
+                            const token = state.authentication.token;
+                            const groupsChats = state.comments.groupComments[groupId];
+                            const user = state.user.user;
+                            if (groupsChats) {
+                                this.setChatTop(groupsChats, groupId, user, token, dispatch)
+                            }
+                            dispatch({
+                                type: types.SAVE_GROUPS_REQUEST,
+                                token: token,
+                            });
+                            asyncListener.markAsRead(snap.key);
                         }
+
                     });
                     //sync group view
                     asyncListener.addListener('user_follow_group_' + group._id, (snap) => {
                         // TODO use get by group
-                        let groupId = snap.key.substring('group_'.length);
-                        const token = state.authentication.token;
-                        dispatch({
-                            type: types.SAVE_GROUPS_REQUEST,
-                            token: token,
-                        });
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            let groupId = snap.key.substring('group_'.length);
+                            const token = state.authentication.token;
+                            dispatch({
+                                type: types.SAVE_GROUPS_REQUEST,
+                                token: token,
+                            });
+                            asyncListener.markAsRead(snap.key);
+                        }
+
                     })
                     //sync group main feeds
                     asyncListener.addListener('feed_' + group._id, (snap) => {
-                        const feedOrder = state.groups.groupFeedOrder[group._id];
-                        const token = state.authentication.token;
-                        if (feedOrder) {
-                            if (feedOrder && feedOrder.length > 0) {
-                                dispatch({
-                                    type: types.GROUP_FEED_SET_TOP_FEED,
-                                    lastId: feedOrder[0],
-                                    group: group,
-                                    token: token,
-                                    user: user,
-                                });
-                                dispatch({
-                                    type: types.SAVE_GROUPS_REQUEST,
-                                    token: token,
-                                });
+                        let response = snap.val();
+                        if (response && !response.markAsRead) {
+                            const feedOrder = state.groups.groupFeedOrder[group._id];
+                            const token = state.authentication.token;
+                            if (feedOrder) {
+                                if (feedOrder && feedOrder.length > 0) {
+                                    dispatch({
+                                        type: types.GROUP_FEED_SET_TOP_FEED,
+                                        lastId: feedOrder[0],
+                                        group: group,
+                                        token: token,
+                                        user: user,
+                                    });
+                                    dispatch({
+                                        type: types.SAVE_GROUPS_REQUEST,
+                                        token: token,
+                                    });
+                                }
                             }
+                            asyncListener.markAsRead(snap.key);
                         }
+
                     })
                 }
             )

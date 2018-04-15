@@ -1,16 +1,14 @@
 import React, {Component} from 'react';
-import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem} from 'native-base';
-import {BackHandler, Dimensions, Image, ScrollView, View} from 'react-native';
+import {Button, Card, CardItem, Container, Content, Footer, Icon, Input, Item, List, ListItem,} from 'native-base';
+import {BackHandler, Image, Platform, ScrollView, View} from 'react-native';
 import PromotionApi from '../../api/promotion'
 import {BusinessHeader, PromotionColumnHeader, PromotionSeperator, ThisText} from '../../ui/index';
 import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
 import InstanceLifeCycle from '../../utils/InstanceLifeCycle'
 import StyleUtils from "../../utils/styleUtils";
-import Tasks from '../../tasks/tasks'
 import FeedUiConverter from "../../api/feed-ui-converter";
 
-const deviceHeight = Dimensions.get('window').width;
 let promotionApi = new PromotionApi()
 let feedUiConverter = new FeedUiConverter();
 
@@ -82,12 +80,11 @@ class RealizePromotion extends Component {
         return (
             <ScrollView>
                 <BusinessHeader backAction={this.handleBack.bind(this)} showBack navigation={this.props.navigation}
-                                business={item.business}
+                                business={item.business} heaedrSize={Platform.OS === 'ios' ? 81 : 65}
                                 categoryTitle={item.categoryTitle} businessLogo={item.businessLogo}
                                 businessName={item.businessName}/>
 
-                <View style={{flex: 1, backgroundColor:'white',justifyContent: 'center', alignItems: 'center'}}>
-
+                <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center'}}>
 
 
                     <PromotionColumnHeader item={item} columnStyle type={item.promotion} feed={true}
@@ -95,7 +92,7 @@ class RealizePromotion extends Component {
                                            titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
-                    <View style={{marginTop:5,flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
+                    <View style={{marginTop: 5, flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
 
                         <PromotionSeperator narrowWidth={StyleUtils.scale(30)}/>
                     </View>
@@ -117,15 +114,19 @@ class RealizePromotion extends Component {
                         }} source={{uri: this.state.image.qrcode}}/>
                         }
                     </View>
-                    {isRealized && <View style={{transform: [{rotate: '45deg'}],position: 'absolute', left:40, top: 370, backgroundColor: 'transparent'}}>
+                    {isRealized && <View style={{
+                        transform: [{rotate: '45deg'}],
+                        position: 'absolute',
+                        left: 40,
+                        top: 370,
+                        backgroundColor: 'transparent'
+                    }}>
                         <ThisText style={{
                             backgroundColor: 'white',
                             fontSize: 50,
-                            marginRight:70,
+                            marginRight: 70,
                             marginTop: 30,
-
                             fontWeight: 'bold',
-
                             color: '#2db6c8'
                         }}>{strings.Realized.toUpperCase()}</ThisText>
                     </View>}

@@ -83,8 +83,10 @@ export default class ImagePickerComponent extends Component {
     async pickVideo() {
         const {setVideo} = this.props;
         try {
+            await ImagePicker.clean();
             let video = await ImagePicker.openPicker({
                 mediaType: "video",
+                cropping: false
             });
             setVideo(video);
         } catch (e) {

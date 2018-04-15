@@ -221,17 +221,8 @@ class ApplicationManager extends Component {
 
     componentDidMount() {
         dataSync.syncData();
-        //  codePush.sync({updateDialog: updateDialogOption});
     }
 
-    renderTabeBar(props) {
-        switch (props.activeTab) {
-            default:
-                return <View ref={'tabs'}> <ThisText>bla</ThisText>
-
-                </View>
-        }
-    }
 
     savePromotionFromPopup(id, navigation, feed) {
         const {feedAction} = this.props;
