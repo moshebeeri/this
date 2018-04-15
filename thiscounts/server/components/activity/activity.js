@@ -16,16 +16,21 @@ function Activity() {
 }
 
 function getActivityActor(activity) {
+  let actor = null;
   if (activity.actor_user)
-    return activity.actor_user;
+    actor = activity.actor_user;
   if (activity.actor_business)
-    return activity.actor_business;
+    actor = activity.actor_business;
   if (activity.actor_group)
-    return activity.actor_group;
+    actor = activity.actor_group;
   if (activity.actor_mall)
-    return activity.actor_mall;
+    actor = activity.actor_mall;
   if (activity.actor_chain)
-    return activity.actor_chain;
+    actor = activity.actor_chain;
+
+  if(actor._id)
+    return actor._id.toString();
+  return actor;
 }
 
 //pagination http://blog.mongodirector.com/fast-paging-with-mongodb/
@@ -49,18 +54,22 @@ function update_feeds(effected, activity) {
   if (_.includes(activity.audience, 'SELF')) {
     const actor = getActivityActor(activity);
     effected = effected.map(e=>e._id);
-    //console.log(`update_feeds SELF entity: ${actor} `);
-    if (!effected.includes(actor)) {
-      activity.distributions += 1;
-      Feed.create({
-      entity: actor,
-      activity: activity._id
-      }, function (err, feed) {
-        if (err) {
-          return logger.error(err.message);
-        }
-        fireEvent.change('feed', actor);
-      });
+    if(actor) {
+      //console.log(`update_feeds SELF entity: ${actor}`);
+      if (!effected.includes(actor)) {
+        activity.distributions += 1;
+        Feed.create({
+          entity: actor,
+          activity: activity._id
+        }, function (err, feed) {
+          if (err) {
+            return logger.error(err.message);
+          }
+          fireEvent.change('feed', actor);
+        });
+      }
+    }else{
+      console.error(`failed to send activity to actor ${JSON.stringify({actor, activity})}`);
     }
   }
 }

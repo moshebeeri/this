@@ -320,7 +320,10 @@ function user_follow_group(user_id, group, callback) {
     if (err) {
       console.error(err);
     }
-    fireEvent.change('user_follow_group', user_id);
+    fireEvent.info('user', user_id, 'user_follow_group', {
+      userId: user_id,
+      groupId: group._id
+    });
     user_follow_group_activity(group, user_id);
     onAction.follow(user_id, group._id, (err) => {
       if (err) console.error(err)
@@ -334,6 +337,10 @@ function group_follow_group(following_group_id, group_to_follow_id, callback) {
   graphModel.relate_ids(following_group_id, 'FOLLOW', group_to_follow_id, function (err) {
     if (err) return callback(err);
     fireEvent.change('group_follow_group', following_group_id);
+    fireEvent.info('group', following_group_id, 'group_follow_group', {
+      following_group_id,
+      group_to_follow_id
+    });
     group_follow_group_activity(following_group_id, group_to_follow_id);
     callback(null)
   });
