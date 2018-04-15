@@ -297,6 +297,7 @@ TakeProductPicture                            : "Take Product Picture",
 LoginFailedMessage                            : "Login failed , Bad Credentials",
 SignUpUserExist                               : "SignUp failed , user already exist",
 networkErrorMessage                           : "Operation failed, server is not reachable",
+Free                                          : "Free",
 
 
 };

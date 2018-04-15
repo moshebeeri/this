@@ -164,7 +164,7 @@ class BusinessHeader extends Component {
         if (bgColor) {
             backgroundColor = bgColor;
         }
-        return <View style={[headerContainerStyle, {backgroundColor: 'transparent', width: StyleUtils.getWidth()}]}>
+        return <View style={[headerContainerStyle, {backgroundColor: backgroundColor, width: StyleUtils.getWidth()}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}
             </View>

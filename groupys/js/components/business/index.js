@@ -21,22 +21,14 @@ class Business extends Component {
     }
 
     render() {
-        const {businesses, navigation, businessLoading, update, actions, user} = this.props;
-        if (businessLoading && businesses.length === 0) {
-            return <Spinner/>
-        }
-        if (!businessLoading && businesses.length === 0) {
-            return <View></View>
-        }
+        const {businesses, navigation, update, actions, user} = this.props;
         return (
-            <Container style={{backgroundColor: `${appBackgroundColor}`}}>
-
-
+            <View style={{flex: 1}}>
                 <GenericListManager user={user} noRefresh rows={businesses} navigation={navigation} actions={actions}
                                     update={update}
                                     ItemDetail={BusinessListView}/>
 
-            </Container>
+            </View>
         );
     }
 }
