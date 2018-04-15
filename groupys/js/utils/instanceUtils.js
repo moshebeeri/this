@@ -51,15 +51,15 @@ function checkIfActive(feed) {
     return true;
 }
 
-function showClaim(item){
-    return !item.isRealized && !item.isExpired && item.isActive && !item.isSaved
+function showClaim(item,saved){
+    return !item.isRealized && !item.isExpired && item.isActive && !item.isSaved && !saved
 }
 function showRedeemed(item){
     return item.isRealized
 }
 
-function showRedeem(item){
-    return !item.isRealized && !item.isExpired && item.isActive && item.isSaved
+function showRedeem(item,saved){
+    return !item.isRealized && !item.isExpired && item.isActive && (item.isSaved || saved)
 }
 
 function showExpired(item){

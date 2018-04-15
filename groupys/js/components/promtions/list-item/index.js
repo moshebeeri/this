@@ -55,7 +55,6 @@ export default class PromotionListView extends Component {
     visited(visible) {
         const {item} = this.props;
         if (visible) {
-            //    PageRefresher.visitedBusinessPromotion(item._id);
         }
     }
 
@@ -93,10 +92,7 @@ export default class PromotionListView extends Component {
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
                             <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
-                        <View style={styles.editButtonContainer}>
-                            <SubmitButton title={strings.Edit.toUpperCase()} color="#e65100"
-                                          onPress={this.showProduct.bind(this, this.props, this.props.item)}/>
-                        </View>
+
                     </View>
                     <View style={[styles.promotionAnalyticsContainer, {width: StyleUtils.getWidth()}]}>
 

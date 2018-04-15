@@ -62,7 +62,7 @@ module.exports = {
         width: width,
         flex: 1,
         backgroundColor: 'white',
-        height: StyleUtils.relativeHeight(40, 40),
+        height: StyleUtils.getWidth() * 9/16,
     },
     promotionInformation: {
         width: width - 25,
@@ -93,7 +93,7 @@ module.exports = {
         marginTop: 10,
         marginBottom: 10,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     promotionLoctionContainer: {
         alignItems: 'flex-start',
@@ -103,6 +103,7 @@ module.exports = {
     expireDateContainer: {
         alignItems: 'flex-start',
         backgroundColor: 'white',
+        marginLeft : StyleUtils.scale(30)
     },
     editButtonContainer: {
         backgroundColor: 'white',

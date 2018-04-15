@@ -11,6 +11,7 @@ import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
 import navigationUtils from '../../utils/navigationUtils'
+import CallingCodeUtils from '../../utils/LocalToCallingCode'
 
 const {width, height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
@@ -25,16 +26,21 @@ class Login extends Component {
         super(props);
         this.state = {
             phone_number: '',
+            callingCode: '',
             password: '',
         };
     }
 
+    async componentWillMount(){
+        let callingCode = await CallingCodeUtils.getCallingCode();
+        this.setState({callingCode: '+' + callingCode})
+    }
     focusNextField(nextField) {
         this.refs[nextField].focus()
     }
 
     login() {
-        this.props.actions.login(this.state.phoneNumber, this.state.password, this.props.navigation)
+        this.props.actions.login(this.state.phoneNumber, this.state.password, this.props.navigation,this.state.callingCode)
     }
 
     replaceRoute(route) {
@@ -76,17 +82,33 @@ class Login extends Component {
                     }}>
 
 
-                        <View style={[styles.phoneTextInput, {width: StyleUtils.getWidth()}]} regular>
-
-                            <TextInput focus={focusPhone} keyboardType='phone-pad' value={this.state.name}
+                        <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row',width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
+                            <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
                                        blurOnSubmit={true} returnKeyType='next'
+                                       onSubmitEditing={this.focusNextField.bind(this, "phone")}
+                                       underlineColorAndroid={'transparent'}
+                                       onChangeText={(callingCode) => this.setState({callingCode})}
+                                       placeholderTextColor={'white'}
+                                       selectionColor={'black'}
+                                       style={{
+                                           width:  StyleUtils.scale(60),
+                                           color: 'white',
+                                           borderColor: 'white',
+                                           height: StyleUtils.scale(40),
+                                           fontSize: StyleUtils.scale(20),
+                                           borderBottomWidth: 1
+                                       }}
+                                       />
+                            <TextInput focus={true} keyboardType='phone-pad' value={this.state.name}
+                                       blurOnSubmit={true} returnKeyType='next'
+                                       ref='phone'
                                        onSubmitEditing={this.focusNextField.bind(this, "password")}
                                        underlineColorAndroid={'transparent'}
                                        onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                        placeholderTextColor={'white'}
                                        selectionColor={'black'}
                                        style={{
-                                           width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
+                                           width: StyleUtils.scale(200),
                                            color: 'white',
                                            borderColor: 'white',
                                            height: StyleUtils.scale(40),
@@ -94,6 +116,7 @@ class Login extends Component {
                                            borderBottomWidth: 1
                                        }}
                                        placeholder={strings.PhoneNumber}/>
+
                         </View>
 
                         <View style={[styles.passwordTextInput, {width: StyleUtils.getWidth()}]} regular>

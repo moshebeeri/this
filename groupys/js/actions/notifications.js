@@ -26,7 +26,7 @@ export function setTopNotification() {
 }
 
 export function readNotification(notificationId) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             notificationApi.readNotification(token, notificationId);
@@ -43,7 +43,7 @@ export function readNotification(notificationId) {
 }
 
 export function doNotification(notificationId, type) {
-    return function (dispatch, getState) {
+    return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             notificationApi.doNotificationAction(token, notificationId, type);

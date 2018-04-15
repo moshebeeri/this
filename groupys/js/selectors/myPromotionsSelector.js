@@ -8,6 +8,9 @@ export const getFeeds = createSelector([getStateFeeds],
     (myPromotions) => {
         let feedsOrder = myPromotions.feedOrder
         let feeds = myPromotions.feeds;
+        if(_.isEmpty(feedsOrder)){
+            feedsOrder = Object.keys(feeds);
+        }
         let instanceLifeCycle = new InstanceLifeCycle(myPromotions.feeds);
         let response = [];
         if (!_.isEmpty(feedsOrder)) {

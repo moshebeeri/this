@@ -22,10 +22,10 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
-            if(getState().instances.instances[instanceId]  &&  getState().instances.instances[instanceId].promotion) {
+            if (getState().instances.instances[instanceId] && getState().instances.instances[instanceId].promotion) {
                 asyncListener.syncChange('promotion_' + getState().instances.instances[instanceId].promotion, 'add-comment');
             }
-            asyncListener.syncChange(groupId, {comment: message})
+            asyncListener.syncChange("group_chat_" + groupId, {comment: message})
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-sendMessage\'')
@@ -71,54 +71,6 @@ export function setNextFeeds(group, instance) {
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-setNextFeeds')
             await logger.actionFailed('instance-group-setNextFeeds')
-        }
-    }
-}
-
-export function* restartListenForChat(group, instance, entitiesComents, token) {
-    if (entitiesComents && entitiesComents[0] && entitiesComents[0]._id) {
-        yield put({
-            type: types.CANCEL_GROUP_INSTANCE_CHAT_LISTENER,
-        });
-        yield put({
-            type: types.LISTEN_FOR_GROUP_INSTANCE_CHATS,
-            token: token,
-            group: group,
-            instance: instance,
-            lastChatId: entitiesComents[entitiesComents.length - 1]._id
-        });
-    }
-}
-
-export function stopListenForChat() {
-    return function (dispatch) {
-        dispatch({
-            type: types.CANCEL_GROUP_INSTANCE_CHAT_LISTENER,
-        })
-    }
-}
-
-export function startListenForChat(group, instance) {
-    return function (dispatch, getState) {
-        const token = getState().authentication.token;
-        if (getState().commentInstances.groupCommentsOrder[group._id] && getState().commentInstances.groupCommentsOrder[group._id][instance.id]) {
-            let entitiesComents = getState().commentInstances.groupCommentsOrder[group._id][instance.id];
-            dispatch({
-                type: types.LISTEN_FOR_GROUP_INSTANCE_CHATS,
-                token: token,
-                group: group,
-                instance: instance,
-                lastChatId: entitiesComents[entitiesComents.length - 1]
-            })
-        }
-        else {
-            dispatch({
-                type: types.LISTEN_FOR_GROUP_INSTANCE_CHATS,
-                token: token,
-                group: group,
-                instance: instance,
-                lastChatId: 0
-            })
         }
     }
 }

@@ -46,21 +46,26 @@ export default class ImagePickerComponent extends Component {
     }
 
     async pickFromCamera() {
-        const {setImage, imageWidth, imageHeight, logo} = this.props;
-        let width = 2000;
-        if (imageWidth) {
-            width = imageWidth;
+        const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
+        let cropping = true;
+        if(cropDisable){
+            cropping = false;
         }
-        let height = 1400;
+        let width =  StyleUtils.getWidth() ;
         if (imageWidth) {
-            height = imageHeight;
+            width =  imageWidth;
+        }
+        let height = parseInt(StyleUtils.getWidth() * 9 /16);
+        if (imageHeight) {
+            height =  imageHeight;
         }
         if (logo) {
             height = 2000;
+            width =  2000;
         }
         try {
             let image = await ImagePicker.openCamera({
-                cropping: true,
+                cropping: cropping,
                 width: width,
                 height: height,
                 compressImageQuality: 1,
@@ -79,8 +84,10 @@ export default class ImagePickerComponent extends Component {
     async pickVideo() {
         const {setVideo} = this.props;
         try {
+            await ImagePicker.clean();
             let video = await ImagePicker.openPicker({
                 mediaType: "video",
+                cropping: false
             });
             setVideo(video);
         } catch (e) {
@@ -89,21 +96,26 @@ export default class ImagePickerComponent extends Component {
     }
 
     async pickPicture() {
-        const {setImage, imageWidth, imageHeight, logo} = this.props;
-        let width = 2000;
-        if (imageWidth) {
-            width = imageWidth;
+        const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
+        let cropping = true;
+        if(cropDisable){
+            cropping = false;
         }
-        let height = 1400;
+        let width =  StyleUtils.getWidth() ;
         if (imageWidth) {
+            width =  imageWidth ;
+        }
+        let height = parseInt(StyleUtils.getWidth() * 9 /16);
+        if (imageHeight) {
             height = imageHeight;
         }
         if (logo) {
-            height = 2000;
+            height = 200;
+            width =  200;
         }
         try {
             let image = await ImagePicker.openPicker({
-                cropping: true,
+                cropping: cropping,
                 width: width,
                 height: height
                 ,

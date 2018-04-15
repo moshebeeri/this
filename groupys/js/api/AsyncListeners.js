@@ -10,11 +10,22 @@ firebase.initializeApp({
 class AsyncListeners {
 
     listeners = [];
+    managementInit = false;
 
     constructor(){
         firebase.auth().signInAnonymously()
     }
 
+    reset(){
+        this.listeners = [];
+    }
+
+    addManagement(callback){
+        if(!this.managementInit) {
+            firebase.database().ref('Management').on('value', callback);
+            this.managementInit = true;
+        }
+    }
     addListener(key, callback) {
         if(!this.listeners.includes(key)) {
             this.listeners.push(key);
@@ -22,8 +33,13 @@ class AsyncListeners {
         }
     }
 
+
+    markAsRead(key){
+        firebase.database().ref('events').child(key).set({"markAsRead": true});
+    }
+
     syncChange(key,value) {
-       firebase.database().ref('events').child(key).push(value);
+       firebase.database().ref('events').child(key).set(value);
 
     }
 

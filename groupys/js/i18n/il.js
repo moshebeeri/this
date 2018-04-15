@@ -292,6 +292,10 @@ const il = {
     ReducedAmountInvalidCondition                 : "עלות רכישה צריך להיות גדול מהתשלום",
     TakeProductPicture                            : "בחר תמונת מוצר",
     LoginFailedMessage                            : "כניסה נכשלה, סיסמא או משתמש אינם נכונים",
+    SignUpUserExist                               : "רישום נכשל, משתמש כבר קיים במערכת",
+    networkErrorMessage                           : "בקשה נכשלה, הרשת לא זמינה",
+    Free                                          : "חינם",
+
 
 };
 

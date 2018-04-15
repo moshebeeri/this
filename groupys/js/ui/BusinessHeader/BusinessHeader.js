@@ -90,7 +90,7 @@ class BusinessHeader extends Component {
     }
 
     render() {
-        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu} = this.props;
+        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu,heaedrSize} = this.props;
         let nameTextStyle = styles.businessNameText;
         if (color) {
             nameTextStyle = styles.businessColorNameText;
@@ -105,6 +105,11 @@ class BusinessHeader extends Component {
         }
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         let back = undefined;
+
+        let componentSize = 81;
+        if(heaedrSize){
+            componentSize = heaedrSize;
+        }
         let menuAction = <Menu>
             <MenuTrigger placement="right">
                 <Icon2 style={{color: 'white', paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
@@ -145,20 +150,20 @@ class BusinessHeader extends Component {
                 <Icon active color={"#2db6c8"} size={StyleUtils.scale(30)} name={arrowName}/>
             </TouchableOpacityFix>
         }
-        return <View>
+        return <View style={{height: StyleUtils.scale(componentSize)}}>
             {!this.props.noProfile ?
-                <View style={{margin: 7}}>
-                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
+                <View>
+                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction)}
                 </View>
                 :
-                <View style={{margin: 7}}>
-                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction)}
+                <View>
+                    {this.headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction)}
                 </View>
             }
         </View>
     }
 
-    headerInternals(headerContainerStyle, back, nameTextStyle, businessName, categoryTitle, showEdit, editButton, hideMenu, menuAction) {
+    headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction) {
         const {bgColor, textColor} = this.props;
         let backgroundColor = 'white';
         if (bgColor) {
@@ -170,11 +175,12 @@ class BusinessHeader extends Component {
             </View>
             {this.createBusinessLog()}
             <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
-                <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
+                <ThisText style={[nameTextStyle, {color: textColor,  fontWeight: 'bold'}]}
                           note>{businessName}</ThisText>
             </View>
-            {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
+            {showEdit ? <View style={{flexDirection: 'row',alignItems: 'center',}}>
                 <View style={{marginTop: 10}}>
+
                     {editButton}
                 </View>
                 <View style={{marginRight: 20, alignItems: 'center', justifyContent: 'center'}}>

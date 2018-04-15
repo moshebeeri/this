@@ -50,7 +50,6 @@ class GroupFeedHeader extends Component {
 
     navigateBack() {
         this.handleBack();
-        this.props.instanceGroupCommentsAction.stopListenForChat();
         this.props.navigation.goBack();
     }
 

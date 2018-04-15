@@ -105,10 +105,10 @@ class FeedConverter {
             responseFeed.social = post.social_state;
         }
         if (post.video) {
-            responseFeed.video = feed.activity.post.video.url;
+            responseFeed.video = post.video.url;
         }
-        if (post.url && FormUtils.youtube_parser(feed.activity.post.url)) {
-            responseFeed.videoId = FormUtils.youtube_parser(feed.activity.post.url)
+        if (post.url && FormUtils.youtube_parser(post.url)) {
+            responseFeed.videoId = FormUtils.youtube_parser(post.url)
         }
         responseFeed.title = post.title;
         let user = post.creator;

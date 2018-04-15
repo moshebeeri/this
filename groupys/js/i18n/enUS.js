@@ -294,7 +294,10 @@ HappyHour                                     : "Happy Hour",
 ReducedAmountInvalidCondition                 : "Buy amount should be greater then payment amount",
 PercentTerm                                   : "Global Discount {0} % Off",
 TakeProductPicture                            : "Take Product Picture",
-LoginFailedMessage                            : "Login Failed , Bad Credentials",
+LoginFailedMessage                            : "Login failed , Bad Credentials",
+SignUpUserExist                               : "SignUp failed , user already exist",
+networkErrorMessage                           : "Operation failed, server is not reachable",
+Free                                          : "Free",
 
 
 };
