@@ -1,6 +1,7 @@
 import {Platform} from 'react-native';
 
 let debounce = true;
+let debounceAction = true;
 function doNavigation(navigation,route,params){
     if(Platform.OS === 'ios'){
         if(params){
@@ -24,8 +25,19 @@ function doNavigation(navigation,route,params){
 
 }
 
+function doAction(action){
+    if (debounceAction) {
+        debounceAction = false;
+        action()
+        setTimeout(() => {
+            debounceAction = true;
+        }, 2000);
+    }
+}
+
 
 
 export default {
     doNavigation,
+    doAction
 }

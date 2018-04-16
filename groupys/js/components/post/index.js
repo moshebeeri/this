@@ -45,14 +45,18 @@ class AddPost extends Component {
     }
 
     async saveFormData() {
-        const {actions, navigation} = this.props;
         if (this.validateForm()) {
-            const post = this.createPostFromState();
-            if (navigation.state.params && navigation.state.params.group) {
-                actions.createGroupPost(post, this.props.navigation, navigation.state.params.group);
-            } else {
-                actions.createPost(post, this.props.navigation,);
-            }
+            navigationUtils.doAction(this.setPost.bind(this))
+        }
+    }
+
+    async setPost(){
+        const {actions, navigation} = this.props;
+        const post = this.createPostFromState();
+        if (navigation.state.params && navigation.state.params.group) {
+            actions.createGroupPost(post, this.props.navigation, navigation.state.params.group);
+        } else {
+            actions.createPost(post, this.props.navigation,);
         }
     }
 
