@@ -156,7 +156,7 @@ export default class GenericFeedItem extends Component {
     createFeedView(item) {
         if (item) {
             return <View key={this.props.item.id}
-                         style={{backgroundColor: '#cccccc'}}>
+                         style={{backgroundColor:`${appBackgroundColor}`}}>
                 {item}
             </View>
         }

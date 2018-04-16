@@ -153,10 +153,10 @@ module.exports = {
     promotion_card: {
         alignItems: 'center',
         flexDirection: 'column',
-        backgroundColor: 'white',
+
         width: width ,
         flex: 1,
-        borderRadius: 2,
+
     },
     promotion_image: {
         flex: 1,
@@ -277,7 +277,7 @@ module.exports = {
 
         flexDirection: 'row',
         borderTopWidth:1,
-        borderColor:'#cccccc'
+        borderColor:`${appBackgroundColor}`
     },
     post_bottomContainer: {
         backgroundColor: 'white',

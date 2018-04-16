@@ -97,9 +97,9 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
         }
         const result =
-            <InViewPort onChange={this.visited.bind(this)} style={container}>
-                <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
-                    {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor: 'red'}}>
+            <InViewPort onChange={this.visited.bind(this)} style={[container, {backgroundColor:`white`}]}>
+                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
+                    {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor:'white'}}>
                             <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
                                 <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                                  titleValue={item.promotionValue} term={item.promotionTerm}/>
@@ -207,7 +207,6 @@ export default class FeedPromotion extends Component {
             flex: 1,
             width: StyleUtils.getWidth(),
             overflow: 'hidden',
-            backgroundColor: 'pink',
             marginBottom: 10,
             alignItems: 'center',
             flexDirection: 'column',
