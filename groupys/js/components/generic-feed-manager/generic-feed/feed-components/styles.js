@@ -277,7 +277,7 @@ module.exports = {
 
         flexDirection: 'row',
         borderTopWidth:1,
-        borderColor:`${appBackgroundColor}`
+        borderColor:'#E6E6E6'
     },
     post_bottomContainer: {
         backgroundColor: 'white',
