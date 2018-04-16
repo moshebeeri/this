@@ -1,7 +1,7 @@
 /**
  * Created by roilandshut on 08/06/2017.
  */
-import {applyMiddleware, createStore} from "redux";
+import {applyMiddleware, createStore, compose} from "redux";
 import thunk from "redux-thunk";
 import {AsyncStorage} from 'react-native'
 import getRootReducer from "./reducers";
@@ -23,6 +23,19 @@ const store = createStore(
     autoRehydrate(),
 
 );
+
+// const initialState = {};
+// const middlewares = [thunk, sagaMiddleware];
+// const storeMoshe = createStore(
+//     getRootReducer(),
+//     initialState,
+//     compose(
+//         applyMiddleware(...middlewares),
+//         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+//     ),
+//     autoRehydrate(),
+// );
+
 
 
 persistStore(store, {storage: AsyncStorage});
