@@ -112,8 +112,13 @@ module.exports = {
         width: width /2 - 7
     },
     inputFullTextLayout: {
-        marginTop: 1, padding: 0,
-        width: width -15
+        padding: 0,
+        marginTop:StyleUtils.scale(40),
+        marginLeft: StyleUtils.scale(10),
+        width: width -15,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'flex-start'
     },
     inputTextLayoutImage: {
         marginBottom: 10, padding: 3,
