@@ -600,7 +600,10 @@ exports.user_products = function (req, res) {
 function sendGroupNotification(actor_user, audience, group, type) {
   //'ask_join'ask_invite'
   audience.forEach(to => {
-    User.findById(to).exec(user => {
+    User.findById(to).exec((err, user) => {
+      if(err) return console.error(err);
+      if(!user) return console.error(new Error(`User not found for id ${to}`));
+
       function generateText() {
         if (type === 'ask_join') {
           return {
