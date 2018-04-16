@@ -76,15 +76,21 @@ class AddPost extends Component {
 
     createPostFromState() {
         const {user, navigation} = this.props;
+        let video = this.state.video;
+        let picture = this.state.image;
+        if( this.state.youTubeUrl && FormUtils.youtube_parser(this.state.youTubeUrl)){
+            video = undefined;
+            picture = undefined;
+        }
         let clientParametes = {uploading: false}
-        if (this.state.image || this.state.video) {
+        if (picture || video) {
             clientParametes = {uploading: true}
         }
         if (navigation.state.params && navigation.state.params.group) {
             return {
                 text: this.state.post,
-                image: this.state.image,
-                uploadVideo: this.state.video,
+                image: picture,
+                uploadVideo: video,
                 url: this.state.youTubeUrl,
                 client: clientParametes,
                 behalf: {

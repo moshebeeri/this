@@ -484,6 +484,21 @@ export function refresh(id, currentSocialState) {
     }
 }
 
+
+export function inviteUser(userId, groupId) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            groupsApi.inviteUser(userId,groupId,token);
+            handler.handleSuccses(getState(), dispatch)
+            // await userApi.like(id, token);
+        } catch (error) {
+            handler.handleError(error, dispatch, 'groups-refresh')
+            logger.actionFailed('groups-refresh')
+        }
+    }
+}
+
 export function searchGroup(group) {
     return function (dispatch, getState) {
         const token = getState().authentication.token;
