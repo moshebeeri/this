@@ -36,7 +36,7 @@ class GroupsApi {
         }, 'groups', '/groups/add/user');
     }
 
-    inviteUser(user, group) {
+    inviteUser(user, group,token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/groups/invite/ask/${group}/${user}`, {
             method: 'GET',
             headers: {

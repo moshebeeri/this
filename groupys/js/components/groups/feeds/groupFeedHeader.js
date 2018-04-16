@@ -85,10 +85,11 @@ class GroupFeedHeader extends Component {
     }
 
     inviteUser(users) {
+        const{actions} = this.props;
         if (users) {
             let groupId = this.props.item._id;
             users.forEach(function (user) {
-                groupApi.inviteUser(user._id, groupId);
+                actions.inviteUser(user._id, groupId);
             });
         }
     }

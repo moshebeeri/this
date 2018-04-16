@@ -45,14 +45,18 @@ class AddPost extends Component {
     }
 
     async saveFormData() {
-        const {actions, navigation} = this.props;
         if (this.validateForm()) {
-            const post = this.createPostFromState();
-            if (navigation.state.params && navigation.state.params.group) {
-                actions.createGroupPost(post, this.props.navigation, navigation.state.params.group);
-            } else {
-                actions.createPost(post, this.props.navigation,);
-            }
+            navigationUtils.doAction(this.setPost.bind(this))
+        }
+    }
+
+    async setPost(){
+        const {actions, navigation} = this.props;
+        const post = this.createPostFromState();
+        if (navigation.state.params && navigation.state.params.group) {
+            actions.createGroupPost(post, this.props.navigation, navigation.state.params.group);
+        } else {
+            actions.createPost(post, this.props.navigation,);
         }
     }
 
@@ -72,15 +76,21 @@ class AddPost extends Component {
 
     createPostFromState() {
         const {user, navigation} = this.props;
+        let video = this.state.video;
+        let picture = this.state.image;
+        if( this.state.youTubeUrl && FormUtils.youtube_parser(this.state.youTubeUrl)){
+            video = undefined;
+            picture = undefined;
+        }
         let clientParametes = {uploading: false}
-        if (this.state.image || this.state.video) {
+        if (picture || video) {
             clientParametes = {uploading: true}
         }
         if (navigation.state.params && navigation.state.params.group) {
             return {
                 text: this.state.post,
-                image: this.state.image,
-                uploadVideo: this.state.video,
+                image: picture,
+                uploadVideo: video,
                 url: this.state.youTubeUrl,
                 client: clientParametes,
                 behalf: {
