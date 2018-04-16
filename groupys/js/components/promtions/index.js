@@ -114,23 +114,23 @@ class Promotions extends Component {
             </MenuOptions>
         </Menu>;
         return (
-            <Container style={{backgroundColor: '#b7b7b7'}}>
+            <View style={{flex:1}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                             title={strings.MyPromotions} bgc="white"
                             submitIcon={icon}
 
                             titleColor="#FA8559" backIconColor="#FA8559"/>
                 {!promotionsLoading[businessId] && <Spinner/>}
-                {promotions[businessId] && promotions[businessId].length > 0 &&
+
                 <GenericListManager rows={promotions[businessId]} navigation={navigation} actions={actions}
                                     update={update}
                                     noRefresh
                                     businessId={navigation.state.params.business._id}
                                     location={location}
-                                    ItemDetail={PromotionListItem}/>}
+                                    ItemDetail={PromotionListItem}/>
 
 
-            </Container>
+            </View>
         );
     }
 }

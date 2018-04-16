@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+import {Image, View} from 'react-native';
 import StyleUtils from '../../utils/styleUtils'
 
+const empty = require('../../../images/THIS-symbol-gray.png');
 export default class ListEmptyDisplay extends Component {
     constructor(props) {
         super(props);
@@ -10,7 +10,8 @@ export default class ListEmptyDisplay extends Component {
 
     render() {
         return <View>
-            <Entypo size={StyleUtils.scale(100)} name={'text-document'}/>
+            <Image style={{width: StyleUtils.scale(200), height: StyleUtils.scale(200)}} source={empty}/>
+
         </View>
     }
 }
