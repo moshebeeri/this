@@ -242,6 +242,11 @@ exports.update = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
+      if(updated.chat_policy !== group.chat_policy)
+        fireEvent.info('group', group.id, 'chat_policy', {
+          from: group.chat_policy,
+          to: updated.chat_policy
+        });
       return res.status(200).json(group);
     });
   });
