@@ -51,7 +51,7 @@ class BusinessHeader extends Component {
             if (noProfile) {
                 return <View style={{margin: 10}}>
                     <View>
-                        <ImageController thumbnail size={StyleUtils.scale(40)} source={{uri: businessLogo}}/>
+                        <ImageController thumbnail size={StyleUtils.scale(60)} source={{uri: businessLogo}}/>
                     </View>
                 </View>
             }

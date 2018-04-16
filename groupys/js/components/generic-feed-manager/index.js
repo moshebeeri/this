@@ -134,7 +134,7 @@ export default class GenericFeedManager extends Component {
 
                     />
                     {nextBulkLoad &&
-                    <View style={{bottom: 0, width: width, backgroundColor: '#cccccc', position: 'absolute'}}>
+                    <View style={{bottom: 0, width: width, backgroundColor: `${appBackgroundColor}`, position: 'absolute'}}>
                         <Spinner color='red'/>
                     </View>}
                     {this.state.showActions && <View style={{
@@ -148,7 +148,7 @@ export default class GenericFeedManager extends Component {
                             <View style={{
                                 flexDirection: 'row',
                                 borderTopWidth: 10,
-                                borderColor: '#cccccc',
+                                borderColor: `${appBackgroundColor}`,
                                 justifyContent: 'flex-end',
                                 alignItems: 'center',
                                 width: width
@@ -256,7 +256,7 @@ export default class GenericFeedManager extends Component {
         }
         return (
 
-            <View style={{flex: 1,backgroundColor: backgroundColor}}>
+            <View style={{flex: 1,backgroundColor: `${appBackgroundColor}`}}>
 
                 <FlatList
                     ref='flatList'
@@ -272,7 +272,7 @@ export default class GenericFeedManager extends Component {
                 />
 
                 {nextBulkLoad && !showTopLoader &&
-                <View style={{bottom: 0, width: width, backgroundColor: '#cccccc', position: 'absolute'}}>
+                <View style={{bottom: 0, width: width, backgroundColor: `${appBackgroundColor}`, position: 'absolute'}}>
                     <Spinner color='red'/>
                 </View>}
                 {this.state.showActions &&

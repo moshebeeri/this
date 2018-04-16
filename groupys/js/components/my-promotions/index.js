@@ -6,6 +6,7 @@ import GenericFeedItem from "../generic-feed-manager/generic-feed";
 import * as promotionAction from "../../actions/myPromotions";
 import {connect} from 'react-redux';
 import navigationUtils from '../../utils/navigationUtils'
+import {View} from "react-native";
 
 class MyPromotions extends Component {
     constructor(props) {
@@ -27,6 +28,7 @@ class MyPromotions extends Component {
     render() {
         const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user, rawFeeds, location} = this.props;
         return (
+            <View style={{flex:1}}>
             <GenericFeedManager
                 navigation={navigation}
                 realize={this.realize.bind(this)}
@@ -43,6 +45,7 @@ class MyPromotions extends Component {
                 ItemDetail={GenericFeedItem}>
 
             </GenericFeedManager>
+            </View>
 
         );
     }
