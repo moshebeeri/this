@@ -1,5 +1,6 @@
 import CommentsApi from "../api/commet";
 import asyncListener from "../api/AsyncListeners";
+import SyncUtils from "../sync/SyncerUtils";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
@@ -9,11 +10,12 @@ import {put} from 'redux-saga/effects'
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
 
-export function sendMessage(groupId, message,instanceId) {
+export function sendMessage(groupId, message, instanceId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
+            SyncUtils.addGroupChatSync(dispatch, getState(), groupId);
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_ADD_MESSAGE,
@@ -21,7 +23,7 @@ export function sendMessage(groupId, message,instanceId) {
                 message: messageItem
             });
             await commentsApi.createComment(groupId, instanceId, message, token);
-            if(getState().instances.instances[instanceId]  &&  getState().instances.instances[instanceId].promotion) {
+            if (getState().instances.instances[instanceId] && getState().instances.instances[instanceId].promotion) {
                 asyncListener.syncChange('promotion_' + getState().instances.instances[instanceId].promotion, 'add-comment');
             }
             asyncListener.syncChange("group_chat_" + groupId, {comment: message})

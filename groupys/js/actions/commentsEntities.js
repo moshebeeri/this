@@ -3,7 +3,8 @@ import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../sega/segaActions';
-import {put} from 'redux-saga/effects'
+import {put} from 'redux-saga/effects';
+import SyncUtils from "../sync/SyncerUtils";
 import asyncListener from "../api/AsyncListeners";
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
@@ -58,6 +59,7 @@ export function sendMessage(entities, generalId, message) {
         try {
             await commentsApi.createGlobalComment(entities, message, token)
             let messageItem = createMessage(message, user);
+            SyncUtils.addInstanceChatSync(dispatch,getState(),generalId);
             dispatch({
                 type: actions.ENTITIES_COMMENT_INSTANCE_ADD_MESSAGE,
                 generalId: generalId,

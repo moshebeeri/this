@@ -29,7 +29,7 @@ class GroupFeedComponent extends Component {
 
     allowPost(group) {
         switch (group.entity_type) {
-            case 'USERS':
+            case 'USER':
                 return true;
             case 'BUSINESS':
                 if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" )) {
