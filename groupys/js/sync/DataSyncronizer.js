@@ -1,5 +1,6 @@
 import getStore from "../store";
 import asyncListener from "../api/AsyncListeners";
+import SyncUtils from "./SyncerUtils";
 import * as types from '../sega/segaActions';
 
 const store = getStore();
@@ -38,6 +39,7 @@ class DataSync {
     }
 
     syncUser(state, dispatch, user) {
+        let initFunction = this.initDataLysteners.bind(this);
         if (user) {
             asyncListener.addListener('user_' + user._id, (snap) => {
                 let response = snap.val();
@@ -139,7 +141,6 @@ class DataSync {
                             });
                             asyncListener.markAsRead(snap.key);
                         }
-
                     })
                     asyncListener.addListener('Redeem' + instance._id, (snap) => {
                         let response = snap.val();
@@ -155,38 +156,9 @@ class DataSync {
                             });
                             asyncListener.markAsRead(snap.key);
                         }
-
                     })
-                    // sync instance comments
-                    asyncListener.addListener('instanceMessage_' + instance._id, (snap) => {
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            let instanceId = snap.key.substring('instanceMessage_'.length);
-                            const token = state.authentication.token;
-                            let entities = [];
-                            entities.push({instance: instance._id});
-                            let entitiesComents = state.entityComments.entityCommentsOrder[instanceId];
-                            if (entitiesComents) {
-                                dispatch({
-                                    type: types.FEED_SYNC_CHAT,
-                                    entities: entities,
-                                    token: token,
-                                    generalId: instanceId,
-                                    lastChatId: entitiesComents[0]
-                                })
-                            } else {
-                                dispatch({
-                                    type: types.FEED_SYNC_CHAT,
-                                    entities: entities,
-                                    token: token,
-                                    generalId: instanceId,
-                                    lastChatId: 0
-                                })
-                            }
-                            asyncListener.markAsRead(snap.key);
-                        }
 
-                    })
+                    SyncUtils.addInstanceChatSync(dispatch,state, instance._id);
                 }
             )
         }
@@ -196,24 +168,7 @@ class DataSync {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
                     //sync group chat
-                    asyncListener.addListener("group_chat_" + group._id, (snap) => {
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            let groupId = snap.key.substring('group_chat_'.length);
-                            const token = state.authentication.token;
-                            const groupsChats = state.comments.groupComments[groupId];
-                            const user = state.user.user;
-                            if (groupsChats) {
-                                this.setChatTop(groupsChats, groupId, user, token, dispatch)
-                            }
-                            dispatch({
-                                type: types.SAVE_GROUPS_REQUEST,
-                                token: token,
-                            });
-                            asyncListener.markAsRead(snap.key);
-                        }
-
-                    });
+                   SyncUtils.addGroupChatSync(dispatch,state,group._id);
                     //sync group view
                     asyncListener.addListener('user_follow_group_' + group._id, (snap) => {
                         // TODO use get by group
@@ -259,24 +214,7 @@ class DataSync {
         }
     }
 
-    setChatTop(groupsChats, group, user, token, dispatch) {
-        let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
-            if (a < b) {
-                return 1
-            }
-            if (a > b) {
-                return -1
-            }
-            return 0;
-        });
-        dispatch({
-            type: types.GROUP_SYNC_CHAT,
-            group: group,
-            token: token,
-            lastChatId: groupChatIds[0],
-            user: user,
-        })
-    }
+
 }
 
 const dataSync = new DataSync();
