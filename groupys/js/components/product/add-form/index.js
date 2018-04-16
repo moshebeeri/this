@@ -35,7 +35,7 @@ class AddProduct extends Component {
                 business: item.business,
                 info: item.info,
                 retail_price: item.retail_price ? item.retail_price.toString() : '',
-                SKU: '',
+                SKU: item.SKU,
                 token: '',
                 item: item,
                 updateMode: true,
