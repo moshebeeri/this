@@ -7,6 +7,7 @@ const graphTools = require('../../components/graph-tools');
 const graphModel = graphTools.createGraphModel('post');
 const activity = require('../../components/activity').createActivity();
 const pricing = require('../../components/pricing');
+const LinkPreview = require('../../components/link-preview');
 
 // Get list of posts
 exports.index = function(req, res) {
@@ -56,46 +57,65 @@ exports.create = function(req, res) {
   if(!getActorId(post))
     return handleError(res, new Error('no actor (behalf) present'));
 
+  function createPost() {
+    Post.create(post, function (err, post) {
+      if (err) {
+        return handleError(res, err);
+      }
+      graphModel.reflect(post, {_id: post._id}, function (err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        handlePostCreation(post);
+        const act = {
+          creator: post.creator,
+          actor_user: post.behalf.user,
+          actor_business: post.behalf.business,
+          actor_mall: post.behalf.mall,
+          actor_chain: post.behalf.chain,
+          actor_group: post.behalf.group,
+          sharable: typeof(post.sharable) === 'boolean' ? post.sharable : true,
+          post: post._id,
+          action: 'post',
+          audience: ['SELF', 'FOLLOWERS']
+        };
+
+        if (act.actor_user)
+          act.audience = ['SELF', 'FOLLOWERS'];
+        else if (act.actor_group)
+          act.ids = [act.actor_group];
+
+        Post.findById(post._id).exec((err, post) => {
+          if (err) {
+            return handleError(res, err);
+          }
+          pricing.balance(post.behalf, function (err, positiveBalance) {
+            if (err) return handleError(res, err);
+            if (!positiveBalance) return res.status(402).send(post);
+            //console.log(`exports.create post ${JSON.stringify({act})}`);
+            activity.activity(act, function (err) {
+              if (err) {
+                return handleError(res, err);
+              }
+              pricing.chargeActivityDistribution(post.behalf, activity);
+              return res.status(201).send(post);
+            });
+          })
+        })
+      });
+    });
+  }
+
   post.creator = req.user._id;
   post.created = Date.now();
-  Post.create(post, function(err, post) {
-    if(err) { return handleError(res, err); }
-    graphModel.reflect(post, {_id: post._id}, function (err) {
-      if (err) { return handleError(res, err); }
-      handlePostCreation(post);
-      const act = {
-        creator         : post.creator        ,
-        actor_user      : post.behalf.user    ,
-        actor_business  : post.behalf.business,
-        actor_mall      : post.behalf.mall    ,
-        actor_chain     : post.behalf.chain   ,
-        actor_group     : post.behalf.group   ,
-        sharable        : typeof(post.sharable) === 'boolean'? post.sharable : true,
-        post            : post._id            ,
-        action          : 'post'              ,
-        audience        : ['SELF', 'FOLLOWERS']
-      };
-
-      if(act.actor_user)
-        act.audience =['SELF', 'FOLLOWERS'];
-      else if(act.actor_group)
-        act.ids = [act.actor_group];
-
-      Post.findById(post._id).exec((err, post) => {
-        if (err) { return handleError(res, err); }
-        pricing.balance(post.behalf, function (err, positiveBalance) {
-          if (err) return handleError(res, err);
-          if (!positiveBalance) return res.status(402).send(post);
-          //console.log(`exports.create post ${JSON.stringify({act})}`);
-          activity.activity(act, function (err) {
-            if (err) { return handleError(res, err);}
-            pricing.chargeActivityDistribution(post.behalf, activity);
-            return res.status(201).send(post);
-          });
-        })
-      })
+  LinkPreview.getPreview(post.text)
+    .then(linkPreview => {
+      post.textLinkPreview = linkPreview;
+      return createPost();
+    })
+    .catch(() => {
+      return createPost();
     });
-  });
 };
 
 // Updates an existing post in the DB.

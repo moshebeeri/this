@@ -11,7 +11,7 @@ const countryCode = require('../../components/counrtycode');
 const LinkPreview = require('../../components/link-preview');
 
 exports.test = function(req, res) {
-  const text = "take a look at http://www.google.com";
+  const text = "take a look at http://www.google.com or http://www.yahoo.com";
   // var regex = new RegExp("^take");
   // let f = regex.exec(text);
   // return res.status(200).json(f)

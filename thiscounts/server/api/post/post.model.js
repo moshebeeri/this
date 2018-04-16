@@ -20,6 +20,7 @@ let PostSchema = new Schema({
     brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true},
   },
   text: String,
+  textLinkPreview: {},
   url: String,
   client: {},
   pictures: [],
