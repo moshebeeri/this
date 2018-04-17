@@ -23,6 +23,14 @@ export default class PercentComponent extends Component {
     constructor(props) {
         super(props);
     }
+    focusNextField(nextField) {
+        if (this.refs[nextField].wrappedInstance) {
+            this.refs[nextField].wrappedInstance.focus()
+        }
+        if (this.refs[nextField] ) {
+            this.refs[nextField].focus()
+        }
+    }
 
     setPercent(value) {
         if (this.props.state.percent) {
@@ -143,23 +151,34 @@ export default class PercentComponent extends Component {
                                                                          title={strings.SelectProduct}
                                                                          action={this.showProducts.bind(this, true)}/></View>
                 let retailPrice =
-                    <View style={styles.inputTextLayout}>
+                    <View style={{width:200}}>
 
                         <TextInput field={strings.RetailPrice} value={this.props.state.percent.retail_price}
-                                   returnKeyType='next' ref="retail" refNext="retail"
+                                   returnKeyType='done' ref="retail"
+                                   refNext="retail"
                                    keyboardType='numeric'
+                                   onSubmitEditing={this.done.bind(this)}
                                    onChangeText={(value) => this.setRetailPrice(value)} isMandatory={true}/>
                     </View>
                 let discount =
                     <View style={styles.inputTextLayout}>
-                        <TextInput field={strings.Discount} value={this.props.state.percent.percent}
-                                   returnKeyType='done' ref="discount" refNext="discount"
+                        <TextInput field={strings.PercentageOff} value={this.props.state.percent.percent}
+                                   returnKeyType='next' ref="off" refNext="off"
+                                   onSubmitEditing={this.focusNextField.bind(this, "retail")}
+
                                    keyboardType='numeric'
-                                   placeholder="%"
                                    validateContent={FormUtils.validatePercent}
                                    onChangeText={(value) => this.setPercent(value)} isMandatory={true}/>
                     </View>
-                return <View style={{flexDirection: 'row'}}>{button}{retailPrice}{discount}</View>
+                return <View>{discount}
+                    <View style={{ flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingTop: 10,
+                        paddingRight: 5,
+                        paddingLeft: 5,
+                        width: StyleUtils.getWidth() - 15}}>
+                {button}{retailPrice}</View></View>
             } else {
                 return <View><View style={styles.inputTextLayout}>
 
