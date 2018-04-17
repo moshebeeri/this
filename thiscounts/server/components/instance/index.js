@@ -561,7 +561,7 @@ Instances.createSingleInstance =
 
 Instances.notify =
   Instances.prototype.notifyInstance = function (instance, audience) {
-    console.log(`============> ${JSON.stringify(instance)}`);
+    //console.log(`============> ${JSON.stringify(instance)}`);
     function extractBusinessName(instance){
       try{
         return instance.promotion.entity.business.name

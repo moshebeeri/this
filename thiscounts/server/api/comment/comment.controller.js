@@ -16,6 +16,8 @@ const Promotion     = require('../promotion/promotion.model');
 const Instance      = require('../instance/instance.model');
 const Activity      = require('../activity/activity.model');
 const Notifications = require('../../components/notification');
+const fireEvent     = require('../../components/firebaseEvent');
+const LinkPreview   = require('../../components/link-preview');
 
 // Get list of comments
 exports.index = function(req, res) {
@@ -61,37 +63,59 @@ function saveCommentToGroup(comment) {
   })
 }
 
+function fireEntitiesEvent(comment) {
+  if(comment.entities)
+    Object.keys(comment.entities).forEach(key => {
+      fireEvent.info(key, comment.entities[key], 'comment', comment);
+    });
+}
+
 // Creates a new comment.
 exports.create = function(req, res) {
   let comment = req.body;
-  let entities = extract_ids(comment.entities);
-  comment.user = req.user._id;
-  comment.entities = list2object(comment.entities);
-  comment.created = Date.now();
-  Comment.create(comment, function(err, comment) {
-    if(err) { return handleError(res, err); }
-    if(comment.entities && comment.entities.group){
-      saveCommentToGroup(comment);
-    }
-    graphModel.reflect(comment, {
-      _id: comment._id
-    },function (err, comment) {
-      if (err) { return handleError(res, err); }
-      let params = `{comment_id:"${comment._id}"}`;
 
-      graphModel.relate_ids(req.user._id, 'COMMENTED', entities[0], params);
-      for(let i = 0; i < entities.length; i++) {
-        if(i === entities.length-1)
-          graphModel.relate_ids(entities[i], 'COMMENTED', comment._id, params);
-        else
-          graphModel.relate_ids(entities[i], 'COMMENTED', entities[i+1], params);
+  let createComment = () => {
+    let entities = extract_ids(comment.entities_ids);
+    comment.user = req.user._id;
+    comment.entities = list2object(comment.entities_ids);
+    comment.created = Date.now();
+    Comment.create(comment, function (err, comment) {
+      if (err) {
+        return handleError(res, err);
       }
-      if(comment.entities.group)
-        notifyGroupComment(comment);
-
+      if (comment.entities && comment.entities.group) {
+        saveCommentToGroup(comment);
+      }
+      graphModel.reflect(comment, {
+        _id: comment._id
+      }, function (err, comment) {
+        if (err) {
+          return handleError(res, err);
+        }
+        let params = `{comment_id:"${comment._id}"}`;
+        graphModel.relate_ids(req.user._id, 'COMMENTED', entities[0], params);
+        for (let i = 0; i < entities.length; i++) {
+          if (i === entities.length - 1)
+            graphModel.relate_ids(entities[i], 'COMMENTED', comment._id, params);
+          else
+            graphModel.relate_ids(entities[i], 'COMMENTED', entities[i + 1], params);
+        }
+        if (comment.entities.group)
+          notifyGroupComment(comment);
+        fireEntitiesEvent(comment.entities);
+      });
+      return res.status(201).json(comment);
     });
-    return res.status(201).json(comment);
-  });
+  };
+
+  LinkPreview.getPreview(comment.message)
+    .then(linkPreview => {
+      comment.messageLinkPreview = linkPreview;
+      return createComment();
+    })
+    .catch(() => {
+      return createComment();
+    });
 };
 
 function groupFollowersExclude(groupId, exUserId, callback) {
