@@ -69,6 +69,13 @@ exports.read = function(req, res) {
   });
 };
 
+exports.resetUserBadge = function(req, res) {
+  Notification.update({$and: [{ to: req.user._id }, {badge: true}]}, { $set: { badge: false }}, (err) => {
+    if (err) { return handleError(res, err); }
+    return res.status(200).send();
+  });
+};
+
 exports.notify = function(req, res) {
   let notification = req.body;
   notification.timestamp = Date.now();

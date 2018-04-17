@@ -654,16 +654,20 @@ exports.create = function (req, res) {
 };
 
 function notifyOnAction(business) {
-  try {
-    Notifications.notify({
-      note: 'ADD_BUSINESS_FOLLOW_ON_ACTION',
-      business: business._id,
-      actor_user: business.creator,
-      timestamp: Date.now()
-    }, [business.creator])
-  } catch (err) {
-    console.error(err)
-  }
+  const notes = ['ADD_BUSINESS_FOLLOW_ON_ACTION',
+    'ADD_BUSINESS_PROXIMITY_ON_ACTION'];
+  notes.forEach(note => {
+    try {
+      Notifications.notify({
+        note: note,
+        business: business._id,
+        actor_user: business.creator,
+        timestamp: Date.now()
+      }, [business.creator])
+    } catch (err) {
+      console.error(err)
+    }
+  })
 }
 
 // Updates an existing business in the DB.

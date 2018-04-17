@@ -13,10 +13,10 @@ const admin = require('firebase-admin');
 //   databaseURL: "https://this-1000.firebaseio.com"
 // });
 
-function unread(userId, callback){
+function badge(userId, callback){
   Notification.count({})
     .where('to').equals(userId)
-    .where('read').equals(false)
+    .where('badge').equals(true)
     .exec(callback);
 }
 
@@ -56,14 +56,15 @@ function toPayloadData(notification, callback){
   if( notification.actor_group      ) data.actor_group    = notification.actor_group._id.toString()      ;
 
 
-  data._id = data._id.toString();
+  //  consolidate by user instead of data old was: data._id = data._id.toString();
+  data._id = notification.to.toString();
   n.title =  data.title = notification.title;
   n.body = data.body = notification.body;
   data.note = notification.note;
   data.action = notification.action;
   data.notificationId = notification._id.toString();
   n.tag = data._id? data._id : '';
-  unread(notification.to, function(err, badge){
+  badge(notification.to, function(err, badge){
     if(err) return callback(err);
     n.badge = badge.toString();
     data.badge = badge.toString();
@@ -203,6 +204,7 @@ exports.notifyUser = function (note, user, translate) {
     return console.error(new Error(`notification.notify params error user=${user} note=${note}`));
   note.to = user;
   note.timestamp = Date.now();
+  note.badge = true;
   Notification.create(note, function (err, notification) {
     if (err) return console.error(err);
     fireEvent.info('user', user, 'notification_sent', {notification: notification._id});
