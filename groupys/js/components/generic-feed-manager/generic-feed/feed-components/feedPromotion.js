@@ -82,7 +82,7 @@ export default class FeedPromotion extends Component {
     render() {
         const {
             showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,
-            scanner, group
+            scanner, group,minimizeSize
         }
             = this.props;
         let categoruTitle = item.categoryTitle;
@@ -97,8 +97,8 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
         }
         const result =
-            <InViewPort onChange={this.visited.bind(this)} style={[container, {backgroundColor:`white`}]}>
-                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth()}]}>
+            <InViewPort onChange={this.visited.bind(this)} style={[container, {width: StyleUtils.getWidth() - minimizeSize,backgroundColor:`white`}]}>
+                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth() - minimizeSize}]}>
                     {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor:'white'}}>
                             <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
                                 <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}

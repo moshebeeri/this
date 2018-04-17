@@ -245,13 +245,13 @@ class ApplicationManager extends Component {
         let notificationnTopPadding = 150;
         let leftPadding = 10;
         let sideMargin = 20;
-        let borderSideWidth = 2;
+        let borderSideWidth = 4;
         if (item) {
-            notificationPopupHeight = 100
-            notificationnTopPadding = 30;
-            leftPadding = 0;
-            borderSideWidth = 0;
-            sideMargin = 0;
+            notificationPopupHeight = StyleUtils.scale(250);
+            notificationnTopPadding = StyleUtils.scale(150);
+            leftPadding = StyleUtils.scale(5);
+            borderSideWidth = 4;
+            sideMargin = StyleUtils.scale(10);;
         }
         let notificationActionString
         if (notificationOnAction) {
@@ -322,11 +322,11 @@ class ApplicationManager extends Component {
                     </View>}
                     {showPopup && <View style={{
                         left: leftPadding,
-                        borderTopWidth: 2,
-                        borderBottomWidth: 2,
+                        borderTopWidth: 4,
+                        borderBottomWidth: 4,
                         borderLeftWidth: borderSideWidth,
                         borderRightWidth: borderSideWidth,
-                        borderColor: 'black',
+                        borderColor: '#00000055',
                         top: notificationnTopPadding,
                         position: 'absolute',
                         width: StyleUtils.getWidth() - sideMargin,
@@ -337,18 +337,18 @@ class ApplicationManager extends Component {
                     }}>
                         <TouchableOpacity style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-end'}}
                                           onPress={() => this.closePopup(false)}>
-                            <Icon2 style={{fontSize: 30}} name="ios-close-circle-outline"/>
+                            <Icon2 style={{fontWeight:'bold',color:'black',fontSize: 30}} name="ios-close-circle-outline"/>
 
                         </TouchableOpacity>
 
                         {item ?
                             <View style={{
                                 flex: 1,
-                                width: StyleUtils.getWidth() - 5,
+
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <FeedPromotion scanner showActions={true} token={token}
+                                <FeedPromotion minimizeSize={StyleUtils.scale(18) }scanner showActions={true} token={token}
                                                location={location} actions={feedAction}
                                                navigation={this.props.navigation} item={item}
                                                like={feedAction.like} unlike={feedAction.unlike}
