@@ -31,7 +31,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
 import navigationUtils from '../../../utils/navigationUtils'
-
+import LinearGradient from 'react-native-linear-gradient';
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BusinessListView extends Component {
     constructor(props) {
@@ -75,17 +75,14 @@ export default class BusinessListView extends Component {
 
     createView() {
         const {item, index} = this.props;
-        const banner = this.createBannerTag(item);
         const editButton = this.createEditTag(item);
+        const banner = this.createBannerTag(item,editButton);
+
         const promotionButton = this.createPromotionsTag(item);
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton = this.createPoductsTag(item);
         const inReview = item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
         return ( <View style={{marginTop: 1, marginBottom: 9, backgroundColor: 'white'}}>
-                <BusinessHeader businesscolor navigation={this.props.navigation} business={item.business}
-                                categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
-                                businessName={item.business.name} noMargin businessView heaedrSize={Platform.OS === 'ios' ? 60 : 60}
-                                editButton={editButton}/>
 
 
                 <View key={index} style={{marginTop: 1, backgroundColor: '#eaeaea'}}>
@@ -164,7 +161,7 @@ export default class BusinessListView extends Component {
         return undefined;
     }
 
-    createBannerTag(item) {
+    createBannerTag(item,editButton) {
         if (item.business.pictures && item.business.pictures.length > 0) {
             let picLength = item.business.pictures.length;
             return <View style={{}}><ImageController
@@ -172,7 +169,27 @@ export default class BusinessListView extends Component {
                 source={{uri: item.business.pictures[picLength - 1].pictures[0]}}>
 
             </ImageController>
+                <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
+                                locations={[0, 0.8]}
+                                colors={['#00000099', 'transparent']} style={{
+                    height: StyleUtils.relativeHeight(15, 10),
+                    position: 'absolute',
+                    justifyContent: 'flex-end',
+                    top: StyleUtils.relativeHeight(17, 16),
+                    backgroundColor: 'transparent',
+                    width: StyleUtils.getWidth()
+                }}>
 
+                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
+                                    categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
+                                    businessName={item.business.name} noMargin
+                                    editButton={editButton}
+                                     bgColor={'transparent'}
+                                     size={60}
+                                     textColor={'white'}/>
+
+
+                </LinearGradient>
             </View>
         }
         return <ImageController

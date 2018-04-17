@@ -13,7 +13,7 @@ module.exports = {
         borderWidth:1,
     },
     productIcon:{
-        color:'#ff6400'
+        color:'white'
     },
     retailTextStyle:{
         color:'#b3b3b3'

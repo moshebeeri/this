@@ -145,7 +145,7 @@ export default class FeedBusiness extends Component {
                     height: StyleUtils.relativeHeight(15, 10),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: StyleUtils.relativeHeight(25, 30),
+                    top: StyleUtils.relativeHeight(16, 17),
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
