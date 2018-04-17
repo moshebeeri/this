@@ -150,7 +150,7 @@ export default class FeedPost extends Component {
                             <ActivityReport id={item.activityId} showActions={showActions}/>
                         </View>
                     </View>
-                    <UrlPreview text={item.feed.activity.post.text}/>
+                    <UrlPreview post={item.feed.activity.post} text={item.feed.activity.post.text}/>
                     {!this.state.containLink && <View style={postMessageContainerStyle}>
 
                         <View style={{width: StyleUtils.getWidth() - 15}}>
