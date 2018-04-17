@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Platform} from 'react-native';
+import {Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
@@ -30,8 +30,8 @@ import navigationUtils from '../../utils/navigationUtils'
 class Groups extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            refreshing:false
+        this.state = {
+            refreshing: false
         }
     }
 
@@ -39,52 +39,51 @@ class Groups extends Component {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
         navigationUtils.doNavigation(navigation, 'GroupFeed', {group: item, role: 'admin'});
-
     }
+
     onPressMessageItem(item) {
         const {actions, navigation} = this.props;
         actions.touch(item._id);
-        navigationUtils.doNavigation(navigation, 'GroupFeed', {chat:true,group: item, role: 'admin'});
+        navigationUtils.doNavigation(navigation, 'GroupFeed', {chat: true, group: item, role: 'admin'});
     }
-    shouldComponentUpdate(){
-        if(this.props.currentScreen ==='home' ){
+
+    shouldComponentUpdate() {
+        if (this.props.currentScreen === 'home') {
             return true;
         }
         return false;
     }
-
 
     navigateToAdd() {
         navigationUtils.doNavigation(this.props.navigation, 'AddGroups');
     }
 
     componentWillMount() {
-        const { groups} = this.props;
-        if(!groups || groups.length === 0) {
-            this.props.actions.fetchGroups();
-        }
+        const {groups} = this.props;
+        this.props.actions.fetchGroups();
     }
 
-    refreshTop(){
-        this.setState({refreshing:true});
-       // this.props.actions.fetchGroups();
-        this.setState({refreshing:false});
+    refreshTop() {
+        this.setState({refreshing: true});
+        // this.props.actions.fetchGroups();
+        this.setState({refreshing: false});
     }
 
     render() {
-        const {update, groups, navigation, actions,visibleItem} = this.props;
+        const {update, groups, navigation, actions, visibleItem} = this.props;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
             icon = <Icon2 active size={40} name="ios-add"/>;
         }
         return (
             <View style={{flex: 1}}>
-                <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update} setVisibleItem={actions.setVisibleItem}
+                <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update}
+                                    setVisibleItem={actions.setVisibleItem}
                                     visibleItem={visibleItem}
                                     refreshing={this.state.refreshing}
                                     onRefreshing={this.refreshTop.bind(this)}
                                     onPressItem={this.onPressItem.bind(this)}
-                                    onPressMessageItem = {this.onPressMessageItem.bind(this)}
+                                    onPressMessageItem={this.onPressMessageItem.bind(this)}
                                     ItemDetail={GenericListGroupView}/>
                 <Fab
 
@@ -107,9 +106,9 @@ export default connect(
         groups: getGroups(state),
         update: state.groups.update,
         user: state.user.user,
-        selectedTab:state.mainTab.selectedTab,
-        currentScreen:state.render.currentScreen,
-        visibleItem:state.feeds.visibleFeed,
+        selectedTab: state.mainTab.selectedTab,
+        currentScreen: state.render.currentScreen,
+        visibleItem: state.feeds.visibleFeed,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

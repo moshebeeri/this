@@ -21,7 +21,6 @@ import {
     showCompoenent
 } from "../../selectors/appSelector";
 import * as mainAction from "../../actions/mainTab";
-import popupActions from "../../actions/mainTab";
 import * as feedAction from "../../actions/feedsMain";
 import * as userAction from "../../actions/user";
 import * as businessActions from "../../actions/business";
@@ -35,6 +34,7 @@ import '../../conf/global';
 import PageRefresher from '../../refresh/pageRefresher'
 import Tasks from '../../tasks/tasks'
 import dataSync from '../../sync/DataSyncronizer';
+import NotificationHandler from '../notifications/NotificationHandler'
 import {
     BusinessHeader,
     BusinessList,
@@ -80,11 +80,7 @@ FCM.on(FCMEvent.Notification, async (notif) => {
         //iOS: app is open/resumed because user clicked banner
         //Android: app is open/resumed because user clicked banner or tapped app icon
     }
-    if (notif && notif.model === 'instance') {
-        let token = reduxStore.getState().authentication.token;
-        popupActions.promotionPopAction(notif._id, notif.notificationId, reduxStore.dispatch, token);
-        return;
-    }
+    NotificationHandler.handleFrontNotification(notif, reduxStore.getState(), reduxStore.dispatch);
     if (Platform.OS === 'ios') {
         //optional
         //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application.
@@ -165,30 +161,7 @@ class ApplicationManager extends Component {
         });
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
-        if (notification && notification.model === 'instance') {
-            this.props.actions.showPromotionPopup(notification._id, notification.notificationId);
-            return;
-        }
-        if (notification && notification.model === 'group') {
-            if (notification.note === "ask_invite") {
-                this.props.actions.showInviteGroupPopup(notification._id, notification.actor_user, notification.notificationId);
-            } else {
-                this.props.actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
-            }
-            return;
-        }
-        if (notification && notification.model === 'business') {
-            this.props.actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
-            return;
-        }
-        if (notification && notification.model === 'comment') {
-            this.props.actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, this.props.navigation);
-            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
-            return;
-        }
-        if (notification && notification.title) {
-            this.props.actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
-        }
+        NotificationHandler.handleBacKNotification(notification, this.props.actions,this.props.navigation);
         AppState.addEventListener('change', this._handleAppStateChange);
         this.props.userActions.resetForm();
     }
@@ -207,10 +180,6 @@ class ApplicationManager extends Component {
         dataSync.syncData();
     }
 
-    navigateToAdd() {
-        this.replaceRoute(this.props.addComponent);
-    }
-
     openDrawer() {
         this._drawer._root.open();
     }
@@ -222,7 +191,6 @@ class ApplicationManager extends Component {
     componentDidMount() {
         dataSync.syncData();
     }
-
 
     savePromotionFromPopup(id, navigation, feed) {
         const {feedAction} = this.props;
@@ -251,7 +219,8 @@ class ApplicationManager extends Component {
             notificationnTopPadding = StyleUtils.scale(150);
             leftPadding = StyleUtils.scale(5);
             borderSideWidth = 4;
-            sideMargin = StyleUtils.scale(10);;
+            sideMargin = StyleUtils.scale(10);
+            ;
         }
         let notificationActionString
         if (notificationOnAction) {
@@ -337,18 +306,19 @@ class ApplicationManager extends Component {
                     }}>
                         <TouchableOpacity style={{paddingTop: 5, paddingLeft: 10, justifyContent: 'flex-end'}}
                                           onPress={() => this.closePopup(false)}>
-                            <Icon2 style={{fontWeight:'bold',color:'black',fontSize: 30}} name="ios-close-circle-outline"/>
+                            <Icon2 style={{fontWeight: 'bold', color: 'black', fontSize: 30}}
+                                   name="ios-close-circle-outline"/>
 
                         </TouchableOpacity>
 
                         {item ?
                             <View style={{
                                 flex: 1,
-
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <FeedPromotion minimizeSize={StyleUtils.scale(18) }scanner showActions={true} token={token}
+                                <FeedPromotion minimizeSize={StyleUtils.scale(18)} scanner showActions={true}
+                                               token={token}
                                                location={location} actions={feedAction}
                                                navigation={this.props.navigation} item={item}
                                                like={feedAction.like} unlike={feedAction.unlike}
