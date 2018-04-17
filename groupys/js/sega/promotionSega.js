@@ -123,6 +123,7 @@ function* updatePromotionSocialState(action) {
 function* handleNotification(action) {
     try {
         yield call(notificationApi.readNotification, action.token, action.notificationId);
+        yield call(notificationApi.resetBadgeNotification, action.token);
         let instance = yield call(instanceApi.getInstance, action.token, action.instanceId);
         yield put({
             type: actions.APP_SHOW_PROMOTION_POPUP,
