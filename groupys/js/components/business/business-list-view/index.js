@@ -182,7 +182,7 @@ export default class BusinessListView extends Component {
 
                     <BusinessHeader  navigation={this.props.navigation} business={item.business}
                                     categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
-                                    businessName={item.business.name} noMargin
+                                    businessName={item.business.name} noMargin businessView
                                     editButton={editButton}
                                      bgColor={'transparent'}
                                      size={60}
