@@ -84,7 +84,7 @@ class AddGroup extends Component {
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
-                    top: 100,
+                    top: 30,
                     right: 20,
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -323,7 +323,7 @@ class AddGroup extends Component {
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
-                    top: 100,
+                    top: 30,
                     right: 20,
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -359,22 +359,24 @@ class AddGroup extends Component {
             if (this.state.qrcodeSource) {
                 qrcodeView = <TouchableOpacity onPress={() => this.changeQrLook()}
                                                style={this.state.codeContainerStyle}>
-                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
+
                     <Image
                         style={this.state.codeStyle} resizeMode="cover"
                         source={{uri: this.state.qrcodeSource}}>
 
                     </Image>
+                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
                 </TouchableOpacity>
             } else {
                 qrcodeView = <TouchableOpacity onPress={() => this.changeQrLook()}
                                                style={this.state.codeContainerStyle}>
-                    <ThisText>{strings.ScanToFollow}</ThisText>
+
                     <Image
                         style={this.state.codeStyle} resizeMode="cover"
                         source={{uri: lastGroupQrCode}}>
 
                     </Image>
+                    <ThisText>{strings.ScanToFollow}</ThisText>
                 </TouchableOpacity>
             }
         }
@@ -394,7 +396,7 @@ class AddGroup extends Component {
 
 
     createView(qrcodeView, selectedGroupPolicy, BusinessPiker) {
-        return <View>
+        return <View style={{backgroundColor:'white'}}>
             {this.state.updateMode && !this.state.viewOnly &&
             <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
                         title={strings.UpdateGroup} bgc="#2db6c8"/>}
@@ -407,12 +409,13 @@ class AddGroup extends Component {
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
+                backgroundColor:'white',
             }} style={styles.contentContainer}>
 
 
                 {this.createCoverImageComponnent()}
                 {qrcodeView}
-                <View style={{
+                {!this.state.viewOnly && <View style={{
                     marginTop: 4, padding: 3, marginBottom: 5,
                     width: width - 15, justifyContent: 'space-between', flexDirection: 'row'
                 }}>
@@ -423,12 +426,12 @@ class AddGroup extends Component {
 
                         onValueChange={this.groupChatToggle.bind(this)}
                         value={this.state.groupChat}/>
-                </View>
-                <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
+                </View>}
+                {!this.state.viewOnly && <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
                               disable={this.state.viewOnly}
                               list={groupPolicy} itemTitle={strings.GroupPolicy}
                               defaultHeader={strings.ChooseType} isMandatory={!this.state.updateMode}
-                              onValueSelected={this.selectGroupPolocy.bind(this)}/>
+                              onValueSelected={this.selectGroupPolocy.bind(this)}/>}
                 {!this.state.updateMode &&
                 <SimplePicker ref="groupType" list={groupType} itemTitle={strings.GroupType}
                               disable={this.state.viewOnly}
@@ -439,22 +442,39 @@ class AddGroup extends Component {
 
 
                 <View style={styles.inputTextLayour}>
-                    <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
+                    {this.state.viewOnly ? <View>
+                        <ThisText style={{marginTop:20,marginLeft:10,fontSize:14,color:'#A9A9A9'}} >{strings.GroupName}</ThisText>
+                        <ThisText style={{marginTop:5,marginLeft:10,fontSize:20}}>{this.state.name}</ThisText>
+                    </View>:  <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
                                returnKeyType='next' ref="1" refNext="1"
                                onSubmitEditing={this.focusNextField.bind(this, "2")}
                                onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                        }
+
                 </View>
 
                 <View style={styles.inputTextLayour}>
 
-
+                    {this.state.viewOnly ? <View>
+                            <ThisText style={{marginLeft:10,fontSize:14,color:'#A9A9A9'}} >{strings.Description}</ThisText>
+                            <ThisText style={{marginTop:5,marginLeft:10,fontSize:20}}>{this.state.info}</ThisText>
+                        </View>:
                     <TextInput disabled={this.state.viewOnly} field={strings.Description} value={this.state.info}
                                returnKeyType='next' ref="2"
                                refNext="2"
 
 
-                               onChangeText={(info) => this.setState({info})}/>
+                               onChangeText={(info) => this.setState({info})}/>}
                 </View>
+                {this.state.viewOnly &&
+                <View style={styles.inputTextLayour}>
+
+                    <View>
+                            <ThisText style={{marginLeft:10,fontSize:14,color:'#A9A9A9'}} >{strings.GroupPolicy}</ThisText>
+                            <ThisText style={{marginTop:5,marginLeft:10,fontSize:20}}>{selectedGroupPolicy}</ThisText>
+                        </View>
+                </View>}
+
                 {!this.state.updateMode && <View style={styles.groupSelectUserContainer}>
                     <SelectButton
                         client ref="selectUsers" selectedValue={this.state.selectedUsers} isMandatory
