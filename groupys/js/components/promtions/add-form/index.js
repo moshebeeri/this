@@ -801,12 +801,12 @@ class AddPromotion extends Component {
                             color: 'white',
                             marginLeft: 8,
                             marginRight: 8
-                        }}>{strings.AdvancedPromotions}</ThisText> :
+                        }}>{strings.AdvancedPromotion}</ThisText> :
                         <ThisText style={{
                             color: 'white',
                             marginLeft: 8,
                             marginRight: 8
-                        }}>{strings.SimplePromotions}</ThisText>
+                        }}>{strings.SimplePromotion}</ThisText>
                     }
 
                     <Switch
