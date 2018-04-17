@@ -8,38 +8,54 @@ let activity = require('../../components/activity').createActivity();
 let logger = require('../../components/logger').createLogger();
 const utils = require('../../components/utils').createUtils();
 const countryCode = require('../../components/counrtycode');
+const LinkPreview = require('../../components/link-preview');
 
-const p2 = [
-  { normalized_number: '001 888 552 0893',
-    number: '001 888 552 0893',
-    name: 'mexico' },
-  { normalized_number: '+001-800-633 2152',
-    number: '+001-800-633 2152',
-    name: 'some usa number' },
-  { normalized_number: '1-800-MY-APPLE',
-    number: '1-800-MY-APPLE',
-    name: 'Apple Inc. null' },
-  { normalized_number: '1 408 974 4897',
-    number: '1 408 974 4897',
-    name: 'some usa number' },
-  { normalized_number: '1414*',
-    number: '1414*',
-    name: 'Car - Zehava' },
-  { normalized_number: '*3242',
-    number: '*3242',
-    name: 'Taxi - Castele' },
-  { normalized_number: '3621',
-    number: '3621',
-    name: 'Poalim Yashir' },
-  { normalized_number: '0', number: '0', name: 'Aaa null' },
-  { normalized_number: '2369', number: '2369', name: 'Door null' },
-  { normalized_number: '1 836 *',
-    number: '1 836 *',
-     name: 'Car Caspion' }
-];
+exports.test = function(req, res) {
+  const text = "take a look at http://www.google.com or http://www.yahoo.com";
+  // var regex = new RegExp("^take");
+  // let f = regex.exec(text);
+  // return res.status(200).json(f)
+  LinkPreview.getPreview(text)
+    .then(data => {
+      return res.status(200).json(data);
+    })
+    .catch(e => {
+      console.error(e);
+      res.status(500).json(e)
+    })
+};
 
 // Get list of tests
-exports.test = function(req, res) {
+exports.testCountryCode = function(req, res) {
+  const p2 = [
+    { normalized_number: '001 888 552 0893',
+      number: '001 888 552 0893',
+      name: 'mexico' },
+    { normalized_number: '+001-800-633 2152',
+      number: '+001-800-633 2152',
+      name: 'some usa number' },
+    { normalized_number: '1-800-MY-APPLE',
+      number: '1-800-MY-APPLE',
+      name: 'Apple Inc. null' },
+    { normalized_number: '1 408 974 4897',
+      number: '1 408 974 4897',
+      name: 'some usa number' },
+    { normalized_number: '1414*',
+      number: '1414*',
+      name: 'Car - Zehava' },
+    { normalized_number: '*3242',
+      number: '*3242',
+      name: 'Taxi - Castele' },
+    { normalized_number: '3621',
+      number: '3621',
+      name: 'Poalim Yashir' },
+    { normalized_number: '0', number: '0', name: 'Aaa null' },
+    { normalized_number: '2369', number: '2369', name: 'Door null' },
+    { normalized_number: '1 836 *',
+      number: '1 836 *',
+      name: 'Car Caspion' }
+  ];
+
   let country_code = '972';
   let changed = '';
   p2.forEach(p => {
