@@ -6,6 +6,9 @@ class NotificationHandler {
 
     handleFrontNotification(notification, state, dispatch) {
         let token = state.authentication.token;
+        const user = state.user.user;
+        const notifications = state.notification.notification;
+
         switch (notification.model) {
             case 'instance':
                 dispatch({
@@ -23,6 +26,7 @@ class NotificationHandler {
                     notificationId: notification.notificationId,
                     token: token,
                 });
+                this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'comment':
                 dispatch({
@@ -38,9 +42,26 @@ class NotificationHandler {
                         notificationId: notification.notificationId,
                         token: token,
                     });
+                    this.setNotifications(notifications, dispatch, user, token);
                 }
                 break;
+
         }
+
+    }
+
+    setNotifications(notifications, dispatch, user, token) {
+        let skip = 0;
+        if (notifications) {
+            skip = notifications.length;
+        }
+        dispatch({
+            type: types.SAVE_NOTIFICATION_REQUEST,
+            user: user,
+            skip: skip,
+            token: token,
+            limit: 20,
+        });
     }
 
     handleBacKNotification(notification, actions,navigation) {

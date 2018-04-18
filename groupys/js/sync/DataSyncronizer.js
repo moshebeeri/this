@@ -39,7 +39,6 @@ class DataSync {
     }
 
     syncUser(state, dispatch, user) {
-        let initFunction = this.initDataLysteners.bind(this);
         if (user) {
             asyncListener.addListener('user_' + user._id, (snap) => {
                 let response = snap.val();

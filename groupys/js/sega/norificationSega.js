@@ -32,10 +32,10 @@ function* setTopNotification(action) {
 
 function* handleGeneralNotification(action) {
     try {
-        yield call(notificationApi.readNotification, action.token, action.notificationId);
+       // yield call(notificationApi.readNotification, action.token, action.notificationId);
         yield  call(notificationApi.resetBadgeNotification, action.token);
     } catch (error) {
-        console.log("failed  handleGeneralNotification");
+        console.log("failed  handleCommentNotification");
     }
 }
 

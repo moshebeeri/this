@@ -159,6 +159,7 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
+        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
         NotificationHandler.handleBacKNotification(notification, this.props.actions,this.props.navigation);
