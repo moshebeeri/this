@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Image, Linking, TouchableOpacity, View} from 'react-native';
-import LinkPreview from 'react-native-link-preview';
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 import {ThisText} from '../../ui/index';
 
@@ -15,13 +14,13 @@ export default class UrlPreview extends Component {
     }
 
     async componentWillMount() {
-        const {text,post} = this.props;
+        const {text, post} = this.props;
         try {
-            if(post.textLinkPreview && post.textLinkPreview.url) {
+            if (post.textLinkPreview && post.textLinkPreview.url) {
                 this.setState({urlFound: true, data: post.textLinkPreview})
                 let textWithoutLink = text.replace(post.textLinkPreview.url, '');
                 this.setState({postText: textWithoutLink})
-            }else{
+            } else {
                 this.setState({urlFound: false})
             }
         } catch (error) {
@@ -39,8 +38,8 @@ export default class UrlPreview extends Component {
                 <Image resizeMode="cover" style={{height: 80, width: 80}} source={{uri: this.state.data.images[0]}}/>
         }
         let showText = true;
-        if(!this.state.postText || (this.state.postText && !this.state.postText.trim())){
-            showText =  false;
+        if (!this.state.postText || (this.state.postText && !this.state.postText.trim())) {
+            showText = false;
         }
         return <View
             style={{justifyContent: 'flex-start', alignItems: "center", paddingLeft: 5, paddingRight: 5, marginTop: 5}}>
@@ -61,7 +60,7 @@ export default class UrlPreview extends Component {
 
             </View>
 
-            {showText  && <View style={{alignItems: 'center', justifyContent: 'center'}}>
+            {showText && <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <ThisText>{this.state.postText}</ThisText>
             </View>}
 

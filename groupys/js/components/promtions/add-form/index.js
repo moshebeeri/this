@@ -750,8 +750,8 @@ class AddPromotion extends Component {
         const {saving, savingFailed} = this.props;
         let proximityForm = undefined;
         let header = '';
-        if (this.props.navigation.state.params.onBoardType) {
-            switch (this.props.navigation.state.params.onBoardType) {
+        if (this.state.onBoardType) {
+            switch (this.state.onBoardType) {
                 case 'BUSINESS':
                     header = strings.AddOnBoardingPromotion;
                     break;

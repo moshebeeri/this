@@ -1,12 +1,11 @@
 import store from "react-native-simple-store";
-import CallingCallUtils from '../utils/LocalToCallingCode'
 import PhoneUtils from '../utils/phoneUtils'
 import serverRequestHandler from './serverRequestHandler';
 
 class LoginApi {
-    async login(phone, password,callingCode) {
-        let phoneNumber =  callingCode + phone;
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, callingCode );
+    async login(phone, password, callingCode) {
+        let phoneNumber = callingCode + phone;
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, callingCode);
         let normalizePhoneNumber = PhoneUtils.clean_phone_number(normalizedPhone);
         let email = PhoneUtils.clean_phone_number(callingCode) + normalizePhoneNumber + "@low.la";
         return serverRequestHandler.fetch_handler(`${server_host}/auth/local`, {
@@ -27,9 +26,9 @@ class LoginApi {
         return newPhone;
     }
 
-    async signup(phone, password, firstName, lastName,callingCode) {
-        let phoneNumber =  callingCode + phone;
-        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, callingCode );
+    async signup(phone, password, firstName, lastName, callingCode) {
+        let phoneNumber = callingCode + phone;
+        let normalizedPhone = this.normalizePhoneNumber(phoneNumber, callingCode);
         let normalizePhoneNumber = PhoneUtils.clean_phone_number(normalizedPhone);
         let email = PhoneUtils.clean_phone_number(callingCode) + normalizePhoneNumber + "@low.la";
         return serverRequestHandler.fetch_handler(`${server_host}/api/users`, {
@@ -58,7 +57,7 @@ class LoginApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             },
-        }, 'users', '/verification','BOOLEAN');
+        }, 'users', '/verification', 'BOOLEAN');
     }
 
     recoverPassword(phoneNumber) {

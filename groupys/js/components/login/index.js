@@ -12,8 +12,13 @@ import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
 import navigationUtils from '../../utils/navigationUtils'
 import CallingCodeUtils from '../../utils/LocalToCallingCode'
-
-const {width, height} = Dimensions.get('window');
+import FCM, {
+    FCMEvent,
+    NotificationType,
+    RemoteNotificationResult,
+    WillPresentNotificationResult
+} from 'react-native-fcm';
+const { height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
 
@@ -33,7 +38,8 @@ class Login extends Component {
 
     async componentWillMount(){
         let callingCode = await CallingCodeUtils.getCallingCode();
-        this.setState({callingCode: '+' + callingCode})
+        this.setState({callingCode: '+' + callingCode});
+        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
     }
     focusNextField(nextField) {
         this.refs[nextField].focus()

@@ -4,12 +4,17 @@ import {setPromotion, setSinglePromotion} from "../actions/promotions";
 import * as segaActions from './segaActions'
 import ImageApi from "../api/image";
 import productApi from "../api/product";
+import InstanceApi from "../api/instances";
 import {setProduct} from "../actions/product";
 import {handleSucsess} from './SegaSuccsesHandler'
 import FeedApi from "../api/feed";
+import NotificationApi from "../api/notification";
+import * as actions from '../reducers/reducerActions';
 
+let notificationApi = new NotificationApi();
 let promotionApi = new PromotionApi();
 let feedApi = new FeedApi();
+let instanceApi = new InstanceApi();
 
 function* savePromotion(action) {
     try {
@@ -115,9 +120,25 @@ function* updatePromotionSocialState(action) {
     }
 }
 
+function* handleNotification(action) {
+    try {
+        yield call(notificationApi.readNotification, action.token, action.notificationId);
+        let instance = yield call(instanceApi.getInstance, action.token, action.instanceId);
+        yield put({
+            type: actions.APP_SHOW_PROMOTION_POPUP,
+            showPopup: true,
+            instance: instance,
+            notificationId: action.notificationId
+        });
+    } catch (error) {
+        console.log("failed saveMyPromotionsRequest");
+    }
+}
+
 function* promotionSega() {
     yield throttle(2000, segaActions.SAVE_PROMOTION, savePromotion);
     yield throttle(2000, segaActions.UPDATE_PROMOTION, updatePromotionSocialState);
+    yield throttle(2000, segaActions.PROMOTION_NOTIFICATION, handleNotification);
 }
 
 export default promotionSega;

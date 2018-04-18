@@ -23,9 +23,7 @@ export default class NotificationListView extends Component {
         actions.doNotification(viewItem._id)
     }
 
-    shouldComponentUpdate() {
-        return false;
-    }
+
 
     notify(notification) {
         const {item, actions} = this.props;
@@ -98,7 +96,7 @@ export default class NotificationListView extends Component {
         const actionStyle = this.getActionStyle(viewItem);
         const action = this.getAvalibaleActions(viewItem, actionStyle, redeemStyle);
         return (
-            <View style={{padding: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea'}}
+            <View style={{marginTop:StyleUtils.scale(5), alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea'}}
                   regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
@@ -147,13 +145,14 @@ export default class NotificationListView extends Component {
         const action = this.getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.business.name.length * 10;
         return (
-            <View style={{padding: 5, backgroundColor: '#eaeaea'}} regular>
+            <View style={{ marginTop:StyleUtils.scale(5),backgroundColor: '#eaeaea'}} regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
                     flexDirection: 'row',
                     paddingTop: StyleUtils.scale(5),
                     paddingLeft: StyleUtils.scale(5),
+                    paddingBottom: StyleUtils.scale(5),
                     alignItems: 'center',
                 }}>
                     {image}
@@ -310,7 +309,7 @@ export default class NotificationListView extends Component {
         const action = this.getAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.group.name.length * 10;
         return (
-            <View style={{padding: 5, backgroundColor: '#eaeaea'}} regular>
+            <View style={{marginTop:StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
@@ -357,7 +356,7 @@ export default class NotificationListView extends Component {
         const action = this.getPromotionAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.group.name.length * 10;
         return (
-            <View style={{padding: 5, backgroundColor: '#eaeaea'}} regular>
+            <View style={{marginTop:StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
