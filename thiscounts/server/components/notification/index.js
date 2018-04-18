@@ -26,9 +26,18 @@ function flatten(array) {
 
 function toPayloadData(notification, callback){
   let data = {};
+  //https://firebase.google.com/docs/cloud-messaging/admin/send-messages
   let n = {
+    //??icon: 'mipmap-hdpi/ic_launcher.png', <-- TODO: should be extended so the icon will be according to entity.
     color: '#4ad9ff',
-    badge: '0',
+    android: {
+      ttl: 3600 * 1000, // 1 hour in milliseconds
+      priority: 'normal',
+      notification: {
+        //??icon: 'mipmap-hdpi/ic_launcher.png',
+        color: '#4ad9ff',
+      },
+    },
     // 'titleLocKey': '',
     // 'titleLocArgs': '',
     // 'sound': '',
@@ -57,20 +66,30 @@ function toPayloadData(notification, callback){
 
 
   //  consolidate by user instead of data old was: data._id = data._id.toString();
-  data._id = notification.to.toString();
+  data._id = data._id.toString();
   n.title =  data.title = notification.title;
   n.body = data.body = notification.body;
   data.note = notification.note;
   data.action = notification.action;
+  data.entity = data._id.toString();
   data.notificationId = notification._id.toString();
-  n.tag = data._id? data._id : '';
-  badge(notification.to, function(err, badge){
+  n.tag = notification.to._id.toString();//data._id? data._id : ''; //notification._id;
+  badge(notification.to._id, function(err, badgeCount){
     if(err) return callback(err);
-    n.badge = badge.toString();
-    data.badge = badge.toString();
+    console.log(`badge of ${notification.to._id} is ${badgeCount}`);
+    n.badge = badgeCount.toString();
+    data.badge = badgeCount.toString();
     return callback(null, {
       data,
-      notification : n
+      notification : n,
+      apns: {
+        payload: {
+          aps: {
+            badge: badgeCount,
+          },
+        },
+      },
+
     });
   });
 }
@@ -128,12 +147,14 @@ function firebasePNS(notification, registrationTokens, userId) {
           }
         };
       */
-    //admin.messaging().sendToDevice(registrationTokens, notification.payload, notification.options)
+    console.log(`firebase PNS ${JSON.stringify(payload)}`);
     admin.messaging().sendToDevice(registrationTokens, payload, notification.options)
       .then(function (response) {
-        console.log(`Successfully sent message to ${userId}:  ${JSON.stringify(response)}`);
+        //console.log(`Successfully sent message to ${userId}:${JSON.stringify(response)}`);
+        console.log(`Successfully sent message to ${userId}`);
       })
       .catch(function (error) {
+        //console.log(`Error sending message to ${userId}: ${JSON.stringify(error)}`);
         console.log(`Error sending message to ${userId}: ${JSON.stringify(error)}`);
       });
   })
@@ -159,7 +180,7 @@ function pnsUserDevices(notification, translate) {
       }
 
       let registrationTokens = getUserFirebaseTokens(user);
-      console.log(`send notifications to ${notification.to} with tokens ${JSON.stringify(registrationTokens)}`);
+      //console.log(`send notifications to ${notification.to._id} with tokens ${JSON.stringify(registrationTokens)}`);
       firebasePNS(notification, registrationTokens, notification.to)
     });
 }
@@ -175,6 +196,7 @@ exports.notify = function (note, audience, translate) {
   audience.forEach(to => {
     note.to = to;
     note.timestamp = Date.now();
+    note.badge = true;
     Notification.create(note, function (err, notification) {
       if (err) return console.error(err);
       Notification.findById(notification._id).exec((err, populated) => {

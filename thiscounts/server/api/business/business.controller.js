@@ -20,6 +20,7 @@ const Role = require('../../components/role');
 const randomstring = require("randomstring");
 const email = require('../../components/email');
 const geolib = require('geolib');
+const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Business);
 
@@ -205,6 +206,7 @@ function doFollowBusiness(userId, businessId, callback) {
             graphModel.query(query, function (err) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
+              fireEvent.info('business', businessId, 'follow_business', {userId});
               if (business.shopping_chain) {
                 return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
               }
@@ -504,6 +506,7 @@ exports.review = function (req, res) {
   review(businessId, status, (err, business) => {
     if (err) return res.status(400).send(err);
     if (!business) return res.status(404).send('Not Found');
+    fireEvent.info('business', businessId, 'review', {review: business.review});
     return res.status(201).json(business);
   })
 };
@@ -521,6 +524,7 @@ function validate_email(businessId, validationCode, callback) {
       if (business.review.status !== 'reviewed') {
         reviewRequest(business);
       }
+      fireEvent.info('business', businessId, 'validate_email', {review: business.review});
       return callback(null, business);
     });
   })
@@ -530,6 +534,7 @@ function approveBusiness(business, callback) {
   review(business._id, 'accepted', (err, business) => {
     if (err) return callback(err);
     if (!business) return callback(null, null);
+    fireEvent.info('business', approveBusiness, 'review', {review: business.review});
     return callback(null, business);
   })
 }

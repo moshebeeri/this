@@ -75,9 +75,9 @@ exports.create = function(req, res) {
   let comment = req.body;
 
   let createComment = () => {
-    let entities = extract_ids(comment.entities_ids);
+    let entities = extract_ids(comment.entities);
     comment.user = req.user._id;
-    comment.entities = list2object(comment.entities_ids);
+    comment.entities = list2object(comment.entities);
     comment.created = Date.now();
     Comment.create(comment, function (err, comment) {
       if (err) {
