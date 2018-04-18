@@ -30,14 +30,8 @@ function toPayloadData(notification, callback){
   let n = {
     //??icon: 'mipmap-hdpi/ic_launcher.png', <-- TODO: should be extended so the icon will be according to entity.
     color: '#4ad9ff',
-    android: {
-      ttl: 3600 * 1000, // 1 hour in milliseconds
-      priority: 'normal',
-      notification: {
-        //??icon: 'mipmap-hdpi/ic_launcher.png',
-        color: '#4ad9ff',
-      },
-    },
+    ttl: '3600000', // 1 hour in milliseconds
+    priority: 'normal',
     // 'titleLocKey': '',
     // 'titleLocArgs': '',
     // 'sound': '',
@@ -81,15 +75,7 @@ function toPayloadData(notification, callback){
     data.badge = badgeCount.toString();
     return callback(null, {
       data,
-      notification : n,
-      apns: {
-        payload: {
-          aps: {
-            badge: badgeCount,
-          },
-        },
-      },
-
+      notification : n
     });
   });
 }
@@ -119,7 +105,7 @@ function firebasePNS(notification, registrationTokens, userId) {
     return;
   // console.log(`firebasePNS options: ${JSON.stringify(notification.options)}`);
   // console.log(`firebasePNS registrationTokens: ${JSON.stringify(registrationTokens)}`);
-  toPayloadData(notification, function(err, payload) {
+  toPayloadData(notification, function(err, message) {
     if(err) return console.error(err);
     /*
         let payload = {
@@ -147,14 +133,21 @@ function firebasePNS(notification, registrationTokens, userId) {
           }
         };
       */
-    console.log(`firebase PNS ${JSON.stringify(payload)}`);
-    admin.messaging().sendToDevice(registrationTokens, payload, notification.options)
+    console.log(`firebase PNS ${JSON.stringify(message)}`);
+    //Background
+    admin.messaging().sendToDevice(registrationTokens, {data : message.data}, notification.options)
       .then(function (response) {
         //console.log(`Successfully sent message to ${userId}:${JSON.stringify(response)}`);
-        console.log(`Successfully sent message to ${userId}`);
       })
       .catch(function (error) {
-        //console.log(`Error sending message to ${userId}: ${JSON.stringify(error)}`);
+        console.log(`Error sending message to ${userId}: ${JSON.stringify(error)}`);
+      });
+    //Foreground & Background
+    admin.messaging().sendToDevice(registrationTokens, message, notification.options)
+      .then(function (response) {
+        //console.log(`Successfully sent message to ${userId}:${JSON.stringify(response)}`);
+      })
+      .catch(function (error) {
         console.log(`Error sending message to ${userId}: ${JSON.stringify(error)}`);
       });
   })

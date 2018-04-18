@@ -70,9 +70,9 @@ exports.read = function(req, res) {
 };
 
 exports.resetUserBadge = function(req, res) {
-  Notification.update({$and: [{ to: req.user._id }, {badge: true}]}, { $set: { badge: false }}, (err) => {
+  Notification.update({$and: [{ to: req.user._id }, {badge: true}]}, { $set: { badge: false }}, { multi: true }, (err) => {
     if (err) { return handleError(res, err); }
-    return res.status(200).send();
+    return res.status(200).json({});
   });
 };
 
