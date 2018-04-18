@@ -8,7 +8,6 @@ class NotificationHandler {
         let token = state.authentication.token;
         const user = state.user.user;
         const notifications = state.notification.notification;
-
         switch (notification.model) {
             case 'instance':
                 dispatch({
@@ -45,12 +44,10 @@ class NotificationHandler {
                     this.setNotifications(notifications, dispatch, user, token);
                 }
                 break;
-
         }
-
     }
 
-    setNotifications(notifications, dispatch, user, token) {
+    setNotifications(notifications, dispatch, user, token,) {
         let skip = 0;
         if (notifications) {
             skip = notifications.length;
@@ -64,11 +61,15 @@ class NotificationHandler {
         });
     }
 
-    handleBacKNotification(notification, actions,navigation) {
+    handleBacKNotification(notification, actions, navigation, state, dispatch) {
+        let token = state.authentication.token;
+        const user = state.user.user;
+        const notifications = state.notification.notification;
         switch (notification.model) {
             case 'instance':
                 actions.showPromotionPopup(notification._id, notification.notificationId);
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
+                this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'group':
                 if (notification.note === "ask_invite") {
@@ -77,10 +78,12 @@ class NotificationHandler {
                     actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
                 }
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
+                this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'business':
                 actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
+                this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'comment':
                 actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, navigation);
@@ -89,6 +92,7 @@ class NotificationHandler {
                 if (notification && notification.title) {
                     actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
                     FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
+                    this.setNotifications(notifications, dispatch, user, token);
                 }
                 break;
         }
