@@ -25,6 +25,7 @@ class DataSync {
     initDataLysteners() {
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
+        this.syncBusinesses(store.getState().businesses.myBusinesses, store.getState(), store.dispatch);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
@@ -122,6 +123,15 @@ class DataSync {
         }
     }
 
+    syncBusinesses(businesses, state, dispatch) {
+        if (Object.values(businesses)) {
+            Object.values(businesses).forEach(business => {
+                    SyncUtils.addBusinessSync(dispatch, state, business.business._id);
+                }
+            )
+        }
+    }
+
     syncInstances(instances, state, dispatch) {
         if (Object.values(instances)) {
             Object.values(instances).forEach(instance => {
@@ -156,8 +166,7 @@ class DataSync {
                             asyncListener.markAsRead(snap.key);
                         }
                     })
-
-                    SyncUtils.addInstanceChatSync(dispatch,state, instance._id);
+                    SyncUtils.addInstanceChatSync(dispatch, state, instance._id);
                 }
             )
         }
@@ -167,7 +176,7 @@ class DataSync {
         if (Object.values(groups)) {
             Object.values(groups).forEach(group => {
                     //sync group chat
-                   SyncUtils.addGroupChatSync(dispatch,state,group._id);
+                    SyncUtils.addGroupChatSync(dispatch, state, group._id);
                     //sync group view
                     asyncListener.addListener('user_follow_group_' + group._id, (snap) => {
                         // TODO use get by group
@@ -181,7 +190,6 @@ class DataSync {
                             });
                             asyncListener.markAsRead(snap.key);
                         }
-
                     })
                     //sync group main feeds
                     asyncListener.addListener('feed_' + group._id, (snap) => {
@@ -206,14 +214,11 @@ class DataSync {
                             }
                             asyncListener.markAsRead(snap.key);
                         }
-
                     })
                 }
             )
         }
     }
-
-
 }
 
 const dataSync = new DataSync();

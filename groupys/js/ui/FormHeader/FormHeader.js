@@ -8,6 +8,7 @@ import strings from "../../i18n/i18n"
 import {connect} from 'react-redux';
 import {ThisText} from '../../ui/index';
 import StyleUtils from "../../utils/styleUtils";
+import NavigatioUtils from "../../utils/navigationUtils";
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
@@ -34,7 +35,7 @@ class FormHeader extends Component {
         if (disableAction) {
             return
         }
-        submitForm()
+        NavigatioUtils.doAction(submitForm);
     }
 
     createTitleStyle(titleColor) {

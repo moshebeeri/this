@@ -70,7 +70,6 @@ const resetAction = NavigationActions.reset({
 let logger = new ActionLogger();
 // this shall be called regardless of app state: running, background or not running. Won't be called when app is killed by user in iOS
 FCM.on(FCMEvent.Notification, async (notif) => {
-    FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
     //console.log(notif);
     // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
     if (notif.local_notification) {
@@ -80,6 +79,7 @@ FCM.on(FCMEvent.Notification, async (notif) => {
         //iOS: app is open/resumed because user clicked banner
         //Android: app is open/resumed because user clicked banner or tapped app icon
     }
+    let token = reduxStore.getState().authentication.token;
     NotificationHandler.handleFrontNotification(notif, reduxStore.getState(), reduxStore.dispatch);
     if (Platform.OS === 'ios') {
         //optional
@@ -97,6 +97,12 @@ FCM.on(FCMEvent.Notification, async (notif) => {
                 notif.finish(WillPresentNotificationResult.All) //other types available: WillPresentNotificationResult.None
                 break;
         }
+    }else{
+        if(!token)
+        {
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number));
+        }
+
     }
 });
 FCM.on(FCMEvent.RefreshToken, (token) => {
@@ -135,7 +141,6 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
-        FCM.getBadgeNumber().then(number => 0);
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
@@ -160,6 +165,7 @@ class ApplicationManager extends Component {
             PageRefresher.updateUserFireBase(token);
         });
         FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+        this.props.actions.resetBadge();
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
         NotificationHandler.handleBacKNotification(notification, this.props.actions,this.props.navigation,reduxStore.getState(), reduxStore.dispatch);
@@ -216,7 +222,7 @@ class ApplicationManager extends Component {
         let sideMargin = 20;
         let borderSideWidth = 4;
         if (item) {
-            notificationPopupHeight = StyleUtils.scale(250);
+            notificationPopupHeight = StyleUtils.scale(230);
             notificationnTopPadding = StyleUtils.scale(150);
             leftPadding = StyleUtils.scale(5);
             borderSideWidth = 4;
