@@ -60,6 +60,15 @@ async function promotionPopAction(instanceId, notificationId, dispatch, token) {
     }
 }
 
+export function resetBadge() {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        notificationApi.resetBadgeNotification(token);
+    }
+}
+
+
+
 export function showGenericPopup(notificationTitle, notificationId, notificationAction) {
     return async function (dispatch) {
         try {

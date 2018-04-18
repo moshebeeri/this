@@ -5,48 +5,51 @@ class NotificationHandler {
     }
 
     handleFrontNotification(notification, state, dispatch) {
-        let token = state.authentication.token;
-        const user = state.user.user;
-        const notifications = state.notification.notification;
-        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
-        switch (notification.model) {
-            case 'instance':
-                dispatch({
-                    type: types.PROMOTION_NOTIFICATION,
-                    notificationId: notification.notificationId,
-                    instanceId: notification.entity,
-                    token: token,
-                })
 
-                break;
-            case 'group':
-            case 'business':
-                dispatch({
-                    type: types.ADD_GENERAL_NOTIFICATION,
-                    notificationId: notification.notificationId,
-                    token: token,
-                });
-                this.setNotifications(notifications, dispatch, user, token);
-                break;
-            case 'comment':
-                dispatch({
-                    type: types.ADD_COMMENT_NOTIFICATION,
-                    notificationId: notification.notificationId,
-                    token: token,
-                });
-                break;
-            default:
-                if (notification.notificationId) {
+        let token = state.authentication.token;
+        if(token) {
+            const user = state.user.user;
+            const notifications = state.notification.notification;
+            // FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+            switch (notification.model) {
+                case 'instance':
+                    dispatch({
+                        type: types.PROMOTION_NOTIFICATION,
+                        notificationId: notification.notificationId,
+                        instanceId: notification.entity,
+                        token: token,
+                    })
+                    break;
+                case 'group':
+                case 'business':
                     dispatch({
                         type: types.ADD_GENERAL_NOTIFICATION,
                         notificationId: notification.notificationId,
                         token: token,
                     });
                     this.setNotifications(notifications, dispatch, user, token);
-                }
-                break;
+                    break;
+                case 'comment':
+                    dispatch({
+                        type: types.ADD_COMMENT_NOTIFICATION,
+                        notificationId: notification.notificationId,
+                        token: token,
+                    });
+                    break;
+                default:
+                    if (notification.notificationId) {
+                        dispatch({
+                            type: types.ADD_GENERAL_NOTIFICATION,
+                            notificationId: notification.notificationId,
+                            token: token,
+                        });
+                        this.setNotifications(notifications, dispatch, user, token);
+                    }
+                    break;
+            }
         }
     }
+
 
     setNotifications(notifications, dispatch, user, token,) {
         let skip = 0;
