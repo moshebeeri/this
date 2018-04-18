@@ -324,7 +324,9 @@ export function saveBusiness(business, navigation) {
             dispatch({
                 type: types.SAVE_BUSINESS,
                 business: business,
-                token: token
+                token: token,
+                dispatch: dispatch,
+                state: getState(),
             });
             dispatch({
                 type: actions.SAVE_BUSINESS_TAMPLATE,

@@ -1,6 +1,24 @@
 import asyncListener from "../api/AsyncListeners";
 import * as types from '../sega/segaActions';
 
+
+
+function addBusinessSync(dispatch,state,businessId){
+
+    asyncListener.addListener("business_" + businessId, (snap) => {
+        let response = snap.val();
+        if(response) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_REQUEST,
+                token: token,
+            })
+        }
+
+    });
+
+}
+
 function addGroupChatSync(dispatch,state,groupId){
 
     asyncListener.addListener("group_chat_" + groupId, (snap) => {
@@ -76,5 +94,6 @@ function addInstanceChatSync(dispatch,state,instanceId){
 
 export default {
     addGroupChatSync,
-    addInstanceChatSync
+    addInstanceChatSync,
+    addBusinessSync
 }

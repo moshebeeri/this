@@ -10,6 +10,7 @@ import {
 import * as segaActions from './segaActions'
 import ImageApi from "../api/image";
 import {handleSucsess}from './SegaSuccsesHandler'
+import sync from "../sync/SyncerUtils";
 let businessApi = new BusinessApi();
 
 function* getAll(action) {
@@ -29,6 +30,7 @@ function* saveBusiness(action) {
         let createdBusiness = yield call(businessApi.createBusiness, action.business, action.token, true);
         handleSucsess();
         if(createdBusiness._id) {
+            sync.addBusinessSync(action.dispatch,action.state,createdBusiness._id);
             createdBusiness.pictures = [];
             let pictures = [];
             if (action.business.image.path) {

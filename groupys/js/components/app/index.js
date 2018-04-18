@@ -216,7 +216,7 @@ class ApplicationManager extends Component {
         let sideMargin = 20;
         let borderSideWidth = 4;
         if (item) {
-            notificationPopupHeight = StyleUtils.scale(250);
+            notificationPopupHeight = StyleUtils.scale(230);
             notificationnTopPadding = StyleUtils.scale(150);
             leftPadding = StyleUtils.scale(5);
             borderSideWidth = 4;
