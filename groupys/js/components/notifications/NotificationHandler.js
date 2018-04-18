@@ -1,5 +1,5 @@
 import * as types from '../../sega/segaActions';
-
+import FCM from 'react-native-fcm';
 class NotificationHandler {
     constructor() {
     }
@@ -12,8 +12,8 @@ class NotificationHandler {
             case 'instance':
                 dispatch({
                     type: types.PROMOTION_NOTIFICATION,
-                    notificationId: notif.notificationId,
-                    instanceId: notif._id,
+                    notificationId: notification.notificationId,
+                    instanceId: notification.entity,
                     token: token,
                 })
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
@@ -67,21 +67,21 @@ class NotificationHandler {
         const notifications = state.notification.notification;
         switch (notification.model) {
             case 'instance':
-                actions.showPromotionPopup(notification._id, notification.notificationId);
+                actions.showPromotionPopup(notification.entity, notification.notificationId);
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                 this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'group':
                 if (notification.note === "ask_invite") {
-                    actions.showInviteGroupPopup(notification._id, notification.actor_user, notification.notificationId);
+                    actions.showInviteGroupPopup(notification.entity, notification.actor_user, notification.notificationId);
                 } else {
-                    actions.showGroupPopup(notification._id, notification.notificationId, notification.title, notification.action);
+                    actions.showGroupPopup(notification.entity, notification.notificationId, notification.title, notification.action);
                 }
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                 this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'business':
-                actions.showBusinessPopup(notification._id, notification.notificationId, notification.title, notification.action);
+                actions.showBusinessPopup(notification.entity, notification.notificationId, notification.title, notification.action);
                 FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                 this.setNotifications(notifications, dispatch, user, token);
                 break;

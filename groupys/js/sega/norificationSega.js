@@ -33,7 +33,6 @@ function* setTopNotification(action) {
 function* handleGeneralNotification(action) {
     try {
        // yield call(notificationApi.readNotification, action.token, action.notificationId);
-        yield  call(notificationApi.resetBadgeNotification, action.token);
     } catch (error) {
         console.log("failed  handleCommentNotification");
     }
@@ -42,7 +41,6 @@ function* handleGeneralNotification(action) {
 function* handleCommentNotification(action) {
     try {
         yield call(notificationApi.readNotification, action.token, action.notificationId);
-        yield  call(notificationApi.resetBadgeNotification, action.token);
         //TODO add comment annotation
     } catch (error) {
         console.log("failed  handleCommentNotification");

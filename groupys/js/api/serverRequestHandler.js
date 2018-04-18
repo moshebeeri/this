@@ -27,6 +27,11 @@ class ServerRequestHandler {
                         if (statusValidate) {
                             return reject(statusValidate);
                         }
+                        if(status === 404){
+                            return reject({
+                                message: 'No Content',
+                            });
+                        }
                         if(status === 204){
                            return resolve({
                                 message: 'No Content',
