@@ -8,6 +8,7 @@ class NotificationHandler {
         let token = state.authentication.token;
         const user = state.user.user;
         const notifications = state.notification.notification;
+        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
         switch (notification.model) {
             case 'instance':
                 dispatch({
@@ -16,7 +17,7 @@ class NotificationHandler {
                     instanceId: notification.entity,
                     token: token,
                 })
-                FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
+
                 break;
             case 'group':
             case 'business':
@@ -65,10 +66,10 @@ class NotificationHandler {
         let token = state.authentication.token;
         const user = state.user.user;
         const notifications = state.notification.notification;
+        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
         switch (notification.model) {
             case 'instance':
                 actions.showPromotionPopup(notification.entity, notification.notificationId);
-                FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                 this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'group':
@@ -77,12 +78,10 @@ class NotificationHandler {
                 } else {
                     actions.showGroupPopup(notification.entity, notification.notificationId, notification.title, notification.action);
                 }
-                FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                 this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'business':
                 actions.showBusinessPopup(notification.entity, notification.notificationId, notification.title, notification.action);
-                FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                 this.setNotifications(notifications, dispatch, user, token);
                 break;
             case 'comment':
@@ -91,7 +90,6 @@ class NotificationHandler {
             default:
                 if (notification && notification.title) {
                     actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
-                    FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number - 1));
                     this.setNotifications(notifications, dispatch, user, token);
                 }
                 break;
