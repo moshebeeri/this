@@ -5,7 +5,9 @@ class NotificationHandler {
     }
 
     handleFrontNotification(notification, state, dispatch) {
-
+        if(!notification){
+            return;
+        }
         let token = state.authentication.token;
         if(token) {
             const user = state.user.user;
@@ -66,6 +68,9 @@ class NotificationHandler {
     }
 
     handleBacKNotification(notification, actions, navigation, state, dispatch) {
+        if(!notification){
+            return;
+        }
         let token = state.authentication.token;
         const user = state.user.user;
         const notifications = state.notification.notification;
