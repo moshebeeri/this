@@ -9,6 +9,9 @@ class NotificationHandler {
             return;
         }
         let token = state.authentication.token;
+        if(notification.fcm.tag){
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+        }
         if(token) {
             const user = state.user.user;
             const notifications = state.notification.notification;
@@ -27,6 +30,7 @@ class NotificationHandler {
                     dispatch({
                         type: types.ADD_GENERAL_NOTIFICATION,
                         notificationId: notification.notificationId,
+
                         token: token,
                     });
                     this.setNotifications(notifications, dispatch, user, token);
@@ -35,6 +39,7 @@ class NotificationHandler {
                     dispatch({
                         type: types.ADD_COMMENT_NOTIFICATION,
                         notificationId: notification.notificationId,
+                        group: notification.actor_group,
                         token: token,
                     });
                     break;
