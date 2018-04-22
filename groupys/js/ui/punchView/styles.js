@@ -37,6 +37,7 @@ module.exports = {
         flexDirection: 'row',
         height: 30,
         marginTop: styleUtils.scale(30),
+        width: styleUtils.getWidth(),
         alignItems: 'center',
         justifyContent: 'center',
     }

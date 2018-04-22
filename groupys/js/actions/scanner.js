@@ -96,7 +96,7 @@ export function inTime(instance) {
     let date = new Date();
     if (instance.type === 'HAPPY_HOUR') {
         return isIn(instance.savedData.happy_hour.days, instance.savedData.happy_hour.from, instance.savedData.happy_hour.until,
-            date.getDay(), date.getHours(), date.getMinutes());
+            date.getDay() + 1, date.getHours(), date.getMinutes());
     }
     return true;
 }
@@ -108,11 +108,11 @@ export function isIn(days,
                      hours,
                      minutes) {
     var now_seconds = hours * 60 * 60 + minutes * 60;
-    if (days.includes(day) && ( from <= now_seconds && now_seconds <= until))
+    if (days.includes(day) && ( from <= now_seconds && now_seconds <=   until ) )
         return true;
     if (days.includes(day - 1)) {
         now_seconds = (24 + hours) * 60 * 60 + minutes * 60;
-        if (from <= now_seconds && now_seconds <= until)
+        if (from <= now_seconds && now_seconds <=   until)
             return true;
     }
     return false;
@@ -126,7 +126,7 @@ export function realizePromotion(code) {
             await promotionApi.realizePromotion(code, token)
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handlerhandleError(error, dispatch, 'scanner-realizePromotion')
+            handler.handleError(error, dispatch, 'scanner-realizePromotion')
             await logger.actionFailed('scanner-realizePromotion')
         }
     }

@@ -17,6 +17,21 @@ function addBusinessSync(dispatch,state,businessId){
 
     });
 
+    asyncListener.addListener('social_' + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            let businessId = snap.key.substring('social_'.length);
+            const token = state.authentication.token;
+
+            dispatch({
+                type: types.FEED_SET_SOCIAL_STATE,
+                token: token,
+                id: businessId
+            });
+            asyncListener.markAsRead(snap.key);
+        }
+    })
+
 }
 
 function addGroupChatSync(dispatch,state,groupId){

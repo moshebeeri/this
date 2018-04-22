@@ -78,7 +78,7 @@ export default class PunchView extends Component {
 
 
                     fontWeight: 'bold',
-                    color: '#2db6c8'
+                    color: '#FA0123'
                 }}>{strings.Free.toUpperCase()}</ThisText>
             </View>}
         </View>

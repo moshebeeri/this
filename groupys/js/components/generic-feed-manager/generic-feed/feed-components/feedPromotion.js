@@ -228,7 +228,7 @@ export default class FeedPromotion extends Component {
                     position:'absolute',
                     justifyContent: 'flex-end',
                     backgroundColor: 'transparent',
-                    bottom:0,
+                    bottom:1,
                     alignItems: 'flex-end',
                     width: StyleUtils.getWidth()
                 }}>

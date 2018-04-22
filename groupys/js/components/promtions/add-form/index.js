@@ -429,7 +429,7 @@ class AddPromotion extends Component {
             promotion.happy_hour.quantity = Number(this.state.quantity);
             promotion.happy_hour.values = {
                 pay: Number(this.state.happy_hour.values.pay),
-                until: this.state.happy_hour.values.until,
+                until: this.state.happy_hour.values.from + this.state.happy_hour.values.until,
                 days: this.state.happy_hour.values.days,
                 from: this.state.happy_hour.values.from,
             };

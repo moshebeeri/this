@@ -18,8 +18,8 @@ module.exports = {
     productMainContainer: {
         flex: 3,
     },
-    productDescContainer: {},
-    productPriceContainer: {},
+    productDescContainer: { alignItems: 'flex-start',justifyContent: 'center',},
+    productPriceContainer: {alignItems: 'flex-start',justifyContent: 'center',},
     productEditContainer: {
         flex: 1,
         height: 80,

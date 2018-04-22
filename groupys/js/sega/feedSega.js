@@ -1,4 +1,4 @@
-import {call, fork, put, race, take, throttle} from 'redux-saga/effects'
+import {call, put, race, take, throttle} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
 import PromotionApi from "../api/promotion";
 import {delay} from 'redux-saga'
@@ -8,18 +8,17 @@ import {
     maxFeedNotReturned,
     maxFeedReturned,
     scrolling,
+    setSavedInstance,
     stopScrolling,
     updateFeeds,
     updateFeedsTop,
-    updateSocialState,
-    setSavedInstance
+    updateSocialState
 } from "../actions/feedsMain";
-import {handleSucsess}from './SegaSuccsesHandler'
+import {handleSucsess} from './SegaSuccsesHandler'
 import * as segaActions from './segaActions'
-import feedComperator from "../reduxComperators/MainFeedComperator"
 
 let feedApi = new FeedApi();
-let promotionApi =new PromotionApi();
+let promotionApi = new PromotionApi();
 
 function* feedScrollDown(action) {
     try {
@@ -93,14 +92,11 @@ function* setTopFeeds(action) {
     }
 }
 
-
 function* setSocialState(action) {
     try {
         const response = yield call(feedApi.getFeedSocialState, action.id, action.token);
         handleSucsess();
-        if (feedComperator.shouldUpdateSocial(action.feed, response)) {
-            yield put(updateSocialState(response, action.id));
-        }
+        yield put(updateSocialState(response, action.id));
     } catch (error) {
         console.log("failed to update social state");
     }
@@ -113,7 +109,6 @@ function* feedUpdate(action) {
         listFeeds.push(response);
         handleSucsess();
         yield* updateFeeds(listFeeds);
-
     } catch (error) {
         console.log("failed to update feed");
     }
@@ -123,16 +118,10 @@ function* savedInstanceUpdate(action) {
     try {
         const response = yield call(promotionApi.getPromotionSavedInstance, action.item.id, action.token);
         yield put(setSavedInstance(response));
-
     } catch (error) {
         console.log("failed to update saved feed");
     }
 }
-
-
-
-
-
 
 function* feedSega() {
     yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown);
@@ -140,9 +129,7 @@ function* feedSega() {
     yield throttle(1000, segaActions.FEED_UPDATE_SAVED_ITEM, savedInstanceUpdate);
     yield throttle(3000, segaActions.FEED_SET_SOCIAL_STATE, setSocialState);
     yield throttle(3000, segaActions.FEED_SET_TOP_FEED, setTopFeeds);
-
-
- //   yield fork(watchStartBackgroundTask);
+    //   yield fork(watchStartBackgroundTask);
 }
 
 export default feedSega;
