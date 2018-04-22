@@ -85,7 +85,7 @@ class GeneralComponentHeader extends Component {
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         if (state.searchType) {
             return (
-                <View style={{width: StyleUtils.getWidth()}}>
+                <View style={{justifyContent:'center',alignItems:'center',height: StyleUtils.scale(50),width: StyleUtils.getWidth(),backgroundColor:'white'}}>
                     {network.offline && <View style={{
                         width: StyleUtils.getWidth(),
                         height: StyleUtils.scale(20),
@@ -97,7 +97,8 @@ class GeneralComponentHeader extends Component {
                     </View>}
 
                     <View style={{
-                        height: 20, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
+
+                        height: StyleUtils.scale(20), flexDirection: 'row', alignItems: 'center', backgroundColor: 'white',
                         justifyContent: 'space-between',
                     }}>
                         <TouchableOpacity transparent style={{
@@ -108,8 +109,8 @@ class GeneralComponentHeader extends Component {
                         }} onPress={() => this.resetSearch()}>
                             <View style={{
                                 alignItems: 'flex-start',
-                                marginTop: StyleUtils.scale(10),
-                                justifyContent: 'flex-end',
+
+                                justifyContent: 'center',
                                 marginLeft: StyleUtils.scale(10),
                                 width: StyleUtils.scale(30)
                             }}>

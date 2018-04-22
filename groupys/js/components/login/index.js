@@ -88,7 +88,7 @@ class Login extends Component {
                     }}>
 
 
-                        <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row',width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
+                        <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row',width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120)}]} regular>
                             <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
                                        blurOnSubmit={true} returnKeyType='next'
                                        onSubmitEditing={this.focusNextField.bind(this, "phone")}
@@ -114,7 +114,7 @@ class Login extends Component {
                                        placeholderTextColor={'white'}
                                        selectionColor={'black'}
                                        style={{
-                                           width: StyleUtils.scale(200),
+                                           width: StyleUtils.scale(220),
                                            color: 'white',
                                            borderColor: 'white',
                                            height: StyleUtils.scale(40),
@@ -125,7 +125,7 @@ class Login extends Component {
 
                         </View>
 
-                        <View style={[styles.passwordTextInput, {width: StyleUtils.getWidth()}]} regular>
+                        <View style={[styles.passwordTextInput, {width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
 
 
                             <TextInput

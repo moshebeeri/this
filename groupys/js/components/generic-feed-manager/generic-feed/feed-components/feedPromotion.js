@@ -225,10 +225,11 @@ export default class FeedPromotion extends Component {
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
                     height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 10)),
-                    position: 'absolute',
+                    position:'absolute',
                     justifyContent: 'flex-end',
-                    top: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(2, -8) : StyleUtils.relativeHeight(17, 17)),
                     backgroundColor: 'transparent',
+                    bottom:0,
+                    alignItems: 'flex-end',
                     width: StyleUtils.getWidth()
                 }}>
                     {item.promotion === 'PUNCH_CARD' &&

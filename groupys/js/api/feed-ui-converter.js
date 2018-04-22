@@ -217,7 +217,7 @@ class FeedConverter {
                 key: feed._id,
                 social: socialState,
                 actor: feed.activity.actor_user._id,
-                itemTitle: strings.businessCreated.formatUnicorn(name),
+
                 name: feed.activity.business.name,
                 address: feed.activity.business.address,
                 website: feed.activity.business.website,
@@ -247,6 +247,12 @@ class FeedConverter {
                 showSocial: true,
             }
         }
+
+        if(feed.activity.action === 'follow'){
+            response.itemTitle = strings.businessFollow.formatUnicorn(name.trim());
+        }else{
+            response.itemTitle = strings.businessCreated.formatUnicorn(name.trim());
+        }
         response.generalId = feed.activity.business._id;
         response.entities = [{business: feed.activity.business._id}];
         response.itemType = 'BUSINESS';
@@ -255,6 +261,7 @@ class FeedConverter {
         response.businessName = feed.activity.business.name;
         response.location = feed.activity.business.location;
         response.business = feed.activity.business;
+
         let user = feed.activity.actor_user;
         if (user && user.pictures && Object.keys(user.pictures).length > 0) {
             response.avetar = {

@@ -112,7 +112,7 @@ const relativeHeight = (heightIos,heightAndroid) => {
 
     };
     if(Platform.OS ==='ios'){
-        return heightIos * vh
+        return heightIos * vh;
     }else{
         return heightAndroid * vh
     }
@@ -125,11 +125,12 @@ const guidelineBaseHeight = 680;
 const scale = (size) => {
 
     if (isTablet() && Platform.OS ==='ios' ) {
-        return width / guidelineBaseWidth * size * 0.6;
+        return width / guidelineBaseWidth * size ;
     }
-
     return width / guidelineBaseWidth * size
 }
+
+
 const verticalScale = size => height / guidelineBaseHeight * size;
 const moderateScale = (size, factor = 0.5) => size + ( scale(size) - size ) * factor;
 
