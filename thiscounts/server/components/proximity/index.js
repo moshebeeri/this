@@ -77,9 +77,11 @@ function handleFollowersProximityActions(userId, location, callback) {
                   WITH   entity,promo,u,on, 
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
                           point({longitude:promo.lon,latitude:promo.lat}) AS promoLocation
-                  WHERE  promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
-                  			AND ( NOT exists(f.eligible_by_proximity_time) OR f.eligible_by_proximity_time + 1000*60*60*24*14 > timestamp()) 
-                  			AND distance(coordinate, promoLocation) < on.proximity*1000
+                  WHERE   NOT (u)-[ON_ACTION_SENT]->(promo)
+                          promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
+                  			  AND ( NOT exists(f.eligible_by_proximity_time) OR f.eligible_by_proximity_time + 1000*60*60*24*14 > timestamp()) 
+                  			  AND distance(coordinate, promoLocation) < on.proximity*1000
+         
                   WITH   promo, entity, coordinate, promoLocation
                   RETURN distinct promo, entity, labels(entity) as labels, distance(coordinate, promoLocation) as d
                   ORDER BY d desc
@@ -103,7 +105,8 @@ function handleProximityActions(userId, location, callback) {
                   WITH   entity,promo,on, 
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
                           point({longitude:promo.lon,latitude:promo.lat}) AS promoLocation                  
-                  WHERE  promo._id IS NOT NULL AND on.type = 'PROXIMITY'
+                  WHERE NOT (u)-[ON_ACTION_SENT]->(promo)
+                        promo._id IS NOT NULL AND on.type = 'PROXIMITY'
                   			AND distance(coordinate, promoLocation) < on.proximity*1000
                         AND NOT (entity)<-[:FOLLOW]-(u)
                         AND NOT (entity)<-[:NO_ON_PROXIMITY_ACTION]-(u)
@@ -146,19 +149,7 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
         location: location
       });
 
-      if(!isFollower)
-        graphModel.relate_ids(userId, 'ON_ACTION_SENT', eligible.entity._id,  `{time: timestamp(), action: '${action}'`);
-      else{ //FOLLOWER
-        let q = `MATCH (u:user)-[f:FOLLOW]->(e) 
-                 WHERE u._id='${userId}' and e._id='${eligible.entity._id}' 
-                 SET   f.eligible_by_proximity_time = timestamp()`;
-        graphModel.query(q,(err)=>{
-          if(err) {
-            console.log(`failed to set eligible_by_proximity_time`);
-            console.error(err);
-          }
-        })
-      }
+      graphModel.relate_ids(userId, 'ON_ACTION_SENT', eligible.promo._id,  `{time: timestamp(), action: '${action}'`);
 
       Instance.notify(instance, [userId]);
       //Notify new costumer received eligible by proximity
