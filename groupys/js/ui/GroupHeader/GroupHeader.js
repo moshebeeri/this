@@ -33,7 +33,7 @@ export default class GroupHeader extends Component {
 
     createTitle(groupType) {
         switch (groupType) {
-            case 'USERS':
+            case 'USER':
                 return strings.PublicGroup; //change to icons @yb
             case 'BUSINESS':
                 return strings.BusinessGroup;
@@ -64,7 +64,7 @@ export default class GroupHeader extends Component {
                         flexDirection: 'row', flex: 5, marginTop: 8,
                         alignItems: 'center'
                     }}>
-                        <ThisText style={styles.groupEntity}>{this.createTitle(group.entity_type)}</ThisText>
+                        <ThisText style={[styles.groupEntity,{ marginRight:5}]}>{this.createTitle(group.entity_type)}</ThisText>
 
 
                         {group.social_state && <View style={{flexDirection: 'row'}}>

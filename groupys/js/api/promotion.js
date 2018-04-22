@@ -45,7 +45,7 @@ class PromotionApi {
         let date = new Date();
         let time = {};
         time.hours = date.getHours();
-        time.day = date.getDay();
+        time.day = date.getDay() + 1;
         time.minutes = date.getMinutes();
         return serverRequestHandler.fetch_handler(`${server_host}/api/instances/post/realize/${code}`, {
             method: 'POST',

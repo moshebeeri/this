@@ -295,7 +295,7 @@ const il = {
     SignUpUserExist                               : "רישום נכשל, משתמש כבר קיים במערכת",
     networkErrorMessage                           : "בקשה נכשלה, הרשת לא זמינה",
     Free                                          : "חינם",
-    businessFollow                                : "{0} עוקב אחרי העסק",
+    businessFollow                                : "   {0} עוקב אחרי העסק  ",
 
 
 };

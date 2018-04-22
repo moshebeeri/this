@@ -8,7 +8,7 @@ module.exports = {
         backgroundColor: 'white',
     },
     groupEntity: {
-        fontWeight: '200', color: '#616F70', fontSize: StyleUtils.scale(14),
+       fontWeight: '200', color: '#616F70', fontSize: StyleUtils.scale(14),
     },
     businessNameText: {
         fontFamily: 'Roboto-Regular',
