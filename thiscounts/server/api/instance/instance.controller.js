@@ -365,6 +365,7 @@ function allocatePunchCardInstance(user, instance) {
       return console.error(err);
     }
     if (results.length >=1 && results[0].quantity > 0) {
+      instance.action = 're-eligible';
       PromotionCtrl.applyToUserList([user._id], instance, (err) =>{
         if(err) console.error(err);
       })

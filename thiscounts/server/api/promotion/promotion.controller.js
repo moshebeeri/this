@@ -475,7 +475,7 @@ function user_instance_eligible_activity(userId, instance){
       instance: instance._id,
       promotion: instance.promotion._id,
       ids: [userId],
-      action: 'eligible'
+      action: instance.action || 'eligible'
     };
     act.actor_business = instance.promotion.entity.business;
     activity.create(act, function(err, activity){
