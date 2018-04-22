@@ -117,11 +117,8 @@ function checkSafeSearch(annotation, callback) {
 }
 
 function getUpdateId(id, callback){
-  console.log(`getUpdateId :${id}`);
   if(id === 'image'){
     Image.create({}, (err, image) => {
-      console.log(`image._id :${image._id}`);
-
       if(err) console.error(err);
       return callback(err? '' : image._id)
     })

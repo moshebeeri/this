@@ -432,7 +432,6 @@ exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
   promotion.creator = req.user._id;
-  console.log(`promotion.on_action`);
   if(promotion.on_action)
     return create_action(req, res);
 
