@@ -187,8 +187,10 @@ class Signup extends Component {
                                     </View>
                                 </View>
 
-                                <KeyboardAvoidingView behavior={'position'}>
-                                    <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row',width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
+                                <KeyboardAvoidingView style={{alignItems:'center',justifyContent:'center'}}   behavior={'position'}>
+
+                                   <View style={{alignItems:'center',justifyContent:'center'}}>
+                                    <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row'}]} regular>
                                         <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
                                                    blurOnSubmit={true} returnKeyType='next'
                                                    onSubmitEditing={this.focusNextField.bind(this, "phone")}
@@ -225,8 +227,8 @@ class Signup extends Component {
 
                                     </View>
 
-
-                                <View style={styles.passwordTextInput} regular>
+                                </View>
+                                <View style={[styles.passwordTextInput, {width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
 
                                     <TextInput
 
@@ -251,7 +253,7 @@ class Signup extends Component {
                                         onSubmitEditing={this.focusNextField.bind(this, "verifyPassword")}
                                     />
                                 </View>
-                                <View style={styles.passwordTextInput} regular>
+                                <View style={[styles.passwordTextInput, {width: StyleUtils.getWidth() - StyleUtils.scale(60)}]} regular>
 
                                     <TextInput
 

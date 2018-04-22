@@ -175,7 +175,7 @@ export default class BusinessListView extends Component {
                     height: StyleUtils.relativeHeight(15, 10),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: StyleUtils.relativeHeight(17, 16),
+                    bottom:1,
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
