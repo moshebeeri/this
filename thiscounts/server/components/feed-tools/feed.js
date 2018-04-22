@@ -137,6 +137,7 @@ function instance_state(user_id, instance, callback){
     if (err) {
       return callback(err, null);
     }
+    //graphModel.query()
     instance.social_state = social_state;
     callback(null, instance);
   })

@@ -10,8 +10,9 @@ const randomstring = require('randomstring');
 const QRCode = require('qrcode');
 const MongodbSearch = require('../../components/mongo-search');
 const fireEvent = require('../../components/firebaseEvent');
-const PromotionCtrl = require('../promotion/promotion.controller');
-const Instances = require('../../components/instance');
+const activity = require('../../components/activity').createActivity();
+const pricing = require('../../components/pricing');
+const Notifications = require('../../components/notification');
 
 
 exports.search = MongodbSearch.create(Instance);
@@ -232,24 +233,24 @@ function relateSavedInstance(userId, savedInstance, instance, callback) {
   });
 }
 
-function saveInstance(req, res, instance, context) {
-  graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
+function saveInstance(userId, instance, context, callback) {
+  graphModel.query(`MATCH (i:instance { _id:'${instance._id}'}) return i.quantity as quantity`, function (err, results) {
     if (err) {
-      return handleError(res, err);
+      return callback(err);
     }
     if (results.length !== 1 && results[0].quantity < 1) {
-      return res.status(400).send('Run out of instances');
+      return callback(new Error('Run out of instances'));
     }
-    createSavedInstance(instance, req.user._id, context, function (err, savedInstance) {
-      if (err) return handleError(res, err);
-      relateSavedInstance(req.user._id, savedInstance, instance, function (err, instance) {
-        if (err) return handleError(res, err);
-        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
-          if (err) return handleError(res, err);
+    createSavedInstance(instance, userId, context, function (err, savedInstance) {
+      if (err) return callback(err);
+      relateSavedInstance(userId, savedInstance, instance, function (err, instance) {
+        if (err) return callback(err);
+        graphModel.query(`MATCH (i:instance { _id:'${instance._id}'}) SET i.quantity=i.quantity-1`, function (err) {
+          if (err) return callback(err);
           SavedInstance.findById(savedInstance._id).exec((err, si) => {
-            if (err) return handleError(res, err);
-            graphModel.relate_ids(req.user._id, 'SAVED', instance.promotion._id);
-            return res.status(200).json(si);
+            if (err) return callback(err);
+            graphModel.relate_ids(userId, 'SAVED', instance.promotion._id);
+            return callback(null, si);
             })
         });
       });
@@ -285,7 +286,11 @@ exports.save = function (req, res) {
         if (isRealizedInstance(status)) {
           return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
-        return saveInstance(req, res, instance, {});
+
+        return saveInstance(req.user._id, instance, {}, (err, si) =>{
+          if(err) handleError(res, err);
+          return res.status(200).json(si);
+        })
       });
     });
 };
@@ -361,23 +366,49 @@ function redeemTimeLogic(obj, callback) {
   return callback(null, obj);
 }
 
-function allocatePunchCardInstance(user, instance) {
-  const error = (err) => {console.error(err)};
+
+function savedInstanceEligibleActivity(userId, savedInstance){
+  let act = {
+    savedInstance: savedInstance._id,
+    instance: savedInstance.instance._id,
+    ids: [userId],
+    action: 'saved_instance_eligible'
+  };
+  const entity = savedInstance.instance.promotion.entity;
+  act.actor_business = entity.business;
+  activity.create(act, function(err, activity){
+    if(err) return console.error(err);
+    pricing.chargeActivityDistribution(entity, activity);
+  });
+}
+
+function allocatePunchCardInstance(user, instance, callback) {
   graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) return i.quantity as quantity`, function (err, results) {
-    if (err) return error(err);
-    if (results.length >=1 && results[0].quantity > 0) {
+    if (err) {
+      return callback(err);
+    }
+    if (results.length >= 1 && results[0].quantity > 0) {
       graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) SET i.quantity=i.quantity-1`, function (err) {
-        if (err) return error(err);
-        Instances.createSingleInstance(instance.promotion, (err, instance) => {
-          if (err) return error(err);
-          PromotionCtrl.applyToUserList([user._id], instance, (err) => {
-            if (err) return error(err);
-          })
+        if (err) return callback(err);
+        createSavedInstance(instance, user._id, {}, (err, si) => {
+          if(err) callback(err);
+          savedInstanceEligibleActivity(user._id, si);
+          let note = {
+            note: 'saved_instance_eligible',
+            instance: instance,
+            title: 'RE_PROMOTION_ELIGIBLE_TITLE',
+            body: instance.promotion ? instance.promotion.name : '',
+            timestamp: Date.now()
+          };
+          Notifications.notifyUser(note, user._id, true);
         });
       });
     }
   });
 }
+
+
+
 
 function redeemPunchCard(saved, callback) {
   let punch_card = saved.savedData.punch_card;
