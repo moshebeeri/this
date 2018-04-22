@@ -9,7 +9,7 @@ let auth = require('../../auth/auth.service');
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 
 router.get('/qrcode/:id', auth.isAuthenticated(), controller.qrcode);
-router.get('/save/:id', auth.isAuthenticated(), controller.save);
+router.post('/save/:id', auth.isAuthenticated(), controller.save);
 router.get('/unsave/:id', auth.isAuthenticated(), controller.unsave);
 router.get('/available/:id', auth.isAuthenticated(), controller.available);
 router.get('/realize/:code', auth.isAuthenticated(), controller.realize);

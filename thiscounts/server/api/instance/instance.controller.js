@@ -179,7 +179,7 @@ function initializeEarlyBooking(instance) {
   };
 }
 
-function createSavedInstance(instance, user_id, callback) {
+function createSavedInstance(instance, user_id, context, callback) {
   let savedInstance = {
     user: user_id,
     instance: instance._id,
@@ -204,6 +204,7 @@ function createSavedInstance(instance, user_id, callback) {
   } else if (instance.type === 'EARLY_BOOKING') {
     savedInstance.savedData.early_booking = initializeEarlyBooking(instance)
   }
+  savedInstance.context = context;
   SavedInstanceController.createSavedInstance(savedInstance, callback)
 }
 
@@ -230,7 +231,7 @@ function relateSavedInstance(userId, savedInstance, instance, callback) {
   });
 }
 
-function saveInstance(req, res, instance) {
+function saveInstance(req, res, instance, context) {
   graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
     if (err) {
       return handleError(res, err);
@@ -238,7 +239,7 @@ function saveInstance(req, res, instance) {
     if (results.length !== 1 && results[0].quantity < 1) {
       return res.status(400).send('Run out of instances');
     }
-    createSavedInstance(instance, req.user._id, function (err, savedInstance) {
+    createSavedInstance(instance, req.user._id, context, function (err, savedInstance) {
       if (err) return handleError(res, err);
       relateSavedInstance(req.user._id, savedInstance, instance, function (err, instance) {
         if (err) return handleError(res, err);
@@ -283,7 +284,7 @@ exports.save = function (req, res) {
         if (isUniqueInstance(status)) {
           return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
-        return saveInstance(req, res, instance);
+        return saveInstance(req, res, instance, req.body || {});
       });
     });
 };

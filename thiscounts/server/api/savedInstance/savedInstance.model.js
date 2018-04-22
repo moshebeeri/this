@@ -21,6 +21,7 @@ let SavedInstanceSchema = new Schema({
   user: {type: Schema.ObjectId, ref: 'User', required: true, autopopulate: utils.userAutopopulateOptions },
   instance: {type: Schema.ObjectId, ref: 'Instance', index: true, required: true, autopopulate: true },
   type: {type: String, required: true},
+  context: {},
   savedDataType: {type: String, enum: savedDataTypes},
   savedData: {
     increasing: {
