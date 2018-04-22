@@ -285,7 +285,7 @@ exports.save = function (req, res) {
         if (isRealizedInstance(status)) {
           return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
-        return saveInstance(req, res, instance, req.body || {});
+        return saveInstance(req, res, instance, {});
       });
     });
 };
