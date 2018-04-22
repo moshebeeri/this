@@ -11,6 +11,7 @@ const QRCode = require('qrcode');
 const MongodbSearch = require('../../components/mongo-search');
 const fireEvent = require('../../components/firebaseEvent');
 const PromotionCtrl = require('../promotion/promotion.controller');
+const Instances = require('../../components/instance');
 
 
 exports.search = MongodbSearch.create(Instance);
@@ -256,9 +257,9 @@ function saveInstance(req, res, instance, context) {
   });
 }
 
-function isUniqueInstance(status) {
+function isRealizedInstance(status) {
   status.forEach(s => {
-    if (s.type === 'PUNCH_CARD' && s.status === 'REALIZED')
+    if (s.status === 'REALIZED')
       return true;
   });
   return false;
@@ -281,7 +282,7 @@ exports.save = function (req, res) {
         if (err) {
           return handleError(res, err);
         }
-        if (isUniqueInstance(status)) {
+        if (isRealizedInstance(status)) {
           return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
         return saveInstance(req, res, instance, req.body || {});
@@ -361,15 +362,19 @@ function redeemTimeLogic(obj, callback) {
 }
 
 function allocatePunchCardInstance(user, instance) {
+  const error = (err) => {console.error(err)};
   graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) return i.quantity as quantity`, function (err, results) {
-    if (err) {
-      return console.error(err);
-    }
+    if (err) return error(err);
     if (results.length >=1 && results[0].quantity > 0) {
-      instance.action = 're-eligible';
-      PromotionCtrl.applyToUserList([user._id], instance, (err) =>{
-        if(err) console.error(err);
-      })
+      graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) SET i.quantity=i.quantity-1`, function (err) {
+        if (err) return error(err);
+        Instances.createSingleInstance(instance.promotion, (err, instance) => {
+          if (err) return error(err);
+          PromotionCtrl.applyToUserList([user._id], instance, (err) => {
+            if (err) return error(err);
+          })
+        });
+      });
     }
   });
 }
