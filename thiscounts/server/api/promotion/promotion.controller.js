@@ -125,6 +125,10 @@ function applyToUserList(users_ids, instance, callback) {
   })
 }
 
+exports.applyToUserList = function applyToUsers(users_ids, instance, callback){
+  return applyToUserList(users_ids, instance, callback);
+};
+
 function applyToGroups(promotion, instances, callback){
   async.each(instances, (instance, callback) => {
     let groups;

@@ -10,6 +10,7 @@ const randomstring = require('randomstring');
 const QRCode = require('qrcode');
 const MongodbSearch = require('../../components/mongo-search');
 const fireEvent = require('../../components/firebaseEvent');
+const PromotionCtrl = require('../promotion/promotion.controller');
 
 
 exports.search = MongodbSearch.create(Instance);
@@ -358,6 +359,19 @@ function redeemTimeLogic(obj, callback) {
   return callback(null, obj);
 }
 
+function allocatePunchCardInstance(user, instance) {
+  graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) return i.quantity as quantity`, function (err, results) {
+    if (err) {
+      return console.error(err);
+    }
+    if (results.length >=1 && results[0].quantity > 0) {
+      PromotionCtrl.applyToUserList([user._id], instance, (err) =>{
+        if(err) console.error(err);
+      })
+    }
+  });
+}
+
 function redeemPunchCard(saved, callback) {
   let punch_card = saved.savedData.punch_card;
 
@@ -391,7 +405,7 @@ function redeemPunchCard(saved, callback) {
                         WHERE saved._id = '${saved._id}' 
                         SET saved.won = true;
                         `, (err)=>{if(err) console.error(err)});
-
+      allocatePunchCardInstance(saved.user, saved.instance);
       return callback(null, {
         terminate: true,
         savedInstance: savedInstance
@@ -546,23 +560,20 @@ function redeemHappyHour(saved, data, callback) {
       graphModel.query(query, callback)
     })
   }
-  if(!data || !data.day || !data.hours || !data.minutes)
-    return callback(new Error('data object is ot preset or ot valid'));
-
+  if(!data || !data.day || !data.hours || !data.minutes) {
+    const err = new Error(`data object is not preset or not valid ${JSON.stringify(data)}`);
+    console.error(err);
+    return callback(err);
+  }
   realize_happy_hour(saved, function (err) {
     if (err) return callback(err);
-    if(!happy_hour.days.includes(data.day)) {
-      return callback(new Error('data object is ot preset or ot valid'));
+    if(!data || !data.day|| !data.hours || !data.minutes) {
+      return callback(new Error('data object is not preset or not valid'));
     }
-    if(!happy_hour.days.includes(data.hours)) {
-      return callback(new Error('data object is ot preset or ot valid'));
-    }
-    if(!happy_hour.days.includes(data.minutes)) {
-      return callback(new Error('data object is ot preset or ot valid'));
-    }
+
     let now_seconds = data.hours*60*60+data.minutes*60;
     if( happy_hour.days.includes(data.day) &&
-        data.from <= now_seconds && now_seconds <= data.until ) {
+      happy_hour.from <= now_seconds && now_seconds <= happy_hour.until) {
       happy_hour.redeemTimes.push(Date.now());
       saved.save(function (err, savedInstance) {
         if (err) return callback(err);
@@ -654,10 +665,10 @@ exports.realize = function (req, res) {
             return res.status(403).send('non or multiple barcode found');
           if (barcodes[0].barcode !== req.params.barcode)
             return res.status(403).send('required barcode mismatch');
-          return realizeSavedInstance(user, savedInstance, rel, res, instance);
+          return realizeSavedInstance(user, savedInstance, rel, res, {});
         });
     } else {
-      return realizeSavedInstance(user, savedInstance, rel, res, instance);
+      return realizeSavedInstance(user, savedInstance, rel, res, {});
     }
   });
 };
@@ -688,10 +699,10 @@ exports.post_realize = function (req, res) {
             return res.status(403).send('non or multiple barcode found');
           if (barcodes[0].barcode !== req.params.barcode)
             return res.status(403).send('required barcode mismatch');
-          return realizeSavedInstance(user, savedInstance, rel, res, instance, req.body || {});
+          return realizeSavedInstance(user, savedInstance, rel, res, req.body || {});
         });
     } else {
-      return realizeSavedInstance(user, savedInstance, rel, res, instance);
+      return realizeSavedInstance(user, savedInstance, rel, res, req.body || {});
     }
   });
 };
@@ -746,5 +757,5 @@ exports.qrcode = function (req, res) {
 
 function handleError(res, err) {
   console.error(err);
-  return res.send(500, err);
+  return res.status(500).send(err.message);
 }
