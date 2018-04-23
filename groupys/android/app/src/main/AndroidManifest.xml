@@ -30,6 +30,7 @@
             android:name=".MainApplication"
             android:supportsRtl="true"
             android:allowBackup="true"
+            android:screenOrientation="portrait"
             android:label="THIS"
             android:icon="@mipmap/ic_launcher"
             tools:replace="android:label"
@@ -49,6 +50,7 @@
 
         <activity
                 android:name=".MainActivity"
+                android:screenOrientation="portrait"
                 android:label="THIS"
                 android:launchMode="singleTop"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

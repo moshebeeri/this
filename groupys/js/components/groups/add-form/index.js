@@ -396,7 +396,11 @@ class AddGroup extends Component {
 
 
     createView(qrcodeView, selectedGroupPolicy, BusinessPiker) {
-        return <View style={{backgroundColor:'white'}}>
+        let backgroundColor = `${appBackgroundColor}`;
+        if(this.state.viewOnly){
+            backgroundColor = 'white';
+        }
+        return <View style={{backgroundColor:backgroundColor}}>
             {this.state.updateMode && !this.state.viewOnly &&
             <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
                         title={strings.UpdateGroup} bgc="#2db6c8"/>}
@@ -409,7 +413,7 @@ class AddGroup extends Component {
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor:'white',
+                backgroundColor:backgroundColor,
             }} style={styles.contentContainer}>
 
 
