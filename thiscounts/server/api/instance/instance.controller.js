@@ -374,12 +374,16 @@ function savedInstanceEligibleActivity(userId, savedInstance){
     ids: [userId],
     action: 'saved_instance_eligible'
   };
-  const entity = savedInstance.instance.promotion.entity;
-  act.actor_business = entity.business;
-  activity.create(act, function(err, activity){
+  Instance.findById(savedInstance.instance).exec((err, instance) => {
     if(err) return console.error(err);
-    pricing.chargeActivityDistribution(entity, activity);
-  });
+    if(!instance) return console.error(new Error(`instance id:${savedInstance.instance} not found`));
+    const entity = instance.promotion.entity;
+    act.actor_business = entity.business;
+    activity.create(act, function(err, activity){
+      if(err) return console.error(err);
+      pricing.chargeActivityDistribution(entity, activity);
+    });
+  })
 }
 
 function allocatePunchCardInstance(user, instance, callback) {
@@ -395,7 +399,7 @@ function allocatePunchCardInstance(user, instance, callback) {
           savedInstanceEligibleActivity(user._id, si);
           let note = {
             note: 'saved_instance_eligible',
-            instance: instance,
+            savedInstance: si._id,
             title: 'RE_PROMOTION_ELIGIBLE_TITLE',
             body: instance.promotion ? instance.promotion.name : '',
             timestamp: Date.now()

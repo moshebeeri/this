@@ -24,6 +24,7 @@ let NotificationSchema = new Schema({
 
   promotion: {type: Schema.ObjectId, ref: 'Promotion', autopopulate: true},
   instance: {type: Schema.ObjectId, ref: 'Instance', autopopulate: true},
+  savedInstance: {type: Schema.ObjectId, ref: 'SavedInstance', autopopulate: true},
   product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
   group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
   user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
