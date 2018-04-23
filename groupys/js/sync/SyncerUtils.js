@@ -3,7 +3,7 @@ import * as types from '../sega/segaActions';
 
 
 
-function addBusinessSync(dispatch,state,businessId){
+function addMyBusinessSync(dispatch,state,businessId){
 
     asyncListener.addListener("business_" + businessId, (snap) => {
         let response = snap.val();
@@ -16,6 +16,11 @@ function addBusinessSync(dispatch,state,businessId){
         }
 
     });
+
+
+}
+function addBusinessSync(dispatch,state,businessId){
+
 
     asyncListener.addListener('social_' + businessId, (snap) => {
         let response = snap.val();
@@ -110,5 +115,6 @@ function addInstanceChatSync(dispatch,state,instanceId){
 export default {
     addGroupChatSync,
     addInstanceChatSync,
-    addBusinessSync
+    addBusinessSync,
+    addMyBusinessSync
 }

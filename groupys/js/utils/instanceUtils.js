@@ -52,21 +52,36 @@ function checkIfActive(feed) {
 }
 
 function showClaim(item,saved){
+    if(item.actionOff){
+        return false;
+    }
     return !item.isRealized && !item.isExpired && item.isActive && !item.isSaved && !saved
 }
 function showRedeemed(item){
+    if(item.actionOff){
+        return false;
+    }
     return item.isRealized
 }
 
 function showRedeem(item,saved){
+    if(item.actionOff){
+        return false;
+    }
     return !item.isRealized && !item.isExpired && item.isActive && (item.isSaved || saved)
 }
 
 function showExpired(item){
+    if(item.actionOff){
+        return false;
+    }
     return !item.isRealized && item.isExpired
 }
 
 function showInActive(item){
+    if(item.actionOff){
+        return false;
+    }
     return !item.isRealized && !item.isActive && !item.isExpired
 }
 

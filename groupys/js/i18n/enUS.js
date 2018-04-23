@@ -299,6 +299,7 @@ SignUpUserExist                               : "SignUp failed , user already ex
 networkErrorMessage                           : "Operation failed, server is not reachable",
 Free                                          : "Free",
 businessFollow                                : "{0} follow business ",
+eligibleForNewPromotion                       : "You are eligible for new Promotion ",
 
 };
 

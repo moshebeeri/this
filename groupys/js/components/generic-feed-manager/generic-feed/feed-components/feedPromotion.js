@@ -99,6 +99,10 @@ export default class FeedPromotion extends Component {
         const result =
             <InViewPort onChange={this.visited.bind(this)} style={[container, {width: StyleUtils.getWidth() - minimizeSize,backgroundColor:`white`}]}>
                 <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth() - minimizeSize}]}>
+                    {item.actionOff && <View style={{marginLeft:StyleUtils.scale(5),alignItems:'flex-start',justifyContent:'center',width:StyleUtils.getWidth()}}>
+                        <ThisText style={{fontSize: StyleUtils.scale(19),
+                            color: '#2db6c8',}}>{strings.eligibleForNewPromotion}</ThisText>
+                    </View>}
                     {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor:'white'}}>
                             <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
                                 <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
