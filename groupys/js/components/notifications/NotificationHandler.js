@@ -84,35 +84,37 @@ class NotificationHandler {
             return;
         }
         let token = state.authentication.token;
-        const user = state.user.user;
-        const notifications = state.notification.notification;
-        FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
-        switch (notification.model) {
-            case 'instance':
-                actions.showPromotionPopup(notification.entity, notification.notificationId);
-                this.setNotifications(notifications, dispatch, user, token);
-                break;
-            case 'group':
-                if (notification.note === "ask_invite") {
-                    actions.showInviteGroupPopup(notification.entity, notification.actor_user, notification.notificationId);
-                } else {
-                    actions.showGroupPopup(notification.entity, notification.notificationId, notification.title, notification.action);
-                }
-                this.setNotifications(notifications, dispatch, user, token);
-                break;
-            case 'business':
-                actions.showBusinessPopup(notification.entity, notification.notificationId, notification.title, notification.action);
-                this.setNotifications(notifications, dispatch, user, token);
-                break;
-            case 'comment':
-                actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, navigation);
-                break;
-            default:
-                if (notification && notification.title) {
-                    actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
+        if(token) {
+            const user = state.user.user;
+            const notifications = state.notification.notification;
+            FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
+            switch (notification.model) {
+                case 'instance':
+                    actions.showPromotionPopup(notification.entity, notification.notificationId);
                     this.setNotifications(notifications, dispatch, user, token);
-                }
-                break;
+                    break;
+                case 'group':
+                    if (notification.note === "ask_invite") {
+                        actions.showInviteGroupPopup(notification.entity, notification.actor_user, notification.notificationId);
+                    } else {
+                        actions.showGroupPopup(notification.entity, notification.notificationId, notification.title, notification.action);
+                    }
+                    this.setNotifications(notifications, dispatch, user, token);
+                    break;
+                case 'business':
+                    actions.showBusinessPopup(notification.entity, notification.notificationId, notification.title, notification.action);
+                    this.setNotifications(notifications, dispatch, user, token);
+                    break;
+                case 'comment':
+                    actions.redirectToChatGroup(notification.actor_group, notification.notificationId, notification.action, navigation);
+                    break;
+                default:
+                    if (notification && notification.title) {
+                        actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
+                        this.setNotifications(notifications, dispatch, user, token);
+                    }
+                    break;
+            }
         }
     }
 }

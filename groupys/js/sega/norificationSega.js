@@ -40,9 +40,10 @@ function* handleGeneralNotification(action) {
 
 function* handleCommentNotification(action) {
     try {
-
-        yield call(notificationApi.readNotification, action.token, action.notificationId);
-        yield call(notificationApi.resetBadgeNotification, action.token);
+        if(action.token) {
+            yield call(notificationApi.readNotification, action.token, action.notificationId);
+            yield call(notificationApi.resetBadgeNotification, action.token);
+        }
         //TODO add comment annotation
     } catch (error) {
         console.log("failed  handleCommentNotification");
