@@ -17,6 +17,13 @@ class NotificationHandler {
             const notifications = state.notification.notification;
             // FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
             switch (notification.model) {
+                case 'savedInstance':
+                    dispatch({
+                        type: types.SAVE_MYPROMOTIONS_REQUEST,
+                        feeds: state.myPromotions.feeds
+
+                    });
+                    break;
                 case 'instance':
                     dispatch({
                         type: types.PROMOTION_NOTIFICATION,

@@ -25,7 +25,8 @@ class DataSync {
     initDataLysteners() {
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
-        this.syncBusinesses(store.getState().businesses.myBusinesses, store.getState(), store.dispatch);
+        this.syncMyBusinesses(store.getState().businesses.myBusinesses, store.getState(), store.dispatch);
+        this.syncBusinesses(store.getState().businesses.businesses, store.getState(), store.dispatch);
         this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
         this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
@@ -123,10 +124,18 @@ class DataSync {
         }
     }
 
+    syncMyBusinesses(businesses, state, dispatch) {
+        if (Object.values(businesses)) {
+            Object.values(businesses).forEach(business => {
+                    SyncUtils.addMyBusinessSync(dispatch, state, business.business._id);
+                }
+            )
+        }
+    }
     syncBusinesses(businesses, state, dispatch) {
         if (Object.values(businesses)) {
             Object.values(businesses).forEach(business => {
-                    SyncUtils.addBusinessSync(dispatch, state, business.business._id);
+                    SyncUtils.addBusinessSync(dispatch, state, business._id);
                 }
             )
         }

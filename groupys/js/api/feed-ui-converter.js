@@ -31,7 +31,7 @@ class FeedConverter {
             response = this.createMessageUi(feed);
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'follower_eligible_by_proximity' ||
-            feed.activity.action === 'eligible_by_proximity' || feed.activity.action === 'eligible' ||
+            feed.activity.action === 'eligible_by_proximity'|| feed.activity.action === 'saved_instance_eligible' || feed.activity.action === 'eligible' ||
             feed.activity.action === 'eligible_on_activity_follow') {
             return this.createPromotionInstance(feed, instanceLifeCycle);
         }
@@ -441,6 +441,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            responseFeed.actionOff = feed.activity.action === 'saved_instance_eligible';
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.sharable = feed.activity.sharable;

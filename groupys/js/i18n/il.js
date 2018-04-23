@@ -296,6 +296,7 @@ const il = {
     networkErrorMessage                           : "בקשה נכשלה, הרשת לא זמינה",
     Free                                          : "חינם",
     businessFollow                                : "   {0} עוקב אחרי העסק  ",
+    eligibleForNewPromotion                       : "זכאות להנחה נוספת ",
 
 
 };
