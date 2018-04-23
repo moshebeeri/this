@@ -15,7 +15,7 @@ export const getFeeds = createSelector([getStateFeeds, getStateSavedInstances],
         let feeds = comments.groupComments;
         let clientComments = comments.clientMessages;
         let response = {}
-        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds);
+        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds,true);
         if (!_.isEmpty(feedsOrder)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
                 if (!response[groupId]) {

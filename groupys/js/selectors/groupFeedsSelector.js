@@ -29,7 +29,7 @@ export const getFeeds = createSelector([getStateFeeds, getPosts, getInstance, ge
         let feeds = groups.groupFeeds;
         let clientMessage = groups.clientMessages;
         let feedsUi = new Map();
-        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds);
+        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds,true);
         if (!_.isEmpty(feeds)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
                 let groupFeeds = feedsOrder[groupId];

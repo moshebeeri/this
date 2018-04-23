@@ -6,11 +6,14 @@ class InstanceLifeCycle {
     expiredInstancesIds = [];
     inActiveInstancesIds = [];
 
-    constructor(feeds) {
+    constructor(feeds,useInstance) {
         if (feeds) {
             this.savedInstancesIds = Object.values(feeds).map(savedFeed => {
                 if (savedFeed.savedInstance) {
-                    return savedFeed.savedInstance.instance._id
+                    if(useInstance){
+                        return savedFeed.savedInstance.instance._id
+                    }
+                    return savedFeed.savedInstance._id
                 }
                 return savedFeed.instance._id
             });
@@ -18,7 +21,10 @@ class InstanceLifeCycle {
                 let isRedeemed = instanceUtils.checkIfRealized(savedFeed);
                 if (isRedeemed) {
                     if (savedFeed.savedInstance) {
-                        return savedFeed.savedInstance.instance._id
+                        if(useInstance){
+                            return savedFeed.savedInstance.instance._id
+                        }
+                        return savedFeed.savedInstance._id
                     }
                     return savedFeed.instance._id
                 }
@@ -28,7 +34,10 @@ class InstanceLifeCycle {
                 let expired = instanceUtils.checkIfExpired(savedFeed);
                 if (expired) {
                     if (savedFeed.savedInstance) {
-                        return savedFeed.savedInstance.instance._id
+                        if(useInstance){
+                            return savedFeed.savedInstance.instance._id
+                        }
+                        return savedFeed.savedInstance._id
                     }
                     return savedFeed.instance._id
                 }
@@ -38,7 +47,10 @@ class InstanceLifeCycle {
                 let isActive = instanceUtils.checkIfActive(savedFeed);
                 if (isActive) {
                     if (savedFeed.savedInstance) {
-                        return savedFeed.savedInstance.instance._id
+                        if(useInstance){
+                            return savedFeed.savedInstance.instance._id
+                        }
+                        return savedFeed.savedInstance._id
                     }
                     return savedFeed.instance._id
                 }

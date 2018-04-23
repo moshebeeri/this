@@ -20,7 +20,8 @@ class NotificationHandler {
                 case 'savedInstance':
                     dispatch({
                         type: types.SAVE_MYPROMOTIONS_REQUEST,
-                        feeds: state.myPromotions.feeds
+                        feeds: state.myPromotions.feeds,
+                        token: token,
 
                     });
                     break;

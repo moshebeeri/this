@@ -41,9 +41,11 @@ function* saveMyPromotionsSingleRequest(action) {
 function* updateSavedInstance(action) {
     try {
         let response = yield call(profileApi.getSavedInstance, action.token, action.savedInstanceId);
+        let savedInstance = {};
+        savedInstance.savedInstance = response;
         yield put({
             type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
-            item: response
+            item: savedInstance
         })
     } catch (error) {
         console.log("failed saveMyPromotionsRequest");

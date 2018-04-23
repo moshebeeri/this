@@ -57,7 +57,7 @@ export const getFeeds = createSelector([getStateFeeds],
 function getInstanceId(feed) {
     let savedinstance = feed;
     if (feed.savedInstance) {
-        savedinstance = feed.savedInstance;
+      return feed.savedInstance._id;
     }
     return savedinstance.instance._id
 }
