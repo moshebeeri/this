@@ -441,11 +441,12 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
-            responseFeed.actionOff = feed.activity.action === 'saved_instance_eligible';
+
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.sharable = feed.activity.sharable;
                 responseFeed.blocked = feed.activity.blocked;
+                responseFeed.actionOff = feed.activity.action === 'saved_instance_eligible';
             }
             responseFeed.promotionEntity = promotion;
             responseFeed.location = instance.location;
