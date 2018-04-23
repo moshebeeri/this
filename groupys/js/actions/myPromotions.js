@@ -73,10 +73,9 @@ export function fetchTop() {
             const user = getState().user.user;
             if (!user)
                 return;
-            if (getState().myPromotions.lastCall) {
-                if (new Date().getTime() - new Date(getState().myPromotions.lastCall).getTime() < 20000) {
-                    return;
-                }
+            if (getState().myPromotions.lastCall &&
+               (new Date().getTime() - new Date(getState().myPromotions.lastCall).getTime() < 20000)){
+               return;
             }
             dispatch({
                 type: actions.SAVED_FEED_LAST_CALL,

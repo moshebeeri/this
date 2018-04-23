@@ -9,19 +9,12 @@ let profileApi = new ProfileApi();
 function* saveMyPromotionsRequest(action) {
     try {
         let response = yield call(profileApi.fetch, action.token, 0, 30);
-        console.log(response);
-        let filteredResponse = response.filter(feed => {
-            if (!action.feeds[feed.savedInstance._id]) {
-                return true;
-            }
-            return false;
-        });
-        console.log(filteredResponse);
+        let filteredResponse = response.filter(feed => !action.feeds[feed.savedInstance._id]);
         if (filteredResponse.length > 0) {
             yield put(setSavedPromotions(filteredResponse))
         }
     } catch (error) {
-        console.log("failed saveMyPromotionsRequest");
+        console.log(`failed saveMyPromotionsRequest ${error}`);
     }
 }
 

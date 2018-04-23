@@ -105,8 +105,7 @@ export default class ImagePickerComponent extends Component {
             let image = await ImagePicker.openPicker({
                 cropping: cropping,
                 width: width,
-                height: height
-                ,
+                height: height,
                 compressImageQuality: 1,
                 compressVideoPreset: 'MediumQuality',
             });
