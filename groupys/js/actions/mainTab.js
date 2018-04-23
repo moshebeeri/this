@@ -44,7 +44,7 @@ export function showPromotionPopup(instanceId, notificationId) {
 
 async function promotionPopAction(instanceId, notificationId, dispatch, token) {
     try {
-        notificationApi.readNotification(token,notificationId);
+        notificationApi.readNotification(token, notificationId);
         if (token) {
             let instance = await instanceApi.getInstance(token, instanceId);
             dispatch({
@@ -66,8 +66,6 @@ export function resetBadge() {
         notificationApi.resetBadgeNotification(token);
     }
 }
-
-
 
 export function showGenericPopup(notificationTitle, notificationId, notificationAction) {
     return async function (dispatch) {
@@ -207,7 +205,7 @@ export function doNotification(notificationId, notificationAction) {
 export function redirectToChatGroup(groupId, notificationId, notificationAction, navigation) {
     return async function (dispatch, getState) {
         let token = getState().authentication.token;
-        while(!token){
+        while (!token) {
             await timeout(500);
             token = getState().authentication.token;
         }
@@ -215,9 +213,34 @@ export function redirectToChatGroup(groupId, notificationId, notificationAction,
             notificationApi.doNotificationAction(token, notificationId, notificationAction);
             let group = getState().groups.groups[groupId];
             if (group) {
-
+                const groupsChats = getState().comments.groupComments[groupId];
+                const user = getState().user.user;
+                if (groupsChats) {
+                    let groupChatIds = Object.keys(groupsChats).sort(function (a, b) {
+                        if (a < b) {
+                            return 1
+                        }
+                        if (a > b) {
+                            return -1
+                        }
+                        return 0;
+                    });
+                    dispatch({
+                        type: types.GROUP_SYNC_CHAT,
+                        group: groupId,
+                        token: token,
+                        lastChatId: groupChatIds[0],
+                        user: user,
+                    })
+                }
+                dispatch({
+                    type: types.SAVE_GROUPS_REQUEST,
+                    token: token,
+                });
                 groupsActions.dispatchGroupTOuch(token, groupId, dispatch);
                 navigation.navigate('GroupFeed', {chat: true, group: group});
+
+
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'doNotification')
