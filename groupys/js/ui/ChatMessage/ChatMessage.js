@@ -113,31 +113,31 @@ export default class ChatMessage extends Component {
                                         {instanceUtils.showClaim(item.instance, this.state.saved) &&
                                         <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={45}
+                                            <SubmitButton fontSize={10} height={25} width={45}
                                                           title={strings.Claim.toUpperCase()} color={'#2db6c8'}
                                                           onPress={() => this.claim()}/>
                                         </View>}
                                         {instanceUtils.showRedeem(item.instance, this.state.saved) &&
                                         <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={65}
+                                            <SubmitButton fontSize={10} height={25} width={55}
                                                           title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                                           onPress={() => this.realize()}/>
                                         </View>}
                                         {instanceUtils.showRedeemed(item.instance) && <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                            <SubmitButton fontSize={10} height={25} width={65} disabled
                                                           title={strings.Realized.toUpperCase()} color={'#cccccc'}/>
                                         </View>}
 
                                         {instanceUtils.showExpired(item.instance) && <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                            <SubmitButton fontSize={10} height={25} width={65} disabled
                                                           title={strings.Expired.toUpperCase()} color={'#cccccc'}/>
                                         </View>}
                                         {instanceUtils.showInActive(item.instance) && <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                            <SubmitButton fontSize={10} height={25} width={65} disabled
                                                           title={strings.InActive.toUpperCase()} color={'#cccccc'}/>
                                         </View>}
                                     </View>
@@ -239,7 +239,7 @@ export default class ChatMessage extends Component {
                                         {instanceUtils.showClaim(item.instance, this.state.saved) &&
                                         <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={45}
+                                            <SubmitButton fontSize={10} height={25} width={45}
                                                           title={strings.Claim.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'white'}
                                                           onPress={() => this.claim()}/>
@@ -247,26 +247,26 @@ export default class ChatMessage extends Component {
                                         {instanceUtils.showRedeem(item.instance, this.state.saved) &&
                                         <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={65}
+                                            <SubmitButton fontSize={10} height={25} width={55}
                                                           title={strings.Realize.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'white'}
                                                           onPress={() => this.realize()}/>
                                         </View>}
                                         {instanceUtils.showRedeemed(item.instance) && <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                            <SubmitButton fontSize={10} height={25} width={65} disabled
                                                           title={strings.Realized.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'#cccccc'}/>
                                         </View>}
                                         {instanceUtils.showExpired(item.instance) && <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                            <SubmitButton fontSize={10} height={25} width={65} disabled
                                                           title={strings.Expired.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'#cccccc'}/>
                                         </View>}
                                         {instanceUtils.showInActive(item.instance) && <View style={{marginLeft: 10,}}>
 
-                                            <SubmitButton fontSize={12} height={25} width={75} disabled
+                                            <SubmitButton fontSize={10} height={25} width={65} disabled
                                                           title={strings.InActive.toUpperCase()} textColor={'#2db6c8'}
                                                           color={'#cccccc'}/>
                                         </View>}
