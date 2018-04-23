@@ -38,7 +38,7 @@ export default class ImagePickerComponent extends Component {
             if (!this.state.value && !image) {
                 this.setState({
                     invalid: true
-                })
+                });
                 return false;
             }
         }
@@ -51,17 +51,11 @@ export default class ImagePickerComponent extends Component {
         if(cropDisable){
             cropping = false;
         }
-        let width =  StyleUtils.getWidth() ;
-        if (imageWidth) {
-            width =  imageWidth;
-        }
-        let height = parseInt(StyleUtils.getWidth() * 9 /16);
-        if (imageHeight) {
-            height =  imageHeight;
-        }
+        let width =  1920;
+        let height = 1080;
         if (logo) {
-            height = 2000;
-            width =  2000;
+            height = 1080;
+            width =  1080;
         }
         try {
             let image = await ImagePicker.openCamera({
@@ -74,7 +68,7 @@ export default class ImagePickerComponent extends Component {
             this.setState({
                 value: true,
                 invalid: false
-            })
+            });
             setImage(image)
         } catch (e) {
             console.log(e);
@@ -94,24 +88,18 @@ export default class ImagePickerComponent extends Component {
             console.log(e);
         }
     }
-
+//w:1920 × h:1080
     async pickPicture() {
         const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
         let cropping = true;
         if(cropDisable){
             cropping = false;
         }
-        let width =  StyleUtils.getWidth() ;
-        if (imageWidth) {
-            width =  imageWidth ;
-        }
-        let height = parseInt(StyleUtils.getWidth() * 9 /16);
-        if (imageHeight) {
-            height = imageHeight;
-        }
+        let width =  1920;
+        let height = 1080;
         if (logo) {
-            height = 200;
-            width =  200;
+            height = 1080;
+            width =  1080;
         }
         try {
             let image = await ImagePicker.openPicker({
@@ -125,7 +113,7 @@ export default class ImagePickerComponent extends Component {
             this.setState({
                 value: true,
                 invalid: false
-            })
+            });
             setImage(image)
         } catch (e) {
             console.log(e);
