@@ -28,7 +28,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;
-        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds);
+        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds,true);
         if (feedsOrder.length > 0) {
             try {
                 let feedArray = feedsOrder.map(key => feeds.feeds[key]);
