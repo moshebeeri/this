@@ -23,8 +23,6 @@ export default class NotificationListView extends Component {
         actions.doNotification(viewItem._id)
     }
 
-
-
     notify(notification) {
         const {item, actions} = this.props;
         actions.doNotification(item._id, notification)
@@ -96,7 +94,12 @@ export default class NotificationListView extends Component {
         const actionStyle = this.getActionStyle(viewItem);
         const action = this.getAvalibaleActions(viewItem, actionStyle, redeemStyle);
         return (
-            <View style={{marginTop:StyleUtils.scale(5), alignItems: 'center', justifyContent: 'center', backgroundColor: '#eaeaea'}}
+            <View style={{
+                marginTop: StyleUtils.scale(5),
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#eaeaea'
+            }}
                   regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
@@ -139,13 +142,13 @@ export default class NotificationListView extends Component {
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
-        const image = this.extractGroupImage(business);
+        const image = this.extractImage(business);
         const backgroundColor = this.getNotificationColor(viewItem);
         const actionStyle = this.getActionStyle(viewItem);
         const action = this.getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.business.name.length * 10;
         return (
-            <View style={{ marginTop:StyleUtils.scale(5),backgroundColor: '#eaeaea'}} regular>
+            <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
@@ -185,13 +188,15 @@ export default class NotificationListView extends Component {
         );
     }
 
-    extractGroupImage(group) {
-        if (group.pictures && group.pictures.length > 0) {
-            return <Thumbnail source={{uri: group.pictures[0].pictures[3]}}/>
-        } else {
-            if (group.entity && group.entity.business && group.entity.business.pictures && group.entity.business.pictures.length > 0) {
-                return <Thumbnail source={{uri: group.entity.business.pictures[0].pictures[3]}}/>
-            }
+    extractImage(entity) {
+        if (entity.logo) {
+            return <Thumbnail source={{uri: entity.logo}}/>
+        }
+        if (entity.pictures && entity.pictures.length > 0) {
+            return <Thumbnail source={{uri: entity.pictures[0].pictures[3]}}/>
+        }
+        if (entity.entity && entity.entity.business && entity.entity.business.logo > 0) {
+            return <Thumbnail source={{uri: entity.entity.business.logo}}/>
         }
         return <Thumbnail source={require('../../../../images/client_1.png')}/>
     }
@@ -292,7 +297,7 @@ export default class NotificationListView extends Component {
         const viewItem = item;
         const group = viewItem.group;
         const user = viewItem.actor_user;
-        const image = this.extractGroupImage(group);
+        const image = this.extractImage(group);
         const redeemStyle = {
             flex: -1,
             justifyContent: 'center',
@@ -309,7 +314,7 @@ export default class NotificationListView extends Component {
         const action = this.getAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.group.name.length * 10;
         return (
-            <View style={{marginTop:StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
+            <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
@@ -350,13 +355,13 @@ export default class NotificationListView extends Component {
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
-        const image = this.extractGroupImage(group);
+        const image = this.extractImage(group);
         const backgroundColor = this.getNotificationColor(viewItem);
         const actionStyle = this.getActionStyle(viewItem);
         const action = this.getPromotionAction(viewItem, actionStyle, redeemStyle);
         const nameWidth = viewItem.group.name.length * 10;
         return (
-            <View style={{marginTop:StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
+            <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                     flex: -1,
                     backgroundColor: backgroundColor,
