@@ -80,7 +80,7 @@ class NotificationHandler {
         });
     }
 
-    handleBacKNotification(notification, actions, navigation, state, dispatch) {
+    handleBackNotification(notification, actions, navigation, state, dispatch) {
         if(!notification){
             return;
         }

@@ -168,7 +168,7 @@ class ApplicationManager extends Component {
         this.props.actions.resetBadge();
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
-        NotificationHandler.handleBacKNotification(notification, this.props.actions,this.props.navigation,reduxStore.getState(), reduxStore.dispatch);
+        NotificationHandler.handleBackNotification(notification, this.props.actions,this.props.navigation,reduxStore.getState(), reduxStore.dispatch);
         AppState.addEventListener('change', this._handleAppStateChange);
         this.props.userActions.resetForm();
     }
