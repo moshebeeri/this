@@ -43,7 +43,6 @@ module.exports = {
         padding: 10,
         borderRadius: 2,
         justifyContent: 'flex-start',
-        fontSize: StyleUtils.scale(16),
         borderWidth: 1,
         borderColor: 'red'
     },

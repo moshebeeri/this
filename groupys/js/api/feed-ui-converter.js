@@ -281,9 +281,9 @@ class FeedConverter {
         try {
             let date = new Date(instance.promotion.end);
             responseFeed.id = id;
-            responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
-            responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-            responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+            responseFeed.isRealized = instanceLifeCycle.isReedemed(id);
+            responseFeed.isActive = instanceLifeCycle.isActive(id);
+            responseFeed.isExpired = instanceLifeCycle.isExpired(id, date);
             responseFeed.isSaved = true;
             responseFeed.fid = id;
             responseFeed.key = id;
