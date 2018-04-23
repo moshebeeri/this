@@ -1,4 +1,4 @@
-import * as types from '../../sega/segaActions';
+import * as types from '../../saga/sagaActions';
 import FCM from 'react-native-fcm';
 class NotificationHandler {
     constructor() {

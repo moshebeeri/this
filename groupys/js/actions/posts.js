@@ -2,7 +2,7 @@ import * as actions from "../reducers/reducerActions";
 import PostApi from "../api/post";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 
 let postApi = new PostApi();
 let logger = new ActionLogger();

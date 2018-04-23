@@ -8,7 +8,7 @@ import getRootReducer from "./reducers";
 import createSagaMiddleware from 'redux-saga'
 import {autoRehydrate, persistStore} from 'redux-persist'
 import {createLogger} from 'redux-logger'
-import sega from './sega/sega'
+import saga from './saga/saga'
 const logger = createLogger({
 
     // ...options
@@ -40,7 +40,7 @@ const store = createStore(
 
 persistStore(store, {storage: AsyncStorage});
 
-sagaMiddleware.run(sega)
+sagaMiddleware.run(saga)
 export default function getStore() {
     return store;
 }

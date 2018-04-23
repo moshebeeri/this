@@ -2,7 +2,7 @@ import CommentsApi from "../api/commet";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects';
 import SyncUtils from "../sync/SyncerUtils";
 import asyncListener from "../api/AsyncListeners";

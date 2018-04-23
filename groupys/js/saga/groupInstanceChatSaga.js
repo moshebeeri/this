@@ -7,9 +7,9 @@ import {
     updateChatScrollUp,
     updateChatTop
 } from "../actions/instanceGroupComments";
-import * as segaActions from './segaActions'
+import * as sagaActions from './sagaActions'
 import {delay} from 'redux-saga'
-import {handleSucsess} from './SegaSuccsesHandler'
+import {handleSucsess} from './SagaSuccsesHandler'
 
 let commentsApi = new CommentsApi();
 
@@ -34,10 +34,10 @@ function* backgroundTask(group, instance, token, lastChatId) {
 
 function* watchStartBackgroundTask() {
     while (true) {
-        const {group, instance, token, lastChatId} = yield take(segaActions.LISTEN_FOR_GROUP_INSTANCE_CHATS);
+        const {group, instance, token, lastChatId} = yield take(sagaActions.LISTEN_FOR_GROUP_INSTANCE_CHATS);
         yield race({
             task: call(backgroundTask, group, instance, token, lastChatId),
-            cancel: take(segaActions.CANCEL_GROUP_INSTANCE_CHAT_LISTENER)
+            cancel: take(sagaActions.CANCEL_GROUP_INSTANCE_CHAT_LISTENER)
         })
     }
 }
@@ -67,9 +67,9 @@ function* chatScrollUp(action) {
     }
 }
 
-function* groupsInstanceChatSega() {
+function* groupsInstanceChatSaga() {
     yield fork(watchStartBackgroundTask);
-    yield throttle(1000, segaActions.GROUP_INSTANCE_CHAT_SCROLL_UP, chatScrollUp);
+    yield throttle(1000, sagaActions.GROUP_INSTANCE_CHAT_SCROLL_UP, chatScrollUp);
 }
 
-export default groupsInstanceChatSega;
+export default groupsInstanceChatSaga;

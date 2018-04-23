@@ -1,7 +1,7 @@
 import getStore from "../store";
 import asyncListener from "../api/AsyncListeners";
 import SyncUtils from "./SyncerUtils";
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 
 const store = getStore();
 

@@ -1,11 +1,11 @@
 import {fork, put, take} from 'redux-saga/effects'
-import * as segaActions from './segaActions'
+import * as sagaActions from './sagaActions'
 import * as actions from '../reducers/reducerActions'
 
 
 function* changeTab() {
     while (true) {
-        const {tab} = yield take(segaActions.CHANGE_TAB);
+        const {tab} = yield take(sagaActions.CHANGE_TAB);
         if(tab === 1){
 
         }
@@ -16,8 +16,8 @@ function* changeTab() {
     }
 }
 
-function* mainSega() {
+function* mainSaga() {
     yield fork(changeTab);
 }
 
-export default mainSega;
+export default mainSaga;

@@ -1,5 +1,5 @@
 import asyncListener from "../api/AsyncListeners";
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 
 
 

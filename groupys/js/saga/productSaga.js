@@ -1,9 +1,9 @@
 import {call, put, throttle} from 'redux-saga/effects'
 import productApi from "../api/product";
 import {setProduct} from "../actions/product";
-import * as segaActions from './segaActions'
+import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
-import {handleSucsess}from './SegaSuccsesHandler'
+import {handleSucsess}from './SagaSuccsesHandler'
 
 
 function* saveProduct(action) {
@@ -38,8 +38,8 @@ function* saveProduct(action) {
     }
 }
 
-function* productSega() {
-    yield throttle(2000, segaActions.SAVE_PRODUCT, saveProduct);
+function* productSaga() {
+    yield throttle(2000, sagaActions.SAVE_PRODUCT, saveProduct);
 }
 
-export default productSega;
+export default productSaga;

@@ -1,12 +1,12 @@
 import {call, put, throttle} from 'redux-saga/effects'
 import PromotionApi from "../api/promotion";
 import {setPromotion, setSinglePromotion} from "../actions/promotions";
-import * as segaActions from './segaActions'
+import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
 import productApi from "../api/product";
 import InstanceApi from "../api/instances";
 import {setProduct} from "../actions/product";
-import {handleSucsess} from './SegaSuccsesHandler'
+import {handleSucsess} from './SagaSuccsesHandler'
 import FeedApi from "../api/feed";
 import NotificationApi from "../api/notification";
 import * as actions from '../reducers/reducerActions';
@@ -135,10 +135,10 @@ function* handleNotification(action) {
     }
 }
 
-function* promotionSega() {
-    yield throttle(2000, segaActions.SAVE_PROMOTION, savePromotion);
-    yield throttle(2000, segaActions.UPDATE_PROMOTION, updatePromotionSocialState);
-    yield throttle(2000, segaActions.PROMOTION_NOTIFICATION, handleNotification);
+function* promotionSaga() {
+    yield throttle(2000, sagaActions.SAVE_PROMOTION, savePromotion);
+    yield throttle(2000, sagaActions.UPDATE_PROMOTION, updatePromotionSocialState);
+    yield throttle(2000, sagaActions.PROMOTION_NOTIFICATION, handleNotification);
 }
 
-export default promotionSega;
+export default promotionSaga;

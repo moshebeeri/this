@@ -14,8 +14,8 @@ import {
     updateFeedsTop,
     updateSocialState
 } from "../actions/feedsMain";
-import {handleSucsess} from './SegaSuccsesHandler'
-import * as segaActions from './segaActions'
+import {handleSucsess} from './SagaSuccsesHandler'
+import * as sagaActions from './sagaActions'
 
 let feedApi = new FeedApi();
 let promotionApi = new PromotionApi();
@@ -72,10 +72,10 @@ function* backgroundTask(token, lastId, user) {
 
 function* watchStartBackgroundTask() {
     while (true) {
-        const {token, user, id} = yield take(segaActions.LISTEN_FOR_MAIN_FEED);
+        const {token, user, id} = yield take(sagaActions.LISTEN_FOR_MAIN_FEED);
         yield race({
             task: call(backgroundTask, token, id, user),
-            cancel: take(segaActions.CANCEL_MAIN_FEED_LISTENER)
+            cancel: take(sagaActions.CANCEL_MAIN_FEED_LISTENER)
         })
     }
 }
@@ -123,13 +123,13 @@ function* savedInstanceUpdate(action) {
     }
 }
 
-function* feedSega() {
-    yield throttle(1000, segaActions.FEED_SCROLL_DOWN, feedScrollDown);
-    yield throttle(1000, segaActions.FEED_UPDATE_ITEM, feedUpdate);
-    yield throttle(1000, segaActions.FEED_UPDATE_SAVED_ITEM, savedInstanceUpdate);
-    yield throttle(3000, segaActions.FEED_SET_SOCIAL_STATE, setSocialState);
-    yield throttle(3000, segaActions.FEED_SET_TOP_FEED, setTopFeeds);
+function* feedSaga() {
+    yield throttle(1000, sagaActions.FEED_SCROLL_DOWN, feedScrollDown);
+    yield throttle(1000, sagaActions.FEED_UPDATE_ITEM, feedUpdate);
+    yield throttle(1000, sagaActions.FEED_UPDATE_SAVED_ITEM, savedInstanceUpdate);
+    yield throttle(3000, sagaActions.FEED_SET_SOCIAL_STATE, setSocialState);
+    yield throttle(3000, sagaActions.FEED_SET_TOP_FEED, setTopFeeds);
     //   yield fork(watchStartBackgroundTask);
 }
 
-export default feedSega;
+export default feedSaga;

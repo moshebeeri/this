@@ -2,8 +2,8 @@ import {call, fork, race, take,throttle} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
 import {delay} from 'redux-saga'
 import {updateFeedsTop,} from "../actions/groups";
-import * as segaActions from './segaActions'
-import {handleSucsess}from './SegaSuccsesHandler'
+import * as sagaActions from './sagaActions'
+import {handleSucsess}from './SagaSuccsesHandler'
 let feedApi = new FeedApi();
 
 function* backgroundTask(token, lastId, group, user) {
@@ -30,10 +30,10 @@ function* backgroundTask(token, lastId, group, user) {
 
 function* watchStartBackgroundTask() {
     while (true) {
-        const {token, group, user, id} = yield take(segaActions.LISTEN_FOR_GROUP_FEED);
+        const {token, group, user, id} = yield take(sagaActions.LISTEN_FOR_GROUP_FEED);
         yield race({
             task: call(backgroundTask, token, id, group, user),
-            cancel: take(segaActions.CANCEL_GROUP_FEED_LISTENER)
+            cancel: take(sagaActions.CANCEL_GROUP_FEED_LISTENER)
         })
     }
 }
@@ -50,9 +50,9 @@ function* setTopFeeds(action) {
     }
 }
 
-function* groupFeedSega() {
+function* groupFeedSaga() {
    // yield fork(watchStartBackgroundTask);
-    yield throttle(3000, segaActions.GROUP_FEED_SET_TOP_FEED, setTopFeeds);
+    yield throttle(3000, sagaActions.GROUP_FEED_SET_TOP_FEED, setTopFeeds);
 }
 
-export default groupFeedSega;
+export default groupFeedSaga;

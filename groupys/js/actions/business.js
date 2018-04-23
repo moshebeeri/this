@@ -14,7 +14,7 @@ import handler from './ErrorHandler'
 import BusinessComperator from "../reduxComperators/BusinessComperator"
 import * as errors from '../api/Errors'
 import ActionLogger from './ActionLogger'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
@@ -255,7 +255,7 @@ export function setBusinessProducts(businessId) {
                 });
             }
         } catch (error) {
-            handler.handleError(error, dispatch, 'setBusinessProducts')
+            handler.handleError(error, dispatch, 'setBusinessProducts');
             await logger.actionFailed("product_findByBusinessId", businessId);
         }
     }
@@ -502,7 +502,7 @@ export function resetForm() {
     }
 }
 
-//////////// MOVE TO SEGA ACTIONS ////////////////////////////
+//////////// MOVE TO SAGA ACTIONS ////////////////////////////
 export function resetSave() {
     return async function (dispatch) {
         dispatch({

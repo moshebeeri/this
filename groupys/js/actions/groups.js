@@ -10,7 +10,7 @@ import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
 import GroupsComperator from "../reduxComperators/GroupsComperator"
 import handler from './ErrorHandler'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
 import asyncListener from "../api/AsyncListeners";
 let groupsApi = new GroupsApi();

@@ -1,9 +1,9 @@
 import {call, put, throttle} from 'redux-saga/effects'
 import NotificationApi from "../api/notification";
 import {setNotification} from "../actions/notifications";
-import * as segaActions from './segaActions'
+import * as sagaActions from './sagaActions'
 import * as actions from '../reducers/reducerActions'
-import {handleSucsess} from './SegaSuccsesHandler'
+import {handleSucsess} from './SagaSuccsesHandler'
 
 let notificationApi = new NotificationApi();
 
@@ -50,11 +50,11 @@ function* handleCommentNotification(action) {
     }
 }
 
-function* notificationSega() {
-    yield throttle(2000, segaActions.SAVE_NOTIFICATION_REQUEST, saveNotificationRequest);
-    yield throttle(2000, segaActions.SAVE_NOTIFICATION_TOP_REQUEST, setTopNotification);
-    yield throttle(2000, segaActions.ADD_GENERAL_NOTIFICATION, handleGeneralNotification);
-    yield throttle(2000, segaActions.ADD_COMMENT_NOTIFICATION, handleCommentNotification);
+function* notificationSaga() {
+    yield throttle(2000, sagaActions.SAVE_NOTIFICATION_REQUEST, saveNotificationRequest);
+    yield throttle(2000, sagaActions.SAVE_NOTIFICATION_TOP_REQUEST, setTopNotification);
+    yield throttle(2000, sagaActions.ADD_GENERAL_NOTIFICATION, handleGeneralNotification);
+    yield throttle(2000, sagaActions.ADD_COMMENT_NOTIFICATION, handleCommentNotification);
 }
 
-export default notificationSega;
+export default notificationSaga;

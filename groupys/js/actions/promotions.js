@@ -5,7 +5,7 @@ import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import PromotionComperator from "../reduxComperators/PromotionComperator"
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 
 let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();

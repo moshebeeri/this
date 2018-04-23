@@ -7,9 +7,9 @@ import {
     setBusinessCategory,
     updateBusinesses
 } from "../actions/business";
-import * as segaActions from './segaActions'
+import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
-import {handleSucsess}from './SegaSuccsesHandler'
+import {handleSucsess}from './SagaSuccsesHandler'
 import sync from "../sync/SyncerUtils";
 let businessApi = new BusinessApi();
 
@@ -151,12 +151,12 @@ function* updateCategory(action) {
     }
 }
 
-function* businessSega() {
-    yield throttle(2000, segaActions.UPDATE_BUSINESS_REQUEST, getAll);
-    yield throttle(2000, segaActions.UPDATE_BUSINESS_REQUEST_FIRST_TIME, updateBusinessFirstTime);
-    yield throttle(2000, segaActions.SAVE_BUSINESS, saveBusiness);
-    yield throttle(2000, segaActions.UPDATE_BUSINESS, updateBusiness);
-    yield takeEvery(segaActions.UPDATE_BUSINESS_CATEGORY_REQUEST, updateCategory);
+function* businessSaga() {
+    yield throttle(2000, sagaActions.UPDATE_BUSINESS_REQUEST, getAll);
+    yield throttle(2000, sagaActions.UPDATE_BUSINESS_REQUEST_FIRST_TIME, updateBusinessFirstTime);
+    yield throttle(2000, sagaActions.SAVE_BUSINESS, saveBusiness);
+    yield throttle(2000, sagaActions.UPDATE_BUSINESS, updateBusiness);
+    yield takeEvery(sagaActions.UPDATE_BUSINESS_CATEGORY_REQUEST, updateCategory);
 }
 
-export default businessSega;
+export default businessSaga;

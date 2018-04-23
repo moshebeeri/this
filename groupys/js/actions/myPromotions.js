@@ -3,7 +3,7 @@ import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import SavedPromotionComperator from "../reduxComperators/SavedPromotionComperator"
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 import asyncListener from "../api/AsyncListeners";
 let profileApi = new ProfilenApi();
 let logger = new ActionLogger();

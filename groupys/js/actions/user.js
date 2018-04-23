@@ -6,7 +6,7 @@ import simpleStore from 'react-native-simple-store';
 import ActionLogger from './ActionLogger'
 import strings from "../i18n/i18n"
 import {put} from 'redux-saga/effects'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 import handler from './ErrorHandler'
 
 let userApi = new UserApi();

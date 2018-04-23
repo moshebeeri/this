@@ -2,8 +2,8 @@ import {call, takeLatest, put, throttle} from 'redux-saga/effects'
 import GroupsApi from "../api/groups";
 import ImageApi from "../api/image";
 import {setGroups,setGroup} from "../actions/groups";
-import * as segaActions from './segaActions'
-import {handleSucsess}from './SegaSuccsesHandler'
+import * as sagaActions from './sagaActions'
+import {handleSucsess}from './SagaSuccsesHandler'
 let groupsApi = new GroupsApi();
 
 function* saveGroupsRequest(action) {
@@ -55,11 +55,11 @@ function* saveGroup(action) {
     }
 }
 
-function* groupsSega() {
-    yield throttle(2000, segaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
-    yield throttle(2000, segaActions.SAVE_GROUP, saveGroup);
+function* groupsSaga() {
+    yield throttle(2000, sagaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
+    yield throttle(2000, sagaActions.SAVE_GROUP, saveGroup);
 }
 
 
 
-export default groupsSega;
+export default groupsSaga;

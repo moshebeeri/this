@@ -7,8 +7,8 @@ import {
     updateChatScrollUp,
     updateChatTop,
 } from "../actions/commentsEntities";
-import {handleSucsess} from './SegaSuccsesHandler'
-import * as segaActions from './segaActions'
+import {handleSucsess} from './SagaSuccsesHandler'
+import * as sagaActions from './sagaActions'
 
 let commentsApi = new CommentsApi();
 
@@ -50,9 +50,9 @@ function* chatScrollUp(action) {
     }
 }
 
-function* feedChatSega() {
-    yield throttle(1000, segaActions.FEED_CHAT_SCROLL_UP, chatScrollUp);
-    yield throttle(1000, segaActions.FEED_SYNC_CHAT, syncFeedComment);
+function* feedChatSaga() {
+    yield throttle(1000, sagaActions.FEED_CHAT_SCROLL_UP, chatScrollUp);
+    yield throttle(1000, sagaActions.FEED_SYNC_CHAT, syncFeedComment);
 }
 
-export default feedChatSega;
+export default feedChatSaga;

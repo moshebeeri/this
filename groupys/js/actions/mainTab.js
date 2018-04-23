@@ -1,5 +1,5 @@
 import * as actions from "../reducers/reducerActions";
-import * as types from "../sega/segaActions";
+import * as types from "../saga/sagaActions";
 import InstanceApi from "../api/instances";
 import NotificationApi from "../api/notification";
 import * as groupsActions from './groups'

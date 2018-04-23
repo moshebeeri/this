@@ -3,7 +3,7 @@ import * as actions from "../reducers/reducerActions";
 import FormUtils from "../utils/fromUtils";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 
 let logger = new ActionLogger();
 

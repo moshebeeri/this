@@ -4,7 +4,7 @@ import SyncUtils from "../sync/SyncerUtils";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
-import * as types from '../sega/segaActions';
+import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
 
 let commentsApi = new CommentsApi();
