@@ -344,7 +344,7 @@ exports.phonebook = function (req, res) {
                   } else {
                     let phone_number = object.value;
                     if (utils.defined(phone_number.owner)) {
-                      console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
+                      //console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
                       graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
                         if (err) return logger.error(err.message);
                         graphModel.owner_followers_follow_business(userId, phone_number.owner);

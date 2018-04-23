@@ -40,17 +40,18 @@ function toPayloadData(notification, callback){
     // 'bodyLocArgs': '',
   };
   //console.log(JSON.stringify(notification));
-  if( notification.promotion ) data = {model: 'promotion'  , _id: notification.promotion._id };
-  if( notification.instance  ) data = {model: 'instance'   , _id: notification.instance._id  };
-  if( notification.product   ) data = {model: 'product'    , _id: notification.product._id   };
-  if( notification.group     ) data = {model: 'group'      , _id: notification.group._id     };
-  if( notification.user      ) data = {model: 'user'       , _id: notification.user._id      };
-  if( notification.business  ) data = {model: 'business'   , _id: notification.business._id  };
-  if( notification.mall      ) data = {model: 'mall'       , _id: notification.mall._id      };
-  if( notification.chain     ) data = {model: 'chain'      , _id: notification.chain._id     };
-  if( notification.card      ) data = {model: 'card'       , _id: notification.card._id      };
-  if( notification.activity  ) data = {model: 'activity'   , _id: notification.activity._id  };
-  if( notification.comment   ) data = {model: 'comment'    , _id: notification.comment._id   };
+  if( notification.promotion      ) data = {model: 'promotion'    , _id: notification.promotion._id     };
+  if( notification.instance       ) data = {model: 'instance'     , _id: notification.instance._id      };
+  if( notification.savedInstance  ) data = {model: 'savedInstance', _id: notification.savedInstance._id };
+  if( notification.product        ) data = {model: 'product'      , _id: notification.product._id       };
+  if( notification.group          ) data = {model: 'group'        , _id: notification.group._id         };
+  if( notification.user           ) data = {model: 'user'         , _id: notification.user._id          };
+  if( notification.business       ) data = {model: 'business'     , _id: notification.business._id      };
+  if( notification.mall           ) data = {model: 'mall'         , _id: notification.mall._id          };
+  if( notification.chain          ) data = {model: 'chain'        , _id: notification.chain._id         };
+  if( notification.card           ) data = {model: 'card'         , _id: notification.card._id          };
+  if( notification.activity       ) data = {model: 'activity'     , _id: notification.activity._id      };
+  if( notification.comment        ) data = {model: 'comment'      , _id: notification.comment._id       };
 
   if( notification.actor_user       ) data.actor_user     = notification.actor_user._id.toString()       ;
   if( notification.actor_business   ) data.actor_business = notification.actor_business._id.toString()   ;
@@ -70,7 +71,7 @@ function toPayloadData(notification, callback){
   n.tag = notification.to._id.toString();//data._id? data._id : ''; //notification._id;
   badge(notification.to._id, function(err, badgeCount){
     if(err) return callback(err);
-    console.log(`badge of ${notification.to._id} is ${badgeCount}`);
+    //console.log(`badge of ${notification.to._id} is ${badgeCount}`);
     n.badge = badgeCount.toString();
     data.badge = badgeCount.toString();
     return callback(null, {
@@ -102,7 +103,7 @@ function firebasePNS(notification, registrationTokens, userId) {
 // Send a message to the devices corresponding to the provided
 // registration tokens.
   if (!notification || !notification.options)
-    return;
+    return console.error(new Error('!notification || !notification.options'));
   // console.log(`firebasePNS options: ${JSON.stringify(notification.options)}`);
   // console.log(`firebasePNS registrationTokens: ${JSON.stringify(registrationTokens)}`);
   toPayloadData(notification, function(err, message) {
