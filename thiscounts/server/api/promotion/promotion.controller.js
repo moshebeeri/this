@@ -125,6 +125,10 @@ function applyToUserList(users_ids, instance, callback) {
   })
 }
 
+exports.applyToUserList = function applyToUsers(users_ids, instance, callback){
+  return applyToUserList(users_ids, instance, callback);
+};
+
 function applyToGroups(promotion, instances, callback){
   async.each(instances, (instance, callback) => {
     let groups;
@@ -428,7 +432,6 @@ exports.create_campaign = function (req, res) {
   let promotion = req.body;
   let campaign = req.body;
   promotion.creator = req.user._id;
-  console.log(`promotion.on_action`);
   if(promotion.on_action)
     return create_action(req, res);
 
@@ -471,7 +474,7 @@ function user_instance_eligible_activity(userId, instance){
       instance: instance._id,
       promotion: instance.promotion._id,
       ids: [userId],
-      action: 'eligible'
+      action: instance.action || 'eligible'
     };
     act.actor_business = instance.promotion.entity.business;
     activity.create(act, function(err, activity){

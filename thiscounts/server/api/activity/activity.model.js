@@ -13,6 +13,7 @@ let ActivitySchema = new Schema({
 
   post: {type: Schema.ObjectId, ref: 'Post', autopopulate: true },
   promotion: {type: Schema.ObjectId, ref: 'Promotion', autopopulate: true },
+  savedInstance: {type: Schema.ObjectId, ref: 'SavedInstance', autopopulate: true },
   instance: {type: Schema.ObjectId, ref: 'Instance', autopopulate: true },
   product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true },
   group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true },

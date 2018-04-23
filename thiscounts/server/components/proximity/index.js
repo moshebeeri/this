@@ -77,8 +77,8 @@ function handleFollowersProximityActions(userId, location, callback) {
                   WITH   entity,promo,u,on, 
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
                           point({longitude:promo.lon,latitude:promo.lat}) AS promoLocation
-                  WHERE   NOT (u)-[ON_ACTION_SENT]->(promo)
-                          promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
+                  WHERE   NOT (u)-[:ON_ACTION_SENT]->(promo)
+                          AND promo._id IS NOT NULL AND on.type = 'FOLLOWER_PROXIMITY'
                   			  AND ( NOT exists(f.eligible_by_proximity_time) OR f.eligible_by_proximity_time + 1000*60*60*24*14 > timestamp()) 
                   			  AND distance(coordinate, promoLocation) < on.proximity*1000
          
@@ -105,8 +105,8 @@ function handleProximityActions(userId, location, callback) {
                   WITH   entity,promo,on, 
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
                           point({longitude:promo.lon,latitude:promo.lat}) AS promoLocation                  
-                  WHERE NOT (u)-[ON_ACTION_SENT]->(promo)
-                        promo._id IS NOT NULL AND on.type = 'PROXIMITY'
+                  WHERE NOT (u)-[:ON_ACTION_SENT]->(promo)
+                        AND promo._id IS NOT NULL AND on.type = 'PROXIMITY'
                   			AND distance(coordinate, promoLocation) < on.proximity*1000
                         AND NOT (entity)<-[:FOLLOW]-(u)
                         AND NOT (entity)<-[:NO_ON_PROXIMITY_ACTION]-(u)

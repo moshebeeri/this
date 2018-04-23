@@ -10,6 +10,9 @@ const randomstring = require('randomstring');
 const QRCode = require('qrcode');
 const MongodbSearch = require('../../components/mongo-search');
 const fireEvent = require('../../components/firebaseEvent');
+const activity = require('../../components/activity').createActivity();
+const pricing = require('../../components/pricing');
+const Notifications = require('../../components/notification');
 
 
 exports.search = MongodbSearch.create(Instance);
@@ -178,7 +181,7 @@ function initializeEarlyBooking(instance) {
   };
 }
 
-function createSavedInstance(instance, user_id, callback) {
+function createSavedInstance(instance, user_id, context, callback) {
   let savedInstance = {
     user: user_id,
     instance: instance._id,
@@ -203,6 +206,7 @@ function createSavedInstance(instance, user_id, callback) {
   } else if (instance.type === 'EARLY_BOOKING') {
     savedInstance.savedData.early_booking = initializeEarlyBooking(instance)
   }
+  savedInstance.context = context;
   SavedInstanceController.createSavedInstance(savedInstance, callback)
 }
 
@@ -229,24 +233,24 @@ function relateSavedInstance(userId, savedInstance, instance, callback) {
   });
 }
 
-function saveInstance(req, res, instance) {
-  graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) return i.quantity as quantity`, function (err, results) {
+function saveInstance(userId, instance, context, callback) {
+  graphModel.query(`MATCH (i:instance { _id:'${instance._id}'}) return i.quantity as quantity`, function (err, results) {
     if (err) {
-      return handleError(res, err);
+      return callback(err);
     }
     if (results.length !== 1 && results[0].quantity < 1) {
-      return res.status(400).send('Run out of instances');
+      return callback(new Error('Run out of instances'));
     }
-    createSavedInstance(instance, req.user._id, function (err, savedInstance) {
-      if (err) return handleError(res, err);
-      relateSavedInstance(req.user._id, savedInstance, instance, function (err, instance) {
-        if (err) return handleError(res, err);
-        graphModel.query(`MATCH (i:instance { _id:'${req.params.id}'}) SET i.quantity=i.quantity-1`, function (err) {
-          if (err) return handleError(res, err);
+    createSavedInstance(instance, userId, context, function (err, savedInstance) {
+      if (err) return callback(err);
+      relateSavedInstance(userId, savedInstance, instance, function (err, instance) {
+        if (err) return callback(err);
+        graphModel.query(`MATCH (i:instance { _id:'${instance._id}'}) SET i.quantity=i.quantity-1`, function (err) {
+          if (err) return callback(err);
           SavedInstance.findById(savedInstance._id).exec((err, si) => {
-            if (err) return handleError(res, err);
-            graphModel.relate_ids(req.user._id, 'SAVED', instance.promotion._id);
-            return res.status(200).json(si);
+            if (err) return callback(err);
+            graphModel.relate_ids(userId, 'SAVED', instance.promotion._id);
+            return callback(null, si);
             })
         });
       });
@@ -254,9 +258,9 @@ function saveInstance(req, res, instance) {
   });
 }
 
-function isUniqueInstance(status) {
+function isRealizedInstance(status) {
   status.forEach(s => {
-    if (s.type === 'PUNCH_CARD' && s.status === 'REALIZED')
+    if (s.status === 'REALIZED')
       return true;
   });
   return false;
@@ -279,10 +283,14 @@ exports.save = function (req, res) {
         if (err) {
           return handleError(res, err);
         }
-        if (isUniqueInstance(status)) {
+        if (isRealizedInstance(status)) {
           return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
-        return saveInstance(req, res, instance);
+
+        return saveInstance(req.user._id, instance, {}, (err, si) =>{
+          if(err) handleError(res, err);
+          return res.status(200).json(si);
+        })
       });
     });
 };
@@ -358,6 +366,50 @@ function redeemTimeLogic(obj, callback) {
   return callback(null, obj);
 }
 
+
+function savedInstanceEligibleActivity(userId, savedInstance){
+  let act = {
+    savedInstance: savedInstance._id,
+    instance: savedInstance.instance._id,
+    ids: [userId],
+    action: 'saved_instance_eligible'
+  };
+  const entity = savedInstance.instance.promotion.entity;
+  act.actor_business = entity.business;
+  activity.create(act, function(err, activity){
+    if(err) return console.error(err);
+    pricing.chargeActivityDistribution(entity, activity);
+  });
+}
+
+function allocatePunchCardInstance(user, instance, callback) {
+  graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) return i.quantity as quantity`, function (err, results) {
+    if (err) {
+      return callback(err);
+    }
+    if (results.length >= 1 && results[0].quantity > 0) {
+      graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) SET i.quantity=i.quantity-1`, function (err) {
+        if (err) return callback(err);
+        createSavedInstance(instance, user._id, {}, (err, si) => {
+          if(err) callback(err);
+          savedInstanceEligibleActivity(user._id, si);
+          let note = {
+            note: 'saved_instance_eligible',
+            instance: instance,
+            title: 'RE_PROMOTION_ELIGIBLE_TITLE',
+            body: instance.promotion ? instance.promotion.name : '',
+            timestamp: Date.now()
+          };
+          Notifications.notifyUser(note, user._id, true);
+        });
+      });
+    }
+  });
+}
+
+
+
+
 function redeemPunchCard(saved, callback) {
   let punch_card = saved.savedData.punch_card;
 
@@ -391,7 +443,7 @@ function redeemPunchCard(saved, callback) {
                         WHERE saved._id = '${saved._id}' 
                         SET saved.won = true;
                         `, (err)=>{if(err) console.error(err)});
-
+      allocatePunchCardInstance(saved.user, saved.instance);
       return callback(null, {
         terminate: true,
         savedInstance: savedInstance
@@ -546,23 +598,20 @@ function redeemHappyHour(saved, data, callback) {
       graphModel.query(query, callback)
     })
   }
-  if(!data || !data.day || !data.hours || !data.minutes)
-    return callback(new Error('data object is ot preset or ot valid'));
-
+  if(!data || !data.day || !data.hours || !data.minutes) {
+    const err = new Error(`data object is not preset or not valid ${JSON.stringify(data)}`);
+    console.error(err);
+    return callback(err);
+  }
   realize_happy_hour(saved, function (err) {
     if (err) return callback(err);
-    if(!happy_hour.days.includes(data.day)) {
-      return callback(new Error('data object is ot preset or ot valid'));
+    if(!data || !data.day|| !data.hours || !data.minutes) {
+      return callback(new Error('data object is not preset or not valid'));
     }
-    if(!happy_hour.days.includes(data.hours)) {
-      return callback(new Error('data object is ot preset or ot valid'));
-    }
-    if(!happy_hour.days.includes(data.minutes)) {
-      return callback(new Error('data object is ot preset or ot valid'));
-    }
+
     let now_seconds = data.hours*60*60+data.minutes*60;
     if( happy_hour.days.includes(data.day) &&
-        data.from <= now_seconds && now_seconds <= data.until ) {
+      happy_hour.from <= now_seconds && now_seconds <= happy_hour.until) {
       happy_hour.redeemTimes.push(Date.now());
       saved.save(function (err, savedInstance) {
         if (err) return callback(err);
@@ -654,10 +703,10 @@ exports.realize = function (req, res) {
             return res.status(403).send('non or multiple barcode found');
           if (barcodes[0].barcode !== req.params.barcode)
             return res.status(403).send('required barcode mismatch');
-          return realizeSavedInstance(user, savedInstance, rel, res, instance);
+          return realizeSavedInstance(user, savedInstance, rel, res, {});
         });
     } else {
-      return realizeSavedInstance(user, savedInstance, rel, res, instance);
+      return realizeSavedInstance(user, savedInstance, rel, res, {});
     }
   });
 };
@@ -688,10 +737,10 @@ exports.post_realize = function (req, res) {
             return res.status(403).send('non or multiple barcode found');
           if (barcodes[0].barcode !== req.params.barcode)
             return res.status(403).send('required barcode mismatch');
-          return realizeSavedInstance(user, savedInstance, rel, res, instance, req.body || {});
+          return realizeSavedInstance(user, savedInstance, rel, res, req.body || {});
         });
     } else {
-      return realizeSavedInstance(user, savedInstance, rel, res, instance);
+      return realizeSavedInstance(user, savedInstance, rel, res, req.body || {});
     }
   });
 };
@@ -746,5 +795,5 @@ exports.qrcode = function (req, res) {
 
 function handleError(res, err) {
   console.error(err);
-  return res.send(500, err);
+  return res.status(500).send(err.message);
 }
