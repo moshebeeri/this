@@ -20,6 +20,13 @@ const validateEmail = (email) => {
     let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 };
+const validateNumberic = (input) => {
+    var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+    return (RE.test(input));
+};
+
+
+
 const validateWebsite = (website) => {
     if (!website) {
         return true;
@@ -223,6 +230,7 @@ export default {
     validateWebsite,
     validateHappyHour,
     validateYouTube,
+    validateNumberic,
     validatePuches, validatePercent,
     getDistanceString,
     getSecondSinceMidnight,

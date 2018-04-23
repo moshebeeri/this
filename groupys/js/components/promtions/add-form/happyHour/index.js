@@ -189,7 +189,7 @@ export default class HappyHourComponent extends Component {
                 <View style={{width: 160}}>
                     <TextInput field={strings.Pay} value={pay}
                                returnKeyType='next' ref="Pay $" refNext="2"
-                               keyboardType='numeric'
+                               validateContent={FormUtils.validateNumberic}
                                onSubmitEditing={this.focusNextField.bind(this, "off")}
                                onChangeText={(value) => this.setPay(value)} isMandatory={true}/>
                 </View>
