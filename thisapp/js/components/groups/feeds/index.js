@@ -46,6 +46,12 @@ class GroupFeed extends Component {
             }
             this.props.actions.clearUnreadPosts(group);
         });
+
+        //workaround for hebrew support
+        let item = this.props.navigation.state.params.instanceItem;
+        if(item) {
+            this.props.actions.setReplayInstance(item);
+        }
     }
 
     handleBack() {
@@ -68,9 +74,12 @@ class GroupFeed extends Component {
     }
 
     navigateToChat(item) {
-        this.props.actions.setReplayInstance(item);
+
+
         if (I18nManager.isRTL && (Platform.OS === 'android')) {
-            this.setState({page: 0});
+            //workaround for hebrew support
+            const group = this.props.navigation.state.params.group;
+            this.props.navigation.navigate('GroupFeed', {chat: true, group: group,instanceItem:item});
         } else {
             this.setState({page: 1});
         }
@@ -87,10 +96,17 @@ class GroupFeed extends Component {
         return 1;
     }
 
+    getFeedTab() {
+        if (I18nManager.isRTL && (Platform.OS === 'android')) {
+            return 1;
+        }
+        return 0;
+    }
+
     render() {
         const group = this.props.navigation.state.params.group;
         let chatDisabled = group.chat_policy === 'OFF';
-        let initPage = 0;
+        let initPage = this.getFeedTab();
         if (this.props.navigation.state.params.chat) {
             initPage = this.getChatTab();
         }

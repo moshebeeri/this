@@ -14,10 +14,6 @@ import GenericFeedItem from "../../generic-feed-manager/generic-feed";
 import Icon2 from "react-native-vector-icons/Ionicons";
 import navigationUtils from '../../../utils/navigationUtils'
 
-const {width, height} = Dimensions.get('window')
-const vw = width / 100;
-const vh = height / 100
-
 class GroupFeedComponent extends Component {
     constructor(props) {
         super(props);
@@ -51,7 +47,6 @@ class GroupFeedComponent extends Component {
     navigateToAdd() {
         const group = this.props.navigation.state.params.group;
         navigationUtils.doNavigation(this.props.navigation, 'PostForm', {group: group});
-
     }
 
     showFab(show) {
@@ -62,7 +57,6 @@ class GroupFeedComponent extends Component {
 
     realize(item) {
         navigationUtils.doNavigation(this.props.navigation, 'realizePromotion', {item: item})
-
     }
 
     render() {
