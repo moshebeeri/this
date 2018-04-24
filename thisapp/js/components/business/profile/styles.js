@@ -39,7 +39,7 @@ module.exports = {
         flex: -1,
         alignSelf: 'center',
         alignItems:'flex-end',
-        height:  StyleUtils.relativeHeight(40,40),
+        height:  StyleUtils.relativeHeight(30,30),
 
         width: width,
         borderWidth: 1,

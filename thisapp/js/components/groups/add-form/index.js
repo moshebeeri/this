@@ -270,13 +270,13 @@ class AddGroup extends Component {
             let coverImage = undefined;
             if (this.state.image) {
                 coverImage = <ImageController
-                    style={{width: width - 10, height: StyleUtils.relativeHeight(30,30), borderWidth: 1, borderColor: 'white'}}
+                    style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30,30)}}
                     source={{uri: this.state.image.path}}
                 >
                 </ImageController>
             } else {
                 coverImage = <ImageController
-                    style={{width: width - 10, height: StyleUtils.relativeHeight(30,30), borderWidth: 1, borderColor: 'white'}}
+                    style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30,30),}}
                     source={{uri: this.state.currentImage}}
                 >
                 </ImageController>

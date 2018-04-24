@@ -47,7 +47,7 @@ class BusinessProfile extends Component {
                 alignItems: 'center',
                 justifyContent: 'center'
             },
-            codeTextStyle: {fontSize: 6, marginTop: 5},
+            codeTextStyle: {padding:4,fontSize: 14, marginTop: 5},
             codeFullSize: false,
         }
     }
@@ -77,7 +77,7 @@ class BusinessProfile extends Component {
         if (this.state.codeFullSize) {
             this.setState({
                 codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {fontSize: 6, marginTop: 5},
+                codeTextStyle: {padding:4,fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
@@ -90,8 +90,8 @@ class BusinessProfile extends Component {
             })
         } else {
             this.setState({
-                codeStyle: {width: 250, height: 230, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {fontSize: 14, marginTop: 5,},
+                codeStyle: {width: StyleUtils.scale(160), height: StyleUtils.scale(160), alignItems: 'center', justifyContent: 'center'},
+                codeTextStyle: {padding:4,fontSize: 14, marginTop: 5,},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
@@ -179,7 +179,10 @@ class BusinessProfile extends Component {
                                         source={{uri: lastBusinessQrCode}}>
 
                                     </Image>
-                                    <ThisText >{strings.ScanToFollow}</ThisText>
+                                    <ThisText style={{
+                                        fontSize: 20,
+
+                                    }}>{strings.ScanToFollow}</ThisText>
                                 </TouchableOpacity>
                                 }
                             </View>
@@ -191,7 +194,7 @@ class BusinessProfile extends Component {
                     </View>
                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white'}}>
 
-                        <TouchableOpacity onPress={() => this.loadWebSite()}
+                        {business.website &&  <TouchableOpacity onPress={() => this.loadWebSite()}
                                           style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                             <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"web"}/>
                             <ThisText note style={{
@@ -200,7 +203,7 @@ class BusinessProfile extends Component {
                                 marginLeft: 15
                             }}>{business.website}</ThisText>
 
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                         <TouchableOpacity onPress={() => this.sendEmail()}
                                           style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                             <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"email-outline"}/>
@@ -240,7 +243,7 @@ class BusinessProfile extends Component {
                     height: StyleUtils.relativeHeight(15, 10),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    top: StyleUtils.relativeHeight(25, 30),
+                    bottom:0,
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
