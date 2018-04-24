@@ -97,12 +97,10 @@ FCM.on(FCMEvent.Notification, async (notif) => {
                 notif.finish(WillPresentNotificationResult.All) //other types available: WillPresentNotificationResult.None
                 break;
         }
-    }else{
-        if(!token)
-        {
+    } else {
+        if (!token) {
             FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(number));
         }
-
     }
 });
 FCM.on(FCMEvent.RefreshToken, (token) => {
@@ -168,7 +166,7 @@ class ApplicationManager extends Component {
         this.props.actions.resetBadge();
         Tasks.start();
         let notification = await  FCM.getInitialNotification();
-        NotificationHandler.handleBackNotification(notification, this.props.actions,this.props.navigation,reduxStore.getState(), reduxStore.dispatch);
+        NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
         AppState.addEventListener('change', this._handleAppStateChange);
         this.props.userActions.resetForm();
     }
@@ -306,8 +304,7 @@ class ApplicationManager extends Component {
                         position: 'absolute',
                         width: StyleUtils.getWidth() - sideMargin,
                         height: height - notificationPopupHeight,
-                        shadowColor: 'red',
-                        shadowOffset: { width: 0, height: 0 },
+                        shadowOffset: {width: 0, height: 0},
                         shadowOpacity: 0.2,
                         shadowRadius: 5,
                         elevation: 10,

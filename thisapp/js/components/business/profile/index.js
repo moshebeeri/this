@@ -37,17 +37,24 @@ class BusinessProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
+            codeStyle: {marginBottom:-10,width: StyleUtils.scale(80), height: StyleUtils.scale(80), alignItems: 'center', justifyContent: 'center'},
+            codeTextStyle: {padding:4,fontSize: 14, marginTop: 0},
             codeContainerStyle: {
                 backgroundColor: 'white',
                 position: 'absolute',
                 top: 30,
                 right: 20,
-
+                width: StyleUtils.scale(110), height: StyleUtils.scale(110),
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                borderColor: 'gray',
+                shadowOffset: {width: 0, height: 0},
+                shadowOpacity: 0.2,
+                shadowRadius: 5,
+                borderWidth: 2,
+                borderRadius: 10,
+                elevation: 10,
             },
-            codeTextStyle: {padding:4,fontSize: 14, marginTop: 5},
             codeFullSize: false,
         }
     }
@@ -76,29 +83,45 @@ class BusinessProfile extends Component {
     changeQrLook() {
         if (this.state.codeFullSize) {
             this.setState({
-                codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {padding:4,fontSize: 14, marginTop: 5},
+                codeStyle: {marginBottom:-10,width: StyleUtils.scale(80), height: StyleUtils.scale(80), alignItems: 'center', justifyContent: 'center'},
+                codeTextStyle: {padding:4,fontSize: 14, marginTop: 0},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
                     top: 30,
                     right: 20,
+                    width: StyleUtils.scale(110), height: StyleUtils.scale(110),
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    borderColor:'gray',
+                    shadowOffset: {width: 0, height: 0},
+                    shadowOpacity: 0.2,
+                    shadowRadius: 5,
+                    borderWidth:2,
+                    borderRadius:10,
+                    elevation: 10,
                 },
                 codeFullSize: false,
             })
         } else {
             this.setState({
-                codeStyle: {width: StyleUtils.scale(160), height: StyleUtils.scale(160), alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {padding:4,fontSize: 14, marginTop: 5,},
+                codeStyle: {marginBottom:-10,width: StyleUtils.scale(150), height: StyleUtils.scale(150), alignItems: 'center', justifyContent: 'center'},
+                codeTextStyle: {padding:4,fontSize: 14, marginTop: 0,},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
-                    top: 0,
-                    right: 70,
+                    top:  (StyleUtils.relativeHeight(30,30) - StyleUtils.scale(170)) /2 ,
+                    right: (StyleUtils.getWidth() -  StyleUtils.scale(170))/2,
+                    width: StyleUtils.scale(170), height: StyleUtils.scale(170),
+                    borderColor:'gray',
+                    borderWidth:2,
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    shadowOffset: {width: 0, height: 0},
+                    shadowOpacity: 0.2,
+                    shadowRadius: 5,
+                    borderRadius:10,
+                    elevation: 10,
                 },
                 codeFullSize: true,
             })
