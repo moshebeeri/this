@@ -166,7 +166,7 @@ export default class FeedPromotion extends Component {
 
                     </View>}
 
-                    {!hideSocial &&
+                    {!hideSocial && item.social &&
                     <View style={[styles.promotion_bottomContainer, {width: StyleUtils.getWidth()}]}>
 
                         {item.social && <SocialState feed comments={item.social.comments} onPressComment={comment}

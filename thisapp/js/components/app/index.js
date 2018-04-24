@@ -224,9 +224,9 @@ class ApplicationManager extends Component {
         if (item) {
             notificationPopupHeight = StyleUtils.scale(230);
             notificationnTopPadding = StyleUtils.scale(150);
-            leftPadding = StyleUtils.scale(5);
+            leftPadding = StyleUtils.scale(10);
             borderSideWidth = 4;
-            sideMargin = StyleUtils.scale(10);
+            sideMargin = StyleUtils.scale(20);
             ;
         }
         let notificationActionString
@@ -298,15 +298,20 @@ class ApplicationManager extends Component {
                     </View>}
                     {showPopup && <View style={{
                         left: leftPadding,
-                        borderTopWidth: 4,
-                        borderBottomWidth: 4,
-                        borderLeftWidth: borderSideWidth,
-                        borderRightWidth: borderSideWidth,
-                        borderColor: '#00000055',
+                        borderWidth: 1,
+                        borderRadius: 10,
+                        borderColor: '#ddd',
+                        borderBottomWidth: 0,
                         top: notificationnTopPadding,
                         position: 'absolute',
                         width: StyleUtils.getWidth() - sideMargin,
                         height: height - notificationPopupHeight,
+                        shadowColor: 'red',
+                        shadowOffset: { width: 0, height: 0 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 5,
+                        elevation: 10,
+                        overflow: 'hidden',
                         backgroundColor: 'white',
                         justifyContent: 'center',
                         alignItems: 'flex-start'

@@ -81,6 +81,7 @@ class GroupFeed extends Component {
             const group = this.props.navigation.state.params.group;
             this.props.navigation.navigate('GroupFeed', {chat: true, group: group,instanceItem:item});
         } else {
+            this.props.actions.setReplayInstance(item);
             this.setState({page: 1});
         }
     }
