@@ -5,7 +5,7 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View,I18nManager} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
 import styles from './styles'
@@ -74,7 +74,8 @@ export default class ChatMessage extends Component {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: '#E6E6E6',
-                                    borderTopRightRadius: 10
+                                    borderTopLeftRadius: I18nManager.isRTL ?  10 :0,
+                                    borderTopRightRadius:  I18nManager.isRTL ? 0: 10,
                                 }}>
 
 
@@ -325,7 +326,9 @@ export default class ChatMessage extends Component {
                             alignItems: 'center',
                             justifyContent: 'center',
                             backgroundColor: '#E6E6E6',
-                            borderTopLeftRadius: 10
+
+                            borderTopLeftRadius: I18nManager.isRTL ?  0 :10,
+                            borderTopRightRadius:  I18nManager.isRTL ? 10: 0,
                         }}>
 
                         </View>

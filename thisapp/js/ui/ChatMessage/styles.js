@@ -1,11 +1,10 @@
 const React = require('react-native');
 import StyleUtils from '../../utils/styleUtils'
-const {StyleSheet, Platform, Dimensions} = React;
+const {StyleSheet, Platform, Dimensions,I18nManager} = React;
 const {width, height} = Dimensions.get('window')
-const vw = width / 100;
+
 const vh = height / 100
-const vmin = Math.min(vw, vh);
-const vmax = Math.max(vw, vh);
+
 module.exports = {
     messageComponent: {
         flexDirection: 'row',
@@ -24,7 +23,8 @@ module.exports = {
     messageUserName: {
         flexDirection: 'column',
         borderBottomLeftRadius:8,
-        borderTopRightRadius:8,
+        borderTopLeftRadius:I18nManager.isRTL ? 8: 0,
+        borderTopRightRadius:I18nManager.isRTL ? 0: 8,
         borderBottomRightRadius:8,
         paddingRight:4,
         paddingLeft:4,
@@ -35,7 +35,8 @@ module.exports = {
     messageWideUserName: {
         flexDirection: 'column',
         borderBottomLeftRadius:8,
-        borderTopRightRadius:8,
+        borderTopLeftRadius:I18nManager.isRTL ? 0: 8,
+        borderTopRightRadius:I18nManager.isRTL ? 8: 0,
         borderBottomRightRadius:8,
         paddingRight:4,
         paddingLeft:4,
@@ -46,8 +47,8 @@ module.exports = {
     messageName: {
         flexDirection: 'column',
         justifyContent:'flex-end',
-
-        borderTopLeftRadius:8,
+        borderTopLeftRadius:I18nManager.isRTL ? 0: 8,
+        borderTopRightRadius:I18nManager.isRTL ? 8: 0,
         borderBottomLeftRadius:8,
         borderBottomRightRadius:8,
         paddingRight:4,
