@@ -9,7 +9,7 @@ export default class ListEmptyDisplay extends Component {
     }
 
     render() {
-        return <View>
+        return <View style={{width: StyleUtils.getWidth(),alignItems:'center',justifyContent:'center'}}>
             <Image style={{width: StyleUtils.scale(200), height: StyleUtils.scale(200)}} source={empty}/>
 
         </View>

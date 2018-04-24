@@ -80,7 +80,7 @@ class AddGroup extends Component {
                 business: '',
                 updateMode: true,
                 codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {fontSize: 6, marginTop: 5},
+                codeTextStyle: {fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
@@ -319,7 +319,7 @@ class AddGroup extends Component {
         if (this.state.codeFullSize) {
             this.setState({
                 codeStyle: {width: 80, height: 80, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {fontSize: 6, marginTop: 5},
+                codeTextStyle: {padding:6,fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
@@ -333,7 +333,7 @@ class AddGroup extends Component {
         } else {
             this.setState({
                 codeStyle: {width: 200, height: 180, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {fontSize: 14, marginTop: 5,},
+                codeTextStyle: {padding:6,fontSize: 14, marginTop: 5,},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
@@ -376,7 +376,7 @@ class AddGroup extends Component {
                         source={{uri: lastGroupQrCode}}>
 
                     </Image>
-                    <ThisText>{strings.ScanToFollow}</ThisText>
+                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
                 </TouchableOpacity>
             }
         }
