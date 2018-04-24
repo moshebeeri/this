@@ -34,7 +34,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.shell.MainPackageConfig;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
-
+import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
 import com.facebook.soloader.SoLoader;
 
 import com.facebook.react.modules.i18nmanager.I18nUtil;
@@ -79,7 +79,7 @@ public class MainApplication extends Application implements ReactApplication {
             new FIRMessagingPackage(),
 
             new BraintreePackage(),
-
+            new RNFirebaseCrashlyticsPackage(),
 
             new PickerPackage(),
 

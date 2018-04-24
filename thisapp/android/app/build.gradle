@@ -1,5 +1,6 @@
 
 apply plugin: "com.android.application"
+apply plugin: "io.fabric"
 import com.android.build.OutputFile
 
 /**
@@ -102,6 +103,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -192,6 +194,9 @@ dependencies {
         compile project(':react-native-carrier-info')
         compile project(':react-native-vector-icons')
         compile fileTree(dir: "libs", include: ["*.jar"])
+         compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+            transitive = true
+          }
         compile "com.android.support:appcompat-v7:25.0.0"
          // Firebase dependencies
 
