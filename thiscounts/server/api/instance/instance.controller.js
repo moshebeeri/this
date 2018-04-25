@@ -368,15 +368,16 @@ function redeemTimeLogic(obj, callback) {
 
 
 function savedInstanceEligibleActivity(userId, savedInstance){
-  let act = {
-    savedInstance: savedInstance._id,
-    instance: savedInstance.instance._id,
-    ids: [userId],
-    action: 'saved_instance_eligible'
-  };
   Instance.findById(savedInstance.instance).exec((err, instance) => {
     if(err) return console.error(err);
     if(!instance) return console.error(new Error(`instance id:${savedInstance.instance} not found`));
+    let act = {
+      savedInstance: savedInstance._id,
+      instance: instance._id,
+      promotion: instance.promotion._id,
+      ids: [userId],
+      action: 'saved_instance_eligible'
+    };
     const entity = instance.promotion.entity;
     act.actor_business = entity.business;
     activity.create(act, function(err, activity){
@@ -396,15 +397,18 @@ function allocatePunchCardInstance(user, instance, callback) {
         if (err) return callback(err);
         createSavedInstance(instance, user._id, {}, (err, si) => {
           if(err) callback(err);
-          savedInstanceEligibleActivity(user._id, si);
-          let note = {
-            note: 'saved_instance_eligible',
-            savedInstance: si._id,
-            title: 'RE_PROMOTION_ELIGIBLE_TITLE',
-            body: instance.promotion ? instance.promotion.name : '',
-            timestamp: Date.now()
-          };
-          Notifications.notifyUser(note, user._id, true);
+          relateSavedInstance(user._id, si, instance, (err => {
+            if(err) return callback(err);
+            savedInstanceEligibleActivity(user._id, si);
+            let note = {
+              note: 'saved_instance_eligible',
+              savedInstance: si._id,
+              title: 'RE_PROMOTION_ELIGIBLE_TITLE',
+              body: instance.promotion ? instance.promotion.name : '',
+              timestamp: Date.now()
+            };
+            Notifications.notifyUser(note, user._id, true);
+          }));
         });
       });
     }

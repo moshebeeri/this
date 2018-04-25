@@ -561,7 +561,7 @@ Instances.createSingleInstance =
 
 Instances.notify =
   Instances.prototype.notifyInstance = function (instance, audience) {
-    //console.log(`============> ${JSON.stringify(instance)}`);
+    console.log(`============> ${JSON.stringify(instance)}`);
     function extractBusinessName(instance){
       try{
         return instance.promotion.entity.business.name
@@ -570,20 +570,21 @@ Instances.notify =
       }
       return '';
     }
-
-    audience.forEach(to => {
-      User.findById(to).exec((err, user) => {
-        if(err) return console.error(err);
-        if(!user) return console.error(new Error(`could not find user ${to}`));
-        let note = {
-          note: 'instance_eligible',
-          instance: instance,
-          // new discount from instance.promotion.business.name
-          title: util.format(i18n.get('NEW_PROMOTION_ELIGIBLE_TITLE', user.locale), extractBusinessName(instance)),
-          body: instance.promotion ? instance.promotion.name : '',
-          timestamp: Date.now()
-        };
-        Notifications.notifyUser(note, user._id);
+    InstanceSchema.fineById(instance._id).exec((err, instance)=>{
+      audience.forEach(to => {
+        User.findById(to).exec((err, user) => {
+          if(err) return console.error(err);
+          if(!user) return console.error(new Error(`could not find user ${to}`));
+          let note = {
+            note: 'instance_eligible',
+            instance: instance,
+            // new discount from instance.promotion.business.name
+            title: util.format(i18n.get('NEW_PROMOTION_ELIGIBLE_TITLE', user.locale), extractBusinessName(instance)),
+            body: instance.promotion ? instance.promotion.name : '',
+            timestamp: Date.now()
+          };
+          Notifications.notifyUser(note, user._id);
+        })
       })
     })
   };
