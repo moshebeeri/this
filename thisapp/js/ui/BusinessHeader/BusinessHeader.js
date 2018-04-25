@@ -133,9 +133,7 @@ class BusinessHeader extends Component {
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
                         <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.assignQrCode}</ThisText>
                     </MenuOption>
-                    <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
-                        <ThisText style={{padding: 10, paddingTop: 5}}>{strings.accountDetail}</ThisText>
-                    </MenuOption>
+
                 </MenuOptions>
             </Menu>
         }
