@@ -134,7 +134,7 @@ class UserProfile extends Component {
 
 
                     <ImagePicker imageWidth={3000} imageHeight={3000} image={image}
-                                 setImage={this.setImage.bind(this)}/>
+                                 logo setImage={this.setImage.bind(this)}/>
 
                 </View>
                 <View>
