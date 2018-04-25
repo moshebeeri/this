@@ -136,7 +136,6 @@ class GroupsApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             },
-            body: JSON.stringify(json)
         }, 'groups', '/search');
     }
 }
