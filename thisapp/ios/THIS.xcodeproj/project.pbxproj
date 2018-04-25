@@ -66,7 +66,6 @@
 		AC6F1146FAB448424991D57B /* Pods_THIS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB71E1174DDAC65210113AC3 /* Pods_THIS.framework */; };
 		AD4061B15EF84945B79CAD07 /* libRCTBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D57E2478F3D48C99BFCB481 /* libRCTBraintree.a */; };
 		B3EADD98A1D043E2A8FC0E5F /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2B087BE1CA743E188A8644F /* libRCTVideo.a */; };
-		B683F3B11A3B492CA0C8C8F8 /* libRCTYouTube.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E460D8F448E643638BC8E22E /* libRCTYouTube.a */; };
 		BFCDCE36A15643399454E33E /* libRNBackgroundTimer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA8ABBA0353C4AEA9AE5B22B /* libRNBackgroundTimer.a */; };
 		C0020198D1174262A80E67E7 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 483998D8EFA34D72B81CB911 /* libCodePush.a */; };
 		D0C377D66E2F440C9D3A268D /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BD67BCDF875422CBF9EAD4B /* libRNI18n.a */; };
@@ -392,13 +391,6 @@
 			remoteGlobalIDString = AAA8FE021ACDA079002A9710;
 			remoteInfo = QBImagePicker;
 		};
-		46B8AF711FBB28A10078D8A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0D09ABA83E30498882509649 /* RCTYouTube.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8BDB9BC91B4289AE00EF9FEF;
-			remoteInfo = RCTYouTube;
-		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -575,7 +567,6 @@
 		00E356F21AD99517003FC87E /* THISTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = THISTests.m; sourceTree = "<group>"; };
 		02BE79B1CF334586BF735AC9 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		089D5B47DCB9498DA0D28822 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
-		0D09ABA83E30498882509649 /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
 		10E153B5050741029DA69462 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
 		1251BCED34974A7EBCA0EB3E /* VydiaRNFileUploader.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = VydiaRNFileUploader.xcodeproj; path = "../node_modules/react-native-background-upload/ios/VydiaRNFileUploader.xcodeproj"; sourceTree = "<group>"; };
 		12A03DB6D41E4634B1E1CAB8 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
@@ -771,7 +762,6 @@
 				F66F9B3A203947C00043F180 /* libRNCarrierInfo.a in Frameworks */,
 				4694E24120456BBB00A55418 /* RSKImageCropper.framework in Frameworks */,
 				B3EADD98A1D043E2A8FC0E5F /* libRCTVideo.a in Frameworks */,
-				B683F3B11A3B492CA0C8C8F8 /* libRCTYouTube.a in Frameworks */,
 				7C101115747B4B90BC3FD8AD /* libRCTCamera.a in Frameworks */,
 				F6DDCBF9202C86E200599466 /* libRNFetchBlob.a in Frameworks */,
 				4694E24420456BBE00A55418 /* QBImagePicker.framework in Frameworks */,
@@ -1020,14 +1010,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		46B8AF6E1FBB28A10078D8A7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				46B8AF721FBB28A10078D8A7 /* libRCTYouTube.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		46DF5AA41FE6BBFC0048ABDB /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1122,7 +1104,6 @@
 				A7720CD4D2B24FA884F2F538 /* ReactNativeGlobalProps.xcodeproj */,
 				5E8CCD5703B747C484D1A2AB /* ReactNativeLocalization.xcodeproj */,
 				382AB909D59C40C992E63B05 /* RCTVideo.xcodeproj */,
-				0D09ABA83E30498882509649 /* RCTYouTube.xcodeproj */,
 				8475E30ECD684CD8BB602839 /* RCTCamera.xcodeproj */,
 				DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */,
 				1251BCED34974A7EBCA0EB3E /* VydiaRNFileUploader.xcodeproj */,
@@ -1411,6 +1392,7 @@
 				0CFEE4D129CE59DAE51E0C88 /* [CP] Embed Pods Frameworks */,
 				2510F1DF284E6AE251E893B0 /* [CP] Copy Pods Resources */,
 				4694E24320456BBB00A55418 /* Embed Frameworks */,
+				F6D2E4CF2090B17E00C9C125 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1588,10 +1570,6 @@
 				{
 					ProductGroup = 139FDEE71B06529A00C62182 /* Products */;
 					ProjectRef = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
-				},
-				{
-					ProductGroup = 46B8AF6E1FBB28A10078D8A7 /* Products */;
-					ProjectRef = 0D09ABA83E30498882509649 /* RCTYouTube.xcodeproj */;
 				},
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
@@ -1948,13 +1926,6 @@
 			remoteRef = 4694E23E20456AF900A55418 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		46B8AF721FBB28A10078D8A7 /* libRCTYouTube.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTYouTube.a;
-			remoteRef = 46B8AF711FBB28A10078D8A7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2236,6 +2207,19 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		F6D2E4CF2090B17E00C9C125 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
