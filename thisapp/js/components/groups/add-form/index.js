@@ -66,7 +66,7 @@ class AddGroup extends Component {
             this.state = {
                 name: group.name,
                 info: group.description,
-                groupChat: (group.group_chat==='ON') ? true : false,
+                groupChat: (group.chat_policy==='ON') ? true : false,
                 showUsers: false,
                 images: '',
                 users: [],
@@ -80,7 +80,7 @@ class AddGroup extends Component {
                 business: '',
                 updateMode: true,
                 codeStyle: {width: StyleUtils.scale(80), height: StyleUtils.scale(80),  marginBottom:-10, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {padding:6,fontSize: 14, marginTop: 5},
+                codeTextStyle: {fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     width: StyleUtils.scale(110), height: StyleUtils.scale(110),
@@ -327,7 +327,7 @@ class AddGroup extends Component {
         if (this.state.codeFullSize) {
             this.setState({
                 codeStyle: {width: StyleUtils.scale(80), height: StyleUtils.scale(80),  marginBottom:-10, alignItems: 'center', justifyContent: 'center'},
-                codeTextStyle: {padding:6,fontSize: 14, marginTop: 5},
+                codeTextStyle: {fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     width: StyleUtils.scale(110), height: StyleUtils.scale(110),
@@ -349,7 +349,7 @@ class AddGroup extends Component {
         } else {
             this.setState({
                 codeStyle: {width: StyleUtils.scale(150), height: StyleUtils.scale(150),  alignItems: 'center', marginBottom:-10, justifyContent: 'center'},
-                codeTextStyle: {padding:4,fontSize: 14, marginTop: 5,},
+                codeTextStyle: {fontSize: 14, marginTop: 5,},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
@@ -378,6 +378,7 @@ class AddGroup extends Component {
             selectedGroupPolicy = this.getGroupPolicy(this.state.groupPolocy);
         }
         const BusinessPiker = this.createBusinessPicker(this.state.groupType, businesses);
+        let qrCodeString = this.state.codeFullSize ? strings.ScanToFollow : strings.clickToEnlarge;
         let qrcodeView = undefined;
         if (this.state.showQrcCode) {
             if (this.state.qrcodeSource) {
@@ -389,7 +390,7 @@ class AddGroup extends Component {
                         source={{uri: this.state.qrcodeSource}}>
 
                     </Image>
-                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
+                    <ThisText style={this.state.codeTextStyle}>{qrCodeString}</ThisText>
                 </TouchableOpacity>
             } else {
                 qrcodeView = <TouchableOpacity onPress={() => this.changeQrLook()}
@@ -400,7 +401,7 @@ class AddGroup extends Component {
                         source={{uri: lastGroupQrCode}}>
 
                     </Image>
-                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
+                    <ThisText style={this.state.codeTextStyle}>{qrCodeString}</ThisText>
                 </TouchableOpacity>
             }
         }

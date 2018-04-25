@@ -297,6 +297,7 @@ const il = {
     Free                                          : "חינם",
     businessFollow                                : "   {0} עוקב אחרי העסק  ",
     eligibleForNewPromotion                       : "זכאות להנחה נוספת ",
+    clickToEnlarge                                : "לחץ להגדיל",
 
 
 };
