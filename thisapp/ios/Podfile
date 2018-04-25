@@ -8,7 +8,7 @@ target 'THIS' do
 
   pod 'Firebase/Core'
   pod 'FirebaseMessaging'
-
-
+  pod 'Fabric', '~> 1.7.5'
+  pod 'Crashlytics', '~> 3.10.1'
 end
 
