@@ -9,9 +9,13 @@ export const getMyBusinesses = createSelector([getStateMyBusinesses],
         if (!_.isEmpty(businesses.myBusinesses)) {
             return Object.keys(businesses.myBusinesses).map(key => {
                 let response = businesses.myBusinesses[key].business;
-                response.key = key;
+                if(response.review && response.review.result === 'accepted') {
+                    response.key = key;
+                }else{
+                    return null;
+                }
                 return response;
-            })
+            }).filter(business => business);
         }
         return [];
     });
