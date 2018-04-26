@@ -211,6 +211,12 @@ export const unlike = (id) => {
 export function saveFeed(id,) {
     return async function (dispatch, getState) {
         try {
+            // prevent user from saving twice the same instance
+            let instance = getState().instances.instances[id];
+            if(instance && instance.social_state.saved){
+                return;
+            }
+
             dispatch({
                 type: actions.SAVE,
                 id: id

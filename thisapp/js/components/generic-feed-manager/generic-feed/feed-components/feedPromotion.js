@@ -5,6 +5,8 @@ import React, {Component} from 'react';
 import {Dimensions} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import instanceUtils from '../../../../utils/instanceUtils'
+import navigationUtils from '../../../../utils/navigationUtils'
+
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -138,7 +140,7 @@ export default class FeedPromotion extends Component {
                         <View style={styles.editButtonContainer}>
                             <SubmitButton
                                 title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                onPress={() => save(item.id)}/>
+                                onPress={() => navigationUtils.doAction(save,item.id)}/>
                         </View>
                         }
                         {instanceUtils.showRedeem(item) &&
