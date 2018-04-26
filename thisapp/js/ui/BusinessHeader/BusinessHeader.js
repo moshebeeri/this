@@ -89,6 +89,15 @@ class BusinessHeader extends Component {
         this.props.navigation.goBack();
     }
 
+    isMyBusiness(){
+        const {businesses,business} = this.props;
+        if(businesses.myBusinesses[business._id]){
+            return true;
+        }
+
+        return false;
+
+    }
     render() {
         const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu,heaedrSize} = this.props;
         let nameTextStyle = styles.businessNameText;
@@ -115,9 +124,9 @@ class BusinessHeader extends Component {
                 <Icon2 style={{color: 'white', paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
-                <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
+                {!this.isMyBusiness() && <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
                     <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.UnFollow}</ThisText>
-                </MenuOption>
+                </MenuOption>}
                 {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
                     <ThisText style={{padding: 10, paddingTop: 5}}>{strings.reportActivity}</ThisText>
                 </MenuOption>}
