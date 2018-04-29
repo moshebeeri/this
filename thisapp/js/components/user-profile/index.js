@@ -73,9 +73,7 @@ class UserProfile extends Component {
     }
 
     save() {
-        if (this.props.saving) {
-            return;
-        }
+
         if (this.validateForm()) {
             let user = {
                 name: this.state.name,
@@ -84,6 +82,7 @@ class UserProfile extends Component {
                 phone_number: this.state.phone_number
             }
             this.props.updateUser(user, this.props.navigation)
+            this.props.navigation.goBack();
         }
     }
 
@@ -150,7 +149,7 @@ class UserProfile extends Component {
                                    returnKeyType='done' ref="2" refNext="2"
                                    onChangeText={(phone_number) => this.setState({phone_number})}/>
                     </View>
-                    {this.props.saving && <Spinner/>}
+
                 </View>
             </View>
             </ScrollView>

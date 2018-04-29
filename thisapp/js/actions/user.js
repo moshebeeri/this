@@ -104,11 +104,13 @@ export function changePassword(oldPassword, newPassword, navigation) {
 
 export function updateUser(newUser) {
     return function (dispatch, getState) {
-        const token = getState().authentication.token
+        const token = getState().authentication.token;
+        const user = getState().user.user
         if (newUser) {
             dispatch({
                 type: types.SAVE_USER_REQUEST,
                 newUser: newUser,
+                user : user,
                 token: token,
             })
         }
