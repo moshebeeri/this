@@ -31,6 +31,7 @@ class AddPost extends Component {
             image: '',
             business: '',
             post: '',
+            saving : false,
             services: []
         };
     }
@@ -45,7 +46,8 @@ class AddPost extends Component {
     }
 
     async saveFormData() {
-        if (this.validateForm()) {
+        if (this.validateForm() && !this.state.saving) {
+            this.setState({saving:true});
             this.setPost();
         }
     }

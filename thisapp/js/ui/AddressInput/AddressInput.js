@@ -22,7 +22,7 @@ class AddressInput extends Component {
             spinner: false,
             ilegalAddress: false,
         }
-        props.actions.resetForm();
+
     }
 
     focus() {
@@ -36,6 +36,7 @@ class AddressInput extends Component {
             city: city,
             address: address,
         })
+        this.props.actions.resetForm();
     }
 
     focusNextField(nextField) {
@@ -66,7 +67,6 @@ class AddressInput extends Component {
             }
         }
         this.setState({ilegalAddress: false});
-        this.setSubmut();
         return result;
     }
 
@@ -76,7 +76,7 @@ class AddressInput extends Component {
             address: this.state.address,
             country: this.state.country,
         }
-        this.props.actions.validateAddress(address, onValid);
+        this.props.actions.validateAddress(address, onValid,this.setSubmut.bind(this));
     }
 
     chooseAddress(address) {
@@ -124,12 +124,12 @@ class AddressInput extends Component {
     }
 
     async onSubmit(onValid) {
-        this.checkAddress(onValid);
+        this.checkAddress( onValid);
         Keyboard.dismiss();
-        this.setSubmut();
+
     }
 
-    setSubmut() {
+    setSubmut(onValid) {
         const {onSubmitEditing, addressForm} = this.props;
         if (!addressForm.location) {
             return;
@@ -142,6 +142,9 @@ class AddressInput extends Component {
         }
         if (onSubmitEditing) {
             onSubmitEditing(address);
+        }
+        if(onValid){
+            onValid(address);
         }
     }
 
