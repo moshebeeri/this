@@ -19,7 +19,6 @@ import * as types from '../saga/sagaActions';
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
-
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
@@ -44,7 +43,7 @@ async function get(dispatch, token, id) {
 
 async function getBusinessCategories(dispatch, gid, token) {
     try {
-        if(gid) {
+        if (gid) {
             let response = await businessApi.getBusinessCategories(gid, token);
             dispatch({
                 type: actions.SET_BUSINESS_CATEGORIES,
@@ -95,7 +94,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
 }
 
 export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
-    return async function (dispatch,getState) {
+    return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
@@ -125,7 +124,7 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
                 type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
                 show: false,
             });
-            handler.handleSuccses(getState(),dispatch);
+            handler.handleSuccses(getState(), dispatch);
             //navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'UserBusinessesByPhoneNumber');
@@ -175,6 +174,7 @@ export function followBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
             dispatch({type: actions.RESET_FOLLOW_FORM})
+            dispatch({type: actions.USER_FOLLOW_BUSINESS, id: businessId});
         } catch (error) {
             handler.handleError(error, dispatch, 'followBusiness')
             await logger.actionFailed("business_followBusiness", businessId)
@@ -187,6 +187,7 @@ export function unFollowBusiness(businessId) {
         try {
             const token = getState().authentication.token;
             await businessApi.unFollowBusiness(businessId, token);
+            dispatch({type: actions.USER_UNFOLLOW_BUSINESS, id: businessId});
         } catch (error) {
             handler.handleError(error, dispatch, 'unFollowBusiness')
             await logger.actionFailed("business_followBusiness", businessId)
@@ -352,14 +353,12 @@ export function updateBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS,
             });
-
             const token = getState().authentication.token;
             dispatch({
                 type: types.UPDATE_BUSINESS,
                 business: business,
                 token: token
             });
-
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
@@ -390,8 +389,7 @@ export function setBusinessQrCode(business) {
             dispatch({
                 type: actions.REST_BUSINESS_QRCODE,
             });
-
-            if(business.qrcode) {
+            if (business.qrcode) {
                 let response = await imageApi.getQrCodeImage(business.qrcode, token);
                 dispatch({
                     type: actions.UPSERT_BUSINESS_QRCODE,

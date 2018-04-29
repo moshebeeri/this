@@ -14,6 +14,7 @@ import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
 import asyncListener from "../api/AsyncListeners";
+
 let feedApi = new FeedApi();
 let userApi = new UserApi();
 let promotionApi = new PtomotionApi();
@@ -98,8 +99,8 @@ export function like(id) {
                 id: id
             });
             await userApi.like(id, token);
-            asyncListener.syncChange('social_'+id,'like' )
-            if(getState().instances.instances[id] &&  getState().instances.instances[id].promotion) {
+            asyncListener.syncChange('social_' + id, 'like')
+            if (getState().instances.instances[id] && getState().instances.instances[id].promotion) {
                 asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'like');
             }
             handler.handleSuccses(getState(), dispatch)
@@ -151,7 +152,7 @@ export function updateFeed(item) {
     }
 }
 
-export function updateSavedInstance(item){
+export function updateSavedInstance(item) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
@@ -166,8 +167,6 @@ export function updateSavedInstance(item){
             logger.actionFailed('getFeedSocialState')
         }
     }
-
-
 }
 
 async function refreshFeedSocialState(state, dispatch, token, id) {
@@ -190,14 +189,13 @@ export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token
-
             dispatch({
                 type: actions.UNLIKE,
                 id: id
             });
             await userApi.unlike(id, token);
-            asyncListener.syncChange('social_'+id,'un-like' )
-            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+            asyncListener.syncChange('social_' + id, 'un-like')
+            if (getState().instances.instances[id] && getState().instances.instances[id].promotion) {
                 asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'un-like');
             }
             handler.handleSuccses(getState(), dispatch)
@@ -213,10 +211,9 @@ export function saveFeed(id,) {
         try {
             // prevent user from saving twice the same instance
             let instance = getState().instances.instances[id];
-            if(instance && instance.social_state.saved){
+            if (instance && instance.social_state.saved) {
                 return;
             }
-
             dispatch({
                 type: actions.SAVE,
                 id: id
@@ -227,8 +224,8 @@ export function saveFeed(id,) {
                 item: savedInstance,
                 feedId: id
             })
-            asyncListener.syncChange('social_'+id,'save' )
-            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
+            asyncListener.syncChange('social_' + id, 'save')
+            if (getState().instances.instances[id] && getState().instances.instances[id].promotion) {
                 asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'save');
             }
             handler.handleSuccses(getState(), dispatch)
@@ -269,9 +266,7 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
-            asyncListener.syncChange('social_'+id,'share' )
-
-
+            asyncListener.syncChange('social_' + id, 'share')
         } catch (error) {
             handler.handleError(error, dispatch, 'shareActivity')
             logger.actionFailed('shareActivity')
@@ -346,8 +341,6 @@ export function updateSocialState(response, feedId) {
     }
 }
 
-
-
 export function* updateFeeds(feeds) {
     if (feeds) {
         let collectionDispatcher = new CollectionDispatcher();
@@ -370,6 +363,43 @@ export function* updateFeeds(feeds) {
     }
 }
 
+export function* updateFollowers(feeds) {
+    if (feeds) {
+        let feedsObjects = Object.values(feeds);
+        let feed;
+        while (feed = feedsObjects.pop()) {
+            switch (feed.activity.action) {
+                case 'created':
+                    if (feed.activity.business.social_state.follow) {
+                        yield put({
+                            type: actions.USER_FOLLOW_BUSINESS,
+                            id: feed.activity.business._id
+                        })
+                    } else {
+                        yield put({
+                            type: actions.USER_UNFOLLOW_BUSINESS,
+                            id: feed.activity.business._id
+                        })
+                    }
+                    break;
+                case 'eligible':
+                    if (feed.activity.actor_business.social_state.follow) {
+                        yield put({
+                            type: actions.USER_FOLLOW_BUSINESS,
+                            id: feed.activity.actor_business._id
+                        })
+                    } else {
+                        yield put({
+                            type: actions.USER_UNFOLLOW_BUSINESS,
+                            id: feed.activity.actor_business._id
+                        })
+                    }
+                    break;
+            }
+        }
+    }
+}
+
 export function setSavedInstance(response) {
     return {
         type: actions.UPSERT_SAVED_FEEDS,
@@ -380,6 +410,9 @@ export function setSavedInstance(response) {
 export function* updateFeedsTop(feeds) {
     if (feeds) {
         let collectionDispatcher = new CollectionDispatcher();
+        feeds.forEach(feed => {
+            console.log(feed);
+        })
         let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
         let keys = Object.keys(collectionDispatcher.events);
         let eventType;
@@ -398,16 +431,14 @@ export function* updateFeedsTop(feeds) {
     }
 }
 
-
 export function setVisibleItem(itemId) {
     return function (dispatch) {
         dispatch({
             type: actions.VISIBLE_MAIN_FEED,
-            feedId:itemId
+            feedId: itemId
         });
     }
 }
-
 
 export default {
     nextLoad,

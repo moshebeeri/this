@@ -298,6 +298,7 @@ const il = {
     businessFollow                                : "   {0} עוקב אחרי העסק  ",
     eligibleForNewPromotion                       : "זכאות להנחה נוספת ",
     clickToEnlarge                                : "לחץ להגדיל",
+    followBusiness                                : "עקוב אחרי העסק",
 
 
 };

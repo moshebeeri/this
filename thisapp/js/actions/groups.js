@@ -187,14 +187,12 @@ export function setGroupQrCode(group) {
 export function updateGroup(group, navigation) {
     return async function (dispatch, getState) {
         try {
-            dispatch({
-                type: actions.GROUP_SAVING,
-            });
+
             const token = getState().authentication.token;
-            await groupsApi.updateGroup(group, token);
-            await getAll(dispatch, token);
             dispatch({
-                type: actions.GROUP_SAVING_DONE,
+                type: types.UPDATE_GROUPS_REQUEST,
+                group: group,
+                token: token
             });
             navigation.goBack();
         } catch (error) {
@@ -651,7 +649,42 @@ export function* updateFeedsTop(feeds, group, user) {
         asyncListener.syncChange('group_' + groupId, 'addActivity');
     }
 }
-
+export function* updateFollowers(feeds) {
+    if (feeds) {
+        let feedsObjects = Object.values(feeds);
+        let feed;
+        while (feed = feedsObjects.pop()) {
+            switch (feed.activity.action) {
+                case 'created':
+                    if (feed.activity.business.social_state.follow) {
+                        yield put({
+                            type: actions.USER_FOLLOW_BUSINESS,
+                            id: feed.activity.business._id
+                        })
+                    } else {
+                        yield put({
+                            type: actions.USER_UNFOLLOW_BUSINESS,
+                            id: feed.activity.business._id
+                        })
+                    }
+                    break;
+                case 'eligible':
+                    if (feed.activity.actor_business.social_state.follow) {
+                        yield put({
+                            type: actions.USER_FOLLOW_BUSINESS,
+                            id: feed.activity.actor_business._id
+                        })
+                    } else {
+                        yield put({
+                            type: actions.USER_UNFOLLOW_BUSINESS,
+                            id: feed.activity.actor_business._id
+                        })
+                    }
+                    break;
+            }
+        }
+    }
+}
 export function updateSavedInstance(item) {
     return async function (dispatch, getState) {
         try {
