@@ -18,7 +18,7 @@ export default class GroupHeader extends Component {
         if (group.pictures && group.pictures.length > 0) {
             if (group.pictures[group.pictures.length - 1].pictures[3]) {
                 return <ImageController thumbnail size={StyleUtils.scale(50)}
-                                        source={{uri: group.pictures[0].pictures[3]}}/>
+                                        source={{uri: group.pictures[group.pictures.length - 1].pictures[3]}}/>
             }
         } else {
             if (group.entity && group.entity.business) {

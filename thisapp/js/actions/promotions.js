@@ -6,7 +6,7 @@ import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import PromotionComperator from "../reduxComperators/PromotionComperator"
 import * as types from '../saga/sagaActions';
-
+import SyncerUtils from "../sync/SyncerUtils";
 let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();
 let feedApi = new FeedApi();
@@ -251,4 +251,13 @@ export function setSinglePromotion(response, businessId, item) {
 }
 
 
+
+export function* setPromotionListener(promotion) {
+    yield put({
+        type: actions.PROMOTION_LISTENER,
+        id: promotion._id
+    });
+    SyncerUtils.syncPromotion(promotion._id);
+
+}
 

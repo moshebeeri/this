@@ -28,7 +28,7 @@ module.exports = {
         borderBottomRightRadius:8,
         paddingRight:4,
         paddingLeft:4,
-
+        maxWidth:width  -50,
 
         backgroundColor:'white',
     },
@@ -60,6 +60,7 @@ module.exports = {
         backgroundColor:'transparent',
         margin:8,
         marginTop:4,
+
         justifyContent: 'flex-start',
         borderRadius:5,
     },

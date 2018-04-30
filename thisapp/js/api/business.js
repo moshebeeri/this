@@ -85,7 +85,7 @@ class BusinessApi {
     }
 
     unFollowBusiness(businessId, token) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/users/follow//${businessId}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/follow/${businessId}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

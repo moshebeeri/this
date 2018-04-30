@@ -41,6 +41,11 @@ class BusinessHeader extends Component {
         this.props.actions.unFollowBusiness(business._id);
     }
 
+    followBusiness() {
+        const {business} = this.props;
+        this.props.actions.followBusiness(business._id);
+    }
+
     createBusinessLog() {
         const {businessLogo, small, noProfile, size} = this.props;
         let defaultSize = StyleUtils.scale(40);
@@ -89,6 +94,20 @@ class BusinessHeader extends Component {
         this.props.navigation.goBack();
     }
 
+    isMyBusiness(){
+        const {businesses,business} = this.props;
+        if(businesses.myBusinesses[business._id]){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    isFollowingBusiness(){
+        const {following,business} = this.props;
+        return following.followBusiness.includes(business._id);
+    }
     render() {
         const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu,heaedrSize} = this.props;
         let nameTextStyle = styles.businessNameText;
@@ -115,9 +134,12 @@ class BusinessHeader extends Component {
                 <Icon2 style={{color: 'white', paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
-                <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
+                {!this.isMyBusiness() && this.isFollowingBusiness() && <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
                     <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.UnFollow}</ThisText>
-                </MenuOption>
+                </MenuOption>}
+                {!this.isMyBusiness() && !this.isFollowingBusiness() && <MenuOption onSelect={this.followBusiness.bind(this)}>
+                    <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.followBusiness}</ThisText>
+                </MenuOption>}
                 {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
                     <ThisText style={{padding: 10, paddingTop: 5}}>{strings.reportActivity}</ThisText>
                 </MenuOption>}
@@ -133,9 +155,7 @@ class BusinessHeader extends Component {
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
                         <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.assignQrCode}</ThisText>
                     </MenuOption>
-                    <MenuOption onSelect={this.showBusinessAccountDetails.bind(this)}>
-                        <ThisText style={{padding: 10, paddingTop: 5}}>{strings.accountDetail}</ThisText>
-                    </MenuOption>
+
                 </MenuOptions>
             </Menu>
         }
@@ -198,6 +218,7 @@ class BusinessHeader extends Component {
 export default connect(
     state => ({
         businesses: state.businesses,
+        following: state.following,
     }),
     dispatch => ({
         actions: bindActionCreators(businessActions, dispatch)

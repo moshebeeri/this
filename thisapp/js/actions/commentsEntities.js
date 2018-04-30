@@ -5,7 +5,7 @@ import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects';
 import SyncUtils from "../sync/SyncerUtils";
-import asyncListener from "../api/AsyncListeners";
+
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
 
@@ -59,18 +59,12 @@ export function sendMessage(entities, generalId, message) {
         try {
             await commentsApi.createGlobalComment(entities, message, token)
             let messageItem = createMessage(message, user);
-            SyncUtils.addInstanceChatSync(dispatch,getState(),generalId);
             dispatch({
                 type: actions.ENTITIES_COMMENT_INSTANCE_ADD_MESSAGE,
                 generalId: generalId,
                 message: messageItem
             });
-            asyncListener.syncChange('social_'+generalId,"addComment" )
-            asyncListener.syncChange('instanceMessage_'+generalId,message )
-
-            if(getState().instances.instances[generalId]  &&  getState().instances.instances[generalId].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[generalId].promotion, 'add-comment');
-            }
+            SyncUtils.invokeEntityCommentSendEvent(generalId, message, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'createGlobalComment')
@@ -96,15 +90,14 @@ export function setNextFeeds(entities, generalId) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            if (!user){
+            if (!user) {
                 dispatch({
                     type: actions.ENTITIES_COMMENT_LOADING_DONE,
-                        loadingDone: true,
+                    loadingDone: true,
                     generalId: generalId
                 })
                 return;
             }
-
             const comments = getState().entityComments.entityCommentsOrder[generalId];
             if (comments && getState().entityComments.maxLoadingDone[generalId] && comments.length > 0) {
                 dispatch({
@@ -132,7 +125,7 @@ export function setNextFeeds(entities, generalId) {
 export function* updateChatScrollUp(response, generalId) {
     if (response.length > 0) {
         while (item = response.pop()) {
-            if(item) {
+            if (item) {
                 yield put({
                     type: actions.UPSERT_ENTITIES_COMMENT,
                     item: item,
@@ -150,7 +143,7 @@ export function* updateChatScrollUp(response, generalId) {
 export function* updateChatTop(response, generalId,) {
     if (response.length > 0) {
         while (item = response.pop()) {
-            if(item) {
+            if (item) {
                 yield put({
                     type: actions.UPSERT_ENTITIES_TOP_COMMENT,
                     item: item,

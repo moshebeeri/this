@@ -28,7 +28,6 @@ class Feed extends Component {
         if (!feeds || feeds.length === 0) {
             actions.setNextFeeds(feeds);
         }
-        actions.setTopFeeds();
         this.props.userActions.fetchUsersFollowers();
     }
 

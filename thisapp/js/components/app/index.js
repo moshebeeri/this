@@ -180,9 +180,8 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        const {feedAction, instanceGroupCommentsAction} = this.props;
-        feedAction.stopMainFeedsListener();
-        dataSync.syncData();
+
+
     }
 
     openDrawer() {

@@ -25,10 +25,10 @@ function doNavigation(navigation,route,params){
 
 }
 
-function doAction(action){
+function doAction(action,params){
     if (debounceAction) {
         debounceAction = false;
-        action()
+        action(params)
         setTimeout(() => {
             debounceAction = true;
         }, 2000);

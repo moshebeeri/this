@@ -50,11 +50,12 @@ export default class GroupsList extends Component {
                         <View
                             style={{
                                 flex: 1,
-                                marginTop: 10,
+                                marginTop:-20,
                                 marginLeft: 20,
-                                height: 50,
+
+
                                 flexDirection: 'row',
-                                width: 120,
+
                                 alignItems: 'center',
                             }}>
                             <SubmitButton color='#2db6c8' title={strings.Join}

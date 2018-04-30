@@ -9,17 +9,18 @@ import imageApi from "../api/image";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
+import SyncerUtils from "../sync/SyncerUtils";
 import FormUtils from "../utils/fromUtils";
 import handler from './ErrorHandler'
 import BusinessComperator from "../reduxComperators/BusinessComperator"
 import * as errors from '../api/Errors'
 import ActionLogger from './ActionLogger'
 import * as types from '../saga/sagaActions';
+import {put} from 'redux-saga/effects'
 
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
-
 let promotionApi = new PromotionApi();
 let entityUtils = new EntityUtils();
 let pricingApi = new PricingApi();
@@ -44,7 +45,7 @@ async function get(dispatch, token, id) {
 
 async function getBusinessCategories(dispatch, gid, token) {
     try {
-        if(gid) {
+        if (gid) {
             let response = await businessApi.getBusinessCategories(gid, token);
             dispatch({
                 type: actions.SET_BUSINESS_CATEGORIES,
@@ -95,7 +96,7 @@ async function dispatchFollowByQrcode(dispatch, barcode, token) {
 }
 
 export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
-    return async function (dispatch,getState) {
+    return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
@@ -125,7 +126,7 @@ export function searchUserBusinessesByPhoneNumber(phoneNumber, navigation) {
                 type: actions.USER_BUSINESS_BY_PHONE_SHOW_SPINNER,
                 show: false,
             });
-            handler.handleSuccses(getState(),dispatch);
+            handler.handleSuccses(getState(), dispatch);
             //navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'UserBusinessesByPhoneNumber');
@@ -175,6 +176,7 @@ export function followBusiness(businessId) {
             const token = getState().authentication.token;
             await businessApi.followBusiness(businessId, token);
             dispatch({type: actions.RESET_FOLLOW_FORM})
+            dispatch({type: actions.USER_FOLLOW_BUSINESS, id: businessId});
         } catch (error) {
             handler.handleError(error, dispatch, 'followBusiness')
             await logger.actionFailed("business_followBusiness", businessId)
@@ -187,6 +189,7 @@ export function unFollowBusiness(businessId) {
         try {
             const token = getState().authentication.token;
             await businessApi.unFollowBusiness(businessId, token);
+            dispatch({type: actions.USER_UNFOLLOW_BUSINESS, id: businessId});
         } catch (error) {
             handler.handleError(error, dispatch, 'unFollowBusiness')
             await logger.actionFailed("business_followBusiness", businessId)
@@ -277,6 +280,15 @@ export function setBusinessPromotions(businessId) {
                     businessId: businessId
                 });
             }
+            let values = Object.values(promotions);
+            let promotion;
+            while (promotion = values.pop()) {
+                dispatch({
+                    type: actions.PROMOTION_LISTENER,
+                    id: promotion._id
+                });
+                SyncerUtils.syncPromotion(promotion._id);
+            }
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessPromotions')
             dispatch({
@@ -352,14 +364,12 @@ export function updateBusiness(business, navigation) {
             dispatch({
                 type: actions.SAVING_BUSINESS,
             });
-
             const token = getState().authentication.token;
             dispatch({
                 type: types.UPDATE_BUSINESS,
                 business: business,
                 token: token
             });
-
             dispatch({
                 type: actions.SAVING_BUSINESS_DONE,
             });
@@ -390,8 +400,7 @@ export function setBusinessQrCode(business) {
             dispatch({
                 type: actions.REST_BUSINESS_QRCODE,
             });
-
-            if(business.qrcode) {
+            if (business.qrcode) {
                 let response = await imageApi.getQrCodeImage(business.qrcode, token);
                 dispatch({
                     type: actions.UPSERT_BUSINESS_QRCODE,
@@ -518,13 +527,27 @@ async function getAll(dispatch, token) {
     })
 }
 
-export function updateBusinesses(response) {
+export function* updateBusinesses(response) {
     if (response.length > 0) {
         if (businessComperator.shouldUpdateBusinesses(response)) {
-            return {
+            yield put({
                 type: actions.UPSERT_MY_BUSINESS,
                 item: response
-            }
+            });
+        }
+    }
+}
+
+export function* updateBusinessesListeners(response) {
+    if (response.length > 0) {
+        let values = Object.values(response);
+        let business;
+        while (business = values.pop()) {
+            yield put({
+                type: actions.BUSINESS_LISTENER,
+                id: business.business._id
+            });
+            SyncerUtils.addMyBusinessSync(business.business._id);
         }
     }
 }
@@ -590,11 +613,19 @@ export function clearUserBusinessByPhoneForm() {
     };
 }
 
-export function setBusiness(createdBusiness) {
-    return {
+export function* setBusiness(createdBusiness) {
+    yield put({
         type: actions.UPSERT_MY_BUSINESS_SINGLE,
         item: {business: createdBusiness}
-    }
+    });
+}
+
+export function* setBusinessListener(createdBusiness) {
+    yield put({
+        type: actions.BUSINESS_LISTENER,
+        id: createdBusiness._id
+    });
+    SyncerUtils.addMyBusinessSync(createdBusiness._id);
 }
 
 export default {

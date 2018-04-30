@@ -24,11 +24,12 @@ class DataSync {
 
     initDataLysteners() {
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
-        this.syncGroups(store.getState().groups.groups, store.getState(), store.dispatch, store.getState().user.user);
-        this.syncMyBusinesses(store.getState().businesses.myBusinesses, store.getState(), store.dispatch);
-        this.syncBusinesses(store.getState().businesses.businesses, store.getState(), store.dispatch);
-        this.syncInstances(store.getState().instances.instances, store.getState(), store.dispatch);
-        this.syncPromotions(store.getState().promotions.promotions, store.getState(), store.dispatch);
+        this.syncGroups(store.getState().syncServer.groups);
+        this.syncMyBusinesses(store.getState().syncServer.businesses);
+        this.syncSocialState(store.getState().syncServer.socialState,);
+        this.syncPromotions(store.getState().syncServer.promotions);
+        this.syncChats(store.getState().syncServer.chats);
+        this.syncChatsGroupInstances(store.getState().syncServer.chatsGroupInstance);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
     }
 
@@ -95,135 +96,59 @@ class DataSync {
         }
     }
 
-    syncPromotions(promotions, state, dispatch) {
+    syncPromotions(promotions) {
         if (Object.values(promotions)) {
             Object.values(promotions).forEach(promotion => {
-                    asyncListener.addListener('promotion_' + promotion._id, (snap) => {
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            let promotionId = snap.key.substring('promotion_'.length);
-                            const token = state.authentication.token;
-                            let promotion = state.promotions.promotions[promotionId];
-                            if (promotion) {
-                                let businessId = promotion.entity.business;
-                                if (state.businesses.myBusinesses[businessId]) {
-                                    dispatch({
-                                        type: types.UPDATE_PROMOTION,
-                                        token: token,
-                                        id: promotionId,
-                                        businessId: businessId,
-                                        item: promotion
-                                    });
-                                }
-                            }
-                            asyncListener.markAsRead(snap.key);
-                        }
-                    })
+                    SyncUtils.syncPromotion( promotion);
                 }
             )
         }
     }
 
-    syncMyBusinesses(businesses, state, dispatch) {
+    syncMyBusinesses(businesses) {
         if (Object.values(businesses)) {
             Object.values(businesses).forEach(business => {
-                    SyncUtils.addMyBusinessSync(dispatch, state, business.business._id);
-                }
-            )
-        }
-    }
-    syncBusinesses(businesses, state, dispatch) {
-        if (Object.values(businesses)) {
-            Object.values(businesses).forEach(business => {
-                    SyncUtils.addBusinessSync(dispatch, state, business._id);
+                    SyncUtils.addMyBusinessSync(business);
                 }
             )
         }
     }
 
-    syncInstances(instances, state, dispatch) {
-        if (Object.values(instances)) {
-            Object.values(instances).forEach(instance => {
-                    // sync social
-                    asyncListener.addListener('social_' + instance._id, (snap) => {
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            let instanceId = snap.key.substring('social_'.length);
-                            const token = state.authentication.token;
-                            let feedInstance = state.instances.instances[instanceId];
-                            dispatch({
-                                type: types.FEED_SET_SOCIAL_STATE,
-                                token: token,
-                                feed: feedInstance,
-                                id: instanceId
-                            });
-                            asyncListener.markAsRead(snap.key);
-                        }
-                    })
-                    asyncListener.addListener('Redeem' + instance._id, (snap) => {
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            let instanceId = snap.key.substring('Redeem'.length);
-                            const token = state.authentication.token;
-                            let feedInstance = state.instances.instances[instanceId];
-                            dispatch({
-                                type: types.FEED_SET_SOCIAL_STATE,
-                                token: token,
-                                feed: feedInstance,
-                                id: instanceId
-                            });
-                            asyncListener.markAsRead(snap.key);
-                        }
-                    })
-                    SyncUtils.addInstanceChatSync(dispatch, state, instance._id);
+    syncSocialState(entities) {
+        if (Object.values(entities)) {
+            Object.values(entities).forEach(entity => {
+                    SyncUtils.syncSocialState( entity);
                 }
             )
         }
     }
 
-    syncGroups(groups, state, dispatch, user) {
+    syncGroups(groups) {
         if (Object.values(groups)) {
-            Object.values(groups).forEach(group => {
+            Object.values(groups).forEach(groupId => {
                     //sync group chat
-                    SyncUtils.addGroupChatSync(dispatch, state, group._id);
-                    //sync group view
-                    asyncListener.addListener('user_follow_group_' + group._id, (snap) => {
-                        // TODO use get by group
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            let groupId = snap.key.substring('group_'.length);
-                            const token = state.authentication.token;
-                            dispatch({
-                                type: types.SAVE_GROUPS_REQUEST,
-                                token: token,
-                            });
-                            asyncListener.markAsRead(snap.key);
-                        }
-                    })
-                    //sync group main feeds
-                    asyncListener.addListener('feed_' + group._id, (snap) => {
-                        let response = snap.val();
-                        if (response && !response.markAsRead) {
-                            const feedOrder = state.groups.groupFeedOrder[group._id];
-                            const token = state.authentication.token;
-                            if (feedOrder) {
-                                if (feedOrder && feedOrder.length > 0) {
-                                    dispatch({
-                                        type: types.GROUP_FEED_SET_TOP_FEED,
-                                        lastId: feedOrder[0],
-                                        group: group,
-                                        token: token,
-                                        user: user,
-                                    });
-                                    dispatch({
-                                        type: types.SAVE_GROUPS_REQUEST,
-                                        token: token,
-                                    });
-                                }
-                            }
-                            asyncListener.markAsRead(snap.key);
-                        }
-                    })
+                    SyncUtils.syncGroup( groupId);
+                }
+            )
+        }
+    }
+
+    syncChats(chats) {
+        if (Object.values(chats)) {
+            Object.keys(chats).forEach(chatId => {
+                    //sync group chat
+                    SyncUtils.addChatSync(chatId,chats[chatId]);
+                }
+            )
+        }
+    }
+
+    syncChatsGroupInstances(chats) {
+        if (Object.keys(chats)) {
+            Object.keys(chats).forEach(groupId => {
+                    let generalId = chats[groupId];
+                    //sync group chat
+                    SyncUtils.addChatGroupEntitySync(groupId,generalId);
                 }
             )
         }

@@ -164,6 +164,8 @@ class BusinessProfile extends Component {
         let businessView = this.props.navigation.state.params.fromBusiness;
         let address = business.city + ' ' + business.address
         const banner = this.createBannerTag(business, businessView);
+        let qrCodeString = this.state.codeFullSize ? strings.ScanToFollow : strings.clickToEnlarge;
+
         return ( <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
                 <View style={{flex: 1, backgroundColor: 'white'}}>
 
@@ -190,7 +192,7 @@ class BusinessProfile extends Component {
                                         source={{uri: business.qrcodeSource}}>
 
                                     </Image>
-                                    <ThisText style={this.state.codeTextStyle}>{strings.ScanToFollow}</ThisText>
+                                    <ThisText style={this.state.codeTextStyle}>{qrCodeString}</ThisText>
                                 </TouchableOpacity>
                                 }
                                 {lastBusinessQrCode && !business.qrcodeSource &&
@@ -205,7 +207,7 @@ class BusinessProfile extends Component {
                                     <ThisText style={{
                                         fontSize: 20,
 
-                                    }}>{strings.ScanToFollow}</ThisText>
+                                    }}>{qrCodeString}</ThisText>
                                 </TouchableOpacity>
                                 }
                             </View>

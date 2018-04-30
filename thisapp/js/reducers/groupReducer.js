@@ -11,6 +11,7 @@ const initialState = {
     lastGroupQrcode: '',
     visibleGroup: '',
     visibleFeeds: [],
+    maxFeedReturned: {},
     touch: false,
     saving: false
 };
@@ -153,16 +154,20 @@ export default function group(state = initialState, action) {
             );
             if (idIndex === 0) {
                 visitedFeeds.push(immutableState.groupFeedOrder[action.groupId][0]);
-
             } else {
                 visitedFeeds.push(immutableState.groupFeedOrder[action.groupId][idIndex - 1]);
                 visitedFeeds.push(immutableState.groupFeedOrder[action.groupId][idIndex]);
-
             }
             return {
                 ...state,
                 visibleFeeds: visitedFeeds,
             };
+        case actions.MAX_GROUP_FEED_RETUNED:
+            immutableState.maxFeedReturned[action.group] = true;
+            return immutableState;
+        case actions.MAX_GROUP_FEED_NOT_RETUNED:
+            immutableState.maxFeedReturned[action.group] = false;
+            return immutableState;
         default:
             return state;
     }

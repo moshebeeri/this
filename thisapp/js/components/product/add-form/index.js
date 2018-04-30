@@ -147,13 +147,13 @@ class AddProduct extends Component {
         const {saving} = this.props;
         if (this.state.coverImage) {
             let coverImage = <Image
-                style={{width: width - 10, height: StyleUtils.relativeHeight(30, 30), borderWidth: 1, borderColor: 'white'}}
+                style={{width: StyleUtils.relativeHeight(30, 30) -10, height: StyleUtils.relativeHeight(30, 30) -10,}}
                 source={{uri: this.state.coverImage.path}}/>;
             return <View style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
 
                 <View style={styles.cmeraLogoContainer}>
                     <View style={styles.addCoverContainer}>
-                        <ImagePicker ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
+                        <ImagePicker logo ref={"coverImage"} mandatory image={coverImage} color='white' pickFromCamera
                                      setImage={this.setCoverImage.bind(this)}/>
                         {saving && <Spinner/>}
                     </View>
@@ -172,10 +172,10 @@ class AddProduct extends Component {
                                      triggerWrapper: {
                                          alignItems: 'center',
                                          justifyContent: 'center',
-                                         width: StyleUtils.getWidth(),
+                                         width:StyleUtils.relativeHeight(30, 30),
                                          height: StyleUtils.relativeHeight(30, 30),
                                      }
-                                 }} mandatory color='white' pickFromCamera
+                                 }} logo mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
                 </View>
             </View>

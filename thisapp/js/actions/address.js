@@ -4,7 +4,7 @@ let businessApi = new BusinessApi();
 import ActionLogger from './ActionLogger'
 let logger = new ActionLogger();
 import strings from "../i18n/i18n"
-export function validateAddress(address,onValid) {
+export function validateAddress(address,onValid,setForm) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
@@ -36,12 +36,16 @@ export function validateAddress(address,onValid) {
                     lng: response.lng
                 }
             });
+
             if(onValid){
                 address.location = {
                     lat: response.lat,
                     lng: response.lng
                 }
-                onValid(address);
+
+                setForm(onValid)
+            }else{
+                setForm()
             }
         }catch (error){
             await logger.actionFailed('business_checkAddress');

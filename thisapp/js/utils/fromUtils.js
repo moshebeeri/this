@@ -123,6 +123,9 @@ const convertDaysNumToString = (days) => {
 const secondsFromMidnightToString = (seconds) => {
     let d = new Date();
     let hours = Math.round(seconds / 3600);
+    if( hours * 3600 > seconds ){
+        hours = hours -1;
+    }
     let m = Math.round((seconds - ( hours * 3600) ) / 60);
     let hourString = hours
     if (hours < 10) {
@@ -131,6 +134,10 @@ const secondsFromMidnightToString = (seconds) => {
     let stringMinutes = m;
     if (m < 10) {
         stringMinutes = "0" + stringMinutes;
+    }
+
+    if(hourString > 24){
+        hourString = hourString - 24;
     }
     return hourString + ":" + stringMinutes
 }

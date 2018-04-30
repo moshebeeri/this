@@ -2,6 +2,7 @@ const React = require('react-native');
 import styleUtils from '../../utils/styleUtils'
 
 module.exports = {
+
     punch: {
         width: styleUtils.scale(50),
         height: styleUtils.scale(50),
@@ -15,16 +16,17 @@ module.exports = {
         alignItems:'center',justifyContent:'center',
     },
     punchFeed: {
-        width: 60,
-        height: 60,
+        width: styleUtils.scale(50),
+        height: styleUtils.scale(50),
         backgroundColor: 'white',
-        borderRadius: 40,
+        borderRadius: styleUtils.scale(40),
         borderWidth: 1,
 
         borderColor: '#2db6c8',
-        marginRight: 10,
-        marginLeft: 10,
+        marginRight: styleUtils.scale(10),
+        marginLeft: styleUtils.scale(10),
         alignItems:'center',justifyContent:'center',
+
     },
     punchFeedFull: {
         width: styleUtils.scale(50),

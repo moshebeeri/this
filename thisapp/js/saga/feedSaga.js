@@ -12,7 +12,9 @@ import {
     stopScrolling,
     updateFeeds,
     updateFeedsTop,
-    updateSocialState
+    updateSocialState,
+    updateFollowers,
+    updateFeedsListeners
 } from "../actions/feedsMain";
 import {handleSucsess} from './SagaSuccsesHandler'
 import * as sagaActions from './sagaActions'
@@ -42,43 +44,14 @@ function* feedScrollDown(action) {
             yield put(stopScrolling());
         }
         yield* updateFeeds(response);
+        yield* updateFollowers(response);
+        yield* updateFeedsListeners(response);
+
     } catch (error) {
         console.log("failed scroll down");
     }
 }
 
-function* backgroundTask(token, lastId, user) {
-    try {
-        let id = lastId;
-        let delayTime = 1000;
-        while (true) {
-            if (delayTime > 60000) {
-                delayTime = 60000;
-            }
-            yield call(delay, delayTime);
-            console.log('calling feeds fetch ' + lastId);
-            let response = yield call(feedApi.getAll, 'up', id, token, user);
-            handleSucsess();
-            if (response.length > 0) {
-                yield* updateFeedsTop(response);
-                id = response[response.length - 1]._id;
-            }
-            delayTime = delayTime * 1.5
-        }
-    } catch (error) {
-        console.log("failed groups comment request");
-    }
-}
-
-function* watchStartBackgroundTask() {
-    while (true) {
-        const {token, user, id} = yield take(sagaActions.LISTEN_FOR_MAIN_FEED);
-        yield race({
-            task: call(backgroundTask, token, id, user),
-            cancel: take(sagaActions.CANCEL_MAIN_FEED_LISTENER)
-        })
-    }
-}
 
 function* setTopFeeds(action) {
     try {
@@ -86,6 +59,9 @@ function* setTopFeeds(action) {
         handleSucsess();
         if (response.length > 0) {
             yield* updateFeedsTop(response);
+            yield* updateFollowers(response);
+            yield* updateFeedsListeners(response);
+
         }
     } catch (error) {
         console.log("failed to update social state");
