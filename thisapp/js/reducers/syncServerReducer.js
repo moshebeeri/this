@@ -23,6 +23,11 @@ export default function syncServer(state = initialState, action) {
                 syncServerState.groups.push(action.id);
             }
             return syncServerState;
+        case actions.PROMOTION_LISTENER:
+            if (!syncServerState.promotions.includes(action.id)) {
+                syncServerState.promotions.push(action.id);
+            }
+            return syncServerState;
         case actions.BUSINESS_LISTENER:
             if (!syncServerState.businesses.includes(action.id)) {
                 syncServerState.businesses.push(action.id);

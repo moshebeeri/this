@@ -198,8 +198,8 @@ function invokeEntityCommentSendEvent(generalId, message, state) {
 
 function invokeSocialChange(generalId, state) {
     asyncListener.syncChange('social_' + generalId, "addComment");
-    if (state.instances.instances[id] && state.instances.instances[id].promotion) {
-        asyncListener.syncChange('promotion_' + state.instances.instances[id].promotion, 'like');
+    if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
+        asyncListener.syncChange('promotion_' + state.instances.instances[generalId].promotion, 'like');
     }
 }
 

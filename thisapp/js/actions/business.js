@@ -17,6 +17,7 @@ import * as errors from '../api/Errors'
 import ActionLogger from './ActionLogger'
 import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
+
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
@@ -279,6 +280,15 @@ export function setBusinessPromotions(businessId) {
                     businessId: businessId
                 });
             }
+            let values = Object.values(promotions);
+            let promotion;
+            while (promotion = values.pop()) {
+                dispatch({
+                    type: actions.PROMOTION_LISTENER,
+                    id: promotion._id
+                });
+                SyncerUtils.syncPromotion(promotion._id);
+            }
         } catch (error) {
             handler.handleError(error, dispatch, 'setBusinessPromotions')
             dispatch({
@@ -518,7 +528,6 @@ async function getAll(dispatch, token) {
 }
 
 export function* updateBusinesses(response) {
-
     if (response.length > 0) {
         if (businessComperator.shouldUpdateBusinesses(response)) {
             yield put({
@@ -530,7 +539,6 @@ export function* updateBusinesses(response) {
 }
 
 export function* updateBusinessesListeners(response) {
-
     if (response.length > 0) {
         let values = Object.values(response);
         let business;
@@ -612,16 +620,13 @@ export function* setBusiness(createdBusiness) {
     });
 }
 
-
 export function* setBusinessListener(createdBusiness) {
     yield put({
         type: actions.BUSINESS_LISTENER,
         id: createdBusiness._id
     });
     SyncerUtils.addMyBusinessSync(createdBusiness._id);
-
 }
-
 
 export default {
     getAll,

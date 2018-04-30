@@ -1,6 +1,6 @@
 import {call, put, throttle} from 'redux-saga/effects'
 import PromotionApi from "../api/promotion";
-import {setPromotion, setSinglePromotion} from "../actions/promotions";
+import {setPromotion, setSinglePromotion,setPromotionListener} from "../actions/promotions";
 import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
 import productApi from "../api/product";
@@ -89,6 +89,8 @@ function* savePromotion(action) {
         if (uploadProductPicture) {
             yield call(ImageApi.uploadImage, action.token, action.promotion.image, promotionProduct._id);
         }
+
+
         if (action.promotion.image) {
             let imageResponse = yield call(ImageApi.uploadImage, action.token, action.promotion.image, 'image');
             tempPromotion.pictures = imageResponse.pictures;
@@ -105,6 +107,8 @@ function* savePromotion(action) {
             createdPromotion.social_state.shares = 0;
             createdPromotion.social_state.realizes = 0;
             yield put(setPromotion(createdPromotion, action.businessId, tempId));
+            yield* setPromotionListener(response);
+
         }
     } catch (error) {
         console.log("failed  updatePromotion");
