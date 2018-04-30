@@ -1,7 +1,7 @@
 import {call, takeLatest, put, throttle} from 'redux-saga/effects'
 import GroupsApi from "../api/groups";
 import ImageApi from "../api/image";
-import {setGroups,setGroup} from "../actions/groups";
+import {setGroups,setGroup,updateGroupsListeners,updateGroupListener} from "../actions/groups";
 import * as sagaActions from './sagaActions'
 import {handleSucsess}from './SagaSuccsesHandler'
 let groupsApi = new GroupsApi();
@@ -11,7 +11,8 @@ function* saveGroupsRequest(action) {
         let response = yield call(groupsApi.getAll, action.token,0, 100);
         handleSucsess();
         if(response.length > 0) {
-            yield put(setGroups(response,action.state,action.dispatch))
+            yield put(setGroups(response));
+            yield* updateGroupsListeners(response);
         }
     } catch (error) {
         console.log("failed saveGroupsRequest");
@@ -48,6 +49,7 @@ function* saveGroup(action) {
             createdGroup.pictures.push({pictures: pictures});
         }
         yield put(setGroup(createdGroup));
+        yield* updateGroupListener(createdGroup);
         if (action.group.image) {
             let response = yield call(ImageApi.uploadImage, action.token, action.group.image, createdGroup._id);
             response.touched = new Date().getTime();

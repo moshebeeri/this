@@ -9,13 +9,14 @@ import imageApi from "../api/image";
 import PromotionApi from "../api/promotion";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
+import SyncerUtils from "../sync/SyncerUtils";
 import FormUtils from "../utils/fromUtils";
 import handler from './ErrorHandler'
 import BusinessComperator from "../reduxComperators/BusinessComperator"
 import * as errors from '../api/Errors'
 import ActionLogger from './ActionLogger'
 import * as types from '../saga/sagaActions';
-
+import {put} from 'redux-saga/effects'
 const BTClient = require('react-native-braintree-xplat');
 let businessApi = new BusinessApi();
 let userApi = new UserApi();
@@ -516,13 +517,29 @@ async function getAll(dispatch, token) {
     })
 }
 
-export function updateBusinesses(response) {
+export function* updateBusinesses(response) {
+
     if (response.length > 0) {
         if (businessComperator.shouldUpdateBusinesses(response)) {
-            return {
+            yield put({
                 type: actions.UPSERT_MY_BUSINESS,
                 item: response
-            }
+            });
+        }
+    }
+}
+
+export function* updateBusinessesListeners(response) {
+
+    if (response.length > 0) {
+        let values = Object.values(response);
+        let business;
+        while (business = values.pop()) {
+            yield put({
+                type: actions.BUSINESS_LISTENER,
+                id: business.business._id
+            });
+            SyncerUtils.addMyBusinessSync(business.business._id);
         }
     }
 }
@@ -588,12 +605,23 @@ export function clearUserBusinessByPhoneForm() {
     };
 }
 
-export function setBusiness(createdBusiness) {
-    return {
+export function* setBusiness(createdBusiness) {
+    yield put({
         type: actions.UPSERT_MY_BUSINESS_SINGLE,
         item: {business: createdBusiness}
-    }
+    });
 }
+
+
+export function* setBusinessListener(createdBusiness) {
+    yield put({
+        type: actions.BUSINESS_LISTENER,
+        id: createdBusiness._id
+    });
+    SyncerUtils.addMyBusinessSync(createdBusiness._id);
+
+}
+
 
 export default {
     getAll,

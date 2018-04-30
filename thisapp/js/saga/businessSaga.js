@@ -9,8 +9,8 @@ import {
 } from "../actions/business";
 import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
-import {handleSucsess}from './SagaSuccsesHandler'
-import sync from "../sync/SyncerUtils";
+import {handleSucsess} from './SagaSuccsesHandler'
+
 let businessApi = new BusinessApi();
 
 function* getAll(action) {
@@ -18,7 +18,8 @@ function* getAll(action) {
         const response = yield call(businessApi.getAll, action.token, true);
         handleSucsess();
         if (response.length > 0) {
-            yield put(updateBusinesses(response))
+            yield* updateBusinesses(response);
+            yield* updateBusinessesListeners(response);
         }
     } catch (error) {
         console.log("failed  updateBusiness")
@@ -29,8 +30,7 @@ function* saveBusiness(action) {
     try {
         let createdBusiness = yield call(businessApi.createBusiness, action.business, action.token, true);
         handleSucsess();
-        if(createdBusiness._id) {
-            sync.addBusinessSync(action.dispatch,action.state,createdBusiness._id);
+        if (createdBusiness._id) {
             createdBusiness.pictures = [];
             let pictures = [];
             if (action.business.image.path) {
@@ -57,7 +57,8 @@ function* saveBusiness(action) {
             createdBusiness.social_state.likes = 0;
             createdBusiness.social_state.shares = 0;
             createdBusiness.social_state.realizes = 0;
-            yield put(setBusiness(createdBusiness));
+            yield* setBusiness(createdBusiness);
+            yield* setBusinessListener(createdBusiness);
             if (action.business.image) {
                 yield call(ImageApi.uploadImage, action.token, action.business.image, createdBusiness._id);
             }
@@ -94,8 +95,7 @@ function* updateBusiness(action) {
             pictures.push(currentPicturePath);
             updatedBusiness.pictures.push({pictures: pictures});
         }
-
-        if(!updatedBusiness.social_state){
+        if (!updatedBusiness.social_state) {
             updatedBusiness.social_state = {};
             updatedBusiness.social_state.saves = 0;
             updatedBusiness.social_state.comments = 0;
@@ -112,7 +112,7 @@ function* updateBusiness(action) {
                 updatedBusiness.logo = action.business.logoImage.uri;
             }
         }
-        yield put(setBusiness(updatedBusiness));
+        yield* setBusiness(createdBusiness);
         if (action.business.image && uploadCoverImage) {
             yield call(ImageApi.uploadImage, action.token, action.business.image, updatedBusiness._id);
         }
@@ -130,7 +130,8 @@ function* updateBusinessFirstTime(action) {
         const response = yield call(businessApi.getAll, action.token, true);
         handleSucsess();
         if (response.length > 0) {
-            yield put(updateBusinesses(response));
+            yield* updateBusinesses(response);
+            yield* updateBusinessesListeners(response);
         }
         yield put(businessLoadingDone());
     } catch (error) {
@@ -143,7 +144,7 @@ function* updateCategory(action) {
     try {
         const response = yield call(businessApi.getSubCategory, action.token, action.business.business.subcategory, action.locale);
         handleSucsess();
-        const locale =  action.locale;
+        const locale = action.locale;
         let category = response[0].translations[locale];
         yield put(setBusinessCategory(category, action.business,));
     } catch (error) {

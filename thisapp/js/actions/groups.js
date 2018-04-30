@@ -8,18 +8,18 @@ import * as assemblers from "./collectionAssembler";
 import * as actions from "../reducers/reducerActions";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
-import GroupsComperator from "../reduxComperators/GroupsComperator"
 import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
 import asyncListener from "../api/AsyncListeners";
+import SyncerUtils from "../sync/SyncerUtils";
+
 let groupsApi = new GroupsApi();
 let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let userApi = new UserApi();
 let logger = new ActionLogger();
-let groupsComperator = new GroupsComperator();
 
 async function getAll(dispatch, token, state) {
     dispatch({
@@ -187,7 +187,6 @@ export function setGroupQrCode(group) {
 export function updateGroup(group, navigation) {
     return async function (dispatch, getState) {
         try {
-
             const token = getState().authentication.token;
             dispatch({
                 type: types.UPDATE_GROUPS_REQUEST,
@@ -209,67 +208,90 @@ function uploadGroupPic() {
     }
 }
 
-export function setNextFeeds(feeds, token, group) {
+export function setNextFeeds(feeds, group) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
-        let showLoadingDone = false;
-        if (_.isEmpty(feeds) && !getState().groups.loadingDone[group._id]) {
-            dispatch({
-                type: actions.GROUP_FEED_LOADING_DONE,
-                loadingDone: false,
-                groupId: group._id,
-            });
-            showLoadingDone = true;
+        const user = getState().user.user;
+        if (getState().groups.maxFeedReturned[group._id]) {
+            return;
         }
-        try {
-            let response = null;
-            if (_.isEmpty(feeds)) {
-                response = await feedApi.getAll('down', 'start', token, group);
-            } else {
-                let keys = Object.keys(feeds);
-                let id = keys[keys.length - 1];
-                if (feeds[id].id === getState().groups.lastFeed[group._id])
-                    return;
-                // make sure we call the server for the same group max 1 time in 10 seconds period
-                if (getState().groups.lastFeedTime[[group._id]]) {
-                    let currentTimeInMils = new Date().getTime();
-                    if (currentTimeInMils - getState().groups.lastFeedTime[[group._id]] < 10000) {
-                        return
-                    }
-                }
-                dispatch({
-                    type: actions.GROUP_LAST_FEED_DOWN,
-                    id: feeds[id].id,
-                    groupId: group._id,
+        dispatch({
+            type: types.GROUP_FEED_SCROLL_DOWN,
+            feeds: feeds,
+            token: token,
+            user: user,
+            group: group,
+        });
+    }
+}
+
+export function* updateFeeds(feeds, group) {
+    if (feeds) {
+        let collectionDispatcher = new CollectionDispatcher();
+        let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
+        let keys = Object.keys(collectionDispatcher.events);
+        let eventType;
+        while (eventType = keys.pop()) {
+            yield put({
+                type: eventType,
+                item: collectionDispatcher.events[eventType]
+            });
+        }
+        yield put({
+            type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
+            groupFeed: disassemblerItems,
+            groupId: group._id
+        })
+    }
+}
+
+export function* updateFeedsListeners(feeds) {
+    if (feeds) {
+        let values = Object.values(feeds);
+        let feed;
+        while (feed = values.pop()) {
+            let id;
+            switch (feed.activity.action) {
+                case 'created':
+                    id = feed.activity.business._id;
+                    break;
+                case 'eligible':
+                    id = feed.activity.instance._id;
+                    break;
+                case 'post':
+                    id = feed.activity.post._id;
+                    break;
+            }
+            if (id) {
+                yield put({
+                    type: actions.SOCIAL_STATE_LISTENER,
+                    id: id
                 });
-                response = await feedApi.getAll('down', feeds[id].id, token, group);
+                SyncerUtils.syncSocialState(id);
             }
-            let collectionDispatcher = new CollectionDispatcher();
-            let disassemblerItems = response.map(item => {
-                if (item.activity && (item.activity.action === 'group_message' || item.activity.action === 'group_follow')) {
-                    return item;
-                }
-                return assemblers.disassembler(item, collectionDispatcher)
-            });
-            if (disassemblerItems && disassemblerItems.length > 0) {
-                collectionDispatcher.dispatchEvents(dispatch);
-                dispatch({
-                    type: actions.UPSERT_GROUP_FEEDS_BOTTOM,
-                    groupId: group._id,
-                    groupFeed: disassemblerItems
-                })
-            }
-        } catch (error) {
-            handler.handleError(error, dispatch, 'groups-setNextFeeds')
-            logger.actionFailed('groups-setNextFeeds')
         }
-        if (showLoadingDone && !getState().groups.loadingDone[group._id]) {
-            dispatch({
-                type: actions.GROUP_FEED_LOADING_DONE,
-                loadingDone: true,
-                groupId: group._id,
-            });
-        }
+    }
+}
+
+export function maxFeedReturned(group) {
+    return {
+        type: actions.MAX_GROUP_FEED_RETUNED,
+        group: group._id
+    }
+}
+
+export function loadingDone(group) {
+    return {
+        type: actions.GROUP_FEED_LOADING_DONE,
+        loadingDone: true,
+        groupId: group._id
+    }
+}
+
+export function maxFeedNotReturned(group) {
+    return {
+        type: actions.MAX_GROUP_FEED_NOT_RETUNED,
+        group: group._id
     }
 }
 
@@ -341,14 +363,7 @@ async function fetchTopList(id, token, group, dispatch, user) {
 }
 
 export function setFeeds(group, feeds) {
-    if (_.isEmpty(feeds)) {
-        return setNextFeeds(feeds, undefined, group)
-    }
-    return async function (dispatch, getState) {
-        const token = getState().authentication.token;
-        const user = getState().user.user;
-        await fetchTopList(feeds[0].id, token, group, dispatch, user)
-    }
+    return setNextFeeds(feeds, group)
 }
 
 export function fetchTop(feeds, token, group) {
@@ -380,12 +395,8 @@ export function like(id) {
                 type: actions.LIKE,
                 id: id
             });
-
             await userApi.like(id, token);
-            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'like');
-            }
-            asyncListener.syncChange('social_'+id,'like' )
+            SyncerUtils.invokeSocialChange(id, getState());
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-like')
             logger.actionFailed('groups-like')
@@ -402,10 +413,7 @@ export const unlike = (id) => {
                 type: actions.UNLIKE,
                 id: id
             });
-            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'un-like');
-            }
-            asyncListener.syncChange('social_'+id,'un-like' )
+            SyncerUtils.invokeSocialChange(id, getState());
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-unlike')
             logger.actionFailed('groups-unlike')
@@ -426,10 +434,7 @@ export function saveFeed(id, navigation, feed) {
                 type: types.SAVE_SINGLE_MYPROMOTIONS_REQUEST,
                 item: savedInstance
             })
-            asyncListener.syncChange('social_'+id,'saved' )
-            if(getState().instances.instances[id]  &&  getState().instances.instances[id].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'save');
-            }
+            SyncerUtils.invokeSocialChange(id, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-saveFeed')
@@ -444,7 +449,7 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
-            asyncListener.syncChange('social_'+id,'shared' )
+            SyncerUtils.invokeSocialChange(id, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'groups-shareActivity')
@@ -482,12 +487,11 @@ export function refresh(id, currentSocialState) {
     }
 }
 
-
 export function inviteUser(userId, groupId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            groupsApi.inviteUser(userId,groupId,token);
+            groupsApi.inviteUser(userId, groupId, token);
             handler.handleSuccses(getState(), dispatch)
             // await userApi.like(id, token);
         } catch (error) {
@@ -519,6 +523,7 @@ export function joinGroup(groupId) {
         try {
             const token = getState().authentication.token;
             await groupsApi.join(groupId, token);
+            SyncerUtils.syncGroup(groupId);
             dispatch({type: actions.RESET_FOLLOW_FORM})
         } catch (error) {
             handler.handleError(error, dispatch, 'joinGroup');
@@ -526,11 +531,33 @@ export function joinGroup(groupId) {
     }
 }
 
-export function setGroups(response, state, dispatch) {
+export function setGroups(response) {
     return {
         type: actions.UPSERT_GROUP,
         item: response,
     }
+}
+
+export function* updateGroupsListeners(response) {
+    if (response.length > 0) {
+        let values = Object.values(response);
+        let group;
+        while (group = values.pop()) {
+            yield put({
+                type: actions.GROUP_LISTENER,
+                id: group._id
+            });
+            SyncerUtils.syncGroup(group._id);
+        }
+    }
+}
+
+export function* updateGroupListener(group) {
+    yield put({
+        type: actions.GROUP_LISTENER,
+        id: group._id
+    });
+    SyncerUtils.syncGroup(group._id);
 }
 
 export function setGroup(response) {
@@ -605,26 +632,6 @@ export function updateFeed(item) {
 
 export function setTopFeeds(group) {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token;
-        const user = getState().user.user;
-        const feedOrder = getState().groups.groupFeedOrder[group._id];
-        if (feedOrder) {
-            if (!user)
-                return;
-            dispatch({
-                type: types.CANCEL_GROUP_FEED_LISTENER,
-            });
-            if (feedOrder && feedOrder.length > 0) {
-                dispatch({
-                    type: types.LISTEN_FOR_GROUP_FEED,
-                    id: feedOrder[0],
-                    group: group,
-                    token: token,
-                    user: user,
-                });
-            }
-            handler.handleSuccses(getState(), dispatch)
-        }
     }
 }
 
@@ -649,6 +656,7 @@ export function* updateFeedsTop(feeds, group, user) {
         asyncListener.syncChange('group_' + groupId, 'addActivity');
     }
 }
+
 export function* updateFollowers(feeds) {
     if (feeds) {
         let feedsObjects = Object.values(feeds);
@@ -685,6 +693,7 @@ export function* updateFollowers(feeds) {
         }
     }
 }
+
 export function updateSavedInstance(item) {
     return async function (dispatch, getState) {
         try {

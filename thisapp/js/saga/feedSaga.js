@@ -13,7 +13,8 @@ import {
     updateFeeds,
     updateFeedsTop,
     updateSocialState,
-    updateFollowers
+    updateFollowers,
+    updateFeedsListeners
 } from "../actions/feedsMain";
 import {handleSucsess} from './SagaSuccsesHandler'
 import * as sagaActions from './sagaActions'
@@ -44,6 +45,7 @@ function* feedScrollDown(action) {
         }
         yield* updateFeeds(response);
         yield* updateFollowers(response);
+        yield* updateFeedsListeners(response);
 
     } catch (error) {
         console.log("failed scroll down");
@@ -58,6 +60,8 @@ function* setTopFeeds(action) {
         if (response.length > 0) {
             yield* updateFeedsTop(response);
             yield* updateFollowers(response);
+            yield* updateFeedsListeners(response);
+
         }
     } catch (error) {
         console.log("failed to update social state");

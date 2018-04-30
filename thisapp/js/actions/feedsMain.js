@@ -9,11 +9,10 @@ import * as actions from "../reducers/reducerActions";
 import * as assemblers from "./collectionAssembler";
 import CollectionDispatcher from "./collectionDispatcher";
 import ActionLogger from './ActionLogger'
-import feedComperator from "../reduxComperators/MainFeedComperator"
 import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
-import asyncListener from "../api/AsyncListeners";
+import SyncerUtils from "../sync/SyncerUtils";
 
 let feedApi = new FeedApi();
 let userApi = new UserApi();
@@ -70,22 +69,6 @@ export function stopMainFeedsListener() {
 
 export function setTopFeeds() {
     return async function (dispatch, getState) {
-        const token = getState().authentication.token;
-        const user = getState().user.user;
-        const feedOrder = getState().feeds.feedView;
-        if (!user)
-            return;
-        dispatch({
-            type: types.CANCEL_MAIN_FEED_LISTENER,
-        });
-        if (feedOrder && feedOrder.length > 0) {
-            dispatch({
-                type: types.LISTEN_FOR_MAIN_FEED,
-                id: feedOrder[0],
-                token: token,
-                user: user,
-            });
-        }
         handler.handleSuccses(getState(), dispatch)
     }
 }
@@ -99,10 +82,7 @@ export function like(id) {
                 id: id
             });
             await userApi.like(id, token);
-            asyncListener.syncChange('social_' + id, 'like')
-            if (getState().instances.instances[id] && getState().instances.instances[id].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'like');
-            }
+            SyncerUtils.invokeSocialChange(id, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'like')
@@ -113,25 +93,6 @@ export function like(id) {
 
 export function refresh(id) {
     return async function (dispatch, getState) {
-    }
-}
-
-export function setSocialState(item) {
-    return async function (dispatch, getState) {
-        try {
-            const token = getState().authentication.token;
-            let feedInstance = getState().instances.instances[item.id];
-            dispatch({
-                type: types.FEED_SET_SOCIAL_STATE,
-                token: token,
-                feed: feedInstance,
-                id: item.id
-            });
-            handler.handleSuccses(getState(), dispatch)
-        } catch (error) {
-            handler.handleError(error, dispatch, 'feed-getFeedSocialState')
-            logger.actionFailed('getFeedSocialState')
-        }
     }
 }
 
@@ -169,22 +130,6 @@ export function updateSavedInstance(item) {
     }
 }
 
-async function refreshFeedSocialState(state, dispatch, token, id) {
-    try {
-        let response = await feedApi.getFeedSocialState(id, token);
-        if (feedComperator.shouldUpdateSocial(state, id, response)) {
-            dispatch({
-                type: actions.FEED_UPDATE_SOCIAL_STATE,
-                social_state: response,
-                id: id
-            });
-        }
-    } catch (error) {
-        handler.handleError(error, dispatch, 'refreshFeedSocialState')
-        logger.actionFailed('refreshFeedSocialState')
-    }
-}
-
 export const unlike = (id) => {
     return async function (dispatch, getState) {
         try {
@@ -194,10 +139,7 @@ export const unlike = (id) => {
                 id: id
             });
             await userApi.unlike(id, token);
-            asyncListener.syncChange('social_' + id, 'un-like')
-            if (getState().instances.instances[id] && getState().instances.instances[id].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'un-like');
-            }
+            SyncerUtils.invokeSocialChange(id, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'unlike')
@@ -224,10 +166,7 @@ export function saveFeed(id,) {
                 item: savedInstance,
                 feedId: id
             })
-            asyncListener.syncChange('social_' + id, 'save')
-            if (getState().instances.instances[id] && getState().instances.instances[id].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[id].promotion, 'save');
-            }
+            SyncerUtils.invokeSocialChange(id, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'saveFeed')
@@ -266,7 +205,7 @@ export function shareActivity(id, activityId, users, token) {
             users.forEach(function (user) {
                 activityApi.shareActivity(user, activityId, token)
             })
-            asyncListener.syncChange('social_' + id, 'share')
+            SyncerUtils.invokeSocialChange(id, getState());
         } catch (error) {
             handler.handleError(error, dispatch, 'shareActivity')
             logger.actionFailed('shareActivity')
@@ -363,6 +302,34 @@ export function* updateFeeds(feeds) {
     }
 }
 
+export function* updateFeedsListeners(feeds) {
+    if (feeds) {
+        let values = Object.values(feeds);
+        let feed;
+        while (feed = values.pop()) {
+            let id;
+            switch (feed.activity.action) {
+                case 'created':
+                    id = feed.activity.business._id;
+                    break;
+                case 'eligible':
+                    id = feed.activity.instance._id;
+                    break;
+                case 'post':
+                    id = feed.activity.post._id;
+                    break;
+            }
+            if (id) {
+                yield put({
+                    type: actions.SOCIAL_STATE_LISTENER,
+                    id: id
+                });
+                SyncerUtils.syncSocialState(id);
+            }
+        }
+    }
+}
+
 export function* updateFollowers(feeds) {
     if (feeds) {
         let feedsObjects = Object.values(feeds);
@@ -441,13 +408,10 @@ export function setVisibleItem(itemId) {
 }
 
 export default {
-    nextLoad,
     shareActivity,
-    setUserFollows,
     saveFeed,
     unlike,
     like,
-    refreshFeedSocialState,
 };
 
 

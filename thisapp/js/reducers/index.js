@@ -34,6 +34,7 @@ import postForm from './form/postReducer';
 import phone from './phoneReducer';
 import render from './RenderReducer'
 import following from './followReducer'
+import syncServer from './syncServerReducer'
 export default function getRootReducer() {
     return combineReducers({
         feeds: feeds,
@@ -67,6 +68,7 @@ export default function getRootReducer() {
         render:render,
         scannerForm:scannerForm,
         following:following,
-        postForm:postForm
+        postForm:postForm,
+        syncServer:syncServer
     });
 }
