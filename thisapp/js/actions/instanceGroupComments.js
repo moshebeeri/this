@@ -5,6 +5,7 @@ import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
 import {put} from 'redux-saga/effects'
+import SyncerUtils from "../sync/SyncerUtils";
 
 let commentsApi = new CommentsApi();
 let logger = new ActionLogger();
@@ -22,10 +23,7 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
-            if (getState().instances.instances[instanceId] && getState().instances.instances[instanceId].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[instanceId].promotion, 'add-comment');
-            }
-            asyncListener.syncChange("group_chat_" + groupId, {comment: message})
+            SyncerUtils.invokeEntityCommentSendEvent(instanceId,getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-sendMessage\'')

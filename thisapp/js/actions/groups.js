@@ -208,7 +208,7 @@ function uploadGroupPic() {
     }
 }
 
-export function setNextFeeds(feeds, group) {
+export function setNextFeeds(feeds, token, group) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         const user = getState().user.user;
@@ -245,7 +245,7 @@ export function* updateFeeds(feeds, group) {
     }
 }
 
-export function* updateFeedsListeners(feeds) {
+export function* updateFeedsListeners(feeds, groupId) {
     if (feeds) {
         let values = Object.values(feeds);
         let feed;
@@ -255,19 +255,26 @@ export function* updateFeedsListeners(feeds) {
                 case 'created':
                     id = feed.activity.business._id;
                     break;
+                case 'instance':
                 case 'eligible':
                     id = feed.activity.instance._id;
                     break;
                 case 'post':
-                    id = feed.activity.post._id;
+                        id = feed.activity.post._id;
                     break;
             }
             if (id) {
                 yield put({
-                    type: actions.SOCIAL_STATE_LISTENER,
+                    type: actions.CHAT_LISTENER_GROUP_INSTANCE,
+                    id: id,
+                    groupId: groupId
+                });
+                SyncerUtils.addChatGroupEntitySync(groupId, id);
+                SyncerUtils.syncSocialState(id);
+                yield put({
+                    type: actions.CHAT_LISTENER_GROUP,
                     id: id
                 });
-                SyncerUtils.syncSocialState(id);
             }
         }
     }
@@ -363,7 +370,7 @@ async function fetchTopList(id, token, group, dispatch, user) {
 }
 
 export function setFeeds(group, feeds) {
-    return setNextFeeds(feeds, group)
+    return setNextFeeds(feeds, undefined, group)
 }
 
 export function fetchTop(feeds, token, group) {

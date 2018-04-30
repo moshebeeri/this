@@ -29,6 +29,7 @@ class DataSync {
         this.syncSocialState(store.getState().syncServer.socialState,);
         this.syncPromotions(store.getState().syncServer.promotions);
         this.syncChats(store.getState().syncServer.chats);
+        this.syncChatsGroupInstances(store.getState().syncServer.chatsGroupInstance);
         this.syncMainFeed(store.getState().user.user, store.getState(), store.dispatch);
     }
 
@@ -137,6 +138,17 @@ class DataSync {
             Object.keys(chats).forEach(chatId => {
                     //sync group chat
                     SyncUtils.addChatSync(chatId,chats[chatId]);
+                }
+            )
+        }
+    }
+
+    syncChatsGroupInstances(chats) {
+        if (Object.keys(chats)) {
+            Object.keys(chats).forEach(groupId => {
+                    let generalId = chats[groupId];
+                    //sync group chat
+                    SyncUtils.addChatGroupEntitySync(groupId,generalId);
                 }
             )
         }

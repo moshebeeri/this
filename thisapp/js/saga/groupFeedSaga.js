@@ -1,13 +1,13 @@
-import {call, throttle,put} from 'redux-saga/effects'
+import {call, put, throttle} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
 import {
+    loadingDone,
     maxFeedNotReturned,
     maxFeedReturned,
     updateFeeds,
     updateFeedsListeners,
     updateFeedsTop,
-    updateFollowers,
-    loadingDone
+    updateFollowers
 } from "../actions/groups";
 import * as sagaActions from './sagaActions'
 import {handleSucsess} from './SagaSuccsesHandler'
@@ -21,6 +21,7 @@ function* setTopFeeds(action) {
         if (response.length > 0) {
             yield* updateFeedsTop(response, action.group, action.user);
             yield* updateFollowers(response);
+            yield* updateFeedsListeners(response,action.group._id);
         }
     } catch (error) {
         console.log("failed to update social state");
@@ -36,18 +37,18 @@ function* feedScrollDown(action) {
         } else {
             let keys = Object.keys(action.feeds);
             let id = action.feeds[keys.length - 1].id;
-            response = yield call(feedApi.getAll, 'down', id, action.token,action.group);
+            response = yield call(feedApi.getAll, 'down', id, action.token, action.group);
             handleSucsess();
-            if (response.length === 0) {
+            if (response.length === 0 || response.length === 1) {
                 yield put(maxFeedReturned(action.group));
             } else {
                 yield put(maxFeedNotReturned(action.group));
             }
         }
         yield put(loadingDone(action.group));
-        yield* updateFeeds(response,action.group);
+        yield* updateFeeds(response, action.group);
         yield* updateFollowers(response);
-        yield* updateFeedsListeners(response);
+        yield* updateFeedsListeners(response,action.group._id);
     } catch (error) {
         console.log("failed scroll down");
     }

@@ -88,6 +88,30 @@ function addChatSync(generalId, entity) {
     })
 }
 
+function addChatGroupEntitySync(groupId, generalId) {
+    let dispatch = store.dispatch;
+    let state = store.getState();
+    asyncListener.addListener('instanceMessage_' + generalId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            let groupInstancesComments = [];
+            if (state.commentInstances.groupCommentsOrder[groupId]) {
+                groupInstancesComments = state.commentInstances.groupCommentsOrder[groupId][generalId];
+            }
+
+            dispatch({
+                type: types.GROUP_INSTANCE_CHAT_SCROLL_UP,
+                comments: groupInstancesComments,
+                token: token,
+                group: group,
+                instance: generalId,
+            });
+            asyncListener.markAsRead(snap.key);
+        }
+    })
+}
+
 function syncGroup(groupId) {
     let dispatch = store.dispatch;
     let state = store.getState();
@@ -98,7 +122,6 @@ function syncGroup(groupId) {
         // TODO use get by group
         let response = snap.val();
         if (response && !response.markAsRead) {
-            let groupId = snap.key.substring('group_'.length);
             const token = state.authentication.token;
             dispatch({
                 type: types.SAVE_GROUPS_REQUEST,
@@ -111,7 +134,9 @@ function syncGroup(groupId) {
     asyncListener.addListener('feed_' + groupId, (snap) => {
         let response = snap.val();
         if (response && !response.markAsRead) {
-            const feedOrder = state.groups.groupFeedOrder[group._id];
+            const feedOrder = state.groups.groupFeedOrder[groupId];
+            const user = state.user.user;
+            let group = state.groups.groups[groupId];
             const token = state.authentication.token;
             if (feedOrder) {
                 if (feedOrder && feedOrder.length > 0) {
@@ -196,6 +221,9 @@ function invokeEntityCommentSendEvent(generalId, message, state) {
     asyncListener.syncChange('instanceMessage_' + generalId, message);
 }
 
+
+
+
 function invokeSocialChange(generalId, state) {
     asyncListener.syncChange('social_' + generalId, "addComment");
     if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
@@ -211,5 +239,6 @@ export default {
     syncSocialState,
     syncPromotion,
     invokeEntityCommentSendEvent,
-    invokeSocialChange
+    invokeSocialChange,
+    addChatGroupEntitySync
 }
