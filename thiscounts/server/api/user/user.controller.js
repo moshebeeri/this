@@ -185,7 +185,7 @@ exports.save = function (req, res) {
 exports.follow = function (req, res) {
   let userId = req.user._id;
   generate_follow(userId, req.params.id);
-  return res.json(200, "like called for object " + req.params.id + " and user " + userId);
+  return res.status(200).json("like called for object " + req.params.id + " and user " + userId);
 };
 
 /***
@@ -195,7 +195,7 @@ exports.follow = function (req, res) {
 exports.unfollow = function (req, res) {
   let userId = req.user._id;
   graphModel.unrelate_ids(userId, 'FOLLOW', req.params.id);
-  return res.status(200).send("unlike called for promotion " + req.params.id + " and user " + userId);
+  return res.status(200).json("unlike called for promotion " + req.params.id + " and user " + userId);
 };
 
 
