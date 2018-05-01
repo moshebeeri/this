@@ -280,6 +280,20 @@ exports.message = function (req, res) {
     return res.status(200).json(group);
   });
 };
+
+exports.user_candidates = function (req, res) {
+  let groupId = req.params.group;
+  let query = `MATCH (candidate:user)-[:FOLLOW]->(user:user{_id:'${req.user._id}'})
+               WHERE NOT (candidate)-[f:FOLLOW]->(g:group) AND NOT (candidate)-[f:UNFOLLOW]->(g)
+               AND NOT (candidate)-[f:INVITE_GROUP]->(g) 
+               AND g._id = '${groupId}' 
+               return candidate._id as _id`;
+  graphModel.query_objects(User, query, function (err) {
+    if (err) console.error(err.message);
+    return res.status(200).send();
+  });
+};
+
 exports.small_business_candidates = function (req, res) {
   let groupId = req.params.group;
   let query = `MATCH (candidate:user)-[:FOLLOW]->(user:user{_id:'${req.user._id}'})-[role:ROLE{name:'OWNS'}]->(b:business)
@@ -292,6 +306,7 @@ exports.small_business_candidates = function (req, res) {
     return res.status(200).send();
   });
 };
+
 exports.business_candidates = function (req, res) {
   let groupId = req.params.group;
   let businessId = req.params.business;
