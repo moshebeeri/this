@@ -361,14 +361,34 @@ GraphModel.prototype.query_ids_relation = function query_ids(from_id, rel, to_id
 };
 
 GraphModel.prototype.query_objects = function query_objects(schema, query, order, skip, limit, callback){
+  let sort = null;
+  if(order.mongoose) {
+    sort = order.mongoose ? order.mongoose : null;
+    order = order.neo4j ? order.neo4j : '';
+    // otherwise order is string in neo4j syntax
+  }
+
   this.query_ids(query, order, skip, limit, function(err, _ids) {
     if (err) { callback(err, null) }
     if(!_ids) _ids = [];
-    schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
-      if (err) { return callback(err, null) }
-      return callback(null, objects)
-    });
+
+    if(sort) {
+      //sort with mongodb
+      schema.find({}).where('_id').in(_ids).sort(sort).exec(function (err, objects) {
+        if (err) { return callback(err, null) }
+        return callback(null, objects)
+      });
+
+    }else{
+      schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
+        if (err) { return callback(err, null) }
+        return callback(null, objects)});
+
+    }
+
   });
+
+
 };
 
 function make_schema_query_function(schema, _ids){

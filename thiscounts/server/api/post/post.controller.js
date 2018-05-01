@@ -56,7 +56,7 @@ exports.create = function(req, res) {
 
   if(!getActorId(post))
     return handleError(res, new Error('no actor (behalf) present'));
-  if(!post.feed || !post.feed.user || post.feed.group)
+  if(!post.feed || !(post.feed.user || post.feed.group))
     return handleError(res, new Error('no feed specified'));
 
   function createPost() {
@@ -88,7 +88,6 @@ exports.create = function(req, res) {
         else
           return handleError(res, new Error(`unsupported feed type, expects `));
 
-
         Post.findById(post._id).exec((err, post) => {
           if (err) {
             return handleError(res, err);
@@ -99,8 +98,10 @@ exports.create = function(req, res) {
             //console.log(`exports.create post ${JSON.stringify({act})}`);
             activity.activity(act, function (err) {
               if (err) {
+                console.log(`activity.activity(act) error`);
                 return handleError(res, err);
               }
+              console.log(`calling pricing.chargeActivityDistribution`);
               pricing.chargeActivityDistribution(post.behalf, activity);
               return res.status(201).send(post);
             });
