@@ -357,6 +357,10 @@ class FeedConverter {
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionTitle = strings.XYTitle;
                     responseFeed.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
+                    if(promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
+                        responseFeed.promotionValue1 = promotion.x_plus_y.values[0].buy;
+                        responseFeed.promotionValue2 = promotion.x_plus_y.values[0].eligible;
+                    }
                     responseFeed.promotionColor = '#66ff1a';
                     responseFeed.quantity = promotion.x_plus_y.quantity;
                     break;
@@ -528,6 +532,11 @@ class FeedConverter {
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionTitle = strings.XYTitle;
                     responseFeed.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
+                    if(promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
+                        responseFeed.promotionValue1 = promotion.x_plus_y.values[0].buy;
+                        responseFeed.promotionValue2 = promotion.x_plus_y.values[0].eligible;
+                    }
+
                     responseFeed.promotionColor = '#66ff1a';
                     responseFeed.quantity = promotion.x_plus_y.quantity;
                     break;
@@ -650,6 +659,10 @@ class FeedConverter {
                 response.promotion = 'X+Y';
                 response.promotionTitle = strings.XYTitle;
                 response.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
+                if(promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
+                    response.promotionValue1 = promotion.x_plus_y.values[0].buy;
+                    response.promotionValue2 = promotion.x_plus_y.values[0].eligible;
+                }
                 response.promotionColor = '#66ff1a';
                 response.quantity = promotion.x_plus_y.quantity;
                 break;

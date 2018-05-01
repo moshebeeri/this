@@ -8,6 +8,6 @@ export default class ThisText extends Component {
     }
 
     render() {
-        return <Text ellipsizeMode={this.props.ellipsizeMode} numberOfLines={this.props.numberOfLines} onPress={this.props.onPress} note={this.props.note} style={[this.props.style, {fontFamily: (Platform.OS === 'ios') ? 'Helvetica Neue' : 'Roboto-Regular'}]}>{this.props.children}</Text>
+        return <Text textBreakStrategy={'simple'} allowFontScaling={this.props.allowFontScaling} adjustsFontSizeToFit={this.props.adjustsFontSizeToFit} ellipsizeMode={this.props.ellipsizeMode} numberOfLines={this.props.numberOfLines} onPress={this.props.onPress} note={this.props.note} style={[this.props.style, {fontFamily: (Platform.OS === 'ios') ? 'Helvetica Neue' : 'Roboto-Regular'}]}>{this.props.children}</Text>
     }
 }

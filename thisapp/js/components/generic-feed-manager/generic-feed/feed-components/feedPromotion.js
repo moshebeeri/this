@@ -108,7 +108,7 @@ export default class FeedPromotion extends Component {
                     {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor:'white'}}>
                             <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
                                 <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
-                                                 titleValue={item.promotionValue} term={item.promotionTerm}/>
+                                                 titleValue1={item.promotionValue1} titleValue2={item.promotionValue2} titleValue={item.promotionValue} term={item.promotionTerm}/>
                             </View>
 
                         </View> :
