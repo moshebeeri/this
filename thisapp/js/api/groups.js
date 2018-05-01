@@ -36,7 +36,7 @@ class GroupsApi {
         }, 'groups', '/groups/add/user');
     }
 
-    inviteUser(user, group,token) {
+    inviteUser(user, group, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/groups/invite/ask/${group}/${user}`, {
             method: 'GET',
             headers: {
@@ -56,6 +56,28 @@ class GroupsApi {
                 'Authorization': 'Bearer ' + token,
             },
         }, 'groups', '/groups/add/user', 'BOOLEAN');
+    }
+
+    getBusinessFollowers(groupId, businessId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/groups/candidates/${groupId}/${businessId}/0/1000`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'groups', '/groups/candidates');
+    }
+
+    getUserFollowers(groupId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/groups/user/candidates/${groupId}/0/1000`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'groups', '/groups/candidates');
     }
 
     getAll(token) {
@@ -111,6 +133,17 @@ class GroupsApi {
                 'Authorization': 'Bearer ' + token,
             },
         }, 'groups', '/join');
+    }
+
+    unFollowGroup(groupId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/follow/${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            }
+        }, 'businesses', '/follow');
     }
 
     meesage(groupid, message, token) {

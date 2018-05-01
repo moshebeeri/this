@@ -11,7 +11,7 @@ export const getGroups = createSelector([getStateGroups],
             let result =  Object.keys(groups.groups).map(key => {
                 let response = groups.groups[key];
                 return response;
-            }).sort(function(a, b){
+            }).filter(group => group).sort(function(a, b){
                 return b.touched - a.touched;
             });
             return result;

@@ -21,6 +21,12 @@ class GroupFeedComponent extends Component {
     }
 
     componentWillMount() {
+        const group = this.props.navigation.state.params.group;
+        if (group.entity && group.entity.business) {
+            this.props.actions.setGroupFollowers(group._id, group.entity.business._id);
+        } else {
+            this.props.actions.setGroupFollowers(group._id);
+        }
     }
 
     allowPost(group) {

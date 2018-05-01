@@ -3,6 +3,7 @@ const initialState = {
     groupFeedOrder: {},
     groupFeeds: {},
     groupFeedsUnread: {},
+    groupFollowers: {},
     update: false,
     loadingDone: {},
     showTopLoader: {},
@@ -49,6 +50,9 @@ export default function group(state = initialState, action) {
                     }
                 }
             });
+            return immutableState;
+        case actions.REMOVE_GROUP:
+            currentGroups[action.groupId] = undefined;
             return immutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             action.groupFeed.forEach(item => {
@@ -119,6 +123,9 @@ export default function group(state = initialState, action) {
         case actions.GET_GROUPS_BUSINESS :
             immutableState['groups' + action.bid] = action.groups;
             return immutableState;
+        case actions.SET_GROUPS_FOLLOWERS :
+            immutableState.groupFollowers[action.groupId] = action.followers;
+            return immutableState;
         case actions.GROUP_SAVING:
             return {
                 ...state,
@@ -166,7 +173,7 @@ export default function group(state = initialState, action) {
             immutableState.maxFeedReturned[action.group] = true;
             return immutableState;
         case actions.MAX_GROUP_FEED_NOT_RETUNED:
-            immutableState.maxFeedReturned[action.group] = false;
+            immutableState.groupBusinessFollowers[action.groupId] = false;
             return immutableState;
         default:
             return state;

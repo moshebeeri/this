@@ -65,8 +65,12 @@ class SelectUsersComponent extends Component {
 
     render() {
         const {userFollower} = this.props;
+        let users = userFollower;
+        if(this.props.navigation.state.params.users){
+            users = this.props.navigation.state.params.users;
+        }
         let index = 0;
-        let productsRows = userFollower.map((r, i) => {
+        let productsRows = users.map((r, i) => {
             index++;
             if (r.pictures && r.pictures.length > 0) {
                 let path = r.pictures[r.pictures.length - 1].pictures[0];

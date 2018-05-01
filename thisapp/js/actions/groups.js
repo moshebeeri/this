@@ -260,7 +260,7 @@ export function* updateFeedsListeners(feeds, groupId) {
                     id = feed.activity.instance._id;
                     break;
                 case 'post':
-                        id = feed.activity.post._id;
+                    id = feed.activity.post._id;
                     break;
             }
             if (id) {
@@ -538,6 +538,20 @@ export function joinGroup(groupId) {
     }
 }
 
+
+export function unFollowGroup(groupId) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            await groupsApi.unFollowGroup(groupId, token);
+            dispatch({type: actions.REMOVE_GROUP,groupId:groupId})
+            SyncerUtils.syncGroup(groupId);
+        } catch (error) {
+            handler.handleError(error, dispatch, 'unFollowBusiness')
+            await logger.actionFailed("business_followBusiness", businessId)
+        }
+    }
+}
 export function setGroups(response) {
     return {
         type: actions.UPSERT_GROUP,
@@ -639,6 +653,18 @@ export function updateFeed(item) {
 
 export function setTopFeeds(group) {
     return async function (dispatch, getState) {
+    }
+}
+
+export function setGroupFollowers(groupId, businessId) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        dispatch({
+            type: types.UPDATE_GROUPS_FOLLOWERS,
+            groupId: groupId,
+            businessId: businessId,
+            token: token,
+        })
     }
 }
 

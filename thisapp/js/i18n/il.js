@@ -300,6 +300,7 @@ const il = {
     clickToEnlarge                                : "לחץ להגדיל",
     followBusiness                                : "עקוב אחרי העסק",
     BusinessPost                                  : "פוסט עסקי",
+    unfollowGroup                                 : "הסר קבוצה",
 
 
 };
