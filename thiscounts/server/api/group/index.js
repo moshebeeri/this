@@ -7,8 +7,10 @@ let router = express.Router();
 
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 
+router.get('/user/candidates/:group/:skip/:limit', auth.isAuthenticated(), controller.user_candidates);
 router.get('/candidates/:group/:skip/:limit', auth.isAuthenticated(), controller.small_business_candidates);
 router.get('/candidates/:group/:business/:skip/:limit', auth.isAuthenticated(), controller.business_candidates);
+
 router.get('/touch/:group_id', auth.isAuthenticated(), controller.touch);
 router.get('/join/group/:group/:group2follow', auth.isAuthenticated(), controller.group_join_group);
 router.get('/follow/:group/:business', auth.isAuthenticated(), controller.group_follow_business);
