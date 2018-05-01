@@ -561,7 +561,7 @@ Instances.createSingleInstance =
 
 Instances.notify =
   Instances.prototype.notifyInstance = function (instance, audience) {
-    console.log(`============> ${JSON.stringify(instance)}`);
+    //console.log(`============> ${JSON.stringify(instance)}`);
     function extractBusinessName(instance){
       try{
         return instance.promotion.entity.business.name
@@ -570,7 +570,7 @@ Instances.notify =
       }
       return '';
     }
-    InstanceSchema.fineById(instance._id).exec((err, instance)=>{
+    InstanceSchema.findById(instance._id || instance).exec((err, instance)=>{
       audience.forEach(to => {
         User.findById(to).exec((err, user) => {
           if(err) return console.error(err);
