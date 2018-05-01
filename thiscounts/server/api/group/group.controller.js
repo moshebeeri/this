@@ -285,12 +285,13 @@ exports.user_candidates = function (req, res) {
   let groupId = req.params.group;
   let paginate = utils.to_paginate(req);
   let query = `MATCH (candidate:user)-[:FOLLOW]->(user:user{_id:'${req.user._id}'})-[:GROUP_ADMIN]->(g{_id:'${groupId}'})
-               WHERE NOT (candidate)-[:FOLLOW]->(:group) AND NOT (candidate)-[:UNFOLLOW]->(g)
+               WHERE NOT (candidate)-[:FOLLOW]->(g) AND NOT (candidate)-[:UNFOLLOW]->(g)
                AND NOT (candidate)-[:INVITE_GROUP]->(g) 
                return candidate._id as _id`;
-  graphModel.query_objects(User, query,  {mongoose:'name'}, paginate.skip, paginate.limit, function (err) {
+  console.log(`user_candidates ${query}`);
+  graphModel.query_objects(User, query,  {mongoose:'name'}, paginate.skip, paginate.limit, function (err, candidates) {
     if (err) console.error(err.message);
-    return res.status(200).send();
+    return res.status(200).json(candidates);
   });
 };
 
@@ -298,12 +299,13 @@ exports.small_business_candidates = function (req, res) {
   let groupId = req.params.group;
   let paginate = utils.to_paginate(req);
   let query = `MATCH (candidate:user)-[:FOLLOW]->(user:user{_id:'${req.user._id}'})-[role:ROLE]->(b:business)<-[]-(g{_id:'${groupId}'})
-               WHERE NOT (candidate)-[:FOLLOW]->(:group) AND NOT (candidate)-[:UNFOLLOW]->(g)
+               WHERE NOT (candidate)-[:FOLLOW]->(g) AND NOT (candidate)-[:UNFOLLOW]->(g)
                AND NOT (candidate)-[:INVITE_GROUP]->(g) 
                return candidate._id as _id`;
-  graphModel.query_objects(User, query,  {mongoose:'name'}, paginate.skip, paginate.limit, function (err) {
+  console.log(`user_candidates ${query}`);
+  graphModel.query_objects(User, query,  {mongoose:'name'}, paginate.skip, paginate.limit, function (err, candidates) {
     if (err) console.error(err.message);
-    return res.status(200).send();
+    return res.status(200).json(candidates);
   });
 };
 
@@ -312,13 +314,12 @@ exports.business_candidates = function (req, res) {
   let paginate = utils.to_paginate(req);
   let businessId = req.params.business;
   let query = `MATCH (candidate:user)-[:FOLLOW]->(b:business{_id:'${businessId}'})<-[]-(g{_id:'${groupId}'})
-               WHERE NOT (candidate)-[:FOLLOW]->(:group) AND NOT (candidate)-[:UNFOLLOW]->(g)
+               WHERE NOT (candidate)-[:FOLLOW]->(g) AND NOT (candidate)-[:UNFOLLOW]->(g)
                AND NOT (candidate)-[:INVITE_GROUP]->(g)  
                return candidate._id as _id`;
-  console.log(`business_candidates ${query}`);
-  graphModel.query_objects(User, query,  {mongoose:'name'}, paginate.skip, paginate.limit, function (err) {
+  graphModel.query_objects(User, query,  {mongoose:'name'}, paginate.skip, paginate.limit, function (err, candidates) {
     if (err) console.error(err.message);
-    return res.status(200).send();
+    return res.status(200).json(candidates);
   });
 };
 

@@ -133,7 +133,7 @@ function handle_image(req, res, type) {
   let size = 0;
   let fileName = randomstring.generate({length: 8, charset: 'hex'});
 
-  if(!req.params.id)
+  if(!req.params.id || req.params.id === 'undefined')
     return handleError(res, new Error(`invalid req.params.id ${req.params.id}`));
 
   form.on('error', function(err) {
