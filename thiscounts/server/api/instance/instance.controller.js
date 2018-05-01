@@ -13,6 +13,7 @@ const fireEvent = require('../../components/firebaseEvent');
 const activity = require('../../components/activity').createActivity();
 const pricing = require('../../components/pricing');
 const Notifications = require('../../components/notification');
+const SavedInstanceController = require('../savedInstance/savedInstance.controller');
 
 
 exports.search = MongodbSearch.create(Instance);
@@ -118,7 +119,6 @@ exports.available = function (req, res) {
       });
     });
 };
-let SavedInstanceController = require('../savedInstance/savedInstance.controller');
 
 function initializeIncreasing(instance) {
   return {
