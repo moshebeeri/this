@@ -22,11 +22,7 @@ export function sendMessage(groupId, message, instanceId) {
                 message: messageItem
             });
             await commentsApi.createComment(groupId, instanceId, message, token);
-            if (getState().instances.instances[instanceId] && getState().instances.instances[instanceId].promotion) {
-                asyncListener.syncChange('promotion_' + getState().instances.instances[instanceId].promotion, 'add-comment');
-            }
-            asyncListener.syncChange("group_chat_" + groupId, {comment: message})
-            asyncListener.syncChange('group_' + groupId, 'addComment')
+            SyncUtils.invokeSyncChat(groupId, instanceId,getState(),message);
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'sendMessage-group');
