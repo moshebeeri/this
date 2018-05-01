@@ -15,7 +15,6 @@ export function sendMessage(groupId, message, instanceId) {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            SyncUtils.addGroupChatSync(dispatch, getState(), groupId);
             let messageItem = createMessage(message, user);
             dispatch({
                 type: actions.GROUP_COMMENT_ADD_MESSAGE,

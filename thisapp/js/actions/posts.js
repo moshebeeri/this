@@ -15,17 +15,6 @@ export function createPost(post, navigation) {
             });
             const token = getState().authentication.token;
             await postApi.createPost(post, uploadPostPic, token);
-            const user = getState().user.user;
-            const feedOrder = getState().feeds.feedView;
-            dispatch({
-                type: types.CANCEL_MAIN_FEED_LISTENER,
-            });
-            dispatch({
-                type: types.LISTEN_FOR_MAIN_FEED,
-                id: feedOrder[0],
-                token: token,
-                user: user,
-            });
             dispatch({
                 type: actions.POST_SAVING_DONE,
             });
