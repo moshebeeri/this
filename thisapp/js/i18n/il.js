@@ -299,6 +299,7 @@ const il = {
     eligibleForNewPromotion                       : "זכאות להנחה נוספת ",
     clickToEnlarge                                : "לחץ להגדיל",
     followBusiness                                : "עקוב אחרי העסק",
+    BusinessPost                                  : "פוסט עסקי",
 
 
 };

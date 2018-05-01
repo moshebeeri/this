@@ -23,7 +23,7 @@ import {
 } from 'native-base';
 import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
-import {ActivityReport, ImageController, SocialState, ThisText, UrlPreview, Video} from '../../../../ui/index';
+import {BusinessHeader,ActivityReport, ImageController, SocialState, ThisText, UrlPreview, Video} from '../../../../ui/index';
 import strings from "../../../../i18n/i18n"
 
 export default class FeedPost extends Component {
@@ -126,30 +126,43 @@ export default class FeedPost extends Component {
             <InViewPort onChange={this.visited.bind(this)} style={container}>
 
                 <View style={{backgroundColor: 'white', width: StyleUtils.getWidth()}}>
+                    {item.actor_business ?
+                        <BusinessHeader navigation={this.props.navigation} business={item.actor_business}
+                                        businessLogo={item.actor_business.logo}
+                                        businessName= {strings.postMessage.formatUnicorn(item.actor_business.name)} noMargin
+                                        bgColor={'transparent'}
+                                        small
+                                        heaedrSize={55}
+                                        menuColor={'#666666'}
+                                        textColor={'#666666'}
+                                        id={item.activityId} showActions={showActions}
+                        />
+                        :  <View style={[titleContainerStyle, {
+                            backgroundColor: 'white',
+                            alignItems: 'center',
+                            width: StyleUtils.getWidth()
+                        }]}>
+                            <View style={{marginTop: 10, paddingLeft: 10, justifyContent: 'flex-start'}}>
+                                {item.avetar &&
+                                <ImageController thumbnail size={StyleUtils.scale(30)} source={item.avetar}/>}
+                            </View>
+                            <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'center'}}>
+                                <ThisText
+                                    style={{fontSize: StyleUtils.scale(14)}}>{strings.postMessage.formatUnicorn(item.name)}</ThisText>
+                            </View>
+                            <View style={{
+                                marginTop: 10,
+                                flex: 1,
+                                paddingRight: 30,
+                                alignItems: 'flex-end',
+                                justifyContent: 'flex-start'
+                            }}>
+                                <ActivityReport id={item.activityId} showActions={showActions}/>
+                            </View>
 
-                    <View style={[titleContainerStyle, {
-                        backgroundColor: 'white',
-                        alignItems: 'center',
-                        width: StyleUtils.getWidth()
-                    }]}>
-                        <View style={{marginTop: 10, paddingLeft: 10, justifyContent: 'flex-start'}}>
-                            {item.avetar &&
-                            <ImageController thumbnail size={StyleUtils.scale(30)} source={item.avetar}/>}
                         </View>
-                        <View style={{marginTop: 10, paddingLeft: 10, alignItems: 'center'}}>
-                            <ThisText
-                                style={{fontSize: StyleUtils.scale(14)}}>{strings.postMessage.formatUnicorn(item.name)}</ThisText>
-                        </View>
-                        <View style={{
-                            marginTop: 10,
-                            flex: 1,
-                            paddingRight: 30,
-                            alignItems: 'flex-end',
-                            justifyContent: 'flex-start'
-                        }}>
-                            <ActivityReport id={item.activityId} showActions={showActions}/>
-                        </View>
-                    </View>
+                    }
+
                     <UrlPreview post={item.feed.activity.post} text={item.feed.activity.post.text}/>
                     {!this.state.containLink && <View style={postMessageContainerStyle}>
 

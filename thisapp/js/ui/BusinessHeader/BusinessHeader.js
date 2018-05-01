@@ -63,7 +63,7 @@ class BusinessHeader extends Component {
             if (small) {
                 return <TouchableOpacityFix style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                     <View>
-                        <ImageController square thumbnail size={StyleUtils.scale(36)} source={{uri: businessLogo}}/>
+                        <ImageController  thumbnail size={StyleUtils.scale(36)} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacityFix>
             }
@@ -109,7 +109,11 @@ class BusinessHeader extends Component {
         return following.followBusiness.includes(business._id);
     }
     render() {
-        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu,heaedrSize} = this.props;
+        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu,heaedrSize,menuColor} = this.props;
+        let defaultMenuColor= 'white';
+        if(menuColor){
+            defaultMenuColor = menuColor;
+        }
         let nameTextStyle = styles.businessNameText;
         if (color) {
             nameTextStyle = styles.businessColorNameText;
@@ -131,7 +135,7 @@ class BusinessHeader extends Component {
         }
         let menuAction = <Menu>
             <MenuTrigger placement="right">
-                <Icon2 style={{color: 'white', paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
+                <Icon2 style={{color: defaultMenuColor, paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
             </MenuTrigger>
             <MenuOptions>
                 {!this.isMyBusiness() && this.isFollowingBusiness() && <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
@@ -148,7 +152,7 @@ class BusinessHeader extends Component {
         if (businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
-                    <Icon2 style={{color: 'white', paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
+                    <Icon2 style={{color:defaultMenuColor, paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
                 </MenuTrigger>
                 <MenuOptions>
 
@@ -189,6 +193,7 @@ class BusinessHeader extends Component {
         if (bgColor) {
             backgroundColor = bgColor;
         }
+
         return <View style={[headerContainerStyle, {backgroundColor: backgroundColor, width: StyleUtils.getWidth()}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}

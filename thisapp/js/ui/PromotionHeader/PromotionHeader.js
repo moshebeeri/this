@@ -12,7 +12,7 @@ export default class PromotionHeader extends Component {
     }
 
     render() {
-        const {item, type, titleValue, titleText, term, feed, columnStyle} = this.props;
+        const {item, type, titleValue, titleValue1, titleValue2, titleText, term, feed, columnStyle} = this.props;
         let titleValueStyle = styles.titleValue;
         let titleTextStyle = styles.titleText;
         let XplusYtitleValueStyle = styles.XplusYtitleValue;
@@ -115,9 +115,18 @@ export default class PromotionHeader extends Component {
                 </View>;
             case "X+Y":
                 return <View style={[promotionHeader, {width: StyleUtils.getWidth()}]}>
-                    <View style={promotionValue}>
-                        <ThisText allowFontScaling={true} style={titleValueStyle}>{titleValue}</ThisText>
-                    </View>
+                    {titleValue1 ?
+                        <View style={promotionValue}>
+                            <ThisText allowFontScaling={true} style={[titleValueStyle,{fontSize:StyleUtils.scale(20)}]}>{titleValue1}</ThisText>
+                            <ThisText allowFontScaling={true} style={[titleValueStyle,{fontSize:StyleUtils.scale(20)}]}>+</ThisText>
+                            <ThisText allowFontScaling={true} style={[titleValueStyle,{fontSize:StyleUtils.scale(20)}]}>{titleValue2}</ThisText>
+
+
+                        </View> :
+                        <View style={promotionValue}>
+                            <ThisText allowFontScaling={true} style={titleValueStyle}>{titleValue}</ThisText>
+                        </View>}
+
                     <View style={promotiontDescription}>
                         <View style={{flex: 1}}>
                             <ThisText style={titleTextStyle}>{titleText}</ThisText>
