@@ -128,11 +128,13 @@ function getUpdateId(id, callback){
 }
 
 function handle_image(req, res, type) {
-  //let meta_data = req.headers.meta;
   let meta_data = {};
   let form = new multiparty.Form();
   let size = 0;
   let fileName = randomstring.generate({length: 8, charset: 'hex'});
+
+  if(!req.params.id)
+    return handleError(res, new Error(`invalid req.params.id ${req.params.id}`));
 
   form.on('error', function(err) {
     console.log(`handle_image: ${err.message}`);
