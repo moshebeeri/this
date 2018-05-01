@@ -302,6 +302,7 @@ businessFollow                                : "{0} follow business ",
 eligibleForNewPromotion                       : "You are eligible for new Promotion ",
 clickToEnlarge                                : "click to enlarge",
 followBusiness                                : "Follow Business",
+BusinessPost                                  : "Business Post",
 
 };
 

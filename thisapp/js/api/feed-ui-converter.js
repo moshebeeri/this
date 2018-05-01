@@ -51,6 +51,7 @@ class FeedConverter {
             activityId: feed.activity._id,
             blocked: feed.activity.blocked,
             generalId: feed.activity.post._id,
+            actor_business: feed.activity.actor_business,
             entities: [{post: feed.activity.post._id}],
         }
         responseFeed.sharable = feed.activity.sharable;

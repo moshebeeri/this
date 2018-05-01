@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, ScrollView, Switch, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
-import {FormHeader, ImagePicker, Spinner, TextInput, ThisText, Video} from '../../ui/index';
+import {FormHeader, ImagePicker, SimplePicker, Spinner, TextInput, ThisText, Video} from '../../ui/index';
 import * as postAction from "../../actions/posts";
 import {bindActionCreators} from "redux";
 import strings from "../../i18n/i18n"
 import FormUtils from "../../utils/fromUtils";
 import StyleUtils from "../../utils/styleUtils";
 import navigationUtils from '../../utils/navigationUtils';
+import {getMyBusinesses} from '../../selectors/businessesSelector'
+
 const {width, height} = Dimensions.get('window')
 
 class AddPost extends Component {
@@ -31,7 +33,8 @@ class AddPost extends Component {
             image: '',
             business: '',
             post: '',
-            saving : false,
+            saving: false,
+            toggle: false,
             services: []
         };
     }
@@ -47,12 +50,32 @@ class AddPost extends Component {
 
     async saveFormData() {
         if (this.validateForm() && !this.state.saving) {
-            this.setState({saving:true});
+            this.setState({saving: true});
             this.setPost();
         }
     }
 
-    setPost(){
+    selectBusiness(id) {
+        this.setState({business: id})
+    }
+
+    createBusinessPicker() {
+        const {businesses} = this.props;
+        if (businesses && businesses.length > 0) {
+            const rows = businesses.map((s, i) => {
+                return {
+                    value: s._id,
+                    label: s.name
+                }
+            });
+            return <SimplePicker ref="BusineesList" list={rows} itemTitle="Businees"
+                                 defaultHeader={strings.ChooseBusiness} isMandatory
+                                 onValueSelected={this.selectBusiness.bind(this)}/>
+        }
+        return undefined;
+    }
+
+    setPost() {
         const {actions, navigation} = this.props;
         const post = this.createPostFromState();
         if (navigation.state.params && navigation.state.params.group) {
@@ -80,7 +103,7 @@ class AddPost extends Component {
         const {user, navigation} = this.props;
         let video = this.state.video;
         let picture = this.state.image;
-        if( this.state.youTubeUrl && FormUtils.youtube_parser(this.state.youTubeUrl)){
+        if (this.state.youTubeUrl && FormUtils.youtube_parser(this.state.youTubeUrl)) {
             video = undefined;
             picture = undefined;
         }
@@ -88,7 +111,20 @@ class AddPost extends Component {
         if (picture || video) {
             clientParametes = {uploading: true}
         }
+        if(this.state.business){
+            return {
+                text: this.state.post,
+                image: picture,
+                uploadVideo: video,
+                url: this.state.youTubeUrl,
+                client: clientParametes,
+                behalf: {
+                    business: this.state.business
+                }
+            }
+        }
         if (navigation.state.params && navigation.state.params.group) {
+
             return {
                 text: this.state.post,
                 image: picture,
@@ -137,6 +173,13 @@ class AddPost extends Component {
 
     setVideo(video) {
         this.setState({video: video});
+    }
+
+    toogleSwitch(value) {
+        if(this.state.toggle){
+            this.setState({business:undefined});
+        }
+        this.setState({toggle:!this.state.toggle});
     }
 
     openMenu() {
@@ -199,6 +242,7 @@ class AddPost extends Component {
     }
 
     render() {
+        const{businesses} = this.props;
         return (
             <View style={styles.product_container}>
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
@@ -210,7 +254,29 @@ class AddPost extends Component {
 
 
                     {this.createCoverImageComponnent()}
+                    {businesses && businesses.length > 0 &&
+                    <View style={{
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexDirection: 'row', width: StyleUtils.getWidth()
+                    }}>
 
+                        <ThisText style={{
+                            color: '#666666',
+                            marginLeft: 12,
+                            marginRight: 8
+                        }}>{strings.BusinessPost}</ThisText>
+
+
+                        <Switch
+
+                            onTintColor={'#2db6c8'}
+                            style={{marginRight: 10,}}
+                            onValueChange={this.toogleSwitch.bind(this)}
+                            value={this.state.toggle}/>
+                    </View>}
+
+                    {this.state.toggle && this.createBusinessPicker()}
                     <View style={styles.inputTextLayour}>
                         <TextInput field={strings.Post} value={this.state.post}
                                    returnKeyType='next' ref="2" refNext="2"
@@ -228,7 +294,7 @@ class AddPost extends Component {
                                    validateContent={FormUtils.validateYouTube}
                                    onChangeText={(youTubeUrl) => this.setState({youTubeUrl})} isMandatory={false}/>
                     </View>
-                    <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+                    <View style={{height: StyleUtils.scale(30), width: StyleUtils.getWidth()}}></View>
 
                 </ScrollView>
 
@@ -250,6 +316,7 @@ export default connect(
         user: state.user.user,
         saving: state.postForm.saving,
         currentScreen: state.render.currentScreen,
+        businesses: getMyBusinesses(state),
     }),
     (dispatch) => ({
         actions: bindActionCreators(postAction, dispatch),
