@@ -23,7 +23,7 @@ export function sendMessage(groupId, instanceId, message) {
                 groupId: groupId,
                 message: messageItem
             });
-            SyncerUtils.invokeEntityCommentSendEvent(instanceId,getState());
+            SyncerUtils.invokeEntityCommentSendEvent(instanceId,message,getState(),groupId);
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'instance-group-sendMessage\'')

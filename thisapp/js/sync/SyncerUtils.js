@@ -99,7 +99,6 @@ function addChatGroupEntitySync(groupId, generalId) {
             if (state.commentInstances.groupCommentsOrder[groupId]) {
                 groupInstancesComments = state.commentInstances.groupCommentsOrder[groupId][generalId];
             }
-
             dispatch({
                 type: types.GROUP_INSTANCE_CHAT_SCROLL_UP,
                 comments: groupInstancesComments,
@@ -216,19 +215,29 @@ function syncPromotion(promotionId) {
     })
 }
 
-function invokeEntityCommentSendEvent(generalId, message, state) {
+function invokeEntityCommentSendEvent(generalId, message, state,groupId) {
+
+    invokeSyncChat(groupId,generalId,state);
+
     invokeSocialChange(generalId, state);
+
     asyncListener.syncChange('instanceMessage_' + generalId, message);
+
 }
-
-
-
 
 function invokeSocialChange(generalId, state) {
     asyncListener.syncChange('social_' + generalId, "addComment");
     if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
         asyncListener.syncChange('promotion_' + state.instances.instances[generalId].promotion, 'like');
     }
+}
+
+function invokeSyncChat(groupId, generalId, state) {
+    if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
+        asyncListener.syncChange('promotion_' + state.instances.instances[generalId].promotion, 'add-comment');
+    }
+    asyncListener.syncChange('group_' + groupId, 'addComment')
+    asyncListener.syncChange('group_chat_' + groupId, 'addComment')
 }
 
 export default {
@@ -240,5 +249,6 @@ export default {
     syncPromotion,
     invokeEntityCommentSendEvent,
     invokeSocialChange,
-    addChatGroupEntitySync
+    addChatGroupEntitySync,
+    invokeSyncChat,
 }

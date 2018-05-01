@@ -111,41 +111,44 @@ class AddPost extends Component {
         if (picture || video) {
             clientParametes = {uploading: true}
         }
-        if(this.state.business){
-            return {
-                text: this.state.post,
-                image: picture,
-                uploadVideo: video,
-                url: this.state.youTubeUrl,
-                client: clientParametes,
-                behalf: {
-                    business: this.state.business
-                }
-            }
-        }
+
+        let post;
         if (navigation.state.params && navigation.state.params.group) {
 
-            return {
+            post =  {
                 text: this.state.post,
                 image: picture,
                 uploadVideo: video,
                 url: this.state.youTubeUrl,
                 client: clientParametes,
-                behalf: {
-                    group: navigation.state.params.group
+                feed:{
+                    group: navigation.state.params.group._id
                 }
             }
+        }else {
+            post = {
+                text: this.state.post,
+                image: this.state.image,
+                uploadVideo: this.state.video,
+                url: this.state.youTubeUrl,
+                client: clientParametes,
+                feed: {
+                    user: user._id
+                }
+            };
         }
-        return {
-            text: this.state.post,
-            image: this.state.image,
-            uploadVideo: this.state.video,
-            url: this.state.youTubeUrl,
-            client: clientParametes,
-            behalf: {
+
+        if(this.state.business) {
+            post.behalf =  {
+                    business: this.state.business
+                }
+        }else{
+            post.behalf =  {
                 user: user
             }
-        };
+        }
+
+        return post;
     }
 
     focusNextField(nextField) {
