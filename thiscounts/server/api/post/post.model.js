@@ -11,12 +11,9 @@ let PostSchema = new Schema({
   gid: {type: Number, index: true},
   creator: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
   created: {type: Date, required: true},
-  entity:{
+  feed: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},
     group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
-    mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
-    chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
-    brand: {type: Schema.ObjectId, ref: 'Brand', autopopulate: true},
   },
   behalf: {
     user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},

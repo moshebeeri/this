@@ -56,6 +56,8 @@ exports.create = function(req, res) {
 
   if(!getActorId(post))
     return handleError(res, new Error('no actor (behalf) present'));
+  if(!post.feed || !post.feed.user || post.feed.group)
+    return handleError(res, new Error('no feed specified'));
 
   function createPost() {
     Post.create(post, function (err, post) {
@@ -73,17 +75,19 @@ exports.create = function(req, res) {
           actor_business: post.behalf.business,
           actor_mall: post.behalf.mall,
           actor_chain: post.behalf.chain,
-          actor_group: post.behalf.group,
           sharable: typeof(post.sharable) === 'boolean' ? post.sharable : true,
           post: post._id,
           action: 'post',
           audience: ['SELF', 'FOLLOWERS']
         };
 
-        if (act.actor_user)
+        if (post.feed.user)
           act.audience = ['SELF', 'FOLLOWERS'];
-        else if (act.actor_group)
-          act.ids = [act.actor_group];
+        else if (post.feed.group)
+          act.ids = [post.feed.group];
+        else
+          return handleError(res, new Error(`unsupported feed type, expects `));
+
 
         Post.findById(post._id).exec((err, post) => {
           if (err) {
