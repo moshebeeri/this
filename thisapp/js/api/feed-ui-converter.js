@@ -149,7 +149,7 @@ class FeedConverter {
         response.itemType = 'SHARE';
         response.fid = feed._id,
             response.shared = response.shardeActivity.itemType;
-        response.id = response.shardeActivity.id;
+        response.id = response.shardeActivity._id;
         response.activityId = feed.activity._id;
         response.blocked = feed.activity.blocked;
         return response;

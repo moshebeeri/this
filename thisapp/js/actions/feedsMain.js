@@ -312,6 +312,14 @@ export function* updateFeedsListeners(feeds) {
                 case 'created':
                     id = feed.activity.business._id;
                     break;
+                case 'share':
+                    if (feed.activity.activity.instance) {
+                        id = feed.activity.activity.instance._id;
+                    }
+                    if (feed.activity.activity.post) {
+                        id = feed.activity.activity.post._id;
+                    }
+                    break;
                 case 'eligible':
                     id = feed.activity.instance._id;
                     break;

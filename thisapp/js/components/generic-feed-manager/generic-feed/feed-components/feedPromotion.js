@@ -53,7 +53,7 @@ export default class FeedPromotion extends Component {
 
     visited(visible) {
         const {item, actions, group} = this.props;
-        if (visible && actions) {
+        if (visible && actions && actions.setVisibleItem) {
             if (group) {
                 actions.setVisibleItem(item.fid, group._id);
             } else {
