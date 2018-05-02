@@ -197,9 +197,10 @@ class ApplicationManager extends Component {
     }
 
     savePromotionFromPopup(id, navigation, feed) {
-        const {feedAction} = this.props;
+        const {feedAction,item,businessActions} = this.props;
         this.closePopup();
         feedAction.saveFeed(id, navigation, feed);
+        businessActions.followBusiness(item.business._id);
     }
 
     render() {
