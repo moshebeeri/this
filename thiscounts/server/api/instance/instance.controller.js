@@ -259,11 +259,8 @@ function saveInstance(userId, instance, context, callback) {
 }
 
 function isRealizedInstance(status) {
-  status.forEach(s => {
-    if (s.status === 'REALIZED')
-      return true;
-  });
-  return false;
+  return status.map(s=> s.status === 'REALIZED' || s.status === 'SAVED')
+    .reduce((accumulator, currentValue) => accumulator || currentValue, false);
 }
 
 //'/save/:id'
@@ -284,7 +281,7 @@ exports.save = function (req, res) {
           return handleError(res, err);
         }
         if (isRealizedInstance(status)) {
-          return res.status(500).send(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
+          return res.status(500).json(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
         }
 
         return saveInstance(req.user._id, instance, {}, (err, si) =>{
