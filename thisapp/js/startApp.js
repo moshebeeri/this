@@ -2,7 +2,7 @@
  * Created by roilandshut on 08/06/2017.
  */
 import React, {Component} from "react";
-import {Dimensions} from 'react-native';
+import {Dimensions,Platform} from 'react-native';
 import {Provider} from "react-redux";
 import {StackNavigator} from "react-navigation";
 import ApplicationManager from "./components/app/index";
@@ -43,6 +43,27 @@ import getStore from "./store";
 import setCustomStyles from './styles'
 import * as actions from "./reducers/reducerActions";
 import ActionLogger from './actions/ActionLogger';
+import RNRestart from 'react-native-restart';
+import {setJSExceptionHandler, getJSExceptionHandler,setNativeExceptionHandler} from 'react-native-exception-handler';
+
+// registering the error handler (maybe u can do this in the index.android.js or index.ios.js)
+setJSExceptionHandler((error, isFatal) => {
+    if(isFatal){
+        RNRestart.Restart();
+    }
+    // This is your custom global error handler
+    // You do stuff like show an error dialog
+    // or hit google analytics to track crashes
+    // or hit a custom api to inform the dev team.
+});
+
+// getJSExceptionHandler gives the currently set JS exception handler
+const currentHandler = getJSExceptionHandler();
+setNativeExceptionHandler((exceptionString) => {
+    if(Platform.OS !== 'ios'){
+        RNRestart.Restart();
+    }
+});
 
 const store = getStore();
 setCustomStyles();
