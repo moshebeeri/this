@@ -103,7 +103,7 @@ function addChatGroupEntitySync(groupId, generalId) {
                 type: types.GROUP_INSTANCE_CHAT_SCROLL_UP,
                 comments: groupInstancesComments,
                 token: token,
-                group: group,
+                group: {_id: groupId},
                 instance: generalId,
             });
             asyncListener.markAsRead(snap.key);
@@ -215,14 +215,10 @@ function syncPromotion(promotionId) {
     })
 }
 
-function invokeEntityCommentSendEvent(generalId, message, state,groupId) {
-
-    invokeSyncChat(groupId,generalId,state);
-
+function invokeEntityCommentSendEvent(generalId, message, state, groupId) {
+    invokeSyncChat(groupId, generalId, state);
     invokeSocialChange(generalId, state);
-
     asyncListener.syncChange('instanceMessage_' + generalId, message);
-
 }
 
 function invokeSocialChange(generalId, state) {
