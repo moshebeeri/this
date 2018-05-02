@@ -303,6 +303,7 @@ eligibleForNewPromotion                       : "You are eligible for new Promot
 clickToEnlarge                                : "click to enlarge",
 followBusiness                                : "Follow Business",
 BusinessPost                                  : "Business Post",
+unfollowGroup                                 : "Un-follow Group",
 
 };
 

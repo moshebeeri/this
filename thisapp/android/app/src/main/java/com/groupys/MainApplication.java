@@ -3,6 +3,8 @@ package com.groupys;
 import android.app.Application;
 import com.ianlin.RNCarrierInfo.RNCarrierInfoPackage;
 import com.facebook.react.ReactApplication;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
 import com.horcrux.svg.SvgPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.linkpreview.RNReactNativeLinkPreviewPackage;
@@ -97,6 +99,8 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactNativeContacts(),
             new FileUploadPackage(),
             new RNCarrierInfoPackage(),
+            new ReactNativeExceptionHandlerPackage(),
+            new ReactNativeRestartPackage(),
             new VectorIconsPackage()
       );
     }

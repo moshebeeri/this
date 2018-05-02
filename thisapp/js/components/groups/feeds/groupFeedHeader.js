@@ -39,13 +39,12 @@ class GroupFeedHeader extends Component {
     }
 
     handleBack() {
-       // this.props.actions.fetchGroups();
+        // this.props.actions.fetchGroups();
     }
 
     showScanner() {
         let group = this.props.item;
         navigationUtils.doNavigation(this.props.navigation, 'ReadQrCode', {group: group});
-
     }
 
     navigateBack() {
@@ -54,38 +53,52 @@ class GroupFeedHeader extends Component {
     }
 
     showUsers() {
-        let users = this.props.user.followers;
+        let users = this.getFollowerUsers();
         if (users) {
             navigationUtils.doNavigation(this.props.navigation, 'SelectUsersComponent', {
                 users: users,
                 selectUsers: this.inviteUser.bind(this)
             });
-
         }
+    }
+
+    getFollowerUsers() {
+        let group = this.props.item;
+        let users = this.props.groupsFollowers[group._id];
+        if(!users){
+            return [];
+        }
+        return users;
     }
 
     followBusiness() {
         let group = this.props.item;
-        navigationUtils.doNavigation(this.props.navigation,"businessFollow", {business: group.entity.business, group: group});
+        navigationUtils.doNavigation(this.props.navigation, "businessFollow", {
+            business: group.entity.business,
+            group: group
+        });
     }
 
     addPromotion() {
         let group = this.props.item;
-        navigationUtils.doNavigation(this.props.navigation,"addPromotions", {business: group.entity.business, group: group});
+        navigationUtils.doNavigation(this.props.navigation, "addPromotions", {
+            business: group.entity.business,
+            group: group
+        });
     }
 
     updateGroup() {
         let group = this.props.item;
-        navigationUtils.doNavigation(this.props.navigation,"AddGroups", {group: group});
+        navigationUtils.doNavigation(this.props.navigation, "AddGroups", {group: group});
     }
 
     viewGroup() {
         let group = this.props.item;
-        navigationUtils.doNavigation(this.props.navigation,"AddGroups", {group: group, view: true});
+        navigationUtils.doNavigation(this.props.navigation, "AddGroups", {group: group, view: true});
     }
 
     inviteUser(users) {
-        const{actions} = this.props;
+        const {actions} = this.props;
         if (users) {
             let groupId = this.props.item._id;
             users.forEach(function (user) {
@@ -156,9 +169,9 @@ class GroupFeedHeader extends Component {
                     <MenuOption onSelect={this.updateGroup.bind(this)}>
                         <ThisText>{strings.Edit}</ThisText>
                     </MenuOption>
-                    <MenuOption onSelect={this.showUsers.bind(this)}>
+                    {this.getFollowerUsers().length > 0  && <MenuOption onSelect={this.showUsers.bind(this)}>
                         <ThisText>{strings.Invite}</ThisText>
-                    </MenuOption>
+                    </MenuOption>}
                     {addPromotionMenu}
                 </MenuOptions>
             </Menu>
@@ -208,6 +221,7 @@ export default connect(
     state => ({
         businesses: state.businesses,
         user: state.user,
+        groupsFollowers: state.groups.groupFollowers
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

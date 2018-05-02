@@ -71,7 +71,7 @@ export default class GenericListGroupView extends Component {
         const row = <View  key={index}>
             <View style={{marginBottom: 8}}>
                 <TouchableOpacityFix key={index} onPress={() => onPressItem(item)} style={containerStyle}>
-                    <GroupHeader group={item}/>
+                    <GroupHeader group={item} showUnfollow/>
 
                     {(promotion || post || message) && <View style={{
                         marginLeft: 30,

@@ -174,9 +174,12 @@ export function followBusiness(businessId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
-            await businessApi.followBusiness(businessId, token);
-            dispatch({type: actions.RESET_FOLLOW_FORM})
-            dispatch({type: actions.USER_FOLLOW_BUSINESS, id: businessId});
+            const businessFollowed = getState().following.followBusiness;
+            if(!businessFollowed[businessId]) {
+                await businessApi.followBusiness(businessId, token);
+                dispatch({type: actions.RESET_FOLLOW_FORM})
+                dispatch({type: actions.USER_FOLLOW_BUSINESS, id: businessId});
+            }
         } catch (error) {
             handler.handleError(error, dispatch, 'followBusiness')
             await logger.actionFailed("business_followBusiness", businessId)

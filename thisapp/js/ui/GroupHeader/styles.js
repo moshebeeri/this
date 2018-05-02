@@ -23,6 +23,7 @@ module.exports = {
         fontFamily: 'Roboto',
         color: '#616F70',
         fontWeight: 'bold',
+        width: StyleUtils.scale(230),
         fontSize: StyleUtils.scale(18)
     },
     groupHeader: {
