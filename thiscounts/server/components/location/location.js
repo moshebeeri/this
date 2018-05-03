@@ -33,34 +33,46 @@ Location.prototype.address_location = function address_location(addressed, callb
   else if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
     return callback(null, {lat: addressed.location.lat, lng: addressed.location.lng});
 
+  console.log(JSON.stringify(addressed));
+  if( !addressed.city || !addressed.address || !addressed.country ||
+    addressed.city === "" || addressed.address === "" || addressed.country === "" ) {
+    return callback({
+      code: 400,
+      message: `bad address :   ${JSON.stringify(addressed)}`
+    }, null);
+  }
   let address = format_address(addressed);
   geocode_address(address, function (err, data) {
     if (err) {
-      if(err === 'bad address'){
+      if(err.startsWith('bad address no street_address found')) {
+        return callback({
+          code: 400,
+          message: `${err} ${JSON.stringify(address)}`
+        }, null);
+      }else if(err.startsWith('bad address')){
         return callback({
           code: 204,
-          message: 'bad address : ' + address
+          message: 'bad address: ' + address
         }, null);
       }
-      return callback(err, data);
+      else return callback({code: 400,message:err}, data);
+    }else{
+      if (!data.results || data.results.length === 0)
+        return callback({
+          code: 204,
+          message: 'No location under this address : ' + address
+        }, null);
+
+      else if (data.results.length > 1)
+        return callback({
+          code: 202,
+          message: 'Inconsistent address, google api find more then one location under this address : ' + address
+        }, data);
+      else {
+        let location = data.results[0].geometry.location;
+        return callback(null, {lat: location.lat, lng: location.lng});
+      }
     }
-    //logger.info(data);
-    if (!data.results || data.results.length === 0)
-      return callback({
-        code: 204,
-        message: 'No location under this address : ' + address
-      }, null);
-
-    if (data.results.length > 1)
-      return callback({
-        code: 202,
-        message: 'Inconsistent address, google api find more then one location under this address : ' + address
-      }, data);
-
-    //logger.info("lat:" + data.results[0].geometry.location.lat);
-    //logger.info("lng:" + data.results[0].geometry.location.lng);
-    let location = data.results[0].geometry.location;
-    return callback(null, {lat: location.lat, lng: location.lng});
   });
 };
 
@@ -90,8 +102,8 @@ function geocode_address(address, callback) {
     method: 'GET'
   };
   let req = https.request(options, function (res) {
-    logger.info("statusCode: ", res.statusCode);
-    logger.info("headers: ", res.headers);
+    // logger.info("statusCode: ", res.statusCode);
+    // logger.info("headers: ", res.headers);
     let body = '';
     res.on('data', function (d) {
       body += d;
@@ -101,10 +113,15 @@ function geocode_address(address, callback) {
       try {
         parsed = JSON.parse(body);
       } catch (e) {
-        callback('bad request: ' + e.message, null);
+        callback('bad address: ' + e.message, null);
       }
-      if (parsed && parsed.status === 'OK')
+      if (parsed && parsed.status === 'OK') {
+        const streetAddress = parsed.results.filter(result => _.includes(result.types, 'street_address'));
+        if(streetAddress.length === 0){
+          return callback(`bad address no street_address found`, null);
+        }
         callback(null, parsed);
+      }
       else
         callback('bad address', null);
 

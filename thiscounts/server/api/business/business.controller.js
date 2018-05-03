@@ -341,18 +341,20 @@ function create_business_default_group(business) {
 }
 
 exports.check_address = function (req, res) {
-  location.address_location(req.body, function (err, data) {
+  let address = req.body;
+  location.address_location(address, function (err, data) {
     if (err) {
-      if (err.code === 204) return res.status(err.code).send(err.message);
+      if (err.code === 204)
+        return res.status(err.code).json(err);
       else if (err.code === 202) {
         return res.status(202).json(data);
       }
       else{
-        console.error(err);
-        return res.status(400).send(err);
+        return res.status(400).json(err);
       }
+    }else {
+      return res.status(200).json(data);
     }
-    return res.status(200).json(data);
   })
 };
 
