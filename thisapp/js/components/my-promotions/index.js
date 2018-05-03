@@ -55,7 +55,6 @@ const mapStateToProps = state => {
     return {
         userFollower: state.user.followers,
         update: state.myPromotions.update,
-        shouldRender: state.myPromotions.shouldRender,
         user: state.user.user,
         feeds: getFeeds(state),
         rawFeeds: state.myPromotions.feeds,
@@ -64,8 +63,6 @@ const mapStateToProps = state => {
         myPromotions: state.myPromotions,
         firstTime: state.myPromotions.firstTime,
         location: state.phone.currentLocation,
-        selectedTab: state.mainTab.selectedTab,
-        currentScreen: state.render.currentScreen,
     }
 }
 export default connect(

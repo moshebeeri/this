@@ -50,6 +50,7 @@ export default function group(state = initialState, action) {
                     }
                 }
             });
+            immutableState.update = !immutableState.update;
             return immutableState;
         case actions.REMOVE_GROUP:
             currentGroups[action.groupId] = undefined;

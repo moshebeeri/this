@@ -116,6 +116,10 @@ function getCurrentRouteName(navigationState) {
     }
     return route.routeName;
 }
+function isMain(currentScreen, prevScreen) {
+    return currentScreen.routes.length === 2 && prevScreen.routes.length === 1
+
+}
 
 class AppWithNavigationState extends Component {
     constructor(props) {
@@ -135,10 +139,18 @@ class AppWithNavigationState extends Component {
                     onNavigationStateChange={(prevState, currentState) => {
                         const currentScreen = getCurrentRouteName(currentState);
                         const prevScreen = getCurrentRouteName(prevState);
+                        const result = isMain(prevState,currentState);
                         store.dispatch({
                             type: actions.CURRENT_SCREEN,
-                            screen: currentScreen
+                            screen: prevScreen
                         });
+
+                        store.dispatch({
+                            type: actions.CURRENT_MAIN,
+                            isMain: result
+                        });
+
+
                         logger.screenVisited(currentScreen, prevScreen);
                     }}/>
             </MenuContext>
