@@ -649,9 +649,9 @@ class AddPromotion extends Component {
 
     toogleSwitch(value) {
         if (this.state.toggle) {
-            this.setToggleOn()
+            this.setToggleOff()
         } else {
-            this.setToggleOff();
+            this.setToggleOn();
         }
     }
 
@@ -677,9 +677,7 @@ class AddPromotion extends Component {
         this.setState({
             token: '',
             path: '',
-            image: '',
             type: 'PERCENT',
-            images: '',
             businesses: [],
             business: '',
             product: '',
@@ -704,6 +702,7 @@ class AddPromotion extends Component {
             promotion: {},
             toggle: !this.state.toggle
         });
+        this.selectDiscount("PERCENT");
     }
 
     setToggleOn() {
@@ -711,9 +710,7 @@ class AddPromotion extends Component {
         this.setState({
             token: '',
             path: '',
-            image: '',
             type: '',
-            images: '',
             businesses: [],
             business: '',
             product: '',
