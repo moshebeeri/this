@@ -1,4 +1,4 @@
-const initialState = {currentScreen: 'home', currentTab: 'feed'};
+const initialState = {currentScreen: 'home', currentTab: 'feed',isMain: true};
 import * as actions from "./reducerActions";
 import {I18nManager, Platform} from 'react-native';
 
@@ -8,6 +8,11 @@ export default function render(state = initialState, action) {
             return {
                 ...state,
                 currentScreen: action.screen,
+            };
+        case actions.CURRENT_MAIN:
+            return {
+                ...state,
+                isMain: action.isMain,
             };
         case  actions.CURRENT_TAB:
             let tab = 'feed'

@@ -5,17 +5,17 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {View,I18nManager} from 'react-native';
+import {I18nManager, View} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
 import StyleUtils from '../../utils/styleUtils'
-import {SubmitButton, ThisText} from '../index'
+import {ImageController, SubmitButton, ThisText, Video} from '../index'
 import Icon from 'react-native-vector-icons/EvilIcons';
 import strings from "../../i18n/i18n"
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import instanceUtils from '../../utils/instanceUtils'
+import instanceUtils from '../../utils/instanceUtils';
 
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
@@ -28,7 +28,6 @@ export default class ChatMessage extends Component {
         const {claim} = this.props;
         this.setState({saved: true});
         claim();
-
     }
 
     realize() {
@@ -74,8 +73,8 @@ export default class ChatMessage extends Component {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: '#E6E6E6',
-                                    borderTopLeftRadius: I18nManager.isRTL ?  10 :0,
-                                    borderTopRightRadius:  I18nManager.isRTL ? 0: 10,
+                                    borderTopLeftRadius: I18nManager.isRTL ? 10 : 0,
+                                    borderTopRightRadius: I18nManager.isRTL ? 0 : 10,
                                 }}>
 
 
@@ -150,7 +149,10 @@ export default class ChatMessage extends Component {
                                         fontSize: StyleUtils.scale(14),
                                         color: '#616F70'
                                     }}>{strings.postMessage.formatUnicorn(item.post.name)}</ThisText>
+
+
                                     </View>
+
 
                                     <View style={{
                                         borderBottomColor: '#E6E6E6',
@@ -159,16 +161,32 @@ export default class ChatMessage extends Component {
                                         marginTop: 10,
                                         paddingBottom: 8,
                                         borderBottomWidth: 1,
-                                        flexDirection: 'row'
                                     }}>
-                                        <Ionicons size={StyleUtils.scale(25)} style={{marginRight: 12,}}
-                                                  color={'#2db6c8'}
-                                                  name="ios-person-outline"/>
-                                        <ThisText style={{
-                                            fontSize: StyleUtils.scale(14),
-                                            color: '#616F70',
-                                            width: StyleUtils.scale(200),
-                                        }}>{item.post.feed.text}</ThisText></View>
+                                        <View style={{flex: 1, flexDirection: 'row'}}>
+                                            <Ionicons size={StyleUtils.scale(25)} style={{marginRight: 12,}}
+                                                      color={'#2db6c8'}
+                                                      name="ios-person-outline"/>
+                                            <ThisText style={{
+                                                fontSize: StyleUtils.scale(14),
+                                                color: '#616F70',
+                                                width: StyleUtils.scale(200),
+                                            }}>{item.post.feed.text}</ThisText>
+                                        </View>
+                                        {item.post.video &&
+                                        <Video height={250 * 9 / 16} ref={item.id} width={250} muted={false}
+                                               url={item.post.video}/>}
+                                        {item.post.videoId &&
+                                        <Video height={250 * 9 / 16} source={'YOUTUBE'} reference={item.id} width={250}
+                                               muted={false}
+                                               videoId={item.post.videoId}/>}
+                                        {item.post.banner &&
+                                        <ImageController resizeMode="cover"
+                                                         style={{height: 250 * 9 / 16, width: 250}}
+                                                         source={{uri: item.post.banner.uri}}>
+                                        </ImageController>
+                                        }
+                                    </View>
+
                                 </View>}
                                 <View style={styles.message_container_user}>
                                     <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
@@ -288,15 +306,34 @@ export default class ChatMessage extends Component {
                                         paddingLeft: 5,
                                         borderBottomWidth: 1,
                                         paddingBottom: 8,
-                                        flexDirection: 'row'
                                     }}>
-                                        <Ionicons size={25} style={{marginRight: 12,}} color={'white'}
-                                                  name="ios-person-outline"/>
-                                        <ThisText style={{
-                                            fontSize: StyleUtils.scale(14),
-                                            color: 'white',
-                                            width: 200,
-                                        }}>{item.post.feed.text}</ThisText></View>
+                                        <View style={{flex: 1, flexDirection: 'row'}}>
+                                            <Ionicons size={25} style={{marginRight: 20,}} color={'white'}
+                                                      name="ios-person-outline"/>
+                                            <ThisText style={{
+                                                fontSize: StyleUtils.scale(14),
+                                                color: 'white',
+                                                width: 200,
+                                            }}>{item.post.feed.text}</ThisText>
+                                        </View>
+                                        <View style={{marginTop: 5}}>
+                                            {item.post.video &&
+                                            <Video height={250 * 9 / 16} ref={item.id} width={250} muted={false}
+                                                   url={item.post.video}/>}
+                                            {item.post.videoId &&
+                                            <Video height={250 * 9 / 16} source={'YOUTUBE'} reference={item.id}
+                                                   width={250}
+                                                   muted={false}
+                                                   videoId={item.post.videoId}/>}
+                                            {item.post.banner &&
+                                            <ImageController resizeMode="cover"
+                                                             style={{height: 250 * 9 / 16, width: 250}}
+                                                             source={{uri: item.post.banner.uri}}>
+                                            </ImageController>
+                                            }
+                                        </View>
+                                    </View>
+
                                 </View>}
 
                                 <View style={styles.message_container}>
@@ -326,9 +363,8 @@ export default class ChatMessage extends Component {
                             alignItems: 'center',
                             justifyContent: 'center',
                             backgroundColor: '#E6E6E6',
-
-                            borderTopLeftRadius: I18nManager.isRTL ?  0 :10,
-                            borderTopRightRadius:  I18nManager.isRTL ? 10: 0,
+                            borderTopLeftRadius: I18nManager.isRTL ? 0 : 10,
+                            borderTopRightRadius: I18nManager.isRTL ? 10 : 0,
                         }}>
 
                         </View>

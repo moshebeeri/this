@@ -175,6 +175,7 @@ export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';
 export const TIME_OUT = 'TIME_OUT';
 //Render
 export const CURRENT_SCREEN = 'CURRENT_SCREEN';
+export const CURRENT_MAIN = 'CURRENT_MAIN';
 export const CURRENT_TAB = 'CURRENT_TAB';
 //Notification screen
 export const SET_NOTIFICATION = 'SET_NOTIFICATION';

@@ -53,8 +53,7 @@ export default class FeedPromotion extends Component {
 
     visited(visible) {
         const {item, actions, group} = this.props;
-        if (visible && actions && actions.setSocialState) {
-            // actions.setSocialState(item);
+        if (visible && actions && actions.setVisibleItem) {
             if (group) {
                 actions.setVisibleItem(item.fid, group._id);
             } else {
@@ -220,6 +219,7 @@ export default class FeedPromotion extends Component {
     }
 
     createImageComponent(item, styles, categoruTitle, showActions) {
+        const {hideMenu} = this.props;
         if (item.banner) {
             return <View style={[styles.promotion_image_view, {width: StyleUtils.getWidth()}]}>
                 <ImageController resizeMode="cover" style={[styles.promotion_image, {width: StyleUtils.getWidth()}]}
@@ -250,6 +250,7 @@ export default class FeedPromotion extends Component {
                                     businessName={item.business.name} noMargin
                                     bgColor={'transparent'}
                                     textColor={'white'}
+                                    hideMenu={hideMenu}
                                     size={60}
                                     id={item.activityId} showActions={showActions}
                     />}

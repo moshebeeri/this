@@ -32,12 +32,14 @@ class Feed extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'home') {
-            return true;
-        }
-        return false;
+        return this.props.isMain;
     }
 
+    findRouteNameFromNavigatorState ({ routes }) {
+        let route = routes[routes.length - 1];
+        while (route.index !== undefined) route = route.routes[route.index];
+        return route.routeName;
+    }
     refreshTop() {
         console.log('refreshing')
         this.setState({refreshing: true})
@@ -123,8 +125,7 @@ const mapStateToProps = state => {
         location: state.phone.currentLocation,
         visibleItem: state.feeds.visibleFeed,
         visibleFeeds: state.feeds.visibleFeeds,
-        selectedTab: state.mainTab.selectedTab,
-        currentScreen: state.render.currentScreen,
+        isMain: state.render.isMain,
     }
 };
 export default connect(

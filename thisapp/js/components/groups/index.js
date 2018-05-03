@@ -48,10 +48,7 @@ class Groups extends Component {
     }
 
     shouldComponentUpdate() {
-        if (this.props.currentScreen === 'home') {
-            return true;
-        }
-        return false;
+        return this.props.isMain;
     }
 
     navigateToAdd() {
@@ -106,9 +103,7 @@ export default connect(
         groups: getGroups(state),
         update: state.groups.update,
         user: state.user.user,
-        selectedTab: state.mainTab.selectedTab,
-        currentScreen: state.render.currentScreen,
-        visibleItem: state.feeds.visibleFeed,
+        isMain: state.render.isMain,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

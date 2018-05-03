@@ -330,6 +330,7 @@ class ApplicationManager extends Component {
                                                token={token}
                                                location={location} actions={feedAction}
                                                navigation={this.props.navigation} item={item}
+                                               hideMenu
                                                like={feedAction.like} unlike={feedAction.unlike}
                                                save={this.savePromotionFromPopup.bind(this)}/>
 
