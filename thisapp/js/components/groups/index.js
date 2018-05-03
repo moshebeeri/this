@@ -48,9 +48,12 @@ class Groups extends Component {
     }
 
     shouldComponentUpdate() {
-        return this.props.isMain;
+        return this.props.update;
     }
 
+    componentDidUpdate(){
+        this.props.actions.finishUpdate();
+    }
     navigateToAdd() {
         navigationUtils.doNavigation(this.props.navigation, 'AddGroups');
     }

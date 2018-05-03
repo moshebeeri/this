@@ -38,6 +38,10 @@ class Notification extends Component {
 
     }
 
+    shouldComponentUpdate() {
+        return this.props.isMain;
+    }
+
     render() {
         const {notification, navigation, actions,rows,update} = this.props;
         return (
@@ -57,7 +61,8 @@ export default connect(
     state => ({
         rows: getNotification(state),
         notification: state.notification,
-        update: state.notification.update
+        update: state.notification.update,
+        isMain: state.render.isMain,
 
     }),
     (dispatch) => ({

@@ -34,7 +34,7 @@ export default function group(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_SINGLE_GROUP:
             currentGroups[action.group._id] = action.group;
-            immutableState.update = !immutableState.update;
+            immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP:
             action.item.forEach(eventItem => {
@@ -50,10 +50,11 @@ export default function group(state = initialState, action) {
                     }
                 }
             });
-            immutableState.update = !immutableState.update;
+            immutableState.update = true;
             return immutableState;
         case actions.REMOVE_GROUP:
             currentGroups[action.groupId] = undefined;
+            immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             action.groupFeed.forEach(item => {
@@ -66,7 +67,7 @@ export default function group(state = initialState, action) {
                     immutableState.groupFeedOrder[action.groupId].push(item._id);
                 }
             });
-            immutableState.update = !immutableState.update;
+            immutableState.update = true;
             return immutableState;
         case actions.UPDATE_FEED_GROUP_UNREAD:
             action.feeds.forEach(item => {
@@ -78,6 +79,7 @@ export default function group(state = initialState, action) {
                     }
                 }
             );
+            immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP_FEEDS_TOP:
             action.groupFeed.forEach(item => {
@@ -93,7 +95,7 @@ export default function group(state = initialState, action) {
                     immutableState.groupFeedOrder[action.groupId].unshift(item._id);
                 }
             });
-            immutableState.update = !immutableState.update;
+            immutableState.update = true;
             return immutableState;
         case actions.GROIP_CLEAR_UNREAD_POST:
             if (immutableState.groupFeedsUnread[action.gid]) {
@@ -103,14 +105,17 @@ export default function group(state = initialState, action) {
         case actions.GROUP_FEED_LOADING_DONE:
             let loadingDone = immutableState.loadingDone;
             loadingDone[action.groupId] = action.loadingDone;
+            immutableState.update = true;
             return immutableState;
         case actions.GROUP_FEED_SHOWTOPLOADER:
             let topLoader = immutableState.showTopLoader;
             topLoader[action.groupId] = action.showTopLoader;
+            immutableState.update = true;
             return immutableState;
         case actions.GROUP_LAST_FEED_DOWN:
             immutableState.lastFeed[action.groupId] = action.id;
             immutableState.lastFeedTime[action.groupId] = new Date().getTime();
+            immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP_QRCODE:
             currentGroups[action.group._id].qrcodeSoruce = action.qrcodeSource;
@@ -131,11 +136,17 @@ export default function group(state = initialState, action) {
             return {
                 ...state,
                 saving: true,
+                update: true,
             };
         case actions.GROUP_SAVING_DONE:
             return {
                 ...state,
                 saving: false,
+            };
+        case actions.GROUP_UPDATED:
+            return {
+                ...state,
+                update: false,
             };
         case actions.VISIBLE_FEED:
             return {
@@ -172,6 +183,7 @@ export default function group(state = initialState, action) {
             };
         case actions.MAX_GROUP_FEED_RETUNED:
             immutableState.maxFeedReturned[action.group] = true;
+            immutableState.update = true;
             return immutableState;
         case actions.MAX_GROUP_FEED_NOT_RETUNED:
             immutableState.groupBusinessFollowers[action.groupId] = false;
