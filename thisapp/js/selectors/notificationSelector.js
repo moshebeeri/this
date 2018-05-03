@@ -24,7 +24,13 @@ export const getNotification = createSelector([getStateNotification],
                 return false;
             })
             return results.sort(function(a, b){
-                return a._id < b._id  ;
+                if(a.read && !b.read){
+                    return true;
+                }
+                if(!a.read && b.read){
+                    return false;
+                }
+                return a._id > b._id  ;
             });
         }
         return [];
