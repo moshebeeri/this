@@ -59,7 +59,7 @@ class GenericComments extends Component {
         return <View behavior={'position'} style={[styles.inputContainer, {width: StyleUtils.getWidth()}]}>
 
             {item.businessName && <BusinessHeader showBack navigation={this.props.navigation} business={business}
-                                                  categoryTitle={business.categoryTitle}
+                                                  categoryTitle={business.categoryTitle} noMargin heaedrSize={60}
                                                   businessLogo={item.businessLogo}
                                                   businessName={item.businessName}/>}
             {item.feed && item.feed.activity && item.feed.activity.post &&
