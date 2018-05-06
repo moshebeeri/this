@@ -63,7 +63,7 @@ class GenericComments extends Component {
                                                   businessLogo={item.businessLogo}
                                                   businessName={item.businessName}/>}
             {item.feed && item.feed.activity && item.feed.activity.post &&
-            <View style={{flexDirection: 'row', backgroundColor: '#E6E6E6', height: 60, width: StyleUtils.getWidth()}}>
+            <View style={{flexDirection: 'row', backgroundColor: 'white', height: 60, width: StyleUtils.getWidth()}}>
                 <TouchableOpacity transparent style={{
                     width: 40,
                     justifyContent: 'center',
