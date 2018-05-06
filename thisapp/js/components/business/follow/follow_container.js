@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import * as businessAction from "../../../actions/business";
 import FollowView from './index'
 
-class BusinessFollow extends Component {
+class BusinessFollowCointainer extends Component {
     static navigationOptions = {
         header: null
     };
@@ -32,6 +32,7 @@ class BusinessFollow extends Component {
                 cameraOn={state.cameraOn}
                 searching={state.searching}
                 businesses={state.businesses}
+                showSearchResults={state.showSearchResults}
                 navigation={navigation}
                 group={group}
                 {...actions} />
@@ -53,4 +54,4 @@ export default connect(state => ({
     (dispatch) => ({
         actions: bindActionCreators(businessAction, dispatch)
     })
-)(BusinessFollow);
+)(BusinessFollowCointainer);

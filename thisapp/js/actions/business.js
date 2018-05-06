@@ -205,6 +205,7 @@ export function groupFollowBusiness(groupid, businessId, navigation) {
         try {
             const token = getState().authentication.token;
             await businessApi.groupFollowBusiness(groupid, businessId, token);
+            dispatch({type: actions.RESET_FOLLOW_FORM})
             navigation.goBack();
         } catch (error) {
             handler.handleError(error, dispatch, 'groupFollowBusiness')
