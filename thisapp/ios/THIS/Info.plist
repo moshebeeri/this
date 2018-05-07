@@ -23,7 +23,7 @@
 	<key>CFBundleVersion</key>
 	<string>3</string>
 	<key>CodePushDeploymentKey</key>
-	<string>ghm4tw6_UUO3hqeU2_AqsKuFZ2U6V1hL3Uigm</string>
+	<string>__RN_CONFIG_CODE_PUSH</string>
 	<key>LSApplicationCategoryType</key>
 	<string/>
 	<key>LSRequiresIPhoneOS</key>

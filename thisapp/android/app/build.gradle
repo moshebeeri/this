@@ -1,6 +1,13 @@
-
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+project.ext.envConfigFiles = [
+    debug: ".env.staging",
+    staging: ".env.staging",
+    release: ".env.production",
+]
 apply plugin: "io.fabric"
+
+
 import com.android.build.OutputFile
 
 /**
@@ -104,6 +111,7 @@ android {
         versionCode 1
         versionName "1.0"
          multiDexEnabled true
+          resValue "string", "build_config_package", "com.groupys"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -164,6 +172,7 @@ android {
 
 
 dependencies {
+    compile project(':react-native-config')
     compile project(':react-native-restart')
     compile project(':react-native-exception-handler')
     compile project(':react-native-svg')
