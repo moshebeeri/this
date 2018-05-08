@@ -742,8 +742,9 @@ exports.invite_group = function (req, res) {
   let user = req.params.user;
 
   function invite(group) {
-    let create = `MATCH (g:group{_id:"${group}"}), (u:user {_id:'${user}'})
+    let create = `MATCH (g:group{_id:"${group._id}"}), (u:user {_id:'${user}'})
                   CREATE UNIQUE (u)-[:INVITE_GROUP]->(g)`;
+    console.log(`invite_group q=${create}`);
     graphModel.query(create, function (err) {
       if (err) return handleError(res, err);
       sendGroupNotification(userId, [user], group, 'ask_invite');
@@ -757,7 +758,7 @@ exports.invite_group = function (req, res) {
     if (group.admins.indexOf(userId) > -1)
       return invite(group);
     else if (group.add_policy === 'MEMBER_INVITE') {
-      let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group}"}) return r`;
+      let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group._id}"}) return r`;
       graphModel.query(query, function (err, rs) {
         if (err) return handleError(res, err);
         if (rs.length === 0)
@@ -774,6 +775,7 @@ exports.approve_invite_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
   let query = `MATCH (u:user {_id:'${userId}'})-[r:INVITE_GROUP]->(g:group{_id:"${group}"}) return r, type(r) as type`;
+  console.log(`approve_invite_group q=${query}`);
   graphModel.query(query, function (err, rs) {
     if (err) return handleError(res, err);
     if (rs.length === 0)

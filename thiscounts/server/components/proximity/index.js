@@ -224,6 +224,7 @@ exports.reportLastLocation = function(userId, location, callback) {
 
 exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
   if(!distanceInMeters) distanceInMeters = 10000;
+  console.log(`businessesWithinDistance`);
 
   ProximityModel.findById(userId, function (err, proximity) {
     if (err) return console.error(err);
@@ -233,21 +234,22 @@ exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
     let coordinate = spatial.location_to_special(proximity.location);
 
     const query = ` MATCH (b:business),(u:user{_id:'${userId}'})  
-                    WITH  b,promo,on, 
+                    WITH  b,u,
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
                           point({longitude:b.lon,latitude:b.lat}) AS businessLocation                  
                     WHERE NOT (u)-[:FOLLOW]->(b)
                           AND distance(coordinate, businessLocation) < ${distanceInMeters}
-                    WITH   b, businessLocation
-                    RETURN distinct b, distance(coordinate, businessLocation) as d
+                    WITH   b, coordinate, businessLocation
+                    RETURN distinct b._id as business, distance(coordinate, businessLocation) as d
                     ORDER BY d desc
                     SKIP 0 LIMIT 10`;
-
+    console.log(`exports.businessesWithinDistance q=${query}`);
     graphModel.query(query, function (err, businesses) {
       if (err) {
         console.error(err);
         return callback(err);
       }
+      console.log(`businessesWithinDistance ${JSON.stringify(businesses)}`);
       return callback(null, businesses);
     });
   });
