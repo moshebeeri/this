@@ -14,7 +14,7 @@ const onAction = require('../../components/on-action');
 const feed = require('../../components/feed-tools');
 const Instance = require('../../components/instance');
 const util = require('util');
-const i18n = require('../i18n');
+const i18n = require('../../components/i18n');
 const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Group);
@@ -741,7 +741,7 @@ exports.invite_group = function (req, res) {
   let group = req.params.group;
   let user = req.params.user;
 
-  function invite() {
+  function invite(group) {
     let create = `MATCH (g:group{_id:"${group}"}), (u:user {_id:'${user}'})
                   CREATE UNIQUE (u)-[:INVITE_GROUP]->(g)`;
     graphModel.query(create, function (err) {
@@ -755,20 +755,21 @@ exports.invite_group = function (req, res) {
     if (err) return handleError(res, err);
     if (!group) return res.status(404).send('no group');
     if (group.admins.indexOf(userId) > -1)
-      return invite();
+      return invite(group);
     else if (group.add_policy === 'MEMBER_INVITE') {
       let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:"${group}"}) return r`;
       graphModel.query(query, function (err, rs) {
         if (err) return handleError(res, err);
         if (rs.length === 0)
           return res.status(404).send('user can not invite');
-        return invite();
+        return invite(group);
       })
     } else {
       return res.status(401).send('unauthorized');
     }
   });
 };
+
 exports.approve_invite_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
@@ -776,7 +777,7 @@ exports.approve_invite_group = function (req, res) {
   graphModel.query(query, function (err, rs) {
     if (err) return handleError(res, err);
     if (rs.length === 0)
-      return res.status(404).send('user not invited');
+      return res.status(404).json('user not invited');
     user_follow_group(userId, {_id: group}, function (err) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(userId, 'INVITE_GROUP', group);
@@ -788,6 +789,6 @@ exports.approve_invite_group = function (req, res) {
 
 function handleError(res, err) {
   console.error(err);
-  return res.status(500).send(err);
+  return res.status(500).json(err);
 }
 
