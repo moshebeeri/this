@@ -26,6 +26,7 @@ const Role = require('../../components/role');
 const feed = require('../../components/feed-tools');
 const path = require('path');
 const countryCode = require('../../components/counrtycode');
+const suggest = require('../../components/suggest');
 
 exports.search = MongodbSearch.create(User);
 
@@ -520,6 +521,7 @@ exports.verification = function (req, res) {
         (err, number) => {
           if(err) return handleError(res, err);
           new_user_follow(user);
+          suggest.businesses(user);
           return res.status(200).send('user verified');
         }
       );

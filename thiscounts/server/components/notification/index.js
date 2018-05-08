@@ -59,6 +59,8 @@ function toPayloadData(notification, callback){
   if( notification.actor_chain      ) data.actor_chain    = notification.actor_chain._id.toString()      ;
   if( notification.actor_group      ) data.actor_group    = notification.actor_group._id.toString()      ;
 
+  if(!data || !data._id)
+    return callback(new Error(`!data || !data._id for notification ${JSON.stringify(notification)}`));
 
   //  consolidate by user instead of data old was: data._id = data._id.toString();
   data._id = data._id.toString();
