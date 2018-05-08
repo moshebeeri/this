@@ -521,7 +521,7 @@ exports.verification = function (req, res) {
         (err, number) => {
           if(err) return handleError(res, err);
           new_user_follow(user);
-          suggest.businesses(user);
+          //TODO: suggest.businesses(user);
           return res.status(200).send('user verified');
         }
       );
@@ -536,6 +536,14 @@ exports.verification = function (req, res) {
       //   return res.status(200).send('user verified');
       // });
     });
+  });
+};
+
+exports.suggest_businesses = function (req, res) {
+  let userId = req.user._id;
+  suggest.findBusinesses(userId, (err, businesses)=>{
+    if(err) return handleError(res, err);
+    return res.status(200).json(businesses);
   });
 };
 

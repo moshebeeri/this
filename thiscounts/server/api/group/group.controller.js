@@ -769,6 +769,7 @@ exports.invite_group = function (req, res) {
     }
   });
 };
+
 exports.approve_invite_group = function (req, res) {
   let userId = req.user._id;
   let group = req.params.group;
