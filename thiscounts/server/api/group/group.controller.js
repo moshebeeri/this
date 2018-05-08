@@ -777,7 +777,7 @@ exports.approve_invite_group = function (req, res) {
   graphModel.query(query, function (err, rs) {
     if (err) return handleError(res, err);
     if (rs.length === 0)
-      return res.status(404).send('user not invited');
+      return res.status(404).json('user not invited');
     user_follow_group(userId, {_id: group}, function (err) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(userId, 'INVITE_GROUP', group);
@@ -789,6 +789,6 @@ exports.approve_invite_group = function (req, res) {
 
 function handleError(res, err) {
   console.error(err);
-  return res.status(500).send(err);
+  return res.status(500).json(err);
 }
 
