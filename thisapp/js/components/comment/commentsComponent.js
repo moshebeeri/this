@@ -57,7 +57,7 @@ class CommentsComponent extends Component {
         let promotionHeader;
         if (item.promotion) {
             promotionHeader =
-                <View style={[styles.comments_promotions, {width: StyleUtils.getWidth() - 15}]}>
+                <View style={[styles.comments_promotions, {width: StyleUtils.getWidth()}]}>
 
                     <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
                                      titleValue={item.promotionValue} term={item.promotionTerm}/>
@@ -73,7 +73,7 @@ class CommentsComponent extends Component {
                 alignItems: 'center',
                 justifyContent: 'center',
                 backgroundColor: '#E6E6E6',
-                flex: 1,
+                flex:2,
             }}>
                 {promotionHeader}
                 <View style={{flex: 9}}>

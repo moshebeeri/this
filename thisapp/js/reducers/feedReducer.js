@@ -46,10 +46,17 @@ export default function feeds(state = initialState, action) {
         case actions.SHARE:
             return {
                 ...state,
-                updated: !feedstate.updated,
+                updated: true,
                 renderFeed: true,
                 shouldRender: true
             };
+        case actions.FEEDS_UPDATED:{
+            return {
+                ...state,
+                updated: false,
+
+            };
+        }
         case actions.FIRST_TIME_FEED:
             feedstate.firstTime = false;
             return feedstate;
@@ -64,6 +71,7 @@ export default function feeds(state = initialState, action) {
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
+            feedstate.updated = true;
             return feedstate;
         case actions.UPSERT_FEEDS_ITEMS:
             action.items.forEach(item => {
@@ -78,6 +86,7 @@ export default function feeds(state = initialState, action) {
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
+            feedstate.updated = true;
             return feedstate;
         case actions.UPSERT_FEEDS_TOP:
             currentFeeds[action.item._id] = action.item;
@@ -90,30 +99,35 @@ export default function feeds(state = initialState, action) {
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
+            feedstate.updated = true;
             return feedstate;
         case actions.FEED_LOADING_DONE:
             return {
                 ...state,
                 loadingDone: action.loadingDone,
                 shouldRender: true,
+                updated :true
             };
         case actions.FEED_SHOW_TOP_LOADER:
             return {
                 ...state,
                 showTopLoader: action.showTopLoader,
                 renderFeed: true,
+                updated :true
             };
         case actions.FEEDS_GET_NEXT_BULK:
             return {
                 ...state,
                 nextBulkLoad: true,
-                shouldRender: true
+                shouldRender: true,
+                updated :true
             };
         case actions.FEEDS_GET_NEXT_BULK_DONE:
             return {
                 ...state,
                 nextBulkLoad: false,
                 shouldRender: true,
+                updated :true
             };
         case actions.FEEDS_STOP_RENDER:
             return {
@@ -134,11 +148,13 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 maxFeedReturned: true,
+                updated :true
             };
         case actions.MAX_FEED_NOT_RETUNED:
             return {
                 ...state,
                 maxFeedReturned: false,
+                updated :true
             };
         case actions.VISIBLE_FEED:
             return {

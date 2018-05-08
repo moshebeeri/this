@@ -73,6 +73,7 @@
 		D34863DA6DFE4654B36A8D1A /* libVydiaRNFileUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AA1E1B596F34745BD2A1E4C /* libVydiaRNFileUploader.a */; };
 		ECD697CADA5C4AB4AD8E6804 /* libRCTRestart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BC7B15F089349C3B2743A9A /* libRCTRestart.a */; };
 		F63143761FF27890001339E2 /* Firebase.h in Frameworks */ = {isa = PBXBuildFile; fileRef = F631432D1FF27603001339E2 /* Firebase.h */; };
+		F63646C220A06FC1001D0AC2 /* libReactNativeConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F63646C120A06F74001D0AC2 /* libReactNativeConfig.a */; };
 		F667CAB92011F27100E05859 /* libRNFIRAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F667CAB62011F17000E05859 /* libRNFIRAnalytics.a */; };
 		F667CABB2011F37800E05859 /* RNFIRAnalytics.h in Frameworks */ = {isa = PBXBuildFile; fileRef = F667CABA2011F37100E05859 /* RNFIRAnalytics.h */; };
 		F667CABC2011FA7B00E05859 /* RNFIRAnalytics.h in Sources */ = {isa = PBXBuildFile; fileRef = F667CABA2011F37100E05859 /* RNFIRAnalytics.h */; };
@@ -456,6 +457,13 @@
 			remoteGlobalIDString = 3245CDED1BFEE35C00EABF68;
 			remoteInfo = RCTRestart;
 		};
+		F63646C020A06F74001D0AC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F63646BC20A06F74001D0AC2 /* ReactNativeConfig.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EB2648DF1C7BE17A00B8F155;
+			remoteInfo = ReactNativeConfig;
+		};
 		F66680A71FDD755000C9E47C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DFAB2D151A20453D885CF712 /* RNI18n.xcodeproj */;
@@ -721,6 +729,7 @@
 		EBCEAD23CC84434EBFAA8F18 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		F573600D7B89436D8F4A768D /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		F631432D1FF27603001339E2 /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = "../../../../Downloads/Firebase 2/Firebase.h"; sourceTree = "<group>"; };
+		F63646BC20A06F74001D0AC2 /* ReactNativeConfig.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeConfig.xcodeproj; path = "../node_modules/react-native-config/ios/ReactNativeConfig.xcodeproj"; sourceTree = "<group>"; };
 		F667CAB12011F17000E05859 /* RNFIRAnalytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRAnalytics.xcodeproj; path = "../node_modules/react-native-firebase-analytics/ios/RNFIRAnalytics.xcodeproj"; sourceTree = "<group>"; };
 		F667CABA2011F37100E05859 /* RNFIRAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RNFIRAnalytics.h; path = "../node_modules/react-native-firebase-analytics/ios/RNFIRAnalytics.h"; sourceTree = "<group>"; };
 		F66BD8F21FF2A0D0000E6352 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = THIS/Info.plist; sourceTree = "<group>"; };
@@ -764,6 +773,7 @@
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
 				F667CABB2011F37800E05859 /* RNFIRAnalytics.h in Frameworks */,
+				F63646C220A06FC1001D0AC2 /* libReactNativeConfig.a in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				F6DD540C1FFCF8D9002B5D74 /* libRCTBraintree.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
@@ -1103,6 +1113,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F63646BC20A06F74001D0AC2 /* ReactNativeConfig.xcodeproj */,
 				4694E23120456A6500A55418 /* imageCropPicker.xcodeproj */,
 				F66F9B34203947930043F180 /* RNCarrierInfo.xcodeproj */,
 				F6DDCBB7202C860900599466 /* RNFetchBlob.xcodeproj */,
@@ -1289,6 +1300,14 @@
 			isa = PBXGroup;
 			children = (
 				F636461320999D5C001D0AC2 /* libRCTRestart.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F63646BD20A06F74001D0AC2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F63646C120A06F74001D0AC2 /* libReactNativeConfig.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1620,6 +1639,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = F63646BD20A06F74001D0AC2 /* Products */;
+					ProjectRef = F63646BC20A06F74001D0AC2 /* ReactNativeConfig.xcodeproj */;
 				},
 				{
 					ProductGroup = F63645982099984A001D0AC2 /* Products */;
@@ -2037,6 +2060,13 @@
 			fileType = archive.ar;
 			path = libRCTRestart.a;
 			remoteRef = F636461220999D5C001D0AC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F63646C120A06F74001D0AC2 /* libReactNativeConfig.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeConfig.a;
+			remoteRef = F63646C020A06F74001D0AC2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F66680A81FDD755000C9E47C /* libRNI18n.a */ = {
@@ -2492,6 +2522,9 @@
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				INFOPLIST_FILE = THIS/Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "${BUILD_DIR}/GeneratedInfoPlistDotEnv.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2543,6 +2576,9 @@
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 				);
 				INFOPLIST_FILE = THIS/Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "${BUILD_DIR}/GeneratedInfoPlistDotEnv.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",

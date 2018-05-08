@@ -32,14 +32,15 @@ class Feed extends Component {
     }
 
     shouldComponentUpdate() {
-        return this.props.isMain;
+        return this.props.updated;
     }
 
-    findRouteNameFromNavigatorState ({ routes }) {
-        let route = routes[routes.length - 1];
-        while (route.index !== undefined) route = route.routes[route.index];
-        return route.routeName;
+
+    componentDidUpdate(){
+        this.props.actions.finishUpdate();
     }
+
+
     refreshTop() {
         console.log('refreshing')
         this.setState({refreshing: true})

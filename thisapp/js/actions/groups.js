@@ -514,6 +514,11 @@ export function searchGroup(group) {
         dispatchSearchGroups(dispatch, group, token);
     }
 }
+export function finishUpdate(group) {
+    return function (dispatch, getState) {
+        dispatch({type: actions.GROUP_UPDATED});
+    }
+}
 
 async function dispatchSearchGroups(dispatch, business, token) {
     try {

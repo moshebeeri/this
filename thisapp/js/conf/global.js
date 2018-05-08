@@ -1,7 +1,9 @@
+import Config from 'react-native-config'
+
 module.exports = {
-    server_host: 'http://low.la:9000',
+    server_host:Config.API_URL,
     debug:true
 };
-global.server_host = 'http://low.la:9000';
+global.server_host = Config.API_URL;
 global.debug = true;
 global.appBackgroundColor= '#E6E6E6';

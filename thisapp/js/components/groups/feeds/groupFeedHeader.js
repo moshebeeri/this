@@ -65,7 +65,7 @@ class GroupFeedHeader extends Component {
     getFollowerUsers() {
         let group = this.props.item;
         let users = this.props.groupsFollowers[group._id];
-        if(!users){
+        if (!users) {
             return [];
         }
         return users;
@@ -91,6 +91,13 @@ class GroupFeedHeader extends Component {
         let group = this.props.item;
         navigationUtils.doNavigation(this.props.navigation, "AddGroups", {group: group});
     }
+
+    followBusiness() {
+        let group = this.props.item;
+        navigationUtils.doNavigation(this.props.navigation, "businessFollow", {group: group});
+    }
+
+
 
     viewGroup() {
         let group = this.props.item;
@@ -169,9 +176,13 @@ class GroupFeedHeader extends Component {
                     <MenuOption onSelect={this.updateGroup.bind(this)}>
                         <ThisText>{strings.Edit}</ThisText>
                     </MenuOption>
-                    {this.getFollowerUsers().length > 0  && <MenuOption onSelect={this.showUsers.bind(this)}>
+
+                    {this.getFollowerUsers().length > 0 && <MenuOption onSelect={this.showUsers.bind(this)}>
                         <ThisText>{strings.Invite}</ThisText>
                     </MenuOption>}
+                    <MenuOption onSelect={this.followBusiness.bind(this)}>
+                        <ThisText>{strings.FollowBusiness}</ThisText>
+                    </MenuOption>
                     {addPromotionMenu}
                 </MenuOptions>
             </Menu>

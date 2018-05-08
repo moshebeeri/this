@@ -22,6 +22,7 @@ const { height} = Dimensions.get('window');
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
 
+
 class Login extends Component {
     static navigationOptions = {
         header: null

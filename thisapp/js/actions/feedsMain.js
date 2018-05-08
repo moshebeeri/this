@@ -183,6 +183,14 @@ export function stopRender() {
     }
 }
 
+export function finishUpdate() {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.FEEDS_UPDATED,
+        })
+    }
+}
+
 export function setUserFollows() {
     return async function (dispatch, getState) {
         try {
@@ -337,6 +345,8 @@ export function* updateFeedsListeners(feeds) {
         }
     }
 }
+
+
 
 export function* updateFollowers(feeds) {
     if (feeds) {

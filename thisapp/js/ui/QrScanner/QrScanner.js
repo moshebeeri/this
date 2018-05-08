@@ -112,7 +112,9 @@ export default class BusinessFollow extends Component {
                     style={styles.payment_camera}
                     aspect={Camera.constants.Aspect.fill}>
                 </Camera>
+                    <View style={{marginTop:StyleUtils.scale(5)}}>
                     <ThisText>{strings.PleaseScanCode}</ThisText>
+                    </View>
                 </View>}
                 {searching && <View><Spinner color='red'/></View>}
                 {business && <View style={{

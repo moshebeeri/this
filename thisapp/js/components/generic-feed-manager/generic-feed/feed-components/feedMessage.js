@@ -22,8 +22,9 @@ export default class FeedMessage extends Component {
         const image = <Thumbnail medium source={item.logo}/>
         const containerStyle = {
             margin: 5,
-            alignItems: 'flex-start',
-            backgroundColor: '#ebebeb',
+            alignItems: 'center',
+            justifyContent:'center',
+            backgroundColor: 'white',
         };
         const messageTime = this.createMessageTime(item);
         const messageContainer = <View style={styles.message_component}>

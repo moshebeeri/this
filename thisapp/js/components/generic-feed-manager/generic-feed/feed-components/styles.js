@@ -389,8 +389,10 @@ module.exports = {
     },
     message_component: {
         flexDirection: 'row',
+        alignItems:'center',
         justifyContent: 'space-between',
         height: 10 * vh,
+        paddingLeft: 5,
         width: width,
     },
     messageName: {
