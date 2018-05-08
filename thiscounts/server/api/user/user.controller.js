@@ -553,7 +553,7 @@ exports.verify = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).send('verification sms sent');
+      return res.status(200).json('verification sms sent');
     });
   });
 };
