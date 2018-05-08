@@ -18,7 +18,10 @@ export default class NotificationListView extends Component {
 
     accept() {
         const {item, groupActions, actions} = this.props;
-        const viewItem = item.item;
+        let viewItem = item;
+        if(item.item) {
+            viewItem = item.item;
+        }
         groupActions.acceptInvitation(viewItem.group);
         actions.doNotification(viewItem._id)
     }
@@ -363,16 +366,14 @@ export default class NotificationListView extends Component {
                     }}>
                         {image}
                         <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
-                            <View style={{adding: 10, flexDirection: 'row'}}>
-                                <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
-                                <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
+                            <View style={{padding: 10, }}>
+                                    <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
+                                <ThisText style={{
+
+                                    fontWeight: 'bold',
+                                }}> {viewItem.group.name} </ThisText>
                             </View>
-                            <ThisText style={{
-                                marginLeft: vw * 3,
-                                fontWeight: 'bold',
-                                height: vh * 5,
-                                width: nameWidth
-                            }}> {viewItem.group.name} </ThisText>
+
                         </View>
                     </View>
                     {action}
@@ -386,16 +387,14 @@ export default class NotificationListView extends Component {
                         }}>
                             {image}
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
-                                <View style={{adding: 10, flexDirection: 'row'}}>
-                                    <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
-                                    <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
+                                <View style={{padding: 10,}}>
+                                    <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
+                                    <ThisText style={{
+
+                                        fontWeight: 'bold',
+                                    }}> {viewItem.group.name} </ThisText>
                                 </View>
-                                <ThisText style={{
-                                    marginLeft: vw * 3,
-                                    fontWeight: 'bold',
-                                    height: vh * 5,
-                                    width: nameWidth
-                                }}> {viewItem.group.name} </ThisText>
+
                             </View>
                         </TouchableOpacity>
                         {action}
@@ -441,7 +440,7 @@ export default class NotificationListView extends Component {
                         width: StyleUtils.getWidth() - 50,
                         height: vh * 10
                     }}>
-                        <View style={{adding: 10, flexDirection: 'row'}}>
+                        <View style={{padding: 10, flexDirection: 'row'}}>
                             <ThisText numberOfLines={2}
                                       style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
                                 <ThisText style={{
@@ -469,7 +468,7 @@ export default class NotificationListView extends Component {
                                 width: StyleUtils.getWidth() - 50,
                                 height: vh * 10
                             }}>
-                                <View style={{adding: 10, flexDirection: 'row'}}>
+                                <View style={{padding: 10, flexDirection: 'row'}}>
                                     <ThisText numberOfLines={2}
                                               style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
                                         <ThisText style={{

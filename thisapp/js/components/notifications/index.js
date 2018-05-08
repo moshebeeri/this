@@ -43,7 +43,7 @@ class Notification extends Component {
     }
 
     render() {
-        const {notification, navigation, actions,rows,update} = this.props;
+        const {notification, navigation, actions,rows,update,groupActions} = this.props;
         return (
             <View style={{flex: 1}}>
 

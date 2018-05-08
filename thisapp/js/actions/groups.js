@@ -94,13 +94,6 @@ export function acceptInvitation(group) {
         try {
             const token = getState().authentication.token;
             await groupsApi.acceptInvitation(group, token);
-            let groups = await groupsApi.getAll(token);
-            groups.forEach(function (group) {
-                dispatch({
-                    type: actions.UPSERT_SINGLE_GROUP,
-                    group: group
-                });
-            })
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.acceptInvitation');
             logger.actionFailed('groupsApi.acceptInvitation')
