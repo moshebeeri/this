@@ -163,7 +163,9 @@ export default class NotificationListView extends Component {
                     paddingBottom: StyleUtils.scale(5),
                     alignItems: 'center',
                 }}>
+                    <View style={{marginLeft:10}}>
                     {image}
+                    </View>
                     <View style={{
                         flexDirection: 'column',
                         marginLeft: StyleUtils.scale(5),
@@ -198,7 +200,9 @@ export default class NotificationListView extends Component {
                             paddingBottom: StyleUtils.scale(5),
                             alignItems: 'center',
                         }}>
+                            <View style={{marginLeft:10}}>
                             {image}
+                            </View>
                             <View style={{
                                 flexDirection: 'column',
                                 marginLeft: StyleUtils.scale(5),
@@ -364,7 +368,9 @@ export default class NotificationListView extends Component {
                         flexDirection: 'row',
                         alignItems: 'center',
                     }}>
+                        <View style={{marginLeft:10}}>
                         {image}
+                        </View>
                         <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
                             <View style={{padding: 10, }}>
                                     <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
@@ -385,7 +391,9 @@ export default class NotificationListView extends Component {
                             flexDirection: 'row',
                             alignItems: 'center',
                         }}>
+                            <View style={{marginLeft:10}}>
                             {image}
+                            </View>
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
                                 <View style={{padding: 10,}}>
                                     <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
@@ -433,7 +441,9 @@ export default class NotificationListView extends Component {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
+                    <View style={{marginLeft:10}}>
                     {image}
+                    </View>
                     <View style={{
                         flexDirection: 'column',
                         marginLeft: 5,
@@ -461,7 +471,9 @@ export default class NotificationListView extends Component {
                             flexDirection: 'row',
                             alignItems: 'center',
                         }}>
+                            <View style={{marginLeft:10}}>
                             {image}
+                            </View>
                             <View style={{
                                 flexDirection: 'column',
                                 marginLeft: 5,

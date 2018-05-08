@@ -1,4 +1,4 @@
-const initialState = {notification: [],notificationId:[], update: false,unreadNotification:0};
+const initialState = {notification: [],notificationId:[], update: true,unreadNotification:0};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -33,7 +33,7 @@ export default function notification(state = initialState, action) {
                 return {
                     ...state,
                     notification: currentNotifications,
-                    update:shouldUpdate
+                    update:true
                 };
             }
             return state;
@@ -49,6 +49,7 @@ export default function notification(state = initialState, action) {
                 });
                 return {
                     ...state,
+                    update: true,
                     notification: currentNotifications,
                 };
             }
@@ -63,7 +64,7 @@ export default function notification(state = initialState, action) {
             }
             return {
                 ...state,
-                update: !state.update,
+                update: true,
                 notification: currentNotifications,
             };
         case actions.EXECUTE_NOTIFICATION_ACTION:
@@ -76,8 +77,14 @@ export default function notification(state = initialState, action) {
             }
             return {
                 ...state,
-                update: !state.update,
+                update: true,
                 notification: currentNotifications,
+            };
+        case actions.NOTIFICATION_FINISH_UPDATE:
+
+            return {
+                ...state,
+                update: false,
             };
         default:
             return state;
