@@ -521,7 +521,11 @@ exports.verification = function (req, res) {
         (err, number) => {
           if(err) return handleError(res, err);
           new_user_follow(user);
-          suggest.businesses(user);
+          suggest.businesses(user, (err, businesses) => {
+            if(err) console.error(err);
+            if(businesses) console.log(`suggesting businesses user ${user._id} businesses ${JSON.stringify(businesses)}`);
+
+          });
           return res.status(200).send('user verified');
         }
       );
