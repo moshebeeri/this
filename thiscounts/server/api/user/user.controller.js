@@ -600,7 +600,7 @@ exports.updateInfo = function (req, res, next) {
 
   User.findOneAndUpdate(query, newUser, {upsert: true}, function (err, doc) {
     if (err) return res.status(500).send(err);
-    return res.status(200).send("succesfully saved");
+    return res.status(200).send("successfully saved");
   });
 };
 
@@ -613,7 +613,7 @@ exports.me = function (req, res, next) {
     _id: userId
   }, '-salt -hashedPassword -sms_code', function (err, user) { // don't ever give out the password or salt
     if (err) return next(err);
-    if (!user) return res.status(401).send('Unauthorized');
+    if (!user) return res.status(401).json('Unauthorized');
     res.status(200).json(user);
   });
 };
