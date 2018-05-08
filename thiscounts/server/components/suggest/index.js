@@ -9,28 +9,28 @@ function Suggest() {
 }
 
 function businessesWithinDistance(userId, callback){
-  proximity.businessesWithinDistance(userId, 10000, (err, businesses)=>{
+  proximity.businessesWithinDistance(userId, 30000, (err, businesses) => {
     if(err) return callback(err);
-    console.log(`businessesWithinDistance ${JSON.stringify(businesses)}`);
+    return callback(null, businesses);
   })
 }
 
 function businessesFollowedByFriends(userId, callback){
   const query = `match (u:user{_id:'${userId}'})-[:FOLLOW]->(friend:user)-[:FOLLOW]-(b:business)
                   where not (u)-[:FOLLOW]-(b)
-                  return b._id as businesses limit 5`;
-  graphModel.query(query, (err, businesses)=>{
+                  return distinct b._id as business limit 5`;
+  graphModel.query(query, (err, businesses) => {
     if(err) return callback(err);
-    console.log(`businessesFollowedByFriends ${JSON.stringify(businesses)}`);
+    return callback(null, businesses);
   })
 }
 
-function businessSuggestActivity(userId, businesses){
-  businesses.forEach(business=>{
+function businessSuggestActivity(userId, businessesIds){
+  businessesIds.forEach(businessId => {
     activity.activity({
       user: userId,
       action: 'business_suggestion',
-      business: business._id,
+      business: businessId,
       sharable: true,
       audience: ['SELF']
     }, function (err) {
@@ -41,26 +41,30 @@ function businessSuggestActivity(userId, businesses){
 
 Suggest.businesses =
   Suggest.prototype.businesses = function(userId, callback) {
-    businessesFollowedByFriends(userId, (err, businesses)=>{
+    this.findBusinesses(userId, (err, businessesIds) => {
       if(err) return callback(err);
-      businessSuggestActivity(businesses);
-      businessesWithinDistance(userId, (err, businesses)=>{
-        if(err) return callback(err);
-        businessSuggestActivity(businesses);
-        callback(null);
-      });
+      businessSuggestActivity(businessesIds);
+      callback(null);
     });
   };
 
 Suggest.findBusinesses =
-  Suggest.prototype.businesses = function(userId, callback) {
-    businessesFollowedByFriends(userId, (err, businesses)=>{
-      if(err) return callback(err);
+  Suggest.prototype.findBusinesses = function(userId, callback) {
+    function unique(a) {
+      let seen = {};
+      return a.filter(function(item) {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+      });
+    }
+
+    businessesFollowedByFriends(userId, (err, businesses) => {
+      if(err) { return callback(err);}
       let ret = businesses;
-      businessesWithinDistance(userId, (err, businesses)=>{
+      businessesWithinDistance(userId, (err, businesses) => {
         if(err) return callback(err);
         ret = ret.concat(businesses);
-        callback(null, ret);
+        ret = ret.map(o => o.business);
+        return callback(null, unique(ret));
       });
     });
   };
