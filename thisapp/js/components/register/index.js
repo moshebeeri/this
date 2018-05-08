@@ -166,7 +166,7 @@ class Register extends Component {
     createMessage(message) {
         if (message) {
             return <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
-                {this.state.validationMessage}
+                {message}
             </ThisText>
         }
         return undefined;
