@@ -55,7 +55,7 @@ class GroupsApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             },
-        }, 'groups', '/groups/add/user', 'BOOLEAN');
+        }, 'groups', '/groups/add/user');
     }
 
     getBusinessFollowers(groupId, businessId, token) {

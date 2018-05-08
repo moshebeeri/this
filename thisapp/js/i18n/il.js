@@ -98,7 +98,7 @@ const il = {
     AddUserRole: 'הוסף הרשאת משתמש',
     UpdateUserRole: 'עדכן הרשאת משתמש',
     ManagementRole: 'הרשאת מנהל',
-    InvitesYouToJoinGroup: 'הזמין אותך להצטרך לקבוצת',
+    InvitesYouToJoinGroup: '{0} הזמין אותך להצטרך לקבוצת',
     CreatePromotionForEveryoneGroup: 'צור הנחה מיוחדת למצטרפים החדשים לקבוצה',
     SignUp: 'הרשם',
     Login: 'לכניסה',

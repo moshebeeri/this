@@ -9,7 +9,7 @@ class NotificationHandler {
             return;
         }
         let token = state.authentication.token;
-        if(notification.fcm.tag){
+        if(notification.fcm && notification.fcm.tag){
             FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
         }
         if(token) {
