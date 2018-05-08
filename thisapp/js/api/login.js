@@ -48,8 +48,7 @@ class LoginApi {
             , 'users', '/signup')
     }
 
-    async verifyCode(code) {
-        let token = await store.get('token');
+    async verifyCode(code,token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/verification/${code}`, {
             method: 'GET',
             headers: {

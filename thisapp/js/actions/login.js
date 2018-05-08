@@ -19,14 +19,14 @@ const resetAction = NavigationActions.reset({
     ]
 });
 
-export function login(phone, password, navigation,callingCode) {
+export function login(phone, password, navigation, callingCode) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.LOGIN_PROCESS,
                 value: true
             });
-            let response = await loginApi.login(phone, password,callingCode);
+            let response = await loginApi.login(phone, password, callingCode);
             if (response.token) {
                 await store.save("token", response.token)
                 dispatch({
@@ -37,14 +37,12 @@ export function login(phone, password, navigation,callingCode) {
                     type: actions.LOGIN_SUCSESS,
                 });
                 let user = await userApi.getUser(response.token);
-                user.locale =  FormUtils.getLocale();
-                userApi.saveUserDetails(user,null , response.token, null);
+                user.locale = FormUtils.getLocale();
+                userApi.saveUserDetails(user, null, response.token, null);
                 dispatch({
                     type: actions.SET_USER,
                     user: user
                 });
-
-
                 await  store.save("user_id", user._id)
                 if (!user.sms_verified) {
                     navigation.navigate('Register');
@@ -66,12 +64,12 @@ export function login(phone, password, navigation,callingCode) {
                 value: false
             });
         } catch (error) {
-            if(error === errors.NETWORK_ERROR){
+            if (error === errors.NETWORK_ERROR) {
                 dispatch({
                     type: actions.LOGIN_FAILED,
                     message: strings.networkErrorMessage
                 });
-            }else{
+            } else {
                 dispatch({
                     type: actions.LOGIN_FAILED,
                     message: strings.LoginFailedMessage
@@ -81,22 +79,21 @@ export function login(phone, password, navigation,callingCode) {
                 type: actions.LOGIN_PROCESS,
                 value: false
             });
-
             handler.handleError(error, dispatch, 'login')
             logger.actionFailed('login')
         }
     }
 }
 
-export function signup(phone, password, firstName, lastName, navigation,callingCode) {
+export function signup(phone, password, firstName, lastName, navigation, callingCode) {
     return async function (dispatch) {
         try {
             dispatch({
                 type: actions.SIGNUP_PROCESS,
                 value: true
             });
-            let response = await loginApi.signup(phone, password, firstName, lastName,callingCode);
-            if(response === 'user already exist'){
+            let response = await loginApi.signup(phone, password, firstName, lastName, callingCode);
+            if (response === 'user already exist') {
                 dispatch({
                     type: actions.SIGNUP_PROCESS,
                     value: false
@@ -115,7 +112,6 @@ export function signup(phone, password, firstName, lastName, navigation,callingC
             dispatch({
                 type: actions.SIGNUP_SUCSESS,
             });
-
             navigation.navigate('Register');
             dispatch({
                 type: actions.SIGNUP_PROCESS,
@@ -129,7 +125,7 @@ export function signup(phone, password, firstName, lastName, navigation,callingC
                     message: strings.invalidPhoneNumber
                 });
             } else {
-                if(error === errors.NETWORK_ERROR){
+                if (error === errors.NETWORK_ERROR) {
                     dispatch({
                         type: actions.SIGNUP_FAILED,
                         message: strings.networkErrorMessage
@@ -177,23 +173,22 @@ export function focusSignupForm(focus) {
 }
 
 export function verifyCode(code, navigation, resetAction) {
-    return async function (dispatch,getState) {
+    return async function (dispatch, getState) {
         try {
             dispatch({
                 type: actions.REGISTER_PROCESS,
                 value: true
             });
-            await loginApi.verifyCode(code);
             const token = getState().authentication.token;
+            await loginApi.verifyCode(code, token);
             let user = await userApi.getUser(token);
             await store.save("user_id", user._id);
             user.locale = FormUtils.getLocale();
-            userApi.saveUserDetails(user,null ,token, null);
+            userApi.saveUserDetails(user, null, token, null);
             dispatch({
                 type: actions.SET_USER,
                 user: user
             });
-
             dispatch({
                 type: actions.REGISTER_CODE_SUCSSES,
             });
@@ -203,15 +198,22 @@ export function verifyCode(code, navigation, resetAction) {
             });
             navigation.dispatch(resetAction);
         } catch (error) {
+            console.log(error);
             if (error === errors.UNHANDLED_ERROR) {
                 dispatch({
                     type: actions.REGISTER_CODE_INVALID,
                     message: strings.InvalidValidationCode
                 });
             } else {
-                handler.handleError(error, dispatch, 'verifyCode')
+                if (error === errors.UN_AUTHOTIZED_ACCESS) {
+                    dispatch({
+                        type: actions.REGISTER_CODE_INVALID,
+                        message: strings.InvalidValidationCode
+                    });
+                } else {
+                    handler.handleError(error, dispatch, 'verifyCode')
+                }
             }
-            logger.actionFailed('verifyCode');
             dispatch({
                 type: actions.REGISTER_PROCESS,
                 value: false
