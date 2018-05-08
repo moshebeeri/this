@@ -62,7 +62,7 @@ export function doNotification(notificationId, type) {
 export function finishUpdate() {
     return async function (dispatch) {
         dispatch({
-            type: actions.EXECUTE_NOTIFICATION_ACTION,
+            type: actions.NOTIFICATION_FINISH_UPDATE,
         })
     }
 }
