@@ -304,6 +304,8 @@ clickToEnlarge                                : "click to enlarge",
 followBusiness                                : "Follow Business",
 BusinessPost                                  : "Business Post",
 unfollowGroup                                 : "Un-follow Group",
+resendCode                                    : "Resend SMS",
+RegisterHelpMessage                           : "It seems we are having issue with SMS verification please contact us at ",
 
 };
 

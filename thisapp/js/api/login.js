@@ -57,6 +57,17 @@ class LoginApi {
                 'Authorization': 'Bearer ' + token,
             },
         }, 'users', '/verification', 'BOOLEAN');
+    }async
+
+    verify(token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/verify`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'users', '/verify');
     }
 
     recoverPassword(phoneNumber) {

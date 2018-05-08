@@ -220,6 +220,32 @@ export function verifyCode(code, navigation, resetAction) {
             });
         }
     }
+}export function verify() {
+    return async function (dispatch, getState) {
+        try {
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: true
+            });
+            const token = getState().authentication.token;
+            await loginApi.verify( token);
+
+            dispatch({
+                type: actions.REGISTER_RESEND,
+            });
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: false
+            });
+            navigation.dispatch(resetAction);
+        } catch (error) {
+
+            dispatch({
+                type: actions.REGISTER_PROCESS,
+                value: false
+            });
+        }
+    }
 }
 
 export function forgetPassword(phoneNumber) {

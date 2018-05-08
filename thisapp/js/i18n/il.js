@@ -301,6 +301,8 @@ const il = {
     followBusiness                                : "עקוב אחרי העסק",
     BusinessPost                                  : "פוסט עסקי",
     unfollowGroup                                 : "הסר קבוצה",
+    resendCode                                    : "שלח שוב",
+    RegisterHelpMessage                           : "נראה כי לא ניתן לאמת את החשבון. ניתן ליצור קשר במייל הבא: ",
 
 
 };
