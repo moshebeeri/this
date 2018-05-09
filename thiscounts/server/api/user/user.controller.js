@@ -96,6 +96,10 @@ let generate_follow = function (userId, itemId) {
             userId,
             businessId : results.business._id
           });
+          fireEvent.info('user', userId, 'business_user_follow', {
+            userId,
+            businessId : results.business._id
+          });
           activity_follow(userId, {business: results.group._id})
         });
       }
@@ -103,6 +107,10 @@ let generate_follow = function (userId, itemId) {
         graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
           if(err) return console.error(err);
           fireEvent.info('group', results.group._id, 'group_user_follow', {
+            userId,
+            groupId : results.group._id
+          });
+          fireEvent.info('user', userId, 'group_user_follow', {
             userId,
             groupId : results.group._id
           });
@@ -116,6 +124,10 @@ let generate_follow = function (userId, itemId) {
             userId,
             shoppingChainId : results.shoppingChain._id
           });
+          fireEvent.info('user', userId, 'shoppingChain_user_follow', {
+            userId,
+            shoppingChainId : results.shoppingChain._id
+          });
           activity_follow(userId, {shoppingChain: results.shoppingChain._id})
         });
       }
@@ -123,6 +135,10 @@ let generate_follow = function (userId, itemId) {
         graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
           if(err) return console.error(err);
           fireEvent.info('mall', results.mall._id, 'mall_user_follow', {
+            userId,
+            mall : results.mall._id
+          });
+          fireEvent.info('user', userId, 'mall_user_follow', {
             userId,
             mall : results.mall._id
           });
