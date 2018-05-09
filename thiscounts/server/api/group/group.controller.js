@@ -499,6 +499,7 @@ exports.group_join_group = function (req, res) {
     })
   });
 };
+
 exports.group_follow_business = function (req, res) {
   Group.findById(req.params.group, function (err, following_group) {
     if (err) {
@@ -516,6 +517,7 @@ exports.group_follow_business = function (req, res) {
     });
   })
 };
+
 exports.groups_following_business = function (req, res) {
   let skip = req.params.skip;
   let limit = req.params.limit;
