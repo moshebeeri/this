@@ -269,17 +269,10 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
 GraphModel.prototype.owner_followers_follow_default_group = function owner_followers_follow_default_group(owner_id, callback){
   let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business)-[:DEFAULT_GROUP]->(g)
                 WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'   
-                CREATE UNIQUE (u)-[r:FOLLOW]->(g)`;
-
-  if (utils.defined(callback)) {
-    db.query(query, callback);
-  } else {
-    db.query(query, function (err) {
-      if (err) {
-        logger.error(err.message);
-      }
-    });
-  }
+                CREATE UNIQUE (u)-[r:FOLLOW]->(g)  
+                return u._id as userId, g._id as groupId`;
+  console.log(`owner_followers_follow_default_group query:${query}`);
+  db.query(query, callback);
 };
 
 GraphModel.prototype.promotion_instance_id = function promotion_instance(user_id, promotion, callback){

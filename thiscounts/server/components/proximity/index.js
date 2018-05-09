@@ -114,7 +114,6 @@ function handleProximityActions(userId, location, callback) {
                   ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
 
-  console.log('handleProximityActions: ' + query);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {
       console.error(err);
@@ -224,7 +223,7 @@ exports.reportLastLocation = function(userId, location, callback) {
 
 exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
   if(!distanceInMeters) distanceInMeters = 10000;
-  console.log(`businessesWithinDistance`);
+
 
   ProximityModel.findById(userId, function (err, proximity) {
     if (err) return console.error(err);
@@ -243,13 +242,12 @@ exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
                     RETURN distinct b._id as business, distance(coordinate, businessLocation) as d
                     ORDER BY d desc
                     SKIP 0 LIMIT 10`;
-    console.log(`exports.businessesWithinDistance q=${query}`);
+
     graphModel.query(query, function (err, businesses) {
       if (err) {
         console.error(err);
         return callback(err);
       }
-      console.log(`businessesWithinDistance ${JSON.stringify(businesses)}`);
       return callback(null, businesses);
     });
   });
