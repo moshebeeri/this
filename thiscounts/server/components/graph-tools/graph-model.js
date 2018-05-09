@@ -270,7 +270,7 @@ GraphModel.prototype.owner_followers_follow_default_group = function owner_follo
   let query = `MATCH (u:user)-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:"OWNS"}]->(b:business)-[:DEFAULT_GROUP]->(g)
                 WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'   
                 CREATE UNIQUE (u)-[r:FOLLOW]->(g)  
-                return user._id as userId, g._id as groupId`;
+                return u._id as userId, g._id as groupId`;
   console.log(`owner_followers_follow_default_group query:${query}`);
   db.query(query, callback);
 };
