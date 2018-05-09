@@ -3,9 +3,10 @@
  */
 import moment from 'moment';
 import strings from "../i18n/i18n"
-
+const I18n = require('react-native-i18n');
 class DateUtils {
     messageFormater(itemDate) {
+        //moment.locale(I18n.default.locale);
         let date = new Date(itemDate);
         let currentYear = new Date().getYear();
         let year = date.getYear();

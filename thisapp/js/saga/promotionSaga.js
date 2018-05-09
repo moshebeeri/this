@@ -107,7 +107,7 @@ function* savePromotion(action) {
             createdPromotion.social_state.shares = 0;
             createdPromotion.social_state.realizes = 0;
             yield put(setPromotion(createdPromotion, action.businessId, tempId));
-            yield* setPromotionListener(response);
+            yield* setPromotionListener(createdPromotion);
 
         }
     } catch (error) {
