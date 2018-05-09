@@ -7,6 +7,8 @@ import handler from './ErrorHandler'
 import PromotionComperator from "../reduxComperators/PromotionComperator"
 import * as types from '../saga/sagaActions';
 import SyncerUtils from "../sync/SyncerUtils";
+import {put} from 'redux-saga/effects'
+
 let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();
 let feedApi = new FeedApi();

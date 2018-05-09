@@ -204,7 +204,7 @@ class BusinessHeader extends Component {
                           note>{businessName}</ThisText>
             </View>
             {showEdit ? <View style={{flexDirection: 'row',alignItems: 'center',}}>
-                <View style={{marginTop: 10}}>
+                <View style={{marginTop: 10,marginRight:10}}>
 
                     {editButton}
                 </View>
