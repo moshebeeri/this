@@ -182,5 +182,8 @@ module.exports = {
     },
     promotionListLineDescText: {
         fontWeight: '200', color: '#616F70', fontSize: StyleUtils.scale(14), width: StyleUtils.scale(260)
+    },
+    promotionTimeText: {
+        fontWeight: '200', color: '#616F70', fontSize: StyleUtils.scale(14),
     }
 };

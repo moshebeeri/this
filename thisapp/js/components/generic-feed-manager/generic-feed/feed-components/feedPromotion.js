@@ -64,6 +64,9 @@ export default class FeedPromotion extends Component {
 
     shouldComponentUpdate() {
         const {item, shouldUpdateFeeds} = this.props;
+        if(!shouldUpdateFeeds){
+            return true;
+        }
         if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
             return true
         }
@@ -71,7 +74,9 @@ export default class FeedPromotion extends Component {
     }
 
     componentDidUpdate(){
-        this.props.actions.finishUpdateItem(this.props.item.id)
+        if(this.props.actions.finishUpdateItem) {
+            this.props.actions.finishUpdateItem(this.props.item.id)
+        }
 
     }
 
