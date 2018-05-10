@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {TouchableOpacity,TextInput,BackHandler,View} from "react-native";
+import {TouchableOpacity,TextInput,BackHandler,View,I18nManager} from "react-native";
 import {Button, Input, Item, Spinner,} from "native-base";
 import Icon3 from "react-native-vector-icons/Ionicons";
 import Camera from "react-native-camera";
@@ -47,8 +47,10 @@ export default class BusinessFollow extends Component {
 
     createView() {
         const {cameraOn, searching, businesses, searchBusiness, followByQrCode,showSearchResults} = this.props;
-        let back = <Button transparent style={{marginTop:5,marginLeft: 5, marginRight: 5}} onPress={() => this.back()}>
-            <Icon3 active color={"#2db6c8"} size={30} name="ios-arrow-back"/>
+        let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
+
+        let back = <Button transparent style={{marginLeft: 10,marginRight: 5}} onPress={() => this.back()}>
+            <Icon3 active color={"#2db6c8"} size={30} name={arrowName}/>
 
         </Button>
         let spin = undefined;
@@ -92,7 +94,7 @@ export default class BusinessFollow extends Component {
 
 
                 <TouchableOpacity onPress={() => searchBusiness(this.state.searchText)}
-                                  style={{marginRight: 5, flexDirection: 'row', alignItems: 'center',}} regular>
+                                  style={{marginRight: 10, flexDirection: 'row', alignItems: 'center',}} regular>
                     <Icon style={{fontSize: StyleUtils.scale(28), color: "#2db6c8"}} name="ios-search"/>
 
                 </TouchableOpacity>
