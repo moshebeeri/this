@@ -10,7 +10,7 @@ let router = express.Router();
 router.get('/test', controller.test);
 router.get('/load', controller.load);
 router.get('/createI18N', controller.createI18N);
-router.get('/term/:key/:lang/', controller.term);
+router.get('/term/:key/:lang', controller.term);
 
 router.get('/translate/:to', auth.hasRole('admin'), controller.translateAPI);
 router.get('/', auth.hasRole('admin'), controller.index);

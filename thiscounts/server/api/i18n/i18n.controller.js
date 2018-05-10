@@ -72,12 +72,13 @@ exports.show = function(req, res) {
 
 function getToLanguages() {
   let languages = require('./strings/languages.json');
-  return Object.values(languages);
+  return Object.keys(languages).map(key => languages[key]);
 }
 
 exports.createI18N = function(req, res) {
   const strings = require('./strings/strings.json');
-  Object.entries(strings).forEach(([key, enUS]) => {
+  Object.keys(strings).forEach( key => {
+      const enUS = strings[key];
       console.log('translating key: ', key, 'with value: ', enUS);
       I18n.create({key, enUS, translations:{ en: enUS}}, function(err, i18n) {
         if (err) return handleError(res, err);
