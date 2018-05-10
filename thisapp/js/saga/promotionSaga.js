@@ -76,6 +76,7 @@ function* savePromotion(action) {
             pictures.push(action.promotion.image.uri);
             tempPromotion.pictures.push({pictures: pictures});
         }
+        tempPromotion.isTemp = true;
         tempPromotion.social_state = {};
         tempPromotion.social_state.saves = 0;
         tempPromotion.social_state.comments = 0;
