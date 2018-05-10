@@ -487,6 +487,17 @@ export function refresh(id, currentSocialState) {
     }
 }
 
+
+export function finishUpdateItem(id) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SINGLE_FEED_FINISH_UPDATED,
+            id: id
+        });
+    }
+}
+
+
 export function inviteUser(userId, groupId) {
     return async function (dispatch, getState) {
         try {

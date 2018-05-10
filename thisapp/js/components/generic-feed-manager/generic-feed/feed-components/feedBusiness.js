@@ -52,20 +52,17 @@ export default class FeedBusiness extends Component {
     }
 
     shouldComponentUpdate() {
-        const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
-        if (shouldUpdate) {
-            return true;
-        }
-        let results = item.id === visibleItem;
-        if (results) {
-            return results
-        }
-        if (visibleFeeds && item.fid && visibleFeeds.includes(item.fid)) {
-            return true;
+        const {item, shouldUpdateFeeds} = this.props;
+        if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
+            return true
         }
         return false;
     }
 
+    componentDidUpdate(){
+        this.props.actions.finishUpdateItem(this.props.item.id)
+
+    }
     createBusiness(item, like, unlike, showUsers, comment, group) {
         const {location, refresh, showActions} = this.props;
         if (!item.name) {

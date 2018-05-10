@@ -17,6 +17,7 @@ const initialState = {
     shouldRender: true,
     visibleFeed: undefined,
     visibleFeeds: [],
+    shouldUpdateFeeds: {}
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -44,17 +45,18 @@ export default function feeds(state = initialState, action) {
         case actions.UNLIKE:
         case actions.SAVE:
         case actions.SHARE:
-            return {
-                ...state,
-                updated: true,
-                renderFeed: true,
-                shouldRender: true
-            };
-        case actions.FEEDS_UPDATED:{
+            feedstate.shouldUpdateFeeds[action.id] = true;
+            feedstate.renderFeed = true;
+            feedstate.updated = true;
+            feedstate.shouldRender = true;
+            return feedstate;
+        case actions.SINGLE_FEED_FINISH_UPDATED:
+            feedstate.shouldUpdateFeeds[action.id] = false;
+            return feedstate;
+        case actions.FEEDS_UPDATED: {
             return {
                 ...state,
                 updated: false,
-
             };
         }
         case actions.FIRST_TIME_FEED:
@@ -81,6 +83,7 @@ export default function feeds(state = initialState, action) {
                         feedstate.feedView.push(item._id);
                     }
                 }
+                feedstate.shouldUpdateFeeds[item._id] = true;
                 feedstate.updated = !feedstate.updated;
             });
             feedstate.feeds = currentFeeds;
@@ -106,28 +109,28 @@ export default function feeds(state = initialState, action) {
                 ...state,
                 loadingDone: action.loadingDone,
                 shouldRender: true,
-                updated :true
+                updated: true
             };
         case actions.FEED_SHOW_TOP_LOADER:
             return {
                 ...state,
                 showTopLoader: action.showTopLoader,
                 renderFeed: true,
-                updated :true
+                updated: true
             };
         case actions.FEEDS_GET_NEXT_BULK:
             return {
                 ...state,
                 nextBulkLoad: true,
                 shouldRender: true,
-                updated :true
+                updated: true
             };
         case actions.FEEDS_GET_NEXT_BULK_DONE:
             return {
                 ...state,
                 nextBulkLoad: false,
                 shouldRender: true,
-                updated :true
+                updated: true
             };
         case actions.FEEDS_STOP_RENDER:
             return {
@@ -148,13 +151,13 @@ export default function feeds(state = initialState, action) {
             return {
                 ...state,
                 maxFeedReturned: true,
-                updated :true
+                updated: true
             };
         case actions.MAX_FEED_NOT_RETUNED:
             return {
                 ...state,
                 maxFeedReturned: false,
-                updated :true
+                updated: true
             };
         case actions.VISIBLE_FEED:
             return {
@@ -162,7 +165,7 @@ export default function feeds(state = initialState, action) {
                 visibleFeed: action.feedId,
                 visibleFeeds: [],
             };
-        case actions.CURRENT_TAB:{
+        case actions.CURRENT_TAB: {
             return {
                 ...state,
                 visibleFeeds: [],
@@ -179,11 +182,9 @@ export default function feeds(state = initialState, action) {
             );
             if (idIndex === 0) {
                 visitedFeeds.push(feedstate.feedView[0]);
-
             } else {
                 visitedFeeds.push(feedstate.feedView[idIndex - 1]);
                 visitedFeeds.push(feedstate.feedView[idIndex]);
-
             }
             return {
                 ...state,

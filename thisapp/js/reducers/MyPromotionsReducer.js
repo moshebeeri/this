@@ -1,4 +1,15 @@
-const initialState = {feeds: {},feedToSavedFeed: {}, feedOrder: [], showTopLoader: false, update: false, lastfeed: undefined, lastCall: {},firstTime:true,shouldRender:true};
+const initialState = {
+    shouldUpdateFeeds: {},
+    feeds: {},
+    feedToSavedFeed: {},
+    feedOrder: [],
+    showTopLoader: false,
+    update: false,
+    lastfeed: undefined,
+    lastCall: {},
+    firstTime: true,
+    shouldRender: true
+};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -21,47 +32,46 @@ export default function myPromotions(state = initialState, action) {
         case actions.SAVED_LAST_FEED_DOWN:
             feedstate.lastfeed = action.id;
             return feedstate;
+        case actions.SAVE_FEED_UPDATED:
+            feedstate.shouldUpdateFeeds[action.id] = false;
+            return feedstate;
         case actions.SAVED_FEED_LAST_CALL:
             feedstate.lastCall = action.lastCall;
             return feedstate;
         case actions.FETCH_TOP_SAVED_FEEDS:
-            if(action.item){
-                action.item.forEach(item =>{
+            if (action.item) {
+                action.item.forEach(item => {
                     currentFeeds[item.savedInstance._id] = item;
                     if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
                         feedstate.feedOrder.push(item.savedInstance._id);
                         feedstate.feedToSavedFeed[item.savedInstance.instance._id] = item.savedInstance._id;
                     }
-
                 });
                 feedstate.shouldRender = true;
                 return feedstate
             }
             return state;
-
         case actions.UPSERT_SAVED_FEEDS:
-            if(action.item){
-                action.item.forEach(item =>{
+            if (action.item) {
+                action.item.forEach(item => {
                     currentFeeds[item.savedInstance._id] = item;
                     if (!feedstate.feedOrder.includes(item.savedInstance._id)) {
                         feedstate.feedOrder.unshift(item.savedInstance._id);
                         feedstate.feedToSavedFeed[item.savedInstance.instance._id] = item.savedInstance._id;
-
+                        feedstate.shouldUpdateFeeds[item.savedInstance._id] = true;
                     }
-
                 });
                 feedstate.lastCall = new Date();
                 feedstate.shouldRender = true;
                 return feedstate
             }
-
             return state;
         case actions.UPDATE_SINGLE_SAVED_INSTANCE:
             currentFeeds[action.item.savedInstance._id] = action.item;
+            feedstate.shouldUpdateFeeds[action.item.savedInstance._id] = true;
             feedstate.shouldRender = true;
             feedstate.update = !feedstate.update
             return feedstate
-
         case actions.SAVE_PROMOTION_FIRST_TIME_FEED:
             return {
                 ...state,

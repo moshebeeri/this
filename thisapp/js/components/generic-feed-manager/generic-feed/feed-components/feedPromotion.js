@@ -63,22 +63,18 @@ export default class FeedPromotion extends Component {
     }
 
     shouldComponentUpdate() {
-        const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
-        if (shouldUpdate) {
-            return true;
-        }
-        if (item.promotion === 'PUNCH_CARD') {
-            return true;
-        }
-        let results = item.id === visibleItem;
-        if (results) {
-            return results
-        }
-        if (visibleFeeds && item.fid && visibleFeeds.includes(item.fid)) {
-            return true;
+        const {item, shouldUpdateFeeds} = this.props;
+        if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
+            return true
         }
         return false;
     }
+
+    componentDidUpdate(){
+        this.props.actions.finishUpdateItem(this.props.item.id)
+
+    }
+   
 
     render() {
         const {
