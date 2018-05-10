@@ -68,7 +68,7 @@ const il = {
     Gift: 'מתנה',
     BuyAmount: 'כמות רכש',
     PayAmount: 'שלם ₪',
-    NumberOfGifts: 'כמות ההנחות',
+    NumberOfGifts: 'כמות המתנות',
     SelectProduct: 'בחר מוצר',
     SelectGift: 'בחר מתנה',
     SelectOn: 'בחירה עבור',
