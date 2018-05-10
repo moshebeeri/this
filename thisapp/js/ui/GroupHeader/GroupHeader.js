@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View,I18nManager} from 'react-native';
 import {Button, Thumbnail} from 'native-base';
 import styles from './styles'
 import strings from "../../i18n/i18n"
@@ -80,9 +80,9 @@ class GroupHeader extends Component {
                 <Icon2 style={{color: 'black', paddingLeft: 10, fontSize: StyleUtils.scale(15)}}
                        name="options"/>
             </MenuTrigger>
-            <MenuOptions>
+            <MenuOptions customStyles={{optionsContainer: {marginLeft: I18nManager.isRTL ? 100 : 0}}}>
 
-                <MenuOption onSelect={this.unFollowGroup.bind(this)}>
+            <MenuOption onSelect={this.unFollowGroup.bind(this)}>
                     <ThisText style={{padding: 10, paddingTop: 5}}>{strings.unfollowGroup}</ThisText>
                 </MenuOption>
             </MenuOptions>
