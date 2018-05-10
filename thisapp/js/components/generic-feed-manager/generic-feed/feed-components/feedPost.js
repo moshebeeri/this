@@ -63,14 +63,7 @@ export default class FeedPost extends Component {
             this.refs[item.id].visible(visible);
         }
         if (visible) {
-            if (visible && actions && actions.setSocialState) {
-                // actions.setSocialState(item);
-            }
-            if (group) {
-                actions.setVisibleItem(item.fid, group._id);
-            } else {
-                actions.setVisibleItem(item.fid);
-            }
+
             if (this.itemMissingImageOrVideo(item)) {
                 actions.updateFeed(item);
             }

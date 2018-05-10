@@ -74,7 +74,7 @@ export default class FeedPromotion extends Component {
         this.props.actions.finishUpdateItem(this.props.item.id)
 
     }
-   
+
 
     render() {
         const {
@@ -94,7 +94,7 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
         }
         const result =
-            <InViewPort onChange={this.visited.bind(this)} style={[container, {width: StyleUtils.getWidth() - minimizeSize,backgroundColor:`white`}]}>
+            <View style={[container, {width: StyleUtils.getWidth() - minimizeSize,backgroundColor:`white`}]}>
                 <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth() - minimizeSize}]}>
                     {item.actionOff && <View style={{marginLeft:StyleUtils.scale(5),alignItems:'flex-start',justifyContent:'center',width:StyleUtils.getWidth()}}>
                         <ThisText style={{fontSize: StyleUtils.scale(19),
@@ -179,7 +179,7 @@ export default class FeedPromotion extends Component {
 
 
                 </View>
-            </InViewPort>;
+            </View>;
         return result;
     }
 

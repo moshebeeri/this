@@ -71,7 +71,7 @@ export default class FeedBusiness extends Component {
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles, showActions,);
         const result =
-            <InViewPort onChange={this.visited.bind(this)}
+            <View
                         style={[styles.businesses_container, {width: StyleUtils.getWidth()}]}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
 
@@ -126,7 +126,7 @@ export default class FeedBusiness extends Component {
 
                     </View>
                 </View>
-            </InViewPort>;
+            </View>;
         return result;
     }
 
