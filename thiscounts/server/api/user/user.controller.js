@@ -100,7 +100,7 @@ let generate_follow = function (userId, itemId) {
             userId,
             businessId : results.business._id
           });
-          activity_follow(userId, {business: results.group._id})
+          activity_follow(userId, {business: results.business._id})
         });
       }
       else if( results.group )        {
