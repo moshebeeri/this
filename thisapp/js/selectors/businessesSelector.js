@@ -70,6 +70,12 @@ export const getBusinessPromotions = createSelector([getStateMyBusinesses],
             Object.keys(businesses.businessesPromotions).forEach(
                 key => {
                     responseMap[key] = businesses.businessesPromotions[key].sort(function(a,b){
+                        if(a.isTemp){
+                            return -1;
+                        }
+                        if(b.isTemp){
+                            return 1;
+                        }
                         if(a._id < b._id){
                             return 1
                         }

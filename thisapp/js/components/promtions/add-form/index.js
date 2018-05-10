@@ -674,6 +674,8 @@ class AddPromotion extends Component {
 
     setToggleOff() {
         let defaultDate = this.getDefaultDate(false);
+        this.refs["discountType"].selectPromotionType("PERCENT");
+
         this.setState({
             token: '',
             path: '',
@@ -702,11 +704,11 @@ class AddPromotion extends Component {
             promotion: {},
             toggle: !this.state.toggle
         });
-        this.selectDiscount("PERCENT");
     }
 
     setToggleOn() {
         let defaultDate = this.getDefaultDate(true);
+        this.refs["discountType"].selectPromotionType('');
         this.setState({
             token: '',
             path: '',

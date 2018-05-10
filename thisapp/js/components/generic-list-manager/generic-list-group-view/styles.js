@@ -82,7 +82,7 @@ module.exports = {
         backgroundColor: 'white',
     },
     chatListLineTitleText: {
-        fontWeight: 'bold', color: '#616F70', fontSize: StyleUtils.scale(16), width: 260,
+        fontWeight: 'bold', color: '#616F70', fontSize: StyleUtils.scale(16), width: StyleUtils.scale(200),
     },
     chatListLineDescText: {
         fontWeight: '200', color: '#616F70', fontSize:  StyleUtils.scale(14),

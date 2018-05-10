@@ -25,7 +25,6 @@ function* saveGroup(action) {
     try {
         console.log(action);
         let createdGroup = yield call(groupsApi.createGroup, action.group, action.token);
-        yield call(groupsApi.touch, createdGroup._id, action.token);
         handleSucsess();
         createdGroup.touched = new Date().getTime();
         let users = action.group.groupUsers.slice(0);
