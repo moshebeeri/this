@@ -590,10 +590,11 @@ export function* updateGroupListener(group) {
     SyncerUtils.syncGroup(group._id);
 }
 
-export function setGroup(response) {
+export function setGroup(response,id) {
     return {
         type: actions.UPSERT_SINGLE_GROUP,
         group: response,
+        removeId: id
     }
 }
 

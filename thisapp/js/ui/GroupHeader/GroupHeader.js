@@ -56,6 +56,9 @@ class GroupHeader extends Component {
         if(groupUser && groupUser._id  ===  user._id){
             return true;
         }
+        if(group._id.includes("temp_group")){
+            return true;
+        }
 
         return false;
 
