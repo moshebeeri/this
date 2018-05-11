@@ -9,6 +9,7 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    Platform
 
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -188,7 +189,7 @@ class Signup extends Component {
                                     </View>
                                 </View>
 
-                                <KeyboardAvoidingView style={{alignItems:'center',justifyContent:'center'}}   behavior={'position'}>
+                                <KeyboardAvoidingView  keyboardVerticalOffset={Platform.OS === 'ios' ? 300 :0 } style={{alignItems:'center',justifyContent:'center'}}   behavior={Platform.OS === 'ios' ? 'padding' :'position' }>
 
                                    <View style={{alignItems:'center',justifyContent:'center'}}>
                                     <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row'}]} regular>
@@ -209,7 +210,7 @@ class Signup extends Component {
                                                    }}
                                         />}
                                         <TextInput focus={true} keyboardType='phone-pad' value={this.state.phoneNumber}
-                                                   blurOnSubmit={true} returnKeyType='next'
+                                                   blurOnSubmit={true} returnKeyType={Platform.OS === 'ios' ? 'done' :'next'}
                                                    ref='phone'
                                                    onSubmitEditing={this.focusNextField.bind(this, "password")}
                                                    underlineColorAndroid={'transparent'}
