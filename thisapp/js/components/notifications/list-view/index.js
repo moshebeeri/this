@@ -18,7 +18,10 @@ export default class NotificationListView extends Component {
 
     accept() {
         const {item, groupActions, actions} = this.props;
-        const viewItem = item.item;
+        let viewItem = item;
+        if (item.item) {
+            viewItem = item.item;
+        }
         groupActions.acceptInvitation(viewItem.group);
         actions.doNotification(viewItem._id)
     }
@@ -151,75 +154,81 @@ export default class NotificationListView extends Component {
             <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 {viewItem.read ? <View>
 
-                <View  style={{
-                    flex: -1,
-                    backgroundColor: backgroundColor,
-                    flexDirection: 'row',
-                    paddingTop: StyleUtils.scale(5),
-                    paddingLeft: StyleUtils.scale(5),
-                    paddingBottom: StyleUtils.scale(5),
-                    alignItems: 'center',
-                }}>
-                    {image}
                     <View style={{
-                        flexDirection: 'column',
-                        marginLeft: StyleUtils.scale(5),
-                        width: StyleUtils.getWidth() - 60,
+                        flex: -1,
+                        backgroundColor: backgroundColor,
+                        flexDirection: 'row',
+                        paddingTop: StyleUtils.scale(5),
+                        paddingLeft: StyleUtils.scale(5),
+                        paddingBottom: StyleUtils.scale(5),
+                        alignItems: 'center',
                     }}>
-                        <View style={{padding: 10, flexDirection: 'row'}}>
-                            <ThisText numberOfLines={2}
-                                      style={{
-                                          fontSize: StyleUtils.scale(14),
-                                          paddingRight: StyleUtils.scale(5),
-                                      }}>{strings.CreatePromotionForEveryoneBusiness}
-                                <ThisText style={{
-                                    marginLeft: vw * 3,
-                                    fontWeight: 'bold',
-                                    height: vh * 5,
-                                    fontSize: StyleUtils.scale(14),
-                                    width: nameWidth
-                                }}> {viewItem.business.name} </ThisText>
-                            </ThisText>
+                        <View style={{marginLeft: 10}}>
+                            {image}
+                        </View>
+                        <View style={{
+                            flexDirection: 'column',
+                            marginLeft: StyleUtils.scale(5),
+                            width: StyleUtils.getWidth() - 60,
+                        }}>
+                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                <ThisText numberOfLines={2}
+                                          style={{
+                                              fontSize: StyleUtils.scale(14),
+                                              paddingRight: StyleUtils.scale(5),
+                                              width: StyleUtils.scale(250)
+                                          }}>{strings.CreatePromotionForEveryoneBusiness}
+                                    <ThisText style={{
+                                        marginLeft: vw * 3,
+                                        fontWeight: 'bold',
+                                        height: vh * 5,
+                                        fontSize: StyleUtils.scale(14),
+                                        width: nameWidth
+                                    }}> {viewItem.business.name} </ThisText>
+                                </ThisText>
+                            </View>
                         </View>
                     </View>
-                </View>
-                {action}
-                </View>: <View>
+                    {action}
+                </View> : <View>
 
-                        <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
-                            flex: -1,
-                            backgroundColor: backgroundColor,
-                            flexDirection: 'row',
-                            paddingTop: StyleUtils.scale(5),
-                            paddingLeft: StyleUtils.scale(5),
-                            paddingBottom: StyleUtils.scale(5),
-                            alignItems: 'center',
-                        }}>
+                    <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
+                        flex: -1,
+                        backgroundColor: backgroundColor,
+                        flexDirection: 'row',
+                        paddingTop: StyleUtils.scale(5),
+                        paddingLeft: StyleUtils.scale(5),
+                        paddingBottom: StyleUtils.scale(5),
+                        alignItems: 'center',
+                    }}>
+                        <View style={{marginLeft: 10}}>
                             {image}
-                            <View style={{
-                                flexDirection: 'column',
-                                marginLeft: StyleUtils.scale(5),
-                                width: StyleUtils.getWidth() - 60,
-                            }}>
-                                <View style={{padding: 10, flexDirection: 'row'}}>
-                                    <ThisText numberOfLines={2}
-                                              style={{
-                                                  fontSize: StyleUtils.scale(14),
-                                                  paddingRight: StyleUtils.scale(5),
-                                              }}>{strings.CreatePromotionForEveryoneBusiness}
-                                        <ThisText style={{
-                                            marginLeft: vw * 3,
-                                            fontWeight: 'bold',
-                                            height: vh * 5,
-                                            fontSize: StyleUtils.scale(14),
-                                            width: nameWidth
-                                        }}> {viewItem.business.name} </ThisText>
-                                    </ThisText>
-                                </View>
+                        </View>
+                        <View style={{
+                            flexDirection: 'column',
+                            marginLeft: StyleUtils.scale(5),
+                            width: StyleUtils.getWidth() - 60,
+                        }}>
+                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                <ThisText numberOfLines={2}
+                                          style={{
+                                              fontSize: StyleUtils.scale(14),
+                                              paddingRight: StyleUtils.scale(5),
+                                              width: StyleUtils.scale(250)
+                                          }}>{strings.CreatePromotionForEveryoneBusiness}
+                                    <ThisText style={{
+                                        marginLeft: vw * 3,
+                                        fontWeight: 'bold',
+                                        height: vh * 5,
+                                        fontSize: StyleUtils.scale(14),
+                                        width: nameWidth
+                                    }}> {viewItem.business.name} </ThisText>
+                                </ThisText>
                             </View>
-                        </TouchableOpacity>
-                        {action}
-                    </View>}
+                        </View>
+                    </TouchableOpacity>
+                    {action}
+                </View>}
             </View>
 
 
@@ -354,29 +363,31 @@ export default class NotificationListView extends Component {
         return (
             <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
 
-                { viewItem.read ?  <View>
-                    <View  style={{
-                        flex: -1,
-                        backgroundColor: backgroundColor,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}>
-                        {image}
-                        <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
-                            <View style={{adding: 10, flexDirection: 'row'}}>
-                                <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
-                                <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
+                {viewItem.read ? <View>
+                        <View style={{
+                            flex: -1,
+                            backgroundColor: backgroundColor,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <View style={{marginLeft: 10}}>
+                                {image}
                             </View>
-                            <ThisText style={{
-                                marginLeft: vw * 3,
-                                fontWeight: 'bold',
-                                height: vh * 5,
-                                width: nameWidth
-                            }}> {viewItem.group.name} </ThisText>
+                            <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
+                                <View style={{padding: 10,}}>
+                                    <ThisText style={{
+                                        width: StyleUtils.scale(250),
+                                        height: vh * 4
+                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
+                                    <ThisText style={{
+                                        fontWeight: 'bold',
+                                    }}> {viewItem.group.name} </ThisText>
+                                </View>
+
+                            </View>
                         </View>
-                    </View>
-                    {action}
-                </View> :
+                        {action}
+                    </View> :
                     <View>
                         <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
                             flex: -1,
@@ -384,18 +395,20 @@ export default class NotificationListView extends Component {
                             flexDirection: 'row',
                             alignItems: 'center',
                         }}>
-                            {image}
+                            <View style={{marginLeft: 10}}>
+                                {image}
+                            </View>
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
-                                <View style={{adding: 10, flexDirection: 'row'}}>
-                                    <ThisText style={{fontWeight: 'bold', marginLeft: vw * 4}}>{user.name}</ThisText>
-                                    <ThisText style={{height: vh * 4}}>{strings.InvitesYouToJoinGroup}</ThisText>
+                                <View style={{padding: 10,}}>
+                                    <ThisText style={{
+                                        width: StyleUtils.scale(250),
+                                        height: vh * 4
+                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
+                                    <ThisText style={{
+                                        fontWeight: 'bold',
+                                    }}> {viewItem.group.name} </ThisText>
                                 </View>
-                                <ThisText style={{
-                                    marginLeft: vw * 3,
-                                    fontWeight: 'bold',
-                                    height: vh * 5,
-                                    width: nameWidth
-                                }}> {viewItem.group.name} </ThisText>
+
                             </View>
                         </TouchableOpacity>
                         {action}
@@ -428,62 +441,72 @@ export default class NotificationListView extends Component {
         return (
             <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
                 {viewItem.read ? <View>
-                <View style={{
-                    flex: -1,
-                    backgroundColor: backgroundColor,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                }}>
-                    {image}
                     <View style={{
-                        flexDirection: 'column',
-                        marginLeft: 5,
-                        width: StyleUtils.getWidth() - 50,
-                        height: vh * 10
+                        flex: -1,
+                        backgroundColor: backgroundColor,
+                        flexDirection: 'row',
+                        alignItems: 'center',
                     }}>
-                        <View style={{adding: 10, flexDirection: 'row'}}>
-                            <ThisText numberOfLines={2}
-                                      style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
-                                <ThisText style={{
-                                    marginLeft: vw * 3,
-                                    fontWeight: 'bold',
-                                    height: vh * 5,
-                                    width: nameWidth
-                                }}> {viewItem.group.name} </ThisText>
-                            </ThisText>
+                        <View style={{marginLeft: 10}}>
+                            {image}
+                        </View>
+                        <View style={{
+                            flexDirection: 'column',
+                            marginLeft: 5,
+                            width: StyleUtils.getWidth() - 50,
+                            height: vh * 10
+                        }}>
+                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                <ThisText numberOfLines={2}
+                                          style={{
+                                              width: StyleUtils.scale(250),
+                                              height: vh * 7
+                                          }}>{strings.CreatePromotionForEveryoneGroup}
+                                    <ThisText style={{
+                                        marginLeft: vw * 3,
+                                        fontWeight: 'bold',
+                                        height: vh * 5,
+                                        width: nameWidth
+                                    }}> {viewItem.group.name} </ThisText>
+                                </ThisText>
+                            </View>
                         </View>
                     </View>
-                </View>
-                {action}
-                </View> :  <View>
-                        <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
-                            flex: -1,
-                            backgroundColor: backgroundColor,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
+                    {action}
+                </View> : <View>
+                    <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
+                        flex: -1,
+                        backgroundColor: backgroundColor,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                        <View style={{marginLeft: 10}}>
                             {image}
-                            <View style={{
-                                flexDirection: 'column',
-                                marginLeft: 5,
-                                width: StyleUtils.getWidth() - 50,
-                                height: vh * 10
-                            }}>
-                                <View style={{adding: 10, flexDirection: 'row'}}>
-                                    <ThisText numberOfLines={2}
-                                              style={{width: vw * 75, height: vh * 7}}>{strings.CreatePromotionForEveryoneGroup}
-                                        <ThisText style={{
-                                            marginLeft: vw * 3,
-                                            fontWeight: 'bold',
-                                            height: vh * 5,
-                                            width: nameWidth
-                                        }}> {viewItem.group.name} </ThisText>
-                                    </ThisText>
-                                </View>
+                        </View>
+                        <View style={{
+                            flexDirection: 'column',
+                            marginLeft: 5,
+                            width: StyleUtils.getWidth() - 50,
+                            height: vh * 10
+                        }}>
+                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                <ThisText numberOfLines={2}
+                                          style={{
+                                              width: StyleUtils.scale(250),
+                                              height: vh * 7
+                                          }}>{strings.CreatePromotionForEveryoneGroup}
+                                    <ThisText style={{
+                                        marginLeft: vw * 3,
+                                        fontWeight: 'bold',
+                                        height: vh * 5,
+                                        width: nameWidth
+                                    }}> {viewItem.group.name} </ThisText>
+                                </ThisText>
                             </View>
-                        </TouchableOpacity>
-                        {action}
-                    </View>}
+                        </View>
+                    </TouchableOpacity>
+                    {action}
+                </View>}
             </View>
 
 

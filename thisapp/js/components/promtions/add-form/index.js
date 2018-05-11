@@ -674,6 +674,8 @@ class AddPromotion extends Component {
 
     setToggleOff() {
         let defaultDate = this.getDefaultDate(false);
+        this.refs["discountType"].selectPromotionType("PERCENT");
+
         this.setState({
             token: '',
             path: '',
@@ -702,11 +704,11 @@ class AddPromotion extends Component {
             promotion: {},
             toggle: !this.state.toggle
         });
-        this.selectDiscount("PERCENT");
     }
 
     setToggleOn() {
         let defaultDate = this.getDefaultDate(true);
+        this.refs["discountType"].selectPromotionType('');
         this.setState({
             token: '',
             path: '',
@@ -831,10 +833,10 @@ class AddPromotion extends Component {
                         <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
                                       selectedValue={this.props.navigation.state.params.onBoardType}
                                       value={header}
-                                      defaultHeader="Choose Type" isMandatory
+                                      defaultHeader={strings.ChooseType} isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/> :
                         <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
-                                      defaultHeader="Choose Type" isMandatory
+                                      defaultHeader={strings.ChooseType} isMandatory
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     }
 
@@ -842,12 +844,12 @@ class AddPromotion extends Component {
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                     {this.state.toggle ?
                         <SimplePicker ref="discountType" list={types} itemTitle={strings.DiscountType}
-                                      defaultHeader="Choose Type" isMandatory
+                                      defaultHeader={strings.ChooseType} isMandatory
                                       onValueSelected={this.selectDiscount.bind(this)}/> :
                         <SimplePicker ref="discountType" list={types_simple} itemTitle={strings.DiscountType}
                                       selectedValue="PERCENT"
                                       value={strings.PercentageOff}
-                                      defaultHeader="Choose Type" isMandatory
+                                      defaultHeader={strings.ChooseType} isMandatory
                                       onValueSelected={this.selectDiscount.bind(this)}/>}
                 </View>
                 {this.state.toggle && <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>

@@ -201,15 +201,24 @@ function doFollowBusiness(userId, businessId, callback) {
             business_follow_activity(userId, businessId);
 
             let query = `MATCH (user:user{_id:"${userId}"}), (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
-                         CREATE UNIQUE (user)-[f:FOLLOW]->(g)`;
+                         CREATE UNIQUE (user)-[f:FOLLOW]->(g)
+                         return user._id as userId, g._id as groupId
+                         `;
 
-            graphModel.query(query, function (err) {
+            graphModel.query(query, function (err, results) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
               fireEvent.info('business', businessId, 'follow_business', {status:  business.review.status});
               if (business.shopping_chain) {
                 return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
               }
+              results.forEach(user_group => {
+                fireEvent.info('user', user_group.userId, 'group_user_follow', {
+                  userId : user_group.userId,
+                  groupId : user_group.groupId
+                });
+              });
+
               return callback(null)
             })
           });
@@ -334,7 +343,17 @@ function create_business_default_group(business) {
     business.groups.push(group._id);
     business.save((err) => {
       if(err) return console.error(err);
-      graphModel.owner_followers_follow_default_group(business.creator._id);
+      graphModel.owner_followers_follow_default_group(business.creator._id, (err, results)=>{
+        if(err) return console.error(err);
+        console.log(`graphModel.owner_followers_follow_default_group ${JSON.stringify(results)}`);
+        results.forEach(user_group => {
+          fireEvent.info('user', user_group.userId, 'group_user_follow', {
+            userId: user_group.userId,
+            groupId: user_group.groupId
+          });
+        });
+
+      });
       //graphModel.relate_ids(business.creator._id, 'FOLLOW', group._id);
     });
   });

@@ -7,7 +7,7 @@ import {
     ScrollView,
     TextInput,
     TouchableOpacity,
-    View
+    View,Linking
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
@@ -51,11 +51,19 @@ class Register extends Component {
     }
 
     validateCode() {
-        this.props.actions.verifyCode(this.state.code, this.props.navigation, resetAction)
+        this.props.actions.verifyCode(this.state.code, this.props.navigation, resetAction);
+    }
+
+    resendCode() {
+        this.props.actions.verify();
+    }
+
+    sendEmail() {
+        Linking.openURL('mailto:help@this.deals');
     }
 
     render() {
-        const {message, doRegister} = this.props;
+        const {message, doRegister, showResend, numberOfSms} = this.props;
         const errorMessage = this.createMessage(message);
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         return (
@@ -72,7 +80,12 @@ class Register extends Component {
                                resizeMode='cover' source={bg}/>
 
                     </View>
-                    <View style={{width: width,  height: StyleUtils.scale(50), justifyContent: 'center', backgroundColor: 'transparent'}}>
+                    <View style={{
+                        width: width,
+                        height: StyleUtils.scale(50),
+                        justifyContent: 'center',
+                        backgroundColor: 'transparent'
+                    }}>
                         <TouchableOpacityFix transparent style={{
                             width: 50,
                             alignItems: 'flex-start',
@@ -127,35 +140,68 @@ class Register extends Component {
                                     alignItems: 'center',
                                     width: width / 2 + 120
                                 }}>
-
-
-                                    <TouchableOpacityFix onPress={() => this.validateCode()} style={{
-                                        width: StyleUtils.getWidth() - StyleUtils.scale(180),
-                                        height: StyleUtils.scale(50),
-                                        borderRadius: 30,
-                                        backgroundColor: 'white',
-
-                                        flexDirection: 'row',
-                                        justifyContent: 'center',
+                                    <View style={{
+                                        paddingRight: 2,
+                                        paddingLeft: 2,
+                                        width: StyleUtils.getWidth(),
                                         alignItems: 'center',
-                                    }} regular>
+                                        justifyContent: 'center',
+                                        flexDirection: 'row',
+                                    }}>
+                                        <TouchableOpacityFix onPress={() => this.validateCode()} style={{
+                                            width: StyleUtils.getWidth() - StyleUtils.scale(180),
+                                            height: StyleUtils.scale(50),
+                                            borderRadius: 30,
+                                            backgroundColor: 'white',
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }} regular>
 
-                                        <ThisText style={{
-                                            color: 'skyblue',
-                                            fontWeight: 'bold',
-                                            fontStyle: 'normal',
-                                            fontSize: StyleUtils.scale(20)
-                                        }}>{strings.Validate.toUpperCase()}</ThisText>
+                                            <ThisText style={{
+                                                color: 'skyblue',
+                                                fontWeight: 'bold',
+                                                fontStyle: 'normal',
+                                                fontSize: StyleUtils.scale(20)
+                                            }}>{strings.Validate.toUpperCase()}</ThisText>
 
-                                    </TouchableOpacityFix>
+                                        </TouchableOpacityFix>
+
+                                        {showResend && numberOfSms < 3 &&
+                                        <TouchableOpacityFix onPress={() => this.resendCode()} style={{
+                                            width: StyleUtils.getWidth() - StyleUtils.scale(180),
+                                            height: StyleUtils.scale(50),
+                                            borderRadius: 30,
+                                            backgroundColor: 'white',
+                                            marginLeft: 5,
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }} regular>
+
+                                            <ThisText style={{
+                                                color: 'skyblue',
+                                                fontWeight: 'bold',
+                                                fontStyle: 'normal',
+                                                fontSize: StyleUtils.scale(20)
+                                            }}>{strings.resendCode.toUpperCase()}</ThisText>
+
+                                        </TouchableOpacityFix>}
+                                    </View>
                                 </View>
                                 {doRegister && <Spinner style={{position: 'absolute', top: 40}}/>}
+                                {showResend && numberOfSms > 3 && <View style={{width: StyleUtils.getWidth() - 50}}>
 
+                                    <ThisText style={styles.decritpionLine2}>{strings.RegisterHelpMessage}</ThisText>
+                                    <TouchableOpacity onPress={() => this.sendEmail()}>
+                                        <ThisText style={styles.decritpionLine2}>help@this.deals</ThisText>
+                                    </TouchableOpacity>
+                                </View>}
                             </View>
+
 
                         </View>
                     </KeyboardAvoidingView>
-
 
                 </View>
             </ScrollView>
@@ -166,7 +212,7 @@ class Register extends Component {
     createMessage(message) {
         if (message) {
             return <ThisText style={{backgroundColor: 'transparent', padding: 10, fontSize: 16, color: 'red'}}>
-                {this.state.validationMessage}
+                {message}
             </ThisText>
         }
         return undefined;
@@ -177,6 +223,8 @@ export default connect(
     state => ({
         message: state.registerForm.message,
         network: state.network,
+        showResend: state.registerForm.showResend,
+        numberOfSms: state.registerForm.numberOfSms,
         doRegister: state.registerForm.registerProcess,
     }),
     (dispatch) => ({

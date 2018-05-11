@@ -52,9 +52,13 @@ class SelectUsersComponent extends Component {
 
     saveFormData() {
         const {userFollower} = this.props;
+        let users = userFollower;
+        if(this.props.navigation.state.params.users){
+            users = this.props.navigation.state.params.users;
+        }
         let selectedUsers = new Array();
         let selectedBool = this.state.selectCheckBox;
-        userFollower.forEach(function (user, i) {
+        users.forEach(function (user, i) {
             if (selectedBool[i + 1]) {
                 selectedUsers.push(user);
             }

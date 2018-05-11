@@ -30,7 +30,8 @@ export default class FeedPost extends Component {
     constructor() {
         super();
         this.state = {
-            containLink: false
+            containLink: false,
+            update:true,
         }
     }
 
@@ -44,18 +45,16 @@ export default class FeedPost extends Component {
     }
 
     shouldComponentUpdate() {
-        const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
-        if (shouldUpdate) {
-            return true;
-        }
-        let results = item.id === visibleItem;
-        if (results) {
-            return results
-        }
-        if (visibleFeeds && item.fid && visibleFeeds.includes(item.fid)) {
-            return true;
+        const {item, shouldUpdateFeeds} = this.props;
+        if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
+            return true
         }
         return false;
+    }
+
+    componentDidUpdate(){
+        this.props.actions.finishUpdateItem(this.props.item.id)
+
     }
 
     visited(visible) {
@@ -64,14 +63,7 @@ export default class FeedPost extends Component {
             this.refs[item.id].visible(visible);
         }
         if (visible) {
-            if (visible && actions && actions.setSocialState) {
-                // actions.setSocialState(item);
-            }
-            if (group) {
-                actions.setVisibleItem(item.fid, group._id);
-            } else {
-                actions.setVisibleItem(item.fid);
-            }
+
             if (this.itemMissingImageOrVideo(item)) {
                 actions.updateFeed(item);
             }

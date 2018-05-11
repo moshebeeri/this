@@ -149,17 +149,24 @@ export function updateSavedInstance(item) {
         try {
             const token = getState().authentication.token;
             let response = await profileApi.getSavedInstance(token, item.id);
-            //if(savedPromotionComperator.shuoldUpdateInstance(response)) {
             dispatch({
                 type: actions.UPDATE_SINGLE_SAVED_INSTANCE,
                 item: response
             });
-            // }
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'feed-getFeedSocialState')
             await logger.actionFailed('getFeedSocialState')
         }
+    }
+}
+
+export function finishUpdateItem(id) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SAVE_FEED_UPDATED,
+            id: id
+        });
     }
 }
 

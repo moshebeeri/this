@@ -65,7 +65,7 @@ class GroupFeedHeader extends Component {
     getFollowerUsers() {
         let group = this.props.item;
         let users = this.props.groupsFollowers[group._id];
-        if(!users){
+        if (!users) {
             return [];
         }
         return users;
@@ -90,6 +90,11 @@ class GroupFeedHeader extends Component {
     updateGroup() {
         let group = this.props.item;
         navigationUtils.doNavigation(this.props.navigation, "AddGroups", {group: group});
+    }
+
+    followBusiness() {
+        let group = this.props.item;
+        navigationUtils.doNavigation(this.props.navigation, "businessFollow", {group: group});
     }
 
     viewGroup() {
@@ -156,22 +161,27 @@ class GroupFeedHeader extends Component {
         let addPromotionMenu = undefined;
         if (group.role && (group.role === "owner" || group.role === "OWNS" || group.role === "Admin" || group.role === "Manager"  )) {
             addPromotionMenu = <MenuOption onSelect={this.addPromotion.bind(this)}>
-                <ThisText>{strings.AddPromotion}</ThisText>
+                <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.AddPromotion}</ThisText>
             </MenuOption>
         }
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         if (this.isGroupAdmin(group)) {
             groupInvite = <Menu>
                 <MenuTrigger customStyles={{alignItems: 'center', justifyContent: 'center'}}>
-                    <Icon2 style={{fontSize: StyleUtils.scale(25), color: "#2db6c8"}} name="options-vertical"/>
+                    <Icon2 style={{paddingRight:I18nManager.isRTL ? 0: 10,paddingLeft:I18nManager.isRTL ? 10: 0,fontSize: StyleUtils.scale(25), color: "#2db6c8"}} name="options-vertical"/>
                 </MenuTrigger>
-                <MenuOptions>
+                <MenuOptions customStyles={{optionsContainer: {marginLeft: I18nManager.isRTL ? StyleUtils.scale(150) : 0}}}>
+
                     <MenuOption onSelect={this.updateGroup.bind(this)}>
-                        <ThisText>{strings.Edit}</ThisText>
+                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.Edit}</ThisText>
                     </MenuOption>
-                    {this.getFollowerUsers().length > 0  && <MenuOption onSelect={this.showUsers.bind(this)}>
-                        <ThisText>{strings.Invite}</ThisText>
+
+                    {this.getFollowerUsers().length > 0 && <MenuOption onSelect={this.showUsers.bind(this)}>
+                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.Invite}</ThisText>
                     </MenuOption>}
+                    <MenuOption onSelect={this.followBusiness.bind(this)}>
+                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.FollowBusiness}</ThisText>
+                    </MenuOption>
                     {addPromotionMenu}
                 </MenuOptions>
             </Menu>

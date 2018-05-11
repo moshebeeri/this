@@ -177,9 +177,10 @@ class FeedConverter {
             description: feed.activity.message,
             date: feed.activity.timestamp
         };
-        if (user.pictures && user.pictures.length > 0) {
+        if ( user.pictures && Object.values(user.pictures).length > 0) {
+            let pictures = Object.values(user.pictures);
             response.logo = {
-                uri: user.pictures[user.pictures.length - 1].pictures[0]
+                uri: pictures[pictures.length - 1].pictures[0]
             }
         } else {
             response.logo = noPic;

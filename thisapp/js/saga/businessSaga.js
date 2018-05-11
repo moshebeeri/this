@@ -6,7 +6,8 @@ import {
     setBusiness,
     setBusinessCategory,
     updateBusinesses,
-    setBusinessListener
+    setBusinessListener,
+    updateBusinessesListeners
 } from "../actions/business";
 import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";

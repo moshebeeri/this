@@ -10,14 +10,11 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {message: '',registerProcess:false};
+const initialState = {message: '', registerProcess: false, numberOfSms: 0, showResend: false};
 import * as actions from './../reducerActions';
-import {REHYDRATE} from 'redux-persist/constants'
 
 export default function registerForm(state = initialState, action) {
     switch (action.type) {
-
-
         case actions.REGISTER_PROCESS :
             return {
                 ...state,
@@ -27,6 +24,12 @@ export default function registerForm(state = initialState, action) {
             return {
                 ...state,
                 message: action.message,
+                showResend: true
+            };
+        case actions.REGISTER_RESEND :
+            return {
+                ...state,
+                numberOfSms: state.numberOfSms +1,
             };
         case actions.REGISTER_CODE_SUCSSES :
             return {

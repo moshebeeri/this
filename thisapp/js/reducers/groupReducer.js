@@ -4,7 +4,7 @@ const initialState = {
     groupFeeds: {},
     groupFeedsUnread: {},
     groupFollowers: {},
-    update: false,
+    update: true,
     loadingDone: {},
     showTopLoader: {},
     lastFeed: {},

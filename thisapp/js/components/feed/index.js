@@ -66,13 +66,14 @@ class Feed extends Component {
     }
 
     render() {
-        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem, visibleFeeds} = this.props;
+        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem, visibleFeeds,shouldUpdateFeeds} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
         return (
             <View style={{flex: 1, backgroundColor: '#cccccc'}}>
 
                 <GenericFeedManager
                     navigation={navigation}
+                    shouldUpdateFeeds={shouldUpdateFeeds}
                     visibleItem={visibleItem}
                     visibleFeeds={visibleFeeds}
                     loadingDone={loadingDone}
@@ -123,6 +124,7 @@ const mapStateToProps = state => {
         userFollower: state.user.followers,
         user: state.user.user,
         feeds: getFeeds(state),
+        shouldUpdateFeeds : state.feeds.shouldUpdateFeeds,
         location: state.phone.currentLocation,
         visibleItem: state.feeds.visibleFeed,
         visibleFeeds: state.feeds.visibleFeeds,

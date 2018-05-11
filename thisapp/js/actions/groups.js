@@ -94,13 +94,6 @@ export function acceptInvitation(group) {
         try {
             const token = getState().authentication.token;
             await groupsApi.acceptInvitation(group, token);
-            let groups = await groupsApi.getAll(token);
-            groups.forEach(function (group) {
-                dispatch({
-                    type: actions.UPSERT_SINGLE_GROUP,
-                    group: group
-                });
-            })
         } catch (error) {
             handler.handleError(error, dispatch, 'groupsApi.acceptInvitation');
             logger.actionFailed('groupsApi.acceptInvitation')
@@ -493,6 +486,17 @@ export function refresh(id, currentSocialState) {
         }
     }
 }
+
+
+export function finishUpdateItem(id) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SINGLE_FEED_FINISH_UPDATED,
+            id: id
+        });
+    }
+}
+
 
 export function inviteUser(userId, groupId) {
     return async function (dispatch, getState) {

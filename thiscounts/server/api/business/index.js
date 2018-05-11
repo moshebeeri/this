@@ -9,7 +9,7 @@ let router = express.Router();
 router.get('/test/email', controller.test_email);
 
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
-router.post('/checkAddress', /*auth.isAuthenticated(),*/ controller.check_address);
+router.post('/checkAddress', auth.isAuthenticated(), controller.check_address);
 
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);

@@ -26,6 +26,8 @@ const Role = require('../../components/role');
 const feed = require('../../components/feed-tools');
 const path = require('path');
 const countryCode = require('../../components/counrtycode');
+const suggest = require('../../components/suggest');
+const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(User);
 
@@ -90,23 +92,56 @@ let generate_follow = function (userId, itemId) {
       else if( results.business )     {
         BusinessController.followBusiness(userId, results.business._id, (err)=>{
           if(err) return console.error(err);
+          fireEvent.info('business', results.business._id, 'business_user_follow', {
+            userId,
+            businessId : results.business._id
+          });
+          fireEvent.info('user', userId, 'business_user_follow', {
+            userId,
+            businessId : results.business._id
+          });
+          activity_follow(userId, {business: results.business._id})
         });
       }
       else if( results.group )        {
         graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
           if(err) return console.error(err);
+          fireEvent.info('group', results.group._id, 'group_user_follow', {
+            userId,
+            groupId : results.group._id
+          });
+          fireEvent.info('user', userId, 'group_user_follow', {
+            userId,
+            groupId : results.group._id
+          });
           activity_follow(userId, {group: results.group._id})
         })
       }
       else if( results.shoppingChain ){
         graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
           if(err) return console.error(err);
+          fireEvent.info('shoppingChain', results.shoppingChain._id, 'shoppingChain_user_follow', {
+            userId,
+            shoppingChainId : results.shoppingChain._id
+          });
+          fireEvent.info('user', userId, 'shoppingChain_user_follow', {
+            userId,
+            shoppingChainId : results.shoppingChain._id
+          });
           activity_follow(userId, {shoppingChain: results.shoppingChain._id})
         });
       }
       else if( results.mall )         {
         graphModel.relate_ids(userId, 'FOLLOW', itemId, function (err) {
           if(err) return console.error(err);
+          fireEvent.info('mall', results.mall._id, 'mall_user_follow', {
+            userId,
+            mall : results.mall._id
+          });
+          fireEvent.info('user', userId, 'mall_user_follow', {
+            userId,
+            mall : results.mall._id
+          });
           activity_follow(userId, {mall: results.mall._id})
         })
       }
@@ -520,6 +555,11 @@ exports.verification = function (req, res) {
         (err, number) => {
           if(err) return handleError(res, err);
           new_user_follow(user);
+          suggest.businesses(user, (err, businesses) => {
+            if(err) console.error(err);
+            if(businesses) console.log(`suggesting businesses user ${user._id} businesses ${JSON.stringify(businesses)}`);
+
+          });
           return res.status(200).send('user verified');
         }
       );
@@ -534,6 +574,14 @@ exports.verification = function (req, res) {
       //   return res.status(200).send('user verified');
       // });
     });
+  });
+};
+
+exports.suggest_businesses = function(req, res) {
+  let userId = req.user._id;
+  suggest.findBusinesses(userId, (err, businesses)=>{
+    if(err) return handleError(res, err);
+    return res.status(200).json(businesses);
   });
 };
 
@@ -553,7 +601,7 @@ exports.verify = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).send('verification sms sent');
+      return res.status(200).json('verification sms sent');
     });
   });
 };
@@ -600,7 +648,7 @@ exports.updateInfo = function (req, res, next) {
 
   User.findOneAndUpdate(query, newUser, {upsert: true}, function (err, doc) {
     if (err) return res.status(500).send(err);
-    return res.status(200).send("succesfully saved");
+    return res.status(200).send("successfully saved");
   });
 };
 
@@ -613,7 +661,7 @@ exports.me = function (req, res, next) {
     _id: userId
   }, '-salt -hashedPassword -sms_code', function (err, user) { // don't ever give out the password or salt
     if (err) return next(err);
-    if (!user) return res.status(401).send('Unauthorized');
+    if (!user) return res.status(401).json('Unauthorized');
     res.status(200).json(user);
   });
 };

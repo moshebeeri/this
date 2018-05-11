@@ -100,7 +100,7 @@ UserPhoneNumber                               : "User Phone Number",
 AddUserRole                                   : "Add User Role",
 UpdateUserRole                                : "Update User Role",
 ManagementRole                                : "Management Role",
-InvitesYouToJoinGroup                         : "invites you to join group",
+InvitesYouToJoinGroup                         : "{0} invites you to join group",
 CreatePromotionForEveryoneGroup               : "Create a promotion for everyone who joins group",
 CreatePromotionForEveryoneBusiness            : "Create a promotion for everyone who follow your business",
 SignUp                                        : "Sign up",
@@ -304,6 +304,8 @@ clickToEnlarge                                : "click to enlarge",
 followBusiness                                : "Follow Business",
 BusinessPost                                  : "Business Post",
 unfollowGroup                                 : "Un-follow Group",
+resendCode                                    : "Resend SMS",
+RegisterHelpMessage                           : "It seems we are having issue with SMS verification please contact us at ",
 
 };
 

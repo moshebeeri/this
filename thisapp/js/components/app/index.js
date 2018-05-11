@@ -12,6 +12,8 @@ import getStore from "../../store";
 import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
+import codePush from "react-native-code-push";
+
 import {
     addComponent,
     countUnreadNotifications,
@@ -151,6 +153,10 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
+        codePush.sync({
+            updateDialog: true,
+            installMode: codePush.InstallMode.IMMEDIATE
+        });
         FCM.requestPermissions().then(
             () =>
                 console.log('granted')).catch(() =>

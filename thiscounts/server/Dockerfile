@@ -34,7 +34,7 @@ RUN bower install --allow-root
 #RUN grunt --force build
 RUN mkdir public && echo "" >> public/favicon.ico
 
-EXPOSE 9000
+EXPOSE 8080
 CMD [ "node", "./server/app.js" ]
 #CMD [ "grunt", "serve" ]
 #CMD [ "forever", "start ./server/app.js" ]

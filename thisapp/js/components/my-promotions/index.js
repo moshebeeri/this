@@ -26,10 +26,11 @@ class MyPromotions extends Component {
     }
 
     render() {
-        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user, rawFeeds, location} = this.props;
+        const {navigation, feeds, userFollower, actions, token, loadingDone, showTopLoader, user, rawFeeds, location,shouldUpdateFeeds} = this.props;
         return (
             <View style={{flex:1}}>
             <GenericFeedManager
+                shouldUpdateFeeds={shouldUpdateFeeds}
                 navigation={navigation}
                 realize={this.realize.bind(this)}
                 rawFeed={rawFeeds}
@@ -63,6 +64,7 @@ const mapStateToProps = state => {
         myPromotions: state.myPromotions,
         firstTime: state.myPromotions.firstTime,
         location: state.phone.currentLocation,
+        shouldUpdateFeeds : state.myPromotions.shouldUpdateFeeds,
     }
 }
 export default connect(

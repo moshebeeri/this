@@ -87,7 +87,6 @@ function handleFollowersProximityActions(userId, location, callback) {
                   ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
 
-  console.log('handleFollowersProximityActions: ' + query);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {
       console.error(err);
@@ -115,7 +114,6 @@ function handleProximityActions(userId, location, callback) {
                   ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
 
-  console.log('handleProximityActions: ' + query);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {
       console.error(err);
@@ -127,7 +125,6 @@ function handleProximityActions(userId, location, callback) {
 
 function entityRoleMembers(entity, callback) {
   let query = `MATCH (entity{_id:'${entity}'})<-[role:ROLE]-(u:user) return distinct u._id as _id`;
-  console.log(`entityRoleMembers query: ${query}`);
   graphModel.query(query, function(err, users){
     if(err) return callback(err);
     users = users.map(user => user._id);
@@ -172,6 +169,7 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
     });
   })
 }
+
 exports.reportLastLocation = function(userId, location, callback) {
   ProximityModel.findById(userId, function (err, proximity) {
     if (err) return callback(err);
@@ -223,3 +221,34 @@ exports.reportLastLocation = function(userId, location, callback) {
 
 };
 
+exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
+  if(!distanceInMeters) distanceInMeters = 10000;
+
+
+  ProximityModel.findById(userId, function (err, proximity) {
+    if (err) return console.error(err);
+    if (!proximity) return console.log(`no proximity for user ${userId}`);
+    if (!proximity.location) return console.log(`no proximity.location for user ${userId}`);
+
+    let coordinate = spatial.location_to_special(proximity.location);
+
+    const query = ` MATCH (b:business),(u:user{_id:'${userId}'})  
+                    WITH  b,u,
+                          point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
+                          point({longitude:b.lon,latitude:b.lat}) AS businessLocation                  
+                    WHERE NOT (u)-[:FOLLOW]->(b)
+                          AND distance(coordinate, businessLocation) < ${distanceInMeters}
+                    WITH   b, coordinate, businessLocation
+                    RETURN distinct b._id as business, distance(coordinate, businessLocation) as d
+                    ORDER BY d desc
+                    SKIP 0 LIMIT 10`;
+
+    graphModel.query(query, function (err, businesses) {
+      if (err) {
+        console.error(err);
+        return callback(err);
+      }
+      return callback(null, businesses);
+    });
+  });
+};

@@ -76,6 +76,7 @@ function* savePromotion(action) {
             pictures.push(action.promotion.image.uri);
             tempPromotion.pictures.push({pictures: pictures});
         }
+        tempPromotion.isTemp = true;
         tempPromotion.social_state = {};
         tempPromotion.social_state.saves = 0;
         tempPromotion.social_state.comments = 0;
@@ -107,7 +108,7 @@ function* savePromotion(action) {
             createdPromotion.social_state.shares = 0;
             createdPromotion.social_state.realizes = 0;
             yield put(setPromotion(createdPromotion, action.businessId, tempId));
-            yield* setPromotionListener(response);
+            yield* setPromotionListener(createdPromotion);
 
         }
     } catch (error) {

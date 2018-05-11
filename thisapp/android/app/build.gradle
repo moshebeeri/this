@@ -1,6 +1,25 @@
-
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+project.ext.envConfigFiles = [
+    debug: ".env.staging",
+    staging: ".env.staging",
+    release: ".env.production",
+]
 apply plugin: "io.fabric"
+
+project.ext.react = [
+
+    // whether to bundle JS and assets in debug mode
+    bundleInDebug: false,
+    // whether to bundle JS and assets in release mode
+    bundleInRelease: true,
+    bundleInStaging: true,
+    devDisabledInStaging: true,
+    devDisabledInRelease: true
+
+    // the root of your RN project, i.e. where "package.json" lives
+]
+
 import com.android.build.OutputFile
 
 /**
@@ -103,7 +122,8 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-         multiDexEnabled true
+        multiDexEnabled true
+        resValue "string", "build_config_package", "com.groupys"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -113,6 +133,14 @@ android {
         }
      signingConfigs {
                     release {
+                        if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                            storeFile file(MYAPP_RELEASE_STORE_FILE)
+                            storePassword MYAPP_RELEASE_STORE_PASSWORD
+                            keyAlias MYAPP_RELEASE_KEY_ALIAS
+                            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+                        }
+                    }
+                    staging {
                         if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
                             storeFile file(MYAPP_RELEASE_STORE_FILE)
                             storePassword MYAPP_RELEASE_STORE_PASSWORD
@@ -137,7 +165,7 @@ android {
         staging {
                 minifyEnabled enableProguardInReleaseBuilds
                 proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-                signingConfig signingConfigs.release
+                signingConfig signingConfigs.staging
                 buildConfigField "String", "CODEPUSH_KEY", '"ghm4tw6_UUO3hqeU2_AqsKuFZ2U6V1hL3Uigm"'
             }
         release {
@@ -164,6 +192,7 @@ android {
 
 
 dependencies {
+    compile project(':react-native-config')
     compile project(':react-native-restart')
     compile project(':react-native-exception-handler')
     compile project(':react-native-svg')

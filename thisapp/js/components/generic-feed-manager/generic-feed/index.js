@@ -90,7 +90,7 @@ export default class GenericFeedItem extends Component {
     }
 
     render() {
-        const {item, actions, token, location, showActions, visibleItem, realize, visibleFeeds, group} = this.props;
+        const {item, actions, token, location, showActions, visibleItem, realize, visibleFeeds, group,shouldUpdateFeeds} = this.props;
         const showUsers = this.showUsers.bind(this);
         const comment = this.comment.bind(this);
         switch (item.itemType) {
@@ -104,6 +104,7 @@ export default class GenericFeedItem extends Component {
                                                               realize={realize}
                                                               group={group}
                                                               token={token} comment={comment}
+                                                              shouldUpdateFeeds={shouldUpdateFeeds}
                                                               location={location} actions={actions}
                                                               visibleItem={visibleItem}
                                                               navigation={this.props.navigation} item={item}
@@ -115,6 +116,7 @@ export default class GenericFeedItem extends Component {
                                                           location={location} actions={actions}
                                                           visibleItem={visibleItem}
                                                           visibleFeeds={visibleFeeds}
+                                                          shouldUpdateFeeds={shouldUpdateFeeds}
                                                           group={group}
                                                           navigation={this.props.navigation} item={item}
                                                           like={actions.like} unlike={actions.unlike}
@@ -125,6 +127,7 @@ export default class GenericFeedItem extends Component {
                                                        comment={this.commentShare.bind(this)}
                                                        location={location}
                                                        visibleFeeds={visibleFeeds}
+                                                       shouldUpdateFeeds={shouldUpdateFeeds}
                                                        group={group}
                                                        navigation={this.props.navigation} item={item}
                                                        like={actions.like} unlike={actions.unlike}
@@ -136,6 +139,7 @@ export default class GenericFeedItem extends Component {
                                                      navigation={this.props.navigation} item={item} like={actions.like}
                                                      unlike={actions.unlike}
                                                      group={group}
+                                                     shouldUpdateFeeds={shouldUpdateFeeds}
                                                      visibleFeeds={visibleFeeds}
                                                      showUsers={showUsers} actions={actions} comment={comment}/>)
             case 'WELCOME':
@@ -145,6 +149,7 @@ export default class GenericFeedItem extends Component {
                                                          showActions={showActions} location={location} token={token}
                                                          refresh={actions.refresh}
                                                          visibleFeeds={visibleFeeds}
+                                                         shouldUpdateFeeds={shouldUpdateFeeds}
                                                          group={group}
                                                          navigation={this.props.navigation} item={item}
                                                          comment={comment} like={actions.like} unlike={actions.unlike}

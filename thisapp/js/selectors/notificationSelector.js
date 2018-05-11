@@ -30,7 +30,7 @@ export const getNotification = createSelector([getStateNotification],
                 if(!a.read && b.read){
                     return false;
                 }
-                return a._id > b._id  ;
+                return a._id < b._id  ;
             });
         }
         return [];

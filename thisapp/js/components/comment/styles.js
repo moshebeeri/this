@@ -1,6 +1,7 @@
 const React = require('react-native');
 const {StyleSheet, Dimensions, Platform} = React;
 const {width, height} = Dimensions.get('window')
+import StyleUtils from '../../utils/styleUtils';
 module.exports = {
     itemborder: {
         justifyContent: 'center',
@@ -126,8 +127,8 @@ module.exports = {
         color: 'white'
     },
     comments_promotions: {
-        padding: 0,
-        flex:1.4,
+
+        height: StyleUtils.scale(50),
         backgroundColor: 'white',
         flexDirection: 'row',
 

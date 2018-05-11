@@ -8,7 +8,8 @@ import {
     ScrollView,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
@@ -191,7 +192,7 @@ class Signup extends Component {
 
                                    <View style={{alignItems:'center',justifyContent:'center'}}>
                                     <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row'}]} regular>
-                                        <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
+                                        {!I18nManager.isRTL &&  <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
                                                    blurOnSubmit={true} returnKeyType='next'
                                                    onSubmitEditing={this.focusNextField.bind(this, "phone")}
                                                    underlineColorAndroid={'transparent'}
@@ -206,7 +207,7 @@ class Signup extends Component {
                                                        fontSize: StyleUtils.scale(20),
                                                        borderBottomWidth: 1
                                                    }}
-                                        />
+                                        />}
                                         <TextInput focus={true} keyboardType='phone-pad' value={this.state.phoneNumber}
                                                    blurOnSubmit={true} returnKeyType='next'
                                                    ref='phone'
@@ -224,6 +225,22 @@ class Signup extends Component {
                                                        borderBottomWidth: 1
                                                    }}
                                                    placeholder={strings.PhoneNumber}/>
+                                        {I18nManager.isRTL &&  <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
+                                                                           blurOnSubmit={true} returnKeyType='next'
+                                                                           onSubmitEditing={this.focusNextField.bind(this, "phone")}
+                                                                           underlineColorAndroid={'transparent'}
+                                                                           onChangeText={(callingCode) => this.setState({callingCode})}
+                                                                           placeholderTextColor={'white'}
+                                                                           selectionColor={'black'}
+                                                                           style={{
+                                                                               width:  StyleUtils.scale(60),
+                                                                               color: 'white',
+                                                                               borderColor: 'white',
+                                                                               height: StyleUtils.scale(40),
+                                                                               fontSize: StyleUtils.scale(20),
+                                                                               borderBottomWidth: 1
+                                                                           }}
+                                        />}
 
                                     </View>
 

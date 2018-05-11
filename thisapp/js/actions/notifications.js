@@ -1,7 +1,7 @@
 import NotificationApi from "../api/notification";
 import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
-import  handler from './ErrorHandler'
+import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
 
 let notificationApi = new NotificationApi();
@@ -12,14 +12,14 @@ export function setTopNotification() {
         try {
             const token = getState().authentication.token;
             const user = getState().user.user;
-            if(user && token) {
+            if (user && token) {
                 dispatch({
                     type: types.SAVE_NOTIFICATION_TOP_REQUEST,
                     token: token, user: user
                 });
             }
         } catch (error) {
-            handler.handleError(error, dispatch,'notification-setTopNotification')
+            handler.handleError(error, dispatch, 'notification-setTopNotification')
             await logger.actionFailed('notification-setTopNotification')
         }
     }
@@ -34,9 +34,9 @@ export function readNotification(notificationId) {
                 type: actions.READ_NOTIFICATION,
                 id: notificationId,
             });
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch,'notification-readNotification')
+            handler.handleError(error, dispatch, 'notification-readNotification')
             await logger.actionFailed('notification-readNotification')
         }
     }
@@ -51,11 +51,19 @@ export function doNotification(notificationId, type) {
                 type: actions.EXECUTE_NOTIFICATION_ACTION,
                 id: notificationId,
             })
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch,'notification-doNotification')
+            handler.handleError(error, dispatch, 'notification-doNotification')
             await logger.actionFailed('notification-doNotification')
         }
+    }
+}
+
+export function finishUpdate() {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.NOTIFICATION_FINISH_UPDATE,
+        })
     }
 }
 
@@ -65,7 +73,7 @@ async function updateNotification(dispatch, token, user, notifications) {
         if (notifications) {
             skip = notifications.length;
         }
-        if(user && token) {
+        if (user && token) {
             let response = await notificationApi.getAll(token, user, skip, 10);
             if (response.length > 0) {
                 dispatch({
@@ -74,9 +82,8 @@ async function updateNotification(dispatch, token, user, notifications) {
                 });
             }
         }
-
     } catch (error) {
-        handler.handleError(error, dispatch,'notification-updateNotification')
+        handler.handleError(error, dispatch, 'notification-updateNotification')
         await logger.actionFailed('notification-updateNotification')
     }
 }
@@ -87,7 +94,7 @@ export function onEndReached() {
             const token = getState().authentication.token;
             const user = getState().user.user;
             const notifications = getState().notification.notification;
-            if(user && token) {
+            if (user && token) {
                 let skip = 0;
                 if (notifications) {
                     skip = notifications.length;
@@ -100,25 +107,20 @@ export function onEndReached() {
                     limit: 20,
                 });
             }
-            handler.handleSuccses(getState(),dispatch)
+            handler.handleSuccses(getState(), dispatch)
         } catch (error) {
-            handler.handleError(error, dispatch,'notification-onEndReached')
+            handler.handleError(error, dispatch, 'notification-onEndReached')
             await logger.actionFailed('notification-onEndReached')
         }
     }
 }
 
-export function setNotification(response){
+export function setNotification(response) {
     return {
         type: actions.SET_NOTIFICATION,
         notifications: response,
     }
 }
-
-
-
-
-
 
 export default {
     updateNotification

@@ -59,6 +59,7 @@ module.exports = {
         width: Dimensions.get('window').width,
     },
     follow_container: {
+        paddingTop:10,
         height: height,
     },
     follow_search: {

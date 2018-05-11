@@ -10,5 +10,7 @@ target 'THIS' do
   pod 'FirebaseMessaging'
   pod 'Fabric', '~> 1.7.5'
   pod 'Crashlytics', '~> 3.10.1'
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
+
 end
 

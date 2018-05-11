@@ -226,11 +226,11 @@ export default class PercentComponent extends Component {
             <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                 {toggle ? <SimplePicker ref="PromotionOn" list={Discouint_on} itemTitle={strings.PromotionOn}
-                                        defaultHeader="Choose Type" isMandatory
+                                        defaultHeader={strings.ChooseType} isMandatory
 
                                         onValueSelected={this.selectPromotionType.bind(this)}/> :
                     <SimplePicker ref="PromotionOn" list={Discouint_on} itemTitle={strings.PromotionOn}
-                                  defaultHeader="Choose Type" isMandatory
+                                  defaultHeader={strings.ChooseType} isMandatory
                                   selectedValue="PRODUCT"
                                   value={strings.ProductDiscount}
                                   onValueSelected={this.selectPromotionType.bind(this)}/>}
