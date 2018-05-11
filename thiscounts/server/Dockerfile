@@ -2,6 +2,7 @@
 #docker run -it -p 9000:9000 -e MONGODB_URI='mongodb://localhost/lowla-dev' lowla/thiscounts
 #docker run -it -p 9000:9000 -e MONGODB_URI='mongodb://docker.for.mac.host.internal/lowla-dev' lowla/thiscounts
 #docker run -it -p 8080:8080 -e MONGODB_URI='mongodb://docker.for.mac.host.internal/lowla-dev' -e NODE_ENV='production' -e NEO4J_URI='http://docker.for.mac.host.internal:7474' lowla/thiscounts /bin/bash
+#docker run -it -p 8080:8080 -e MONGODB_URI='mongodb://172.17.0.1/lowla-dev' -e NODE_ENV='production' -e NEO4J_URI='http://172.17.0.1:7474' lowla/thiscounts /bin/bash
 
 #FROM  lowla/thiscounts
 FROM ubuntu:latest
