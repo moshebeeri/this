@@ -7,6 +7,7 @@ import {bindActionCreators} from "redux";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {CloseDrawer, ImageController, ImagePicker, ThisText} from "../../ui/index";
 import strings from "../../i18n/i18n"
 
@@ -195,13 +196,14 @@ class ProfileDrawer extends Component {
                 <View style={{height: StyleUtils.scale(70),width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
                     <TouchableOpacityFix onPress={() => this.help()}
                                          style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
-                        <Icon style={{marginLeft: StyleUtils.scale(20), marginBottom: -6}} color="white" size={ StyleUtils.scale(36)} name="help"/>
+                        <Entypo style={{marginLeft: StyleUtils.scale(17), marginBottom: -6}} color="white" size={ StyleUtils.scale(32)} name="help-with-circle"/>
                         <ThisText style={{
-                            marginLeft:StyleUtils.scale(22),
+                            marginLeft:StyleUtils.scale(15),
                             color: 'white',
                             fontStyle: 'normal',
                             fontSize:  StyleUtils.scale(16)
                         }}>{strings.Help} </ThisText>
+
 
                     </TouchableOpacityFix>
                 </View>
