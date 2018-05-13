@@ -325,7 +325,8 @@ const il = {
     November                                      : "נובמבר",
     December                                      : "דצמבר",
     Help                                          : "עזרה",
-    PercentTerm                                   : "קבל {0}% הנחה"
+    PercentTerm                                   : "קבל {0}% הנחה",
+    FollowAnotherBusiness                         : "עקוב אחרי עסק נוסף",
 };
 
 export default il;

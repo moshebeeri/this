@@ -324,6 +324,7 @@ September                                     : "September",
 October                                       : "October",
 November                                      : "November",
 Help                                          : "Help",
+FollowAnotherBusiness                         : "Follow Another Business",
 RegisterHelpMessage                           : "It seems we are having issue with SMS verification please contact us at ",
 
 };
