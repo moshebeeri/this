@@ -72,6 +72,10 @@ class DateUtils {
         return moment(itemDate).isSame(moment(), 'day');
     }
 
+    moreThenMiniute(lastTime){
+        return new Date().getTime() - lastTime > 60000
+    }
+
     isThisWeek(date) {
         var now = moment();
         var input = moment(date);
