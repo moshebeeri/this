@@ -148,8 +148,8 @@ const il = {
     ReduceAmountTitle: 'קנה ב {0} ₪ שלם רק {1}',
     ReduceAmountTerms: 'קנה {0} שלם רק {1}',
     ReduceAmountPromotionTitle: 'מחיר מופחת',
-    PercentWithTerm: 'קבל %{1} הנחה בקניה {0}',
-    PercentTermWithTerm: 'קבל %{1} הנחה בקניה {0}',
+    PercentWithTerm: 'קבל {1}% הנחה בקנית {0}',
+    PercentTermWithTerm: 'קבל {1}% הנחה בקנית {0}',
     NoTerms: 'לא מותנה',
     XForYTitle: 'קנה X שלם רק Y',
     XForYItemTitle: 'קנה {0} {1} שלם רק {2}',
@@ -191,7 +191,7 @@ const il = {
     XForYShortDescription                         : "שלם {0} עבור {1} {2}",
     HappyHourShortDescription                     : "בזמן ה Happy Hour קנה {1} ב {0)",
     ReduceAmountShortDescription                  : "קנה {0} שלם רק {1}",
-    XForYPercentageOffShortDescription            : "קנה {0} קבל {1} בהנחה של %{2}",
+    XForYPercentageOffShortDescription            : "קנה {0} קבל {1} בהנחה של % {2}",
     AllStore                                      : "כל החנות",
     PublicGroup                                   : "קבוצה פומבית",
     UnReadPost                                    : "פוסטים שטרם נקראו {0}",
@@ -276,7 +276,7 @@ const il = {
     ProximityDistanceTitle                        : "מרחק קירבה",
     LatestActivity                                : "פעילות אחרונה",
     DateAtTime                                    : "{0} ב {1}",
-    PercentTerms                                  : "הנחה כללית של %{0}",
+    PercentTerms                                  : "הנחה כללית של % {0}",
     OnFollowerProximity                           : "לקוח מתקרב לעסק",
     GeneralPromotion                              : "כלל הלקוחות",
     Reply                                         : "השב",
@@ -325,6 +325,7 @@ const il = {
     November                                      : "נובמבר",
     December                                      : "דצמבר",
     Help                                          : "עזרה",
+    PercentTerm                                   : "קבל {0}% הנחה"
 };
 
 export default il;
