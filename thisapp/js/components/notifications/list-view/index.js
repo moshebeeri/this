@@ -241,7 +241,7 @@ export default class NotificationListView extends Component {
         if (entity.pictures && entity.pictures.length > 0) {
             return <Thumbnail source={{uri: entity.pictures[0].pictures[3]}}/>
         }
-        if (entity.entity && entity.entity.business && entity.entity.business.logo > 0) {
+        if (entity.entity && entity.entity.business && entity.entity.business.logo) {
             return <Thumbnail source={{uri: entity.entity.business.logo}}/>
         }
         return <Thumbnail source={require('../../../../images/client_1.png')}/>
@@ -374,13 +374,12 @@ export default class NotificationListView extends Component {
                             </View>
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
                                 <View style={{padding: 10,}}>
-                                    <ThisText style={{
+                                    <ThisText  numberOfLines={2} style={{
+
                                         width: StyleUtils.scale(250),
-                                        height: vh * 4
-                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
-                                    <ThisText style={{
-                                        fontWeight: 'bold',
-                                    }}> {viewItem.group.name} </ThisText>
+
+                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name,viewItem.group.name)}</ThisText>
+
                                 </View>
 
                             </View>
@@ -399,13 +398,11 @@ export default class NotificationListView extends Component {
                             </View>
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
                                 <View style={{padding: 10,}}>
-                                    <ThisText style={{
+                                    <ThisText  numberOfLines={2}  style={{
                                         width: StyleUtils.scale(250),
-                                        height: vh * 4
-                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name)}</ThisText>
-                                    <ThisText style={{
-                                        fontWeight: 'bold',
-                                    }}> {viewItem.group.name} </ThisText>
+
+                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name,viewItem.group.name)}</ThisText>
+
                                 </View>
 
                             </View>
