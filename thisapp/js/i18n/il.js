@@ -324,6 +324,7 @@ const il = {
     October                                       : "אוקטובר",
     November                                      : "נובמבר",
     December                                      : "דצמבר",
+    Israel                                        : "ישראל",
     Help                                          : "עזרה",
     PercentTerm                                   : "קבל {0}% הנחה",
     FollowAnotherBusiness                         : "עקוב אחרי עסק נוסף",
