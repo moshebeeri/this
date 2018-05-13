@@ -99,7 +99,7 @@ class AddBusiness extends Component {
                 address: templateBusiness.address,
                 email: templateBusiness.email,
                 website: templateBusiness.website,
-                country: 'Israel',
+                country: strings.Israel,
                 city: templateBusiness.city,
                 state: '',
                 path: path,

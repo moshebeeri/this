@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, InteractionManager, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {Dimensions, Image, Linking,InteractionManager, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -7,6 +7,7 @@ import {bindActionCreators} from "redux";
 import * as userAction from "../../actions/user";
 import StyleUtils from "../../utils/styleUtils";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {CloseDrawer, ImageController, ImagePicker, ThisText} from "../../ui/index";
 import strings from "../../i18n/i18n"
 
@@ -69,6 +70,9 @@ class ProfileDrawer extends Component {
         this.replaceRoute('businesses');
     }
 
+    help(){
+        Linking.openURL(`${help_url}/` );
+    }
     render() {
         let source = noPic;
         if (this.props.user) {
@@ -189,8 +193,20 @@ class ProfileDrawer extends Component {
 
                         </TouchableOpacityFix>
                     </View>
+                <View style={{height: StyleUtils.scale(70),width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
+                    <TouchableOpacityFix onPress={() => this.help()}
+                                         style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
+                        <Entypo style={{marginLeft: StyleUtils.scale(17), marginBottom: -6}} color="white" size={ StyleUtils.scale(32)} name="help-with-circle"/>
+                        <ThisText style={{
+                            marginLeft:StyleUtils.scale(15),
+                            color: 'white',
+                            fontStyle: 'normal',
+                            fontSize:  StyleUtils.scale(16)
+                        }}>{strings.Help} </ThisText>
 
 
+                    </TouchableOpacityFix>
+                </View>
             </View>
             </ScrollView>
 

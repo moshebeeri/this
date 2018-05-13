@@ -46,6 +46,7 @@ export function doNotification(notificationId, type) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
+            notificationApi.readNotification(token, notificationId);
             notificationApi.doNotificationAction(token, notificationId, type);
             dispatch({
                 type: actions.EXECUTE_NOTIFICATION_ACTION,

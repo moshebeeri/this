@@ -180,7 +180,7 @@ class GroupFeedHeader extends Component {
                         <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.Invite}</ThisText>
                     </MenuOption>}
                     <MenuOption onSelect={this.followBusiness.bind(this)}>
-                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.FollowBusiness}</ThisText>
+                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.FollowAnotherBusiness}</ThisText>
                     </MenuOption>
                     {addPromotionMenu}
                 </MenuOptions>

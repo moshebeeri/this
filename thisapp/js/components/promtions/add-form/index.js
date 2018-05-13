@@ -203,9 +203,8 @@ class AddPromotion extends Component {
     }
 
     async componentWillMount() {
-        this.props.actions.resetForm();
+
         if (this.props.navigation.state.params.onBoardType) {
-            this.setToggleOn();
             this.setState({toggle: true, onBoardType: this.props.navigation.state.params.onBoardType});
             return;
         }
@@ -220,6 +219,8 @@ class AddPromotion extends Component {
             this.setPromotion(this.props.navigation.state.params.followerProximity);
             return;
         }
+
+        this.props.actions.resetForm();
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
