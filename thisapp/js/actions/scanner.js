@@ -137,6 +137,13 @@ export function resetForm() {
         dispatch({type: actions.SCANNER_RESET});
     }
 }
+export function closeCamera() {
+    return function (dispatch) {
+        dispatch({type: actions.SCANNER_SHOW_CAMERA,cameraOn:false});
+    }
+}
+
+
 
 export function followBusiness(businessId) {
     return async function (dispatch, getState) {
