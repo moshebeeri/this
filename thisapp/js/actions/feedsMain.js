@@ -91,6 +91,15 @@ export function like(id) {
     }
 }
 
+export function finishUpdateItem(id) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SINGLE_FEED_FINISH_UPDATED,
+            id: id
+        });
+    }
+}
+
 export function refresh(id) {
     return async function (dispatch, getState) {
     }
@@ -345,8 +354,6 @@ export function* updateFeedsListeners(feeds) {
         }
     }
 }
-
-
 
 export function* updateFollowers(feeds) {
     if (feeds) {

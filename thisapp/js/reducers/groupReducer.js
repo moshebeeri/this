@@ -34,6 +34,8 @@ export default function group(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_SINGLE_GROUP:
             currentGroups[action.group._id] = action.group;
+            currentGroups[action.removeId] = undefined;
+
             immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP:

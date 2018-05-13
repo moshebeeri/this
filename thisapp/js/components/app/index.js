@@ -56,10 +56,11 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import FeedPromotion from '../generic-feed-manager/generic-feed/feed-components/feedPromotion'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+import DateUtils from "../../utils/dateUtils";
 import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
 import handler from '../../actions/ErrorHandler'
-
+let dateUtils = new DateUtils();
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
 const reduxStore = getStore();
@@ -112,7 +113,16 @@ FCM.on(FCMEvent.RefreshToken, (token) => {
 const warch = navigator.geolocation.watchPosition((position) => {
         try {
             if (reduxStore.getState().authentication.token) {
-                locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
+
+                let lastTime = reduxStore.getState().phone.lastTime;
+
+                if(!lastTime || (lastTime && dateUtils.moreThenMiniute(lastTime))) {
+                    reduxStore.dispatch({
+                        type: actions.SEND_LOCATION_TIME,
+
+                    })
+                    locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
+                }
             }
             let lastPosition = reduxStore.getState().phone.currentLocation;
             if (!lastPosition || (lastPosition && lastPosition.lat !== position.coords.latitude && lastPosition.long !== position.coords.longitude)) {

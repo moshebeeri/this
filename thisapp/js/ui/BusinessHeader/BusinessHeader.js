@@ -63,7 +63,7 @@ class BusinessHeader extends Component {
             if (small) {
                 return <TouchableOpacityFix style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
                     <View>
-                        <ImageController  thumbnail size={StyleUtils.scale(36)} source={{uri: businessLogo}}/>
+                        <ImageController thumbnail size={StyleUtils.scale(36)} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacityFix>
             }
@@ -94,24 +94,23 @@ class BusinessHeader extends Component {
         this.props.navigation.goBack();
     }
 
-    isMyBusiness(){
-        const {businesses,business} = this.props;
-        if(businesses.myBusinesses[business._id]){
+    isMyBusiness() {
+        const {businesses, business} = this.props;
+        if (businesses.myBusinesses[business._id]) {
             return true;
         }
-
         return false;
-
     }
 
-    isFollowingBusiness(){
-        const {following,business} = this.props;
+    isFollowingBusiness() {
+        const {following, business} = this.props;
         return following.followBusiness.includes(business._id);
     }
+
     render() {
-        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu,heaedrSize,menuColor} = this.props;
-        let defaultMenuColor= 'white';
-        if(menuColor){
+        const {showActions, categoryTitle, color, businessName, showBack, noMargin, editButton, businessView, hideMenu, heaedrSize, menuColor} = this.props;
+        let defaultMenuColor = 'white';
+        if (menuColor) {
             defaultMenuColor = menuColor;
         }
         let nameTextStyle = styles.businessNameText;
@@ -128,20 +127,22 @@ class BusinessHeader extends Component {
         }
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         let back = undefined;
-
         let componentSize = 81;
-        if(heaedrSize){
+        if (heaedrSize) {
             componentSize = heaedrSize;
         }
-        let menuAction = <Menu>
-            <MenuTrigger placement="right">
-                <Icon2 style={{color: defaultMenuColor, paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
+        let menuAction = <Menu placement="left">
+            <MenuTrigger>
+                <Icon2 style={{color: defaultMenuColor, paddingLeft: 10, fontSize: StyleUtils.scale(15)}}
+                       name="options"/>
             </MenuTrigger>
-            <MenuOptions>
-                {!this.isMyBusiness() && this.isFollowingBusiness() && <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
+            <MenuOptions customStyles={{optionsContainer: {marginLeft: I18nManager.isRTL ? 100 : 0}}}>
+                {!this.isMyBusiness() && this.isFollowingBusiness() &&
+                <MenuOption onSelect={this.unFollowBusiness.bind(this)}>
                     <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.UnFollow}</ThisText>
                 </MenuOption>}
-                {!this.isMyBusiness() && !this.isFollowingBusiness() && <MenuOption onSelect={this.followBusiness.bind(this)}>
+                {!this.isMyBusiness() && !this.isFollowingBusiness() &&
+                <MenuOption onSelect={this.followBusiness.bind(this)}>
                     <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.followBusiness}</ThisText>
                 </MenuOption>}
                 {showActions && <MenuOption onSelect={this.showFeedBack.bind(this)}>
@@ -152,9 +153,10 @@ class BusinessHeader extends Component {
         if (businessView) {
             menuAction = <Menu>
                 <MenuTrigger placement="right">
-                    <Icon2 style={{color:defaultMenuColor, paddingLeft: 10, fontSize: StyleUtils.scale(15)}} name="options"/>
+                    <Icon2 style={{color: defaultMenuColor, paddingLeft: 10, fontSize: StyleUtils.scale(15)}}
+                           name="options"/>
                 </MenuTrigger>
-                <MenuOptions>
+                <MenuOptions customStyles={{optionsContainer: {marginLeft: I18nManager.isRTL ? 100 : 0}}}>
 
                     <MenuOption onSelect={this.assignQrCode.bind(this)}>
                         <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.assignQrCode}</ThisText>
@@ -193,18 +195,17 @@ class BusinessHeader extends Component {
         if (bgColor) {
             backgroundColor = bgColor;
         }
-
         return <View style={[headerContainerStyle, {backgroundColor: backgroundColor, width: StyleUtils.getWidth()}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}
             </View>
             {this.createBusinessLog()}
             <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
-                <ThisText style={[nameTextStyle, {color: textColor,  fontWeight: 'bold'}]}
+                <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
                           note>{businessName}</ThisText>
             </View>
-            {showEdit ? <View style={{flexDirection: 'row',alignItems: 'center',}}>
-                <View style={{marginTop: 10,marginRight:10}}>
+            {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                <View style={{marginTop: 10, marginRight: 10}}>
 
                     {editButton}
                 </View>

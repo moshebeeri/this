@@ -8,7 +8,7 @@ import {
     Header,
     Icon,
     Input,
-    InputGroup,m
+    InputGroup,
     Left,
     ListItem,
     Right,

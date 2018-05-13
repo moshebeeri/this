@@ -52,20 +52,17 @@ export default class FeedBusiness extends Component {
     }
 
     shouldComponentUpdate() {
-        const {item, visibleItem, shouldUpdate, visibleFeeds} = this.props;
-        if (shouldUpdate) {
-            return true;
-        }
-        let results = item.id === visibleItem;
-        if (results) {
-            return results
-        }
-        if (visibleFeeds && item.fid && visibleFeeds.includes(item.fid)) {
-            return true;
+        const {item, shouldUpdateFeeds} = this.props;
+        if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
+            return true
         }
         return false;
     }
 
+    componentDidUpdate(){
+        this.props.actions.finishUpdateItem(this.props.item.id)
+
+    }
     createBusiness(item, like, unlike, showUsers, comment, group) {
         const {location, refresh, showActions} = this.props;
         if (!item.name) {
@@ -74,7 +71,7 @@ export default class FeedBusiness extends Component {
         const styles = componentCreator.createStyle();
         const imageBusiness = this.createBusinessImage(item, styles, showActions,);
         const result =
-            <InViewPort onChange={this.visited.bind(this)}
+            <View
                         style={[styles.businesses_container, {width: StyleUtils.getWidth()}]}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
 
@@ -129,7 +126,7 @@ export default class FeedBusiness extends Component {
 
                     </View>
                 </View>
-            </InViewPort>;
+            </View>;
         return result;
     }
 

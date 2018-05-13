@@ -8,7 +8,9 @@ import {
     ScrollView,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+    Platform
+
 } from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
@@ -187,11 +189,11 @@ class Signup extends Component {
                                     </View>
                                 </View>
 
-                                <KeyboardAvoidingView style={{alignItems:'center',justifyContent:'center'}}   behavior={'position'}>
+                                <KeyboardAvoidingView  keyboardVerticalOffset={Platform.OS === 'ios' ? 300 :0 } style={{alignItems:'center',justifyContent:'center'}}   behavior={Platform.OS === 'ios' ? 'padding' :'position' }>
 
                                    <View style={{alignItems:'center',justifyContent:'center'}}>
                                     <View style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row'}]} regular>
-                                        <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
+                                        {!I18nManager.isRTL &&  <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
                                                    blurOnSubmit={true} returnKeyType='next'
                                                    onSubmitEditing={this.focusNextField.bind(this, "phone")}
                                                    underlineColorAndroid={'transparent'}
@@ -206,9 +208,9 @@ class Signup extends Component {
                                                        fontSize: StyleUtils.scale(20),
                                                        borderBottomWidth: 1
                                                    }}
-                                        />
+                                        />}
                                         <TextInput focus={true} keyboardType='phone-pad' value={this.state.phoneNumber}
-                                                   blurOnSubmit={true} returnKeyType='next'
+                                                   blurOnSubmit={true} returnKeyType={Platform.OS === 'ios' ? 'done' :'next'}
                                                    ref='phone'
                                                    onSubmitEditing={this.focusNextField.bind(this, "password")}
                                                    underlineColorAndroid={'transparent'}
@@ -224,6 +226,22 @@ class Signup extends Component {
                                                        borderBottomWidth: 1
                                                    }}
                                                    placeholder={strings.PhoneNumber}/>
+                                        {I18nManager.isRTL &&  <TextInput focus={false} keyboardType='phone-pad' value={this.state.callingCode}
+                                                                           blurOnSubmit={true} returnKeyType='next'
+                                                                           onSubmitEditing={this.focusNextField.bind(this, "phone")}
+                                                                           underlineColorAndroid={'transparent'}
+                                                                           onChangeText={(callingCode) => this.setState({callingCode})}
+                                                                           placeholderTextColor={'white'}
+                                                                           selectionColor={'black'}
+                                                                           style={{
+                                                                               width:  StyleUtils.scale(60),
+                                                                               color: 'white',
+                                                                               borderColor: 'white',
+                                                                               height: StyleUtils.scale(40),
+                                                                               fontSize: StyleUtils.scale(20),
+                                                                               borderBottomWidth: 1
+                                                                           }}
+                                        />}
 
                                     </View>
 
