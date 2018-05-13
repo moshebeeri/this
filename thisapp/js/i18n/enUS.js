@@ -323,7 +323,7 @@ August                                        : "August",
 September                                     : "September",
 October                                       : "October",
 November                                      : "November",
-December                                      : "December",
+Help                                          : "Help",
 RegisterHelpMessage                           : "It seems we are having issue with SMS verification please contact us at ",
 
 };

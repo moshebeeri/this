@@ -61,7 +61,6 @@ export default class NotificationListView extends Component {
 
     render() {
         const {item} = this.props;
-        //console.log("rendering notification " )
         switch (item.note) {
             case notification.APPROVE_GROUP_INVITATION:
             case notification.ASK_GROUP_INVITATION:
@@ -71,62 +70,62 @@ export default class NotificationListView extends Component {
             case notification.ADD_BUSINESS_FOLLOW_ON_ACTION:
                 return this.createBusinessFollowOn(item);
             default:
-                return this.createGeneralAction(item);
+                return <View></View>;
         }
     }
 
-    createGeneralAction(item) {
-        const viewItem = item;
-        const redeemStyle = {
-            flex: -1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginLeft: StyleUtils.getWidth() / 4,
-            borderWidth: 1,
-            flexDirection: 'row',
-            height: 40,
-            width: StyleUtils.getWidth() / 2,
-            backgroundColor: 'white',
-            borderColor: '#2db6c8',
-        };
-        let title = viewItem.note;
-        if (viewItem.title) {
-            title = viewItem.title;
-        }
-        const backgroundColor = this.getNotificationColor(viewItem);
-        const actionStyle = this.getActionStyle(viewItem);
-        const action = this.getAvalibaleActions(viewItem, actionStyle, redeemStyle);
-        return (
-            <View style={{
-                marginTop: StyleUtils.scale(5),
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#eaeaea'
-            }}
-                  regular>
-                <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
-                    flex: -1,
-                    backgroundColor: backgroundColor,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                }}>
-
-                    <View
-                        style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth(), height: vh * 10}}>
-                        <View style={{width: StyleUtils.getWidth() - 20, flexDirection: 'row'}}>
-                            <ThisText numberOfLines={2}
-                                      style={{height: vh * 7}}>
-                                {title}
-                            </ThisText>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                {action}
-            </View>
-
-
-        );
-    }
+    // createGeneralAction(item) {
+    //     const viewItem = item;
+    //     const redeemStyle = {
+    //         flex: -1,
+    //         justifyContent: 'center',
+    //         alignItems: 'center',
+    //         marginLeft: StyleUtils.getWidth() / 4,
+    //         borderWidth: 1,
+    //         flexDirection: 'row',
+    //         height: 40,
+    //         width: StyleUtils.getWidth() / 2,
+    //         backgroundColor: 'white',
+    //         borderColor: '#2db6c8',
+    //     };
+    //     let title = viewItem.note;
+    //     if (viewItem.title) {
+    //         title = viewItem.title;
+    //     }
+    //     const backgroundColor = this.getNotificationColor(viewItem);
+    //     const actionStyle = this.getActionStyle(viewItem);
+    //     const action = this.getAvalibaleActions(viewItem, actionStyle, redeemStyle);
+    //     return (
+    //         <View style={{
+    //             marginTop: StyleUtils.scale(5),
+    //             alignItems: 'center',
+    //             justifyContent: 'center',
+    //             backgroundColor: '#eaeaea'
+    //         }}
+    //               regular>
+    //             <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
+    //                 flex: -1,
+    //                 backgroundColor: backgroundColor,
+    //                 flexDirection: 'row',
+    //                 alignItems: 'center',
+    //             }}>
+    //
+    //                 <View
+    //                     style={{flexDirection: 'column', marginLeft: 5, width: StyleUtils.getWidth(), height: vh * 10}}>
+    //                     <View style={{width: StyleUtils.getWidth() - 20, flexDirection: 'row'}}>
+    //                         <ThisText numberOfLines={2}
+    //                                   style={{height: vh * 7}}>
+    //                             {title}
+    //                         </ThisText>
+    //                     </View>
+    //                 </View>
+    //             </TouchableOpacity>
+    //             {action}
+    //         </View>
+    //
+    //
+    //     );
+    // }
 
     createBusinessFollowOn(item) {
         const viewItem = item;

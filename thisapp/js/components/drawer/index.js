@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, InteractionManager, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {Dimensions, Image, Linking,InteractionManager, Platform, ScrollView, TouchableOpacity} from 'react-native';
 import {Button, Container, Content, Input, InputGroup, Item, View} from 'native-base';
 import styles from './styles';
 import {connect} from 'react-redux';
@@ -69,6 +69,9 @@ class ProfileDrawer extends Component {
         this.replaceRoute('businesses');
     }
 
+    help(){
+        Linking.openURL(`${help_url}/` );
+    }
     render() {
         let source = noPic;
         if (this.props.user) {
@@ -189,8 +192,19 @@ class ProfileDrawer extends Component {
 
                         </TouchableOpacityFix>
                     </View>
+                <View style={{height: StyleUtils.scale(70),width:deviceWidth/5*4,borderBottomWidth:1,flexDirection: 'row',borderColor: '#E5E5E5'}}>
+                    <TouchableOpacityFix onPress={() => this.help()}
+                                         style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
+                        <Icon style={{marginLeft: StyleUtils.scale(20), marginBottom: -6}} color="white" size={ StyleUtils.scale(36)} name="help"/>
+                        <ThisText style={{
+                            marginLeft:StyleUtils.scale(22),
+                            color: 'white',
+                            fontStyle: 'normal',
+                            fontSize:  StyleUtils.scale(16)
+                        }}>{strings.Help} </ThisText>
 
-
+                    </TouchableOpacityFix>
+                </View>
             </View>
             </ScrollView>
 

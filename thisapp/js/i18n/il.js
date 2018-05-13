@@ -324,7 +324,7 @@ const il = {
     October                                       : "אוקטובר",
     November                                      : "נובמבר",
     December                                      : "דצמבר",
-
+    Help                                          : "עזרה",
 };
 
 export default il;
