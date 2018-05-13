@@ -185,9 +185,25 @@ exports.pnsUserDevices = function (notification, audience) {
   pnsUserDevices(notification, audience)
 };
 
+//work around so client wong get notifications it can not display in notifications list
+//should be changed in next versions.
+function isPNSOnly(note){
+  switch(note) {
+    case 'approve_invite':
+    case 'ask_invite':
+    case 'ADD_GROUP_FOLLOW_ON_ACTION':
+    case 'ADD_BUSINESS_FOLLOW_ON_ACTION':
+      return false;
+    default:
+      return true;
+  }
+}
+
 exports.notify = function (note, audience, translate) {
   if(!audience || !note)
     return console.error(new Error(`notification.notify params error audience=${audience} note=${note}`));
+
+  note.pnsOnly = isPNSOnly(note.note);
 
   audience.forEach(to => {
     note.to = to;
@@ -207,6 +223,8 @@ exports.inAppNotify = function (note, audience) {
   if(!audience || !note)
     return console.error(new Error(`notification.notify params error audience=${audience} note=${note}`));
 
+  note.pnsOnly = isPNSOnly(note.note);
+
   audience.forEach(to => {
     note.to = to;
     note.timestamp = Date.now();
@@ -223,6 +241,8 @@ exports.notifyUser = function (note, user, translate) {
   note.to = user;
   note.timestamp = Date.now();
   note.badge = true;
+  note.pnsOnly = isPNSOnly(note.note);
+
   Notification.create(note, function (err, notification) {
     if (err) return console.error(err);
     fireEvent.info('user', user, 'notification_sent', {notification: notification._id});

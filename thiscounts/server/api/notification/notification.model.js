@@ -16,6 +16,7 @@ let NotificationSchema = new Schema({
   body: {type: String, default: ''},
   note: {type: String, default: ''},
   to: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions, required: true, index: true},
+  pnsOnly: {type: Boolean, enum: Action, default: true},
   action: {type: String, enum: Action, default: 'NONE'},
   read: {type: Boolean, default: false},
   badge: {type: Boolean, default: false},
