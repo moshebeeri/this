@@ -270,6 +270,7 @@ exports.create = function (req, res, next) {
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   newUser.country_code = newUser.country_code.toString().replace(/^[+]+/g,'');
+  newUser.shortPhoneNumber = newUser.phone_number;
   newUser.phone_number = countryCode.validateNormalize(newUser.phone_number, newUser.country_code);
   if(!newUser.phone_number) {
     console.error(`validateNormalize number is null ${newUser.country_code}-${newUser.phone_number}`);
@@ -695,8 +696,7 @@ exports.entityRoles = function (req, res) {
 
 exports.getUserByPhone = function (req, res) {
   //country_code
-  User.findOne({ $and: [{phone_number: req.params.phone},
-    {country_code: req.params.country_code}]}, function (err, user) {
+  User.findOne({ phone_number: req.params.country_code + req.params.phone}, function (err, user) {
     if(err) return handleError(res, err);
     return res.status(200).json(user);
   });
