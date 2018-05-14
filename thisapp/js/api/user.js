@@ -125,8 +125,7 @@ class UserApi {
         }, 'user', 'get/user/by/phone');
     }
 
-    async setUserRole(user, business, role) {
-        let token = await store.get('token');
+    async setUserRole(user, business, role,token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/role/${user}/${role}/${business}`, {
             method: 'GET',
             headers: {
@@ -137,8 +136,7 @@ class UserApi {
         }, 'user', 'users/role/:user/:role/:business');
     }
 
-    async removeUserRole(user, business) {
-        let token = await store.get('token');
+    async removeUserRole(user, business,token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/role/${user}/${business}`, {
             method: 'DELETE',
             headers: {

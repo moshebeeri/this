@@ -26,8 +26,8 @@ export function saveRole(user, businessId, userRole, navigation) {
             if(user._id){
                 id = user._id;
             }
-            await userApi.removeUserRole(id, businessId);
-            await userApi.setUserRole(id, businessId, userRole);
+            await userApi.removeUserRole(id, businessId,token);
+            await userApi.setUserRole(id, businessId, userRole,token);
             let users = await userApi.getBusinessUsers(businessId, token);
             dispatch({
                 type: actions.SET_USER_BUSINESS,
@@ -83,6 +83,8 @@ export function search(phoneNumber) {
         }
     }
 }
+
+
 
 export function setRole(role) {
     return function (dispatch) {

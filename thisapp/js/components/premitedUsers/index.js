@@ -32,7 +32,7 @@ class UserPermittedRoles extends Component {
     }
 
     render() {
-        const {users, navigation, actions, update} = this.props;
+        const {users, navigation, actions, update,user} = this.props;
         let business = navigation.state.params.business;
         return (
             <Container>
@@ -43,7 +43,7 @@ class UserPermittedRoles extends Component {
 
                 <GenericListManager rows={users[business._id]} navigation={navigation} actions={actions} update={update}
                                     business={navigation.state.params.business} onEndReached={actions.setBusinessUsers}
-                                    ItemDetail={UserRoleView}/>
+                                    ItemDetail={UserRoleView} user={user}/>
 
 
             </Container>
@@ -58,6 +58,7 @@ class UserPermittedRoles extends Component {
 export default connect(
     state => ({
         users: getBusinessUsers(state),
+        user: state.user.user,
         update: state.businesses.update,
         currentScreen: state.render.currentScreen,
     }),
