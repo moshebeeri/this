@@ -98,7 +98,7 @@ class GroupHeader extends Component {
                 </View>
                 <View style={styles.groupName}>
                     <View style={{flexDirection: 'row' ,justifyContent:'space-between'}}>
-                        <ThisText numberOfLines={2} style={styles.groupNameText}>{group.name}</ThisText>
+                        <ThisText numberOfLines={2} style={[styles.groupNameText,{maxWidth:StyleUtils.scale(180)}]}>{group.name}</ThisText>
                         {!this.isMyGroup() && showUnfollow &&<View style={{marginLeft:StyleUtils.scale(25)}}>
                             {menuAction}
                         </View>}
