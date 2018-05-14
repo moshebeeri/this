@@ -31,7 +31,7 @@ const rolesTypes = {
         Seller: 'Seller'
     };
 export default class UserRoleView extends Component {
-    createUserView(user, role, index) {
+    createUserView(user, role, index,myUser) {
         let pic = <ImageController thumbnail square size={60} source={noPic}/>;
         if (user && user.pictures && user.pictures.length > 0) {
             let path = user.pictures[user.pictures.length - 1].pictures[0];
@@ -46,8 +46,12 @@ export default class UserRoleView extends Component {
                 <ThisText style={{fontSize: StyleUtils.scale(14)}} >{user.name} - <ThisText style={{fontSize: StyleUtils.scale(14)}}>{roleView}</ThisText></ThisText>
             </View>
             <View style={{flex:0.5,justifyContent:'center'}}>
-                <EditButton onPress={this.editPermission.bind(this, user, rolesTypes[role])}/>
+                <EditButton color={'#FA8559'} onPress={this.editPermission.bind(this, user, rolesTypes[role])}/>
             </View>
+
+            {myUser._id !== user._id && <View style={{flex:0.5,justifyContent:'center'}}>
+                <EditButton iconName={'delete'} color={'#FA8559'} onPress={this.removeUser.bind(this, user)}/>
+            </View>}
 
         </View>
     }
@@ -58,8 +62,13 @@ export default class UserRoleView extends Component {
 
     }
 
+    removeUser(user){
+        const{business,actions} = this.props;
+        actions.removeUser(user,business._id);
+    }
+
     render() {
-        const {item, index} = this.props;
-        return this.createUserView(item.user, item.role, index)
+        const {item, index,user} = this.props;
+        return this.createUserView(item.user, item.role, index,user)
     }
 }

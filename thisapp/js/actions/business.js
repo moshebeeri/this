@@ -609,6 +609,20 @@ export function updateBusinesCategory(item) {
     }
 }
 
+export function removeUser(user,businessId) {
+    return async function (dispatch,getState) {
+        const token = getState().authentication.token;
+
+        await userApi.removeUserRole(user._id,businessId,token);
+        let users = await userApi.getBusinessUsers(businessId, token);
+        dispatch({
+            type: actions.SET_USER_BUSINESS,
+            businessUsers: users,
+            businessId: businessId
+        });
+    }
+}
+
 export function clearUserBusinessByPhoneForm() {
     return function (dispatch) {
         dispatch({
