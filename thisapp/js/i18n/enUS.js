@@ -327,6 +327,9 @@ Help                                          : "Help",
 Israel                                        : "Israel",
 FollowAnotherBusiness                         : "Follow Another Business",
 RegisterHelpMessage                           : "It seems we are having issue with SMS verification please contact us at ",
+XYPatternBuyOne                               : "Buy {0} Get {1} {2} free",
+XYPatternGetOne                               : "Buy {0} {1} Get {2} free",
+XYPatternBuyOneGetOne                         : "Buy {0} Get {1} free",
 
 };
 
