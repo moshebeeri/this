@@ -35,7 +35,7 @@ export default class ReduceAmountComponent extends Component {
             }
         });
 
-        if(this.props.state.reduced_amount.values.pay > this.props.state.reduced_amount.values.price){
+        if(parseInt(this.props.state.reduced_amount.values.pay) > parseInt(this.props.state.reduced_amount.values.price)){
             result = false;
             this.setState({invalidMessage:true})
         }
