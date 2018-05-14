@@ -30,12 +30,12 @@ export default class ProductListView extends Component {
     }
 
     createEditTag(item) {
-        return <EditButton onPress={this.navigateToEdit.bind(this, item)}/>
+        return <EditButton color={"#FA8559"} onPress={this.navigateToEdit.bind(this, item)}/>
     }
 
     createSelectTag(item) {
         const {select} = this.props;
-        return <SubmitButton color={'#ff6400'} title={strings.Select.toUpperCase()} onPress={() => select(item)}/>
+        return <SubmitButton color={'#FA8559'} title={strings.Select.toUpperCase()} onPress={() => select(item)}/>
     }
 
     render() {
