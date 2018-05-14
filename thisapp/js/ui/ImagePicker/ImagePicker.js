@@ -59,6 +59,7 @@ export default class ImagePickerComponent extends Component {
         }
         try {
             let image = await ImagePicker.openCamera({
+                mediaType:'photo',
                 cropping: cropping,
                 width: width,
                 height: height,
@@ -104,6 +105,7 @@ export default class ImagePickerComponent extends Component {
         try {
             let image = await ImagePicker.openPicker({
                 cropping: cropping,
+                mediaType:'photo',
                 width: width,
                 height: height,
                 compressImageQuality: 1,
