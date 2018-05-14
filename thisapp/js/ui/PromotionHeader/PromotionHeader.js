@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View,I18nManager} from 'react-native';
 import {Button, Icon, Input} from 'native-base';
 import styles from './styles';
 import {ThisText} from '../index'
@@ -101,7 +101,7 @@ export default class PromotionHeader extends Component {
                     <View style={styles.promotiontHappyDescription}>
                         <View style={{flex: 1, justifyContent: 'flex-start'}}>
                             <ThisText allowFontScaling={true} adjustsFontSizeToFit
-                                      style={[happyHourTextStyle, {color: fontColor}]}>{titleText}</ThisText>
+                                      style={[happyHourTextStyle, {marginRight: I18nManager.isRTL ? StyleUtils.scale(35) : 0,color: fontColor}]}>{titleText}</ThisText>
                         </View>
                         <View style={{flex: 1}}>
                             <ThisText allowFontScaling={true} adjustsFontSizeToFit numberOfLines={3}
