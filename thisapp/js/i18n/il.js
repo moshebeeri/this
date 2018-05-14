@@ -331,6 +331,7 @@ const il = {
     XYPatternBuyOne                               : 'קנה {0} קבל {1} {2} חינם',
     XYPatternGetOne                               : 'קנה {0} {1} קבל {2} חינם',
     XYPatternBuyOneGetOne                         : 'קנה {0} קבל {1} חינם',
+    XForYTitleBuyOnePattern                       : 'קנה {0} שלם רק {1}',
 };
 
 export default il;

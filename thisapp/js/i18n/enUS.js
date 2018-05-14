@@ -330,7 +330,7 @@ RegisterHelpMessage                           : "It seems we are having issue wi
 XYPatternBuyOne                               : "Buy {0} Get {1} {2} free",
 XYPatternGetOne                               : "Buy {0} {1} Get {2} free",
 XYPatternBuyOneGetOne                         : "Buy {0} Get {1} free",
-
+XForYTitleBuyOnePattern                       : "Buy {0} Pay only {1} ",
 };
 
 export default enUS;
