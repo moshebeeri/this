@@ -70,7 +70,7 @@ export function resetBadge() {
 
 export function setCurrencySymbol() {
     return async function (dispatch) {
-        let currencySymbol = LocalToCallingCode.getCurrencySymbol();
+        let currencySymbol = await LocalToCallingCode.getCurrencySymbol();
         dispatch({
             type: actions.SET_CURRENCY,
             currencySymbol: currencySymbol
