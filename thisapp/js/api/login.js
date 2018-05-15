@@ -70,9 +70,10 @@ class LoginApi {
         }, 'users', '/verify');
     }
 
-    recoverPassword(phoneNumber) {
+    recoverPassword(phoneNumber,callingCode) {
         let normalizedPhone = PhoneUtils.clean_phone_number(phoneNumber);
-        return serverRequestHandler.fetch_handler(`${server_host}/api/users/password/${normalizedPhone}`, {
+        let phone  = callingCode + normalizedPhone;
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/password/${phone}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

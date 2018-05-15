@@ -467,7 +467,6 @@ async function getCallingCode() {
     try {
         let countryCode = await CarrierInfo.isoCountryCode();
         if (!countryCode) {
-            x
             return '972';
         }
         let callingCode = countryCodeToCallingCode[countryCode.toUpperCase()];
