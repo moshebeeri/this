@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "color": "^1.0.3",
+    "currency-symbol-map": "^4.0.4",
     "email-templates": "^3.5.2",
     "events": "^1.1.1",
     "firebase": "^4.12.1",
