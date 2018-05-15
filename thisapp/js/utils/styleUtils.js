@@ -125,7 +125,7 @@ const guidelineBaseHeight = 680;
 const scale = (size) => {
 
     if (isTablet() && Platform.OS ==='ios' ) {
-        return width / guidelineBaseWidth * size ;
+        return width / guidelineBaseWidth * size /1.6 ;
     }
     return width / guidelineBaseWidth * size
 }
