@@ -181,19 +181,23 @@ class ApplicationManager extends Component {
         FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
         this.props.actions.resetBadge();
         Tasks.start();
-        let notification = await  FCM.getInitialNotification();
-        NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
-        AppState.addEventListener('change', this._handleAppStateChange);
+
+        AppState.addEventListener('change', this._handleAppStateChange.bind(this));
         this.props.userActions.resetForm();
 
 
         this.props.actions.setCurrencySymbol();
     }
 
-    _handleAppStateChange = (nextAppState) => {
+    async _handleAppStateChange(nextAppState) {
+
         if (nextAppState !== 'active') {
+
             Tasks.stop();
         } else {
+            let notification = await  FCM.getInitialNotification();
+            NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
+
             Tasks.start();
         }
     }
