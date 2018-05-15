@@ -118,7 +118,7 @@ class RealizePromotion extends Component {
                         transform: [{rotate: '45deg'}],
                         position: 'absolute',
                         left: 40,
-                        top: 370,
+                       bottom:StyleUtils.scale(80),
                         backgroundColor: 'transparent'
                     }}>
                         <ThisText style={{
