@@ -281,7 +281,9 @@ exports.save = function (req, res) {
           return handleError(res, err);
         }
         if (isRealizedInstance(status)) {
-          return res.status(500).json(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
+          const err = new Error(`Can not save instance type of ${status[0].type}, in case it was used or redeemed`);
+          console.error(err);
+          return res.status(500).json(err);
         }
 
         return saveInstance(req.user._id, instance, {}, (err, si) =>{
