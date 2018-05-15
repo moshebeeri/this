@@ -11,12 +11,7 @@ class FeedConverter {
         if (feed.activity.post) {
             return this.createActivityPost(feed);
         }
-        if (feed
-                .activity
-                .action
-            ===
-            'welcome'
-        ) {
+        if (feed.activity.action === 'welcome') {
             response = {
                 name: feed.activity.user.name,
                 message: strings.WelcomeMessage,
@@ -32,13 +27,13 @@ class FeedConverter {
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'follower_eligible_by_proximity' ||
             feed.activity.action === 'eligible_by_proximity' || feed.activity.action === 'saved_instance_eligible' || feed.activity.action === 'eligible' ||
-            feed.activity.action === 'eligible_on_activity_follow') {
+            feed.activity.action === 'eligible_on_activity_follow' || feed.activity.action === 'promotion_suggestion') {
             return this.createPromotionInstance(feed, instanceLifeCycle);
         }
         if (feed.activity.action === 'share') {
             return this.createShared(feed);
-            ;
         }
+
         return response;
     }
 
