@@ -253,7 +253,8 @@ GraphModel.prototype.owner_followers_follow_business = function owner_followers_
 
   let query = `MATCH (u:user ${userFilter})-[:FOLLOW]->(owner:user { _id:'${owner_id}' })-[:ROLE{name:'OWNS'}]->(b:business)-[:DEFAULT_GROUP]->(g:group)
                 WHERE b.type = 'SMALL_BUSINESS' OR b.type = 'PERSONAL_SERVICE'
-                CREATE UNIQUE (u)-[:FOLLOW]->(b)-[:FOLLOW]->(g)  ` ;
+                CREATE UNIQUE (u)-[:FOLLOW]->(b)-[:FOLLOW]->(g)  
+                return u._id as followerId, b._id as businessId` ;
 
   if (utils.defined(callback)) {
     db.query(query, callback);

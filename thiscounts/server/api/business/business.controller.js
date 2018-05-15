@@ -21,6 +21,7 @@ const randomstring = require("randomstring");
 const email = require('../../components/email');
 const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
+const suggest = require('../../components/suggest');
 
 exports.search = MongodbSearch.create(Business);
 
@@ -195,6 +196,7 @@ function doFollowBusiness(userId, businessId, callback) {
         graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
           if (err) return callback(err);
           graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
+            suggest.promotionsToNewBusinessFollower(businessId, userId, (err, results) => {});
             if (err) return callback(err);
             if (unFollowExist) return callback(null);
             //first time follow

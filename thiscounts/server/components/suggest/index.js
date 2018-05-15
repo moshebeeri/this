@@ -40,12 +40,13 @@ function businessSuggestActivity(userId, businessesIds){
   })
 }
 
-function promotionSuggestActivity(userId, instanceIds){
-  instanceIds.forEach(instanceId => {
+function promotionSuggestActivity(userId, suggestions){
+  suggestions.forEach(suggestion => {
     activity.activity({
       user: userId,
       action: 'promotion_suggestion',
-      instance: instanceId,
+      instance: suggestion.instanceId,
+      promotion: suggestion.promotionId,
       sharable: false,
       audience: ['SELF']
     }, function (err) {
@@ -107,12 +108,11 @@ Suggest.promotionsToNewBusinessFollower =
     const query = `match (u:user{_id:'${userId}'})-[:FOLLOW]->(b:business{_id:'${businessId}'})<-[:BUSINESS_PROMOTION]-(p:promotion)<-[:INSTANCE_OF]-(i:instance)
                    where not (u)-[:SAVED]->(saved:SavedInstance)-[:SAVE_OF]->(i)
                          and i.quantity > 0
-                   return distinct i._id as id limit 5`;
-    graphModel.query(query, (err, instances) => {
+                   return distinct i._id as instanceId, p._id as promotionId limit 5`;
+    graphModel.query(query, (err, suggestions) => {
       if(err) return callback(err);
-      const instanceIds = instances.map(i => i.id);
-      promotionSuggestActivity(userId, instanceIds);
-      return callback(null, instanceIds);
+      promotionSuggestActivity(userId, suggestions);
+      return callback(null, suggestions);
     })
   };
 
