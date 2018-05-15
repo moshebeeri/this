@@ -252,6 +252,8 @@ dependencies {
 
         }
 
+         compile ("com.facebook.react:react-native:0.50.4") { force = true }
+
     
 
      

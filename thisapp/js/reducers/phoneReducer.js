@@ -1,4 +1,4 @@
-const initialState = {currentLocation:{}, lastTime: ''};
+const initialState = {currentLocation: {}, lastTime: '', currencySymbol: ''};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -13,19 +13,22 @@ export default function phone(state = initialState, action) {
             ...state, ...savedData.phone
         };
     }
-
     switch (action.type) {
         case actions.SET_LOCATION:
             return {
                 ...state,
                 currentLocation: action.currentLocation,
             };
+        case actions.SET_CURRENCY:
+            return {
+                ...state,
+                currencySymbol: action.currencySymbol,
+            };
         case actions.SEND_LOCATION_TIME:
             return {
                 ...state,
                 lastTime: new Date().getTime(),
             };
-
         default:
             return state;
     }

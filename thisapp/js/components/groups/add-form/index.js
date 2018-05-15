@@ -115,7 +115,7 @@ class AddGroup extends Component {
                 groupPolocy: '',
                 groupType: 'USERS',
                 path: '',
-                groupChat: false,
+                groupChat: true,
                 image: '',
                 updateMode: false,
                 business: '',

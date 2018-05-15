@@ -185,6 +185,9 @@ class ApplicationManager extends Component {
         NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
         AppState.addEventListener('change', this._handleAppStateChange);
         this.props.userActions.resetForm();
+
+
+        this.props.actions.setCurrencySymbol();
     }
 
     _handleAppStateChange = (nextAppState) => {
