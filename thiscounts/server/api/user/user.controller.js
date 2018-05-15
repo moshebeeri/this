@@ -92,6 +92,7 @@ let generate_follow = function (userId, itemId) {
       else if( results.business )     {
         BusinessController.followBusiness(userId, results.business._id, (err)=>{
           if(err) return console.error(err);
+          suggest.promotionsToNewBusinessFollower(results.business._id, userId, (err, results) => {});
           fireEvent.info('business', results.business._id, 'business_user_follow', {
             userId,
             businessId : results.business._id
@@ -380,10 +381,16 @@ exports.phonebook = function (req, res) {
                   } else {
                     let phone_number = object.value;
                     if (utils.defined(phone_number.owner)) {
-                      //console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
                       graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
                         if (err) return logger.error(err.message);
-                        graphModel.owner_followers_follow_business(userId, phone_number.owner);
+                        graphModel.owner_followers_follow_business(userId, phone_number.owner, (err, follows)=>{
+                          if(err) return console.error(err);
+                          follows.forEach(follow => {
+                            suggest.promotionsToNewBusinessFollower(follow.businessId, follow.followerId, (err, results) => {
+                              if(err) return console.error(err);
+                            });
+                          })
+                        });
                       });
                     }
                   }
