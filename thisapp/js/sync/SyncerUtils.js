@@ -9,15 +9,73 @@ function addMyBusinessSync(businessId) {
     let state = store.getState();
     asyncListener.addListener("business_" + businessId, (snap) => {
         let response = snap.val();
-        if (response) {
+        if (response && !response.markAsRead) {
             const token = state.authentication.token;
             dispatch({
                 type: types.UPDATE_BUSINESS_REQUEST,
                 token: token,
             })
+            asyncListener.markAsRead(snap.key);
         }
     });
+
+    asyncListener.addListener("business_promotions" + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_PROMOTIONS,
+                businessId: businessId,
+                token: token,
+            })
+            asyncListener.markAsRead(snap.key);
+        }
+    });
+
+    asyncListener.addListener("business_permissions" + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_PERMISSIONS,
+                businessId: businessId,
+                token: token,
+            })
+            asyncListener.markAsRead(snap.key);
+        }
+    });
+
+    asyncListener.addListener("business_products" + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_PRODUCTS,
+                businessId: businessId,
+                token: token,
+            })
+            asyncListener.markAsRead(snap.key);
+        }
+
+    });
 }
+
+
+
+function invokeBusinessPromotionsChange(businessId) {
+    asyncListener.syncChange('business_promotions' + businessId, "promotion_changed");
+}
+function invokeBusinessProductsChange(businessId) {
+    asyncListener.syncChange('business_products' + businessId, "product_changed");
+}
+
+function invokeBusinessUserChange(businessId) {
+    asyncListener.syncChange('business_permissions' + businessId, "user_changed");
+}
+function invokeBusinessChange(userId) {
+    asyncListener.syncChange('business_' + userId, "business_changed");
+}
+
 
 function addGroupChatSync(groupId) {
     let dispatch = store.dispatch;
@@ -236,8 +294,11 @@ function invokeSyncChat(groupId, generalId, state) {
     asyncListener.syncChange('group_chat_' + groupId, 'addComment')
 }
 
+
+
 export default {
     addGroupChatSync,
+    invokeBusinessChange,
     addChatSync,
     addMyBusinessSync,
     syncGroup,
@@ -247,4 +308,7 @@ export default {
     invokeSocialChange,
     addChatGroupEntitySync,
     invokeSyncChat,
+    invokeBusinessPromotionsChange,
+    invokeBusinessProductsChange,
+    invokeBusinessUserChange
 }

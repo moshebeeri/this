@@ -28,7 +28,33 @@ class UserPermittedRoles extends Component {
 
     navigateToAdd() {
         const {navigation} = this.props;
-        navigationUtils.doNavigation(this.props.navigation, "addPermittedUser", {business: navigation.state.params.business});
+        let role =  this.getMyUserRole();
+        if(role && (role ==='OWNS' || role ==='Admin')) {
+            navigationUtils.doNavigation(this.props.navigation, "addPermittedUser", {myRole:role, business: navigation.state.params.business});
+        }
+    }
+
+
+    getMyUserRole() {
+        const {users, user,navigation} = this.props;
+        let business = navigation.state.params.business;
+        let rows = users[business._id];
+        if(rows) {
+            let myUser = rows.filter(row => row.user._id === user._id);
+            if (myUser[0]) {
+                return myUser[0].role;
+            }
+        }
+        return '';
+    }
+
+    showAdd(){
+        let role =  this.getMyUserRole();
+        if(role && (role ==='OWNS' || role ==='Admin')) {
+            return true;
+        }
+
+        return false;
     }
 
     render() {
@@ -36,10 +62,17 @@ class UserPermittedRoles extends Component {
         let business = navigation.state.params.business;
         return (
             <Container>
-                <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
-                            title={strings.AddUserPermission} bgc="white"
-                            submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
-                            titleColor="#FA8559" backIconColor="#FA8559"/>
+                {this.showAdd() ?
+                    <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
+                                title={strings.AddUserPermission} bgc="white"
+                                submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                                titleColor="#FA8559" backIconColor="#FA8559"/>
+                    :
+                    <FormHeader showBack navigation={this.props.navigation}
+                                title={strings.AddUserPermission} bgc="white"
+                                submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                                titleColor="#FA8559" backIconColor="#FA8559"/>
+                }
 
                 <GenericListManager rows={users[business._id]} navigation={navigation} actions={actions} update={update}
                                     business={navigation.state.params.business} onEndReached={actions.setBusinessUsers}

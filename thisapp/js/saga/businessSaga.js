@@ -1,5 +1,8 @@
 import {call, put, takeEvery, throttle} from 'redux-saga/effects'
 import BusinessApi from "../api/business";
+import productApi from "../api/product";
+import PromotionApi from "../api/promotion";
+import UserApi from "../api/user";
 import {
     businessLoading,
     businessLoadingDone,
@@ -7,26 +10,68 @@ import {
     setBusinessCategory,
     updateBusinesses,
     setBusinessListener,
-    updateBusinessesListeners
+    updateBusinessesListeners,
+    updateBusinessesProducts,
+    updateBusinessesPromotions,
+    updateBusinessesUsers
 } from "../actions/business";
 import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
 import {handleSucsess} from './SagaSuccsesHandler'
 
 let businessApi = new BusinessApi();
+let promotionApi = new PromotionApi();
+let userApi = new UserApi();
 
 function* getAll(action) {
     try {
         const response = yield call(businessApi.getAll, action.token, true);
         handleSucsess();
+        yield* updateBusinesses(response);
         if (response.length > 0) {
-            yield* updateBusinesses(response);
             yield* updateBusinessesListeners(response);
         }
     } catch (error) {
         console.log("failed  updateBusiness")
     }
 }
+
+function* getBusinessProducts(action) {
+    try {
+        const response = yield call(productApi.findByBusinessId,action.businessId, action.token);
+        handleSucsess();
+        if (response.length > 0) {
+            yield* updateBusinessesProducts(response,action.businessId);
+        }
+    } catch (error) {
+        console.log("failed  getBusinessProducts ")
+    }
+}
+
+function* getBusinessPromotions(action) {
+    try {
+        const response = yield call(promotionApi.getAllByBusinessId,action.businessId, action.token);
+        handleSucsess();
+        if (response.length > 0) {
+            yield* updateBusinessesPromotions(response,action.businessId);
+        }
+    } catch (error) {
+        console.log("failed  getBusinessPromotions ")
+    }
+}
+function* getBusinessUsers(action) {
+    try {
+
+        const response = yield call(userApi.getBusinessUsers,action.businessId, action.token);
+        handleSucsess();
+        if (response.length > 0) {
+            yield* updateBusinessesUsers(response,action.businessId);
+        }
+    } catch (error) {
+        console.log("failed  getBusinessUsers ")
+    }
+}
+
 
 function* saveBusiness(action) {
     try {
@@ -156,6 +201,9 @@ function* updateCategory(action) {
 
 function* businessSaga() {
     yield throttle(2000, sagaActions.UPDATE_BUSINESS_REQUEST, getAll);
+    yield throttle(2000, sagaActions.UPDATE_BUSINESS_PRODUCTS, getBusinessProducts);
+    yield throttle(2000, sagaActions.UPDATE_BUSINESS_PROMOTIONS, getBusinessPromotions);
+    yield throttle(2000, sagaActions.UPDATE_BUSINESS_PERMISSIONS, getBusinessUsers);
     yield throttle(2000, sagaActions.UPDATE_BUSINESS_REQUEST_FIRST_TIME, updateBusinessFirstTime);
     yield throttle(2000, sagaActions.SAVE_BUSINESS, saveBusiness);
     yield throttle(2000, sagaActions.UPDATE_BUSINESS, updateBusiness);
