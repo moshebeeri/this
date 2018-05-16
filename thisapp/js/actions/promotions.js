@@ -9,6 +9,7 @@ import * as types from '../saga/sagaActions';
 import SyncerUtils from "../sync/SyncerUtils";
 import {put} from 'redux-saga/effects'
 
+
 let promotionComperator = new PromotionComperator();
 let promotionApi = new PromotionsApi();
 let feedApi = new FeedApi();
@@ -235,6 +236,7 @@ async function fetchPromotionById(id, token, dispatch) {
 }
 
 export function setPromotion(response, businessId, removeId) {
+    SyncerUtils.invokeBusinessPromotionsChange(businessId);
     return {
         type: actions.UPSERT_PROMOTION_SINGLE,
         item: response,

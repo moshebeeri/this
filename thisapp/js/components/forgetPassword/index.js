@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from "../../utils/styleUtils";
 import {ThisText} from '../../ui/index';
 import navigationUtils from '../../utils/navigationUtils'
+import CallingCodeUtils from '../../utils/LocalToCallingCode'
 
 const thisLogo = require('../../../images/this-logo.png');
 const bg = require('../../../images/bg.png');
@@ -36,11 +37,16 @@ class ForgetPassword extends Component {
         this.state = {
             phone_number: '',
             password: '',
+            callingCode: '',
         };
     }
 
     back() {
         this.props.navigation.goBack();
+    }
+
+    focusNextField(nextField) {
+        this.refs[nextField].focus()
     }
 
     replaceRoute(route) {
@@ -49,16 +55,16 @@ class ForgetPassword extends Component {
 
     forgetPassword() {
         if (this.state.phoneNumber) {
-            this.props.actions.forgetPassword(this.state.phoneNumber)
+            this.props.actions.forgetPassword(this.state.phoneNumber,this.state.callingCode)
         }
         this.props.navigation.goBack();
     }
 
-    shouldComponentUpdate() {
-        if (this.props.currentScreen === 'forgetPassword') {
-            return true;
-        }
-        return false;
+
+
+    async componentWillMount() {
+        let callingCode = await CallingCodeUtils.getCallingCode();
+        this.setState({callingCode:  callingCode});
     }
 
     render() {
@@ -114,8 +120,24 @@ class ForgetPassword extends Component {
                             alignItems: 'center',
                         }}>
 
-                            <View regular style={[styles.phoneTextInput, {width: StyleUtils.getWidth()}]}>
-
+                            <View regular style={[styles.phoneTextInput, {justifyContent:'space-between',flexDirection:'row',width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120)}]}>
+                                {!I18nManager.isRTL &&
+                                <TextInput focus={false} keyboardType='phone-pad' value={'+' + this.state.callingCode}
+                                           blurOnSubmit={true} returnKeyType='next'
+                                           onSubmitEditing={this.focusNextField.bind(this, "phone")}
+                                           underlineColorAndroid={'transparent'}
+                                           onChangeText={(callingCode) => this.setState({callingCode})}
+                                           placeholderTextColor={'white'}
+                                           selectionColor={'black'}
+                                           style={{
+                                               width: StyleUtils.scale(60),
+                                               color: 'white',
+                                               borderColor: 'white',
+                                               height: StyleUtils.scale(40),
+                                               fontSize: StyleUtils.scale(20),
+                                               borderBottomWidth: 1
+                                           }}
+                                />}
                                 <TextInput keyboardType='phone-pad' value={this.state.name}
                                            blurOnSubmit={true} returnKeyType='next'
                                            onSubmitEditing={this.forgetPassword.bind(this)}
@@ -123,7 +145,7 @@ class ForgetPassword extends Component {
                                            onChangeText={(phoneNumber) => this.setState({phoneNumber})}
                                            placeholderTextColor={'white'}
                                            style={{
-                                               width: StyleUtils.getWidth() / 2 + StyleUtils.scale(120),
+                                               width: StyleUtils.scale(220),
                                                color: 'white',
                                                height: StyleUtils.scale(40),
                                                fontSize: StyleUtils.scale(20),
@@ -131,6 +153,23 @@ class ForgetPassword extends Component {
                                                borderColor: 'white',
                                            }}
                                            placeholder={strings.PhoneNumber}/>
+                                {I18nManager.isRTL &&
+                                <TextInput focus={false} keyboardType='phone-pad' value={'+' +this.state.callingCode}
+                                           blurOnSubmit={true} returnKeyType='next'
+                                           onSubmitEditing={this.focusNextField.bind(this, "phone")}
+                                           underlineColorAndroid={'transparent'}
+                                           onChangeText={(callingCode) => this.setState({callingCode})}
+                                           placeholderTextColor={'white'}
+                                           selectionColor={'black'}
+                                           style={{
+                                               width: StyleUtils.scale(60),
+                                               color: 'white',
+                                               borderColor: 'white',
+                                               height: StyleUtils.scale(40),
+                                               fontSize: StyleUtils.scale(20),
+                                               borderBottomWidth: 1
+                                           }}
+                                />}
                             </View>
                             <View style={{
                                 height: 60, marginTop: 10, justifyContent: 'center',

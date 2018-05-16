@@ -11,7 +11,7 @@ import strings from "../../../i18n/i18n"
 import StyleUtils from "../../../utils/styleUtils";
 
 const noPic = require('../../../../images/client_1.png');
-const rolesTypes = [
+const rolesTypesOwner= [
     {
         value: 'Owner',
         label: strings.Owner
@@ -20,6 +20,18 @@ const rolesTypes = [
         value: 'Admin',
         label: strings.Admin
     },
+    {
+        value: 'Manager',
+        label: strings.Manager
+    },
+    {
+        value: 'Seller',
+        label: strings.Seller
+    },
+];
+
+const rolesTypesAdmin = [
+
     {
         value: 'Manager',
         label: strings.Manager
@@ -196,12 +208,25 @@ class AddPermittedUser extends Component {
     }
 
     createUserRollPicker(role) {
-        return <SimplePicker ref="promotionType" list={rolesTypes} itemTitle={strings.ManagementRole}
+        return <SimplePicker ref="promotionType" list={this.getRoleTypes()} itemTitle={strings.ManagementRole}
                              defaultHeader={strings.ChooseRole} isMandatory
             // defaultValue={this.state.defaultRole}
                              onValueSelected={this.setUserRoles.bind(this)}/>
     }
 
+
+    getRoleTypes(){
+        const{navigation}= this.props;
+        let role = navigation.state.params.myRole;
+        switch (role){
+                case 'OWNS':
+            case 'Owner':
+                return rolesTypesOwner;
+            case 'Admin':
+                return rolesTypesAdmin;
+        }
+
+    }
     createSpinnerTag(showSpinner) {
         if (showSpinner) {
             return <Spinner simple color='red'/>;

@@ -248,11 +248,11 @@ export function verifyCode(code, navigation, resetAction) {
     }
 }
 
-export function forgetPassword(phoneNumber) {
+export function forgetPassword(phoneNumber,callingCode) {
     return function (dispatch,) {
         try {
             if (phoneNumber) {
-                loginApi.recoverPassword(phoneNumber)
+                loginApi.recoverPassword(phoneNumber,callingCode)
             }
         } catch (error) {
             handler.handleError(error, dispatch, 'forgetPassword')

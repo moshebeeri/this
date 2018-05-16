@@ -61,21 +61,29 @@ export default function business(state = initialState, action) {
             });
             return businessesState;
         case actions.UPSERT_MY_BUSINESS:
-            action.item.forEach(eventItem => {
-                if (!myBusinessOrder.includes(eventItem.business._id)) {
-                    myBusinessOrder.push(eventItem.business._id);
-                }
-                if (businessesMap[eventItem.business._id]) {
-                    if (eventItem.business.pictures.length === 0) {
-                        eventItem.business.pictures = businessesMap[eventItem.business._id].business.pictures;
-                        eventItem.business.logo = businessesMap[eventItem.business._id].business.logo;
+            if (action.item && action.item.length > 0) {
+                action.item.forEach(eventItem => {
+                    if (!myBusinessOrder.includes(eventItem.business._id)) {
+                        myBusinessOrder.push(eventItem.business._id);
                     }
-                    if(businessesMap[eventItem.business._id] && businessesMap[eventItem.business._id].categoryTitle ){
-                        eventItem.categoryTitle = businessesMap[eventItem.business._id].categoryTitle;
+                    if (businessesMap[eventItem.business._id]) {
+                        if (eventItem.business.pictures.length === 0) {
+                            eventItem.business.pictures = businessesMap[eventItem.business._id].business.pictures;
+                            eventItem.business.logo = businessesMap[eventItem.business._id].business.logo;
+                        }
+                        if (businessesMap[eventItem.business._id] && businessesMap[eventItem.business._id].categoryTitle) {
+                            eventItem.categoryTitle = businessesMap[eventItem.business._id].categoryTitle;
+                        }
                     }
-                }
-                businessesMap[eventItem.business._id] = eventItem;
-            });
+                    businessesMap[eventItem.business._id] = eventItem;
+                });
+                myBusinessOrder = myBusinessOrder.filter(businessId => {
+                    let updateBusiness = action.item.filter(businessItem => businessItem.business._id === businessId);
+                    return updateBusiness.length > 0;
+                })
+            } else {
+                myBusinessOrder = [];
+            }
             return {
                 ...state,
                 myBusinesses: businessesMap,
@@ -86,7 +94,7 @@ export default function business(state = initialState, action) {
             if (!myBusinessOrder.includes(action.item.business._id)) {
                 myBusinessOrder.unshift(action.item.business._id);
             }
-            if(businessesMap[action.item.business._id] && businessesMap[action.item.business._id].categoryTitle ){
+            if (businessesMap[action.item.business._id] && businessesMap[action.item.business._id].categoryTitle) {
                 action.item.categoryTitle = businessesMap[action.item.business._id].categoryTitle;
             }
             businessesMap[action.item.business._id] = action.item;
@@ -113,8 +121,6 @@ export default function business(state = initialState, action) {
                 ...state,
                 lastBusinessQrCode: undefined,
             };
-
-
         case actions.UPSERT_BUSINESS_QRCODE:
             businessesState.update = !businessesState.update;
             if (currentbusinesses[action.business._id]) {
@@ -150,7 +156,6 @@ export default function business(state = initialState, action) {
             } else {
                 return state;
             }
-
         case actions.SET_BUSINESS_CATEGORIES :
             let categoriesState = {...state};
             categoriesState.categories.language
@@ -165,8 +170,6 @@ export default function business(state = initialState, action) {
             businessesUsers[action.businessId] = action.businessUsers;
             return businessesState;
         case actions.SET_PRODUCT_BUSINESS:
-
-            businessesState.update = !businessesState.update;
             businessesState.update = !businessesState.update;
             if (businessesProducts[action.businessId]) {
                 if (action.businessProducts && action.businessProducts.length > 0) {
@@ -185,32 +188,33 @@ export default function business(state = initialState, action) {
                             businessesProducts[action.businessId].unshift(product);
                         }
                     })
+
                 }
             } else {
                 businessesProducts[action.businessId] = action.businessProducts;
             }
-
             return businessesState;
         case actions.UPSERT_PRODUCT_SINGLE:
             businessesState.update = !businessesState.update;
-            if(!businessesProducts[action.businessId]){
+            if (!businessesProducts[action.businessId]) {
                 businessesProducts[action.businessId] = []
                 businessesProducts[action.businessId].push(action.item)
             }
-            else{
-                let index =  businessesProducts[action.businessId].findIndex(product => product._id === action.item._id);
-                if(index > 0 || index === 0){
+            else {
+                let index = businessesProducts[action.businessId].findIndex(product => product._id === action.item._id);
+                if (index > 0 || index === 0) {
                     businessesProducts[action.businessId][index] = action.item
                 }
-                else{
+                else {
                     businessesProducts[action.businessId].push(action.item)
                 }
+                if(action.tempId){
+                    businessesProducts[action.businessId] =  businessesProducts[action.businessId].filter(product => !product._id || product._id !== action.tempId)
+                }
             }
-
-
+            businessesProducts[action.businessId] = businessesProducts[action.businessId].filter(product => product._id);
             return businessesState;
         case actions.SET_PROMOTION_BUSINESS:
-
             businessesState.update = !businessesState.update;
             if (businessesPromotions[action.businessId]) {
                 if (action.businessesPromotions && action.businessesPromotions.length > 0) {
@@ -236,25 +240,23 @@ export default function business(state = initialState, action) {
             return businessesState;
         case actions.UPSERT_PROMOTION_SINGLE:
             businessesState.update = !businessesState.update;
-            if(action.removeId &&  businessesPromotions[action.businessId]){
-                businessesPromotions[action.businessId] =  businessesPromotions[action.businessId].filter(promotion => promotion._id !== action.removeId);
-                businessesPromotions[action.businessId] =  businessesPromotions[action.businessId].filter(promotion => promotion._id);
+            if (action.removeId && businessesPromotions[action.businessId]) {
+                businessesPromotions[action.businessId] = businessesPromotions[action.businessId].filter(promotion => promotion._id !== action.removeId);
+                businessesPromotions[action.businessId] = businessesPromotions[action.businessId].filter(promotion => promotion._id);
             }
-            if(!businessesPromotions[action.businessId]){
+            if (!businessesPromotions[action.businessId]) {
                 businessesPromotions[action.businessId] = []
                 businessesPromotions[action.businessId].push(action.item)
             }
-            else{
-                let index =  businessesPromotions[action.businessId].findIndex(promotion => promotion._id === action.item._id);
-                if(index > 0 || index === 0){
+            else {
+                let index = businessesPromotions[action.businessId].findIndex(promotion => promotion._id === action.item._id);
+                if (index > 0 || index === 0) {
                     businessesPromotions[action.businessId][index] = action.item
                 }
-                else{
+                else {
                     businessesPromotions[action.businessId].push(action.item)
                 }
             }
-
-
             return businessesState;
         case actions.BUSSINESS_LOADING:
             return {

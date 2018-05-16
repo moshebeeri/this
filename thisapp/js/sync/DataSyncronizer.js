@@ -73,6 +73,14 @@ class DataSync {
                     asyncListener.markAsRead(snap.key);
                 }
             })
+            asyncListener.addListener('business_' + user._id, (snap) => {
+                const token = state.authentication.token;
+                dispatch({
+                    type: types.UPDATE_BUSINESS_REQUEST,
+                    token: token,
+                })
+                asyncListener.markAsRead(snap.key);
+            })
         }
     }
 
@@ -100,7 +108,7 @@ class DataSync {
     syncPromotions(promotions) {
         if (Object.values(promotions)) {
             Object.values(promotions).forEach(promotion => {
-                    SyncUtils.syncPromotion( promotion);
+                    SyncUtils.syncPromotion(promotion);
                 }
             )
         }
@@ -118,7 +126,7 @@ class DataSync {
     syncSocialState(entities) {
         if (Object.values(entities)) {
             Object.values(entities).forEach(entity => {
-                    SyncUtils.syncSocialState( entity);
+                    SyncUtils.syncSocialState(entity);
                 }
             )
         }
@@ -128,7 +136,7 @@ class DataSync {
         if (Object.values(groups)) {
             Object.values(groups).forEach(groupId => {
                     //sync group chat
-                    SyncUtils.syncGroup( groupId);
+                    SyncUtils.syncGroup(groupId);
                 }
             )
         }
@@ -138,7 +146,7 @@ class DataSync {
         if (Object.values(chats)) {
             Object.keys(chats).forEach(chatId => {
                     //sync group chat
-                    SyncUtils.addChatSync(chatId,chats[chatId]);
+                    SyncUtils.addChatSync(chatId, chats[chatId]);
                 }
             )
         }
@@ -149,7 +157,7 @@ class DataSync {
             Object.keys(chats).forEach(groupId => {
                     let generalId = chats[groupId];
                     //sync group chat
-                    SyncUtils.addChatGroupEntitySync(groupId,generalId);
+                    SyncUtils.addChatGroupEntitySync(groupId, generalId);
                 }
             )
         }

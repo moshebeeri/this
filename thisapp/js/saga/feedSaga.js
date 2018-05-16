@@ -1,7 +1,6 @@
-import {call, put, race, take, throttle} from 'redux-saga/effects'
+import {call, put, throttle} from 'redux-saga/effects'
 import FeedApi from "../api/feed";
 import PromotionApi from "../api/promotion";
-import {delay} from 'redux-saga'
 import {
     loadingFeeds,
     loadingFeedsDone,
@@ -11,10 +10,10 @@ import {
     setSavedInstance,
     stopScrolling,
     updateFeeds,
+    updateFeedsListeners,
     updateFeedsTop,
-    updateSocialState,
     updateFollowers,
-    updateFeedsListeners
+    updateSocialState
 } from "../actions/feedsMain";
 import {handleSucsess} from './SagaSuccsesHandler'
 import * as sagaActions from './sagaActions'
@@ -46,12 +45,10 @@ function* feedScrollDown(action) {
         yield* updateFeeds(response);
         yield* updateFollowers(response);
         yield* updateFeedsListeners(response);
-
     } catch (error) {
         console.log("failed scroll down");
     }
 }
-
 
 function* setTopFeeds(action) {
     try {
@@ -61,7 +58,6 @@ function* setTopFeeds(action) {
             yield* updateFeedsTop(response);
             yield* updateFollowers(response);
             yield* updateFeedsListeners(response);
-
         }
     } catch (error) {
         console.log("failed to update social state");
