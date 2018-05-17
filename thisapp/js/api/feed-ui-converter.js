@@ -276,8 +276,8 @@ class FeedConverter {
             let date = new Date(instance.promotion.end);
             responseFeed.id = id;
             responseFeed.isRealized = instanceLifeCycle.isReedemed(id);
-            responseFeed.isActive = instanceLifeCycle.isActive(id);
-            responseFeed.isExpired = instanceLifeCycle.isExpired(id, date);
+            responseFeed.isActive = instanceLifeCycle.isActive(id) || instance.type === 'PUNCH_CARD';;
+            responseFeed.isExpired = instanceLifeCycle.isExpired(id, date) && instance.type !== 'PUNCH_CARD';
             responseFeed.isSaved = true;
             responseFeed.fid = id;
             responseFeed.key = id;
@@ -451,8 +451,8 @@ class FeedConverter {
             responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
             if (instanceLifeCycle) {
-                responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+                responseFeed.isActive = instanceLifeCycle.isActive(instance._id) ||  instance.type === 'PUNCH_CARD';;
+                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date)   && instance.type !== 'PUNCH_CARD';;
                 responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
                 responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
                 if (instance.social_state) {
