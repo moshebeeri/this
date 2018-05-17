@@ -13,6 +13,9 @@ const initialState = {
     visibleGroup: '',
     visibleFeeds: [],
     maxFeedReturned: {},
+    currentGroupId: '',
+    unreadMessage: {},
+    lastMessage: {},
     touch: false,
     saving: false
 };
@@ -35,7 +38,6 @@ export default function group(state = initialState, action) {
         case actions.UPSERT_SINGLE_GROUP:
             currentGroups[action.group._id] = action.group;
             currentGroups[action.removeId] = undefined;
-
             immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP:
@@ -145,6 +147,30 @@ export default function group(state = initialState, action) {
                 ...state,
                 saving: false,
             };
+        case actions.GROUP_UNREAD_MESSAGE:
+            if (state.currentGroupId === action.groupId) {
+                return state;
+            }
+
+            if( immutableState.lastMessage[action.groupId] === action.message ){
+                return state;
+            }
+            if( immutableState.unreadMessage[action.groupId]) {
+                immutableState.unreadMessage[action.groupId] = immutableState.unreadMessage[action.groupId] + 1;
+            }else{
+                immutableState.unreadMessage[action.groupId] =  1;
+
+            }
+            immutableState.update = true;
+            immutableState.lastMessage[action.groupId] = action.message;
+            return immutableState;
+        case actions.CURRENT_GROUP:
+            if(action.groupId) {
+                immutableState.unreadMessage[action.groupId] = 0;
+            }
+            immutableState.update = true;
+            immutableState.currentGroupId = action.groupId;
+            return immutableState;
         case actions.GROUP_UPDATED:
             return {
                 ...state,
@@ -188,7 +214,7 @@ export default function group(state = initialState, action) {
             immutableState.update = true;
             return immutableState;
         case actions.MAX_GROUP_FEED_NOT_RETUNED:
-            immutableState.groupBusinessFollowers[action.groupId] = false;
+            immutableState.maxFeedReturned[action.groupId] = false;
             return immutableState;
         default:
             return state;

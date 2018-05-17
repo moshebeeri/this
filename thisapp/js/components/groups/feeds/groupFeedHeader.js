@@ -49,6 +49,7 @@ class GroupFeedHeader extends Component {
 
     navigateBack() {
         this.handleBack();
+        this.props.actions.setCurrentGroup('');
         this.props.navigation.goBack();
     }
 

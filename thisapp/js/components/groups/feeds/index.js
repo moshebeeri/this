@@ -36,6 +36,7 @@ class GroupFeed extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
         const {navigation, feeds} = this.props;
         const group = navigation.state.params.group;
+        this.props.actions.setCurrentGroup(group._id);
         this.props.actions.clearReplyInstance();
         if (this.props.navigation.state.params.chat) {
             this.setState({page: this.getChatTab()})
@@ -44,19 +45,17 @@ class GroupFeed extends Component {
             if (!feeds[group._id] || (feeds[group._id] && feeds[group._id].length === 0)) {
                 this.props.actions.setFeeds(group, feeds[group._id]);
             }
-            this.props.actions.clearUnreadPosts(group);
         });
-
         //workaround for hebrew support
         let item = this.props.navigation.state.params.instanceItem;
-        if(item) {
+        if (item) {
             this.props.actions.setReplayInstance(item);
         }
     }
 
     handleBack() {
-        InteractionManager.runAfterInteractions(() => {
-        });
+        this.props.actions.setCurrentGroup('');
+
     }
 
     handlePick(emoji) {
@@ -74,12 +73,10 @@ class GroupFeed extends Component {
     }
 
     navigateToChat(item) {
-
-
         if (I18nManager.isRTL && (Platform.OS === 'android')) {
             //workaround for hebrew support
             const group = this.props.navigation.state.params.group;
-            this.props.navigation.navigate('GroupFeed', {chat: true, group: group,instanceItem:item});
+            this.props.navigation.navigate('GroupFeed', {chat: true, group: group, instanceItem: item});
         } else {
             this.props.actions.setReplayInstance(item);
             this.setState({page: 1});

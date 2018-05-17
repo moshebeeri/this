@@ -110,6 +110,15 @@ async function groupTouched(groupId) {
     };
 }
 
+export function setCurrentGroup(groupId) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.CURRENT_GROUP,
+            groupId: groupId
+        });
+    };
+}
+
 export function touch(groupId) {
     return function (dispatch, getState) {
         try {

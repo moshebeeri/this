@@ -50,12 +50,12 @@ export default class GenericListGroupView extends Component {
 
 
     render() {
-        const {item, onPressItem, index, onPressMessageItem,} = this.props;
+        const {item, onPressItem, index, onPressMessageItem,unReadMessage} = this.props;
         const styles = this.createStyle();
         let promotionItem = this.createPromotionItem(item);
         let showBusinessHeader = this.isBusiness(item.entity_type);
         const promotion = this.createPromotion(styles, promotionItem, showBusinessHeader);
-        const message = this.createMessage(styles, item);
+        const message = this.createMessage(styles, item,unReadMessage);
         const post = this.createPost(styles, item);
         const containerStyle = {
             alignItems: 'center',
@@ -134,7 +134,18 @@ export default class GenericListGroupView extends Component {
         return undefined;
     }
 
-    createMessage(styles, item) {
+    createMessage(styles, item,unReadMessage) {
+        let styleNotification = {
+            position: 'absolute',
+            bottom: 18,
+            right: -40,
+            borderRadius: 10,
+            width: 20,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#2db6c8'
+        };
+        let unreadMessages = unReadMessage[item._id] ;
         if (item.preview && item.preview.comment) {
             let user = item.preview.comment.user;
             let itemChat
@@ -163,6 +174,10 @@ export default class GenericListGroupView extends Component {
 
             }
             const image = <ImageController thumbnail size={StyleUtils.scale(30)} source={itemChat.avetar}/>
+            let renderUnread = false;
+            if(unreadMessages && unreadMessages > 0){
+                renderUnread = true;
+            }
             return <View style={styles.group_message_container}>
 
 
@@ -178,6 +193,7 @@ export default class GenericListGroupView extends Component {
 
                         <ThisText  numberOfLines={1} ellipsizeMode='tail'  style={styles.chatListLineTitleText}>{itemChat.message}</ThisText>
                         <ThisText style={styles.chatListLineDescText}>{dateUtils.messageFormater(item.preview.comment.created)}</ThisText>
+                        { renderUnread && <View style={styleNotification}><ThisText style={[styles.chatListLineDescText,{color:'white',fontWeight:'bold'}]}>{unreadMessages}</ThisText></View>}
                     </View>
                 </View>
 
