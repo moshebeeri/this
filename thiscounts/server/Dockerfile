@@ -1,4 +1,6 @@
 #docker build -t lowla/thiscounts .
+#docker tag lowla/thiscounts eu.gcr.io/this-1000/thiscounts:latest
+
 #docker run -it -p 9000:9000 -e MONGODB_URI='mongodb://localhost/lowla-dev' lowla/thiscounts
 #docker run -it -p 9000:9000 -e MONGODB_URI='mongodb://docker.for.mac.host.internal/lowla-dev' lowla/thiscounts
 #docker run -it -p 8080:8080 -e MONGODB_URI='mongodb://docker.for.mac.host.internal/lowla-dev' -e NODE_ENV='production' -e NEO4J_URI='http://docker.for.mac.host.internal:7474' lowla/thiscounts /bin/bash
