@@ -179,7 +179,7 @@ exports.create = function (req, res) {
 };
 
 exports.create_business_default_group = function (group, callback) {
-  group.chat_policy = 'OFF';
+  group.chat_policy = 'ON';
   Group.create(group, function (err, group) {
     if (err) {
       return callback(err);

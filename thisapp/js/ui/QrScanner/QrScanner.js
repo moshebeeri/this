@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {Image, TouchableOpacity,Dimensions} from "react-native";
+import {Image, TouchableOpacity,Dimensions,BackHandler} from "react-native";
 import {Button, Input, Item, Spinner, Text, View} from "native-base";
-import Camera from "react-native-camera";
+import Camera from './BetterCamera';
 import styles from "./styles";
 import {BusinessHeader,SubmitButton,GroupHeader} from '../../ui/index';
 import StyleUtils from '../../utils/styleUtils'
@@ -20,6 +20,7 @@ export default class BusinessFollow extends Component {
         this.state = {
             searchText: '',
         }
+
     }
 
     scaneQrCode(scanCode) {
@@ -34,6 +35,7 @@ export default class BusinessFollow extends Component {
     }
     back() {
         this.props.navigation.goBack();
+       // this.props.closeCamera();
     }
 
     createView() {

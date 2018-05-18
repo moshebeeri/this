@@ -120,8 +120,8 @@ android {
         applicationId "com.this"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.2"
         multiDexEnabled true
         resValue "string", "build_config_package", "com.groupys"
         ndk {
@@ -251,6 +251,8 @@ dependencies {
              exclude group: "com.google.android.gms"
 
         }
+
+         compile ("com.facebook.react:react-native:0.50.4") { force = true }
 
     
 

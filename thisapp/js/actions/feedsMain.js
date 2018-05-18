@@ -178,6 +178,10 @@ export function saveFeed(id,) {
             SyncerUtils.invokeSocialChange(id, getState());
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
+            dispatch({
+                type: actions.SAVE,
+                id: id
+            });
             handler.handleError(error, dispatch, 'saveFeed')
             logger.actionFailed('saveFeed')
         }

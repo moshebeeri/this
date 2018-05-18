@@ -175,7 +175,7 @@ export function followBusiness(businessId) {
         try {
             const token = getState().authentication.token;
             const businessFollowed = getState().following.followBusiness;
-            if(!businessFollowed[businessId]) {
+            if (!businessFollowed[businessId]) {
                 await businessApi.followBusiness(businessId, token);
                 dispatch({type: actions.RESET_FOLLOW_FORM})
                 dispatch({type: actions.USER_FOLLOW_BUSINESS, id: businessId});
@@ -532,13 +532,49 @@ async function getAll(dispatch, token) {
 }
 
 export function* updateBusinesses(response) {
+    yield put({
+        type: actions.UPSERT_MY_BUSINESS,
+        item: response
+    });
+}
+
+export function* updateBusinessesProducts(response, businessId) {
     if (response.length > 0) {
-        if (businessComperator.shouldUpdateBusinesses(response)) {
+        yield put({
+            type: actions.SET_PRODUCT_BUSINESS,
+            businessProducts: response,
+            businessId: businessId
+        });
+    }
+}
+
+export function* updateBusinessesPromotions(response, businessId) {
+    if (response.length > 0) {
+
+        yield put({
+            type: actions.SET_PROMOTION_BUSINESS,
+            businessesPromotions: response,
+            businessId: businessId
+        });
+        let values = Object.values(response);
+        let promotion;
+        while (promotion = values.pop()) {
             yield put({
-                type: actions.UPSERT_MY_BUSINESS,
-                item: response
+                type: actions.PROMOTION_LISTENER,
+                id: promotion._id
             });
+            SyncerUtils.syncPromotion(promotion._id);
         }
+    }
+}
+
+export function* updateBusinessesUsers(response, businessId) {
+    if (response.length > 0) {
+        yield put({
+            type: actions.SET_USER_BUSINESS,
+            businessUsers: response,
+            businessId: businessId
+        });
     }
 }
 
@@ -606,6 +642,21 @@ export function updateBusinesCategory(item) {
             business: item,
             locale: locale
         })
+    }
+}
+
+export function removeUser(user, businessId) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        await userApi.removeUserRole(user._id, businessId, token);
+        let users = await userApi.getBusinessUsers(businessId, token);
+        SyncerUtils.invokeBusinessUserChange(businessId);
+        SyncerUtils.invokeBusinessChange(user._id);
+        dispatch({
+            type: actions.SET_USER_BUSINESS,
+            businessUsers: users,
+            businessId: businessId
+        });
     }
 }
 

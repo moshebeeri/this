@@ -7,6 +7,7 @@ const Notifications = require('../../components/notification');
 // Get list of notifications
 exports.find = function(req, res) {
   Notification.find({$and:[{to: {$eq: req.params.entity_id}}, {list: {$eq: true}}]})
+    .where('pnsOnly').equals(false)
     .skip(req.params.skip)
     .limit(req.params.limit)
     .exec(function (err, notifications) {

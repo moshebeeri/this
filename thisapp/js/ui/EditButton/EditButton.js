@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {TouchableOpacity} from 'react-native';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {Button} from 'native-base';
-import styles from './styles'
 import StyleUtils from '../../utils/styleUtils'
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
@@ -13,22 +12,26 @@ export default class EditButton extends Component {
     }
 
     render() {
-        const {onPress,iconName,touchSize,size} = this.props;
+        const {onPress, iconName, touchSize, size, color} = this.props;
         let name = "edit";
-        if(iconName){
+        if (iconName) {
             name = iconName;
         }
-        let style ={};
+        let defaultColor = 'white'
+        if (color) {
+            defaultColor = color;
+        }
+        let style = {};
         let defaultSize = StyleUtils.scale(20);
-        if(size){
+        if (size) {
             defaultSize = StyleUtils.scale(size);
         }
-        if(touchSize){
-            style = {height:StyleUtils.scale(touchSize),width:StyleUtils.scale(touchSize)};
+        if (touchSize) {
+            style = {height: StyleUtils.scale(touchSize), width: StyleUtils.scale(touchSize)};
         }
         return <TouchableOpacityFix style={style}
-                                 onPress={onPress}>
-            <Icon2 size={defaultSize} style={styles.productIcon} name={name}/>
+                                    onPress={onPress}>
+            <Icon2 size={defaultSize} style={{color: defaultColor}} name={name}/>
         </TouchableOpacityFix>
     }
 }

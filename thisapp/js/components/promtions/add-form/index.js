@@ -203,9 +203,8 @@ class AddPromotion extends Component {
     }
 
     async componentWillMount() {
-        this.props.actions.resetForm();
+
         if (this.props.navigation.state.params.onBoardType) {
-            this.setToggleOn();
             this.setState({toggle: true, onBoardType: this.props.navigation.state.params.onBoardType});
             return;
         }
@@ -220,6 +219,8 @@ class AddPromotion extends Component {
             this.setPromotion(this.props.navigation.state.params.followerProximity);
             return;
         }
+
+        this.props.actions.resetForm();
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -487,13 +488,14 @@ class AddPromotion extends Component {
     }
 
     createDiscountConditionForm() {
+        const{currencySymbol} = this.props;
         let result = undefined;
         let discountForm = undefined;
         if (this.state.type) {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm =
-                        <PercentComponent toggle={this.state.toggle} navigation={this.props.navigation} api={this}
+                        <PercentComponent currencySymbol={currencySymbol} toggle={this.state.toggle} navigation={this.props.navigation} api={this}
                                           state={this.state}
                                           ref={"precent"} setState={this.setState.bind(this)}/>;
                     break;
@@ -503,28 +505,29 @@ class AddPromotion extends Component {
                     break;
                 case 'X+Y':
                     discountForm =
-                        <XPlusYComponent ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
+                        <XPlusYComponent  currencySymbol={currencySymbol} ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
                                          setState={this.setState.bind(this)}/>;
                     break;
                 case 'GIFT':
                     discountForm =
-                        <GiftComponent ref={"GIFT"} navigation={this.props.navigation} api={this} state={this.state}
+                        <GiftComponent  currencySymbol={currencySymbol} ref={"GIFT"} navigation={this.props.navigation} api={this} state={this.state}
                                        setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+N%OFF':
-                    discountForm = <XPlusYOffComponent ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
+                    discountForm = <XPlusYOffComponent  currencySymbol={currencySymbol} ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
                                                        state={this.state}
                                                        setState={this.setState.bind(this)}/>;
                     break;
                 case 'X_FOR_Y':
                     discountForm =
-                        <XForYComponent ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
+                        <XForYComponent  currencySymbol={currencySymbol} ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
                                         setState={this.setState.bind(this)}/>;
                     break;
                 case 'REDUCED_AMOUNT':
                     discountForm =
                         <ReduceAmountComponent ref={"REDUCED_AMOUNT"} navigation={this.props.navigation} api={this}
                                                state={this.state}
+                                               currencySymbol={currencySymbol}
                                                setState={this.setState.bind(this)}/>;
                     break;
                 case 'HAPPY_HOUR':
@@ -1013,6 +1016,7 @@ export default connect(
         savingFailed: state.promotions.savingFormFailed,
         products: state.products,
         currentScreen: state.render.currentScreen,
+        currencySymbol: state.phone.currencySymbol
     }),
     (dispatch) => ({
         businessActions: bindActionCreators(businessAction, dispatch),

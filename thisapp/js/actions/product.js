@@ -4,6 +4,7 @@ import FormUtils from "../utils/fromUtils";
 import ActionLogger from './ActionLogger'
 import handler from './ErrorHandler'
 import * as types from '../saga/sagaActions';
+import SyncerUtils from "../sync/SyncerUtils";
 
 let logger = new ActionLogger();
 
@@ -96,12 +97,18 @@ export function saveProduct(product, businessId, navigation) {
     }
 }
 
-export function setProduct(response, businessId) {
+export function setProduct(response, businessId, tempId) {
+
     return {
         type: actions.UPSERT_PRODUCT_SINGLE,
         item: response,
-        businessId: businessId
+        businessId: businessId,
+        tempId: tempId
     }
+}
+
+export function syncProductChange(businessId) {
+    SyncerUtils.invokeBusinessProductsChange(businessId);
 }
 
 

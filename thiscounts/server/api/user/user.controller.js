@@ -92,6 +92,7 @@ let generate_follow = function (userId, itemId) {
       else if( results.business )     {
         BusinessController.followBusiness(userId, results.business._id, (err)=>{
           if(err) return console.error(err);
+          suggest.promotionsToNewBusinessFollower(results.business._id, userId, (err, results) => {});
           fireEvent.info('business', results.business._id, 'business_user_follow', {
             userId,
             businessId : results.business._id
@@ -270,6 +271,7 @@ exports.create = function (req, res, next) {
   newUser.role = 'user';
   newUser.sms_code = randomstring.generate({length: 4, charset: 'numeric'});
   newUser.country_code = newUser.country_code.toString().replace(/^[+]+/g,'');
+  newUser.shortPhoneNumber = newUser.phone_number;
   newUser.phone_number = countryCode.validateNormalize(newUser.phone_number, newUser.country_code);
   if(!newUser.phone_number) {
     console.error(`validateNormalize number is null ${newUser.country_code}-${newUser.phone_number}`);
@@ -379,10 +381,16 @@ exports.phonebook = function (req, res) {
                   } else {
                     let phone_number = object.value;
                     if (utils.defined(phone_number.owner)) {
-                      //console.log(`phonebook follow_user: ${phone_number._id} ${userId}`);
                       graphModel.follow_user_by_phone_number(phone_number._id, userId, function (err) {
                         if (err) return logger.error(err.message);
-                        graphModel.owner_followers_follow_business(userId, phone_number.owner);
+                        graphModel.owner_followers_follow_business(userId, phone_number.owner, (err, follows)=>{
+                          if(err) return console.error(err);
+                          follows.forEach(follow => {
+                            suggest.promotionsToNewBusinessFollower(follow.businessId, follow.followerId, (err, results) => {
+                              if(err) return console.error(err);
+                            });
+                          })
+                        });
                       });
                     }
                   }
@@ -695,8 +703,7 @@ exports.entityRoles = function (req, res) {
 
 exports.getUserByPhone = function (req, res) {
   //country_code
-  User.findOne({ $and: [{phone_number: req.params.phone},
-    {country_code: req.params.country_code}]}, function (err, user) {
+  User.findOne({ phone_number: req.params.country_code + req.params.phone}, function (err, user) {
     if(err) return handleError(res, err);
     return res.status(200).json(user);
   });

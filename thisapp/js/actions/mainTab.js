@@ -9,6 +9,7 @@ import UserApi from "../api/user";
 import ActionLogger from './ActionLogger';
 import handler from './ErrorHandler'
 import strings from '../i18n/i18n';
+import LocalToCallingCode from '../utils/LocalToCallingCode';
 
 let notificationApi = new NotificationApi();
 let instanceApi = new InstanceApi();
@@ -64,6 +65,16 @@ export function resetBadge() {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
         notificationApi.resetBadgeNotification(token);
+    }
+}
+
+export function setCurrencySymbol() {
+    return async function (dispatch) {
+        let currencySymbol = await LocalToCallingCode.getCurrencySymbol();
+        dispatch({
+            type: actions.SET_CURRENCY,
+            currencySymbol: currencySymbol
+        });
     }
 }
 

@@ -417,5 +417,6 @@ exports.delete = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.log(`function handle_image handleError ${err.message}`);
   return res.status(500).send(err);
 }

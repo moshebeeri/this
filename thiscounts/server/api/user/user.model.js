@@ -12,6 +12,7 @@ let UserSchema = new Schema({
   agent:{},
   gid: { type: Number, index: true},
   phone_number: { type: String, index: true, unique : true, required : true},
+  shortPhoneNumber: { type: String, index: true},
   country_code: { type: Number, required : true },
   created: { type: Date, required : true },
   client: {},
@@ -38,7 +39,7 @@ let UserSchema = new Schema({
 });
 UserSchema.plugin(autopopulate);
 
-UserSchema.index({name: 'text', phone_number: 'text', email: 'text'});
+UserSchema.index({name: 'text', shortPhoneNumber: 'text' ,phone_number: 'text', email: 'text'});
 
 /**
  * Virtuals

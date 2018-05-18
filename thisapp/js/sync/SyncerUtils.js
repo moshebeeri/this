@@ -1,5 +1,6 @@
 import asyncListener from "../api/AsyncListeners";
 import * as types from '../saga/sagaActions';
+import * as actions from '../reducers/reducerActions';
 import getStore from "../store";
 
 const store = getStore();
@@ -9,14 +10,67 @@ function addMyBusinessSync(businessId) {
     let state = store.getState();
     asyncListener.addListener("business_" + businessId, (snap) => {
         let response = snap.val();
-        if (response) {
+        if (response && !response.markAsRead) {
             const token = state.authentication.token;
             dispatch({
                 type: types.UPDATE_BUSINESS_REQUEST,
                 token: token,
             })
+            asyncListener.markAsRead(snap.key);
         }
     });
+    asyncListener.addListener("business_promotions" + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_PROMOTIONS,
+                businessId: businessId,
+                token: token,
+            })
+            asyncListener.markAsRead(snap.key);
+        }
+    });
+    asyncListener.addListener("business_permissions" + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_PERMISSIONS,
+                businessId: businessId,
+                token: token,
+            })
+            asyncListener.markAsRead(snap.key);
+        }
+    });
+    asyncListener.addListener("business_products" + businessId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.UPDATE_BUSINESS_PRODUCTS,
+                businessId: businessId,
+                token: token,
+            })
+            asyncListener.markAsRead(snap.key);
+        }
+    });
+}
+
+function invokeBusinessPromotionsChange(businessId) {
+    asyncListener.syncChange('business_promotions' + businessId, "promotion_changed");
+}
+
+function invokeBusinessProductsChange(businessId) {
+    asyncListener.syncChange('business_products' + businessId, "product_changed");
+}
+
+function invokeBusinessUserChange(businessId) {
+    asyncListener.syncChange('business_permissions' + businessId, "user_changed");
+}
+
+function invokeBusinessChange(userId) {
+    asyncListener.syncChange('business_' + userId, "business_changed");
 }
 
 function addGroupChatSync(groupId) {
@@ -47,6 +101,11 @@ function addGroupChatSync(groupId) {
                     user: user,
                 })
             }
+            dispatch({
+                type: actions.GROUP_UNREAD_MESSAGE,
+                groupId: groupId,
+                message: response
+            })
             dispatch({
                 type: types.SAVE_GROUPS_REQUEST,
                 token: token,
@@ -228,16 +287,17 @@ function invokeSocialChange(generalId, state) {
     }
 }
 
-function invokeSyncChat(groupId, generalId, state) {
+function invokeSyncChat(groupId, generalId, state, message) {
     if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
         asyncListener.syncChange('promotion_' + state.instances.instances[generalId].promotion, 'add-comment');
     }
     asyncListener.syncChange('group_' + groupId, 'addComment')
-    asyncListener.syncChange('group_chat_' + groupId, 'addComment')
+    asyncListener.syncChange('group_chat_' + groupId, message + new Date().getTime())
 }
 
 export default {
     addGroupChatSync,
+    invokeBusinessChange,
     addChatSync,
     addMyBusinessSync,
     syncGroup,
@@ -247,4 +307,7 @@ export default {
     invokeSocialChange,
     addChatGroupEntitySync,
     invokeSyncChat,
+    invokeBusinessPromotionsChange,
+    invokeBusinessProductsChange,
+    invokeBusinessUserChange
 }

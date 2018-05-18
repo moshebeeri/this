@@ -1,5 +1,6 @@
 import * as actions from "../reducers/reducerActions";
 import UserApi from "../api/user";
+import SyncerUtils from "../sync/SyncerUtils";
 
 let userApi = new UserApi();
 import ActionLogger from './ActionLogger'
@@ -26,8 +27,9 @@ export function saveRole(user, businessId, userRole, navigation) {
             if(user._id){
                 id = user._id;
             }
-            await userApi.removeUserRole(id, businessId);
-            await userApi.setUserRole(id, businessId, userRole);
+            await userApi.removeUserRole(id, businessId,token);
+            await userApi.setUserRole(id, businessId, userRole,token);
+
             let users = await userApi.getBusinessUsers(businessId, token);
             dispatch({
                 type: actions.SET_USER_BUSINESS,
@@ -38,6 +40,8 @@ export function saveRole(user, businessId, userRole, navigation) {
                 type: actions.USER_ROLE_SAVING_DONE,
             });
             navigation.goBack();
+            SyncerUtils.invokeBusinessUserChange(businessId);
+            SyncerUtils.invokeBusinessChange(id);
             handler.handleSuccses(getState(),dispatch)
         } catch (error) {
             handler.handleError(error,dispatch,'userRole-saveRole');
@@ -83,6 +87,8 @@ export function search(phoneNumber) {
         }
     }
 }
+
+
 
 export function setRole(role) {
     return function (dispatch) {

@@ -11,12 +11,7 @@ class FeedConverter {
         if (feed.activity.post) {
             return this.createActivityPost(feed);
         }
-        if (feed
-                .activity
-                .action
-            ===
-            'welcome'
-        ) {
+        if (feed.activity.action === 'welcome') {
             response = {
                 name: feed.activity.user.name,
                 message: strings.WelcomeMessage,
@@ -31,14 +26,14 @@ class FeedConverter {
             response = this.createMessageUi(feed);
         }
         if (feed.activity.action === 'instance' || feed.activity.action === 'follower_eligible_by_proximity' ||
-            feed.activity.action === 'eligible_by_proximity'|| feed.activity.action === 'saved_instance_eligible' || feed.activity.action === 'eligible' ||
-            feed.activity.action === 'eligible_on_activity_follow') {
+            feed.activity.action === 'eligible_by_proximity' || feed.activity.action === 'saved_instance_eligible' || feed.activity.action === 'eligible' ||
+            feed.activity.action === 'eligible_on_activity_follow' || feed.activity.action === 'promotion_suggestion') {
             return this.createPromotionInstance(feed, instanceLifeCycle);
         }
         if (feed.activity.action === 'share') {
             return this.createShared(feed);
-            ;
         }
+
         return response;
     }
 
@@ -177,7 +172,7 @@ class FeedConverter {
             description: feed.activity.message,
             date: feed.activity.timestamp
         };
-        if ( user.pictures && Object.values(user.pictures).length > 0) {
+        if (user.pictures && Object.values(user.pictures).length > 0) {
             let pictures = Object.values(user.pictures);
             response.logo = {
                 uri: pictures[pictures.length - 1].pictures[0]
@@ -219,7 +214,6 @@ class FeedConverter {
                 key: feed._id,
                 social: socialState,
                 actor: feed.activity.actor_user._id,
-
                 name: feed.activity.business.name,
                 address: feed.activity.business.address,
                 website: feed.activity.business.website,
@@ -249,10 +243,9 @@ class FeedConverter {
                 showSocial: true,
             }
         }
-
-        if(feed.activity.action === 'follow'){
+        if (feed.activity.action === 'follow') {
             response.itemTitle = strings.businessFollow.formatUnicorn(name.trim());
-        }else{
+        } else {
             response.itemTitle = strings.businessCreated.formatUnicorn(name.trim());
         }
         response.generalId = feed.activity.business._id;
@@ -263,7 +256,6 @@ class FeedConverter {
         response.businessName = feed.activity.business.name;
         response.location = feed.activity.business.location;
         response.business = feed.activity.business;
-
         let user = feed.activity.actor_user;
         if (user && user.pictures && Object.keys(user.pictures).length > 0) {
             response.avetar = {
@@ -276,7 +268,7 @@ class FeedConverter {
         return response;
     }
 
-    createSavedPromotion(feed, id, instanceLifeCycle,extraData) {
+    createSavedPromotion(feed, id, instanceLifeCycle, extraData) {
         let instance = feed.instance;
         let promotion = instance.promotion;
         let responseFeed = {};
@@ -284,8 +276,8 @@ class FeedConverter {
             let date = new Date(instance.promotion.end);
             responseFeed.id = id;
             responseFeed.isRealized = instanceLifeCycle.isReedemed(id);
-            responseFeed.isActive = instanceLifeCycle.isActive(id);
-            responseFeed.isExpired = instanceLifeCycle.isExpired(id, date);
+            responseFeed.isActive = instanceLifeCycle.isActive(id) || instance.type === 'PUNCH_CARD';;
+            responseFeed.isExpired = instanceLifeCycle.isExpired(id, date) && instance.type !== 'PUNCH_CARD';
             responseFeed.isSaved = true;
             responseFeed.fid = id;
             responseFeed.key = id;
@@ -330,12 +322,12 @@ class FeedConverter {
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                    responseFeed.itemTitle = this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.promotionTitle = strings.XForYTitle;
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
-                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                    responseFeed.promotionTerm = this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
@@ -353,13 +345,13 @@ class FeedConverter {
                     break;
                 case "X+Y":
                     if (promotion.x_plus_y.values[0].product) {
-                        responseFeed.itemTitle = strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
-                        responseFeed.promotionTerm = strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
+                        responseFeed.itemTitle = this.getXPlusYDescrition(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
+                        responseFeed.promotionTerm = this.getXPlusYDescrition(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
                     }
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionTitle = strings.XYTitle;
                     responseFeed.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
-                    if(promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
+                    if (promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
                         responseFeed.promotionValue1 = promotion.x_plus_y.values[0].buy;
                         responseFeed.promotionValue2 = promotion.x_plus_y.values[0].eligible;
                     }
@@ -447,7 +439,6 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
-
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.sharable = feed.activity.sharable;
@@ -459,9 +450,9 @@ class FeedConverter {
             responseFeed.generalId = instance._id;
             responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
-            if(instanceLifeCycle) {
-                responseFeed.isActive = instanceLifeCycle.isActive(instance._id);
-                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date);
+            if (instanceLifeCycle) {
+                responseFeed.isActive = instanceLifeCycle.isActive(instance._id) ||  instance.type === 'PUNCH_CARD';;
+                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date)   && instance.type !== 'PUNCH_CARD';;
                 responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
                 responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
                 if (instance.social_state) {
@@ -505,12 +496,12 @@ class FeedConverter {
                     responseFeed.quantity = promotion.percent.quantity;
                     break;
                 case "X_FOR_Y":
-                    responseFeed.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                    responseFeed.itemTitle = this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.promotion = 'X_FOR_Y';
                     responseFeed.promotionColor = '#ff66b3';
                     responseFeed.promotionTitle = strings.XForYTitle;
                     responseFeed.promotionValue = promotion.x_for_y.values[0].pay;
-                    responseFeed.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                    responseFeed.promotionTerm = this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                     responseFeed.quantity = promotion.x_for_y.quantity;
                     break;
                 case "X+N%OFF":
@@ -528,17 +519,16 @@ class FeedConverter {
                     break;
                 case "X+Y":
                     if (promotion.x_plus_y.values[0].product) {
-                        responseFeed.itemTitle = strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
-                        responseFeed.promotionTerm = strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
+                        responseFeed.itemTitle = this.getXPlusYDescrition(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
+                        responseFeed.promotionTerm = this.getXPlusYDescrition(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
                     }
                     responseFeed.promotion = 'X+Y';
                     responseFeed.promotionTitle = strings.XYTitle;
                     responseFeed.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
-                    if(promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
+                    if (promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
                         responseFeed.promotionValue1 = promotion.x_plus_y.values[0].buy;
                         responseFeed.promotionValue2 = promotion.x_plus_y.values[0].eligible;
                     }
-
                     responseFeed.promotionColor = '#66ff1a';
                     responseFeed.quantity = promotion.x_plus_y.quantity;
                     break;
@@ -562,7 +552,7 @@ class FeedConverter {
                     break;
                 case "PUNCH_CARD":
                     let punches = promotion.punch_card.values[0].number_of_punches;
-                    if(promotion.condition.product) {
+                    if (promotion.condition.product) {
                         responseFeed.promotionTerm = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
                         responseFeed.itemTitle = '';
                         responseFeed.promotionTitle = strings.punchCardTerm.formatUnicorn(punches, promotion.condition.product.name);
@@ -597,7 +587,7 @@ class FeedConverter {
         let response = {};
         response.name = promotion.name;
         response.description = promotion.description;
-        if (promotion.pictures && promotion.pictures[0]  ) {
+        if (promotion.pictures && promotion.pictures[0]) {
             response.banner = {
                 uri: promotion.pictures[0].pictures[1]
             };
@@ -632,12 +622,12 @@ class FeedConverter {
                 response.quantity = promotion.percent.quantity;
                 break;
             case "X_FOR_Y":
-                response.itemTitle = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                response.itemTitle = this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                 response.promotion = 'X_FOR_Y';
                 response.promotionColor = '#ff66b3';
                 response.promotionTitle = strings.XForYTitle;
                 response.promotionValue = promotion.x_for_y.values[0].pay;
-                response.promotionTerm = strings.XForYTitlePattern.formatUnicorn(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                response.promotionTerm =this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                 response.quantity = promotion.x_for_y.quantity;
                 break;
             case "X+N%OFF":
@@ -655,13 +645,13 @@ class FeedConverter {
                 break;
             case "X+Y":
                 if (promotion.x_plus_y.values[0].product) {
-                    response.itemTitle = strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
-                    response.promotionTerm = strings.XYPattern.formatUnicorn(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
+                    response.itemTitle = this.getXPlusYDescrition(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
+                    response.promotionTerm = this.getXPlusYDescrition(promotion.x_plus_y.values[0].buy, promotion.condition.product.name, promotion.x_plus_y.values[0].eligible, promotion.x_plus_y.values[0].product.name);
                 }
                 response.promotion = 'X+Y';
                 response.promotionTitle = strings.XYTitle;
                 response.promotionValue = promotion.x_plus_y.values[0].buy + ' + ' + promotion.x_plus_y.values[0].eligible;
-                if(promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
+                if (promotion.x_plus_y.values[0].buy > 100 || promotion.x_plus_y.values[0].eligible > 100) {
                     response.promotionValue1 = promotion.x_plus_y.values[0].buy;
                     response.promotionValue2 = promotion.x_plus_y.values[0].eligible;
                 }
@@ -708,6 +698,27 @@ class FeedConverter {
                 break;
         }
         return response
+    }
+
+    getXPlusYDescrition(buy, name, eligible, eligibleName) {
+        if (buy === 1 && eligible === 1) {
+            return strings.XYPatternBuyOneGetOne.formatUnicorn(name, eligibleName);
+        }
+        if (buy === 1) {
+            return strings.XYPatternBuyOne.formatUnicorn(name, eligible, eligibleName);
+        }
+        if (eligible === 1) {
+            return strings.XYPatternGetOne.formatUnicorn(buy, name, eligibleName);
+        }
+        return strings.XYPattern.formatUnicorn(buy, name, eligible, eligibleName);
+    }
+
+    getXforYDescrition(buy, name,pay) {
+        if (buy === 1)  {
+            return strings.XForYTitleBuyOnePattern.formatUnicorn(name, pay);
+        }
+
+        return strings.XForYTitlePattern.formatUnicorn(buy, name, pay);
     }
 
     createMessage(user, message) {

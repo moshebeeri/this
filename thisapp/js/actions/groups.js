@@ -110,6 +110,15 @@ async function groupTouched(groupId) {
     };
 }
 
+export function setCurrentGroup(groupId) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.CURRENT_GROUP,
+            groupId: groupId
+        });
+    };
+}
+
 export function touch(groupId) {
     return function (dispatch, getState) {
         try {
@@ -590,10 +599,11 @@ export function* updateGroupListener(group) {
     SyncerUtils.syncGroup(group._id);
 }
 
-export function setGroup(response) {
+export function setGroup(response,id) {
     return {
         type: actions.UPSERT_SINGLE_GROUP,
         group: response,
+        removeId: id
     }
 }
 

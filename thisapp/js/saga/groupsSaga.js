@@ -23,8 +23,37 @@ function* saveGroupsRequest(action) {
 
 function* saveGroup(action) {
     try {
-        console.log(action);
-        let createdGroup = yield call(groupsApi.createGroup, action.group, action.token);
+        let tempGroup = action.group;
+        tempGroup._id = 'temp_group' +  + new Date().getTime();
+        let admins = [];
+        admins.push(tempGroup.entity.user);
+        tempGroup.admins = admins;
+        tempGroup.creator = tempGroup.entity.user;
+        tempGroup.created =  new Date();
+        tempGroup.social_state = {};
+        tempGroup.social_state.followers = action.group.groupUsers.length + 1;
+        tempGroup.pictures = [];
+        let pictures = [];
+        if (action.group.image.path) {
+            pictures.push(action.group.image.path);
+            pictures.push(action.group.image.path);
+            pictures.push(action.group.image.path);
+            pictures.push(action.group.image.path);
+            tempGroup.pictures.push({pictures: pictures});
+        } else {
+            pictures.push(action.group.image.uri);
+            pictures.push(action.group.image.uri);
+            pictures.push(action.group.image.uri);
+            pictures.push(action.group.image.uri);
+            tempGroup.pictures.push({pictures: pictures});
+        }
+        yield put(setGroup(tempGroup));
+
+        let imageResponse = yield call(ImageApi.uploadImage, action.token, action.group.image, 'image');
+        tempGroup.pictures = imageResponse.pictures;
+        let tempId = tempGroup._id
+        tempGroup._id = undefined;
+        let createdGroup = yield call(groupsApi.createGroup, tempGroup, action.token);
         handleSucsess();
         createdGroup.touched = new Date().getTime();
         let users = action.group.groupUsers.slice(0);
@@ -32,30 +61,9 @@ function* saveGroup(action) {
         while (user = users.pop()) {
             yield call(groupsApi.addUserToGroup, user._id, createdGroup._id, action.token);
         }
-        createdGroup.social_state = {};
-        createdGroup.social_state.followers = action.group.groupUsers.length + 1;
-        createdGroup.pictures = [];
-        let pictures = [];
-        if (action.group.image.path) {
-            pictures.push(action.group.image.path);
-            pictures.push(action.group.image.path);
-            pictures.push(action.group.image.path);
-            pictures.push(action.group.image.path);
-            createdGroup.pictures.push({pictures: pictures});
-        } else {
-            pictures.push(action.group.image.uri);
-            pictures.push(action.group.image.uri);
-            pictures.push(action.group.image.uri);
-            pictures.push(action.group.image.uri);
-            createdGroup.pictures.push({pictures: pictures});
-        }
-        yield put(setGroup(createdGroup));
+        yield put(setGroup(createdGroup,tempId));
         yield* updateGroupListener(createdGroup);
-        if (action.group.image) {
-            let response = yield call(ImageApi.uploadImage, action.token, action.group.image, createdGroup._id);
-            response.touched = new Date().getTime();
-            yield put(setGroup(response));
-        }
+
     } catch (error) {
         console.log("failed  updateProductn");
     }

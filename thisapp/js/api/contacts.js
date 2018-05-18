@@ -11,6 +11,7 @@ class ContactsApi {
             if (err && err.type === 'permissionDenied') {
                 return;
             }
+            if(!contacts) return 0;
             contacts = contacts.filter(function (element) {
                 return element.phoneNumbers.length > 0;
             });

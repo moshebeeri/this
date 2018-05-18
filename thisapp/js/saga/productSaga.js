@@ -1,6 +1,6 @@
 import {call, put, throttle} from 'redux-saga/effects'
 import productApi from "../api/product";
-import {setProduct} from "../actions/product";
+import {setProduct,syncProductChange} from "../actions/product";
 import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
 import {handleSucsess}from './SagaSuccsesHandler'
@@ -8,31 +8,39 @@ import {handleSucsess}from './SagaSuccsesHandler'
 
 function* saveProduct(action) {
     try {
-        let product = action.product;
+        let temProduct = action.product;
         // Workaround default product categories
-        product.category = [247183, 247467];
-
-        let createdProduct = yield call(productApi.createProduct, action.product, action.token);
-        handleSucsess();
-        createdProduct.pictures = [];
+        temProduct.category = [247183, 247467];
+        temProduct._id = 'temp_product' +  + new Date().getTime();
+        temProduct.pictures = [];
         let pictures = [];
         if (action.product.image.path) {
             pictures.push(action.product.image.path);
             pictures.push(action.product.image.path);
             pictures.push(action.product.image.path);
             pictures.push(action.product.image.path);
-            createdProduct.pictures.push({pictures: pictures});
+            temProduct.pictures.push({pictures: pictures});
         } else {
             pictures.push(action.product.image.uri);
             pictures.push(action.product.image.uri);
             pictures.push(action.product.image.uri);
             pictures.push(action.product.image.uri);
-            createdProduct.pictures.push({pictures: pictures});
+            temProduct.pictures.push({pictures: pictures});
         }
-        yield put(setProduct(createdProduct, action.businessId));
-        if (action.product.image) {
-            yield call(ImageApi.uploadImage, action.token, action.product.image, createdProduct._id);
-        }
+
+
+        yield put(setProduct(temProduct, action.businessId));
+
+        let imageResponse = yield call(ImageApi.uploadImage, action.token, action.product.image, 'image');
+        temProduct.pictures = imageResponse.pictures;
+        let tempId = temProduct._id
+        temProduct._id = undefined;
+        let createdProduct = yield call(productApi.createProduct, temProduct, action.token);
+        yield put(setProduct(createdProduct, action.businessId,tempId));
+        syncProductChange(action.businessId);
+
+
+
     } catch (error) {
         console.log("failed  updateProductn");
     }
