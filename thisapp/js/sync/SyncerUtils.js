@@ -288,7 +288,7 @@ function syncPromotion(promotionId) {
 }
 
 function invokeEntityCommentSendEvent(generalId, message, state, groupId) {
-    invokeSyncChat(groupId, generalId, state);
+    invokeSyncChat(groupId, generalId, state,message);
     invokeSocialChange(generalId, state);
     asyncListener.syncChange('instanceMessage_' + generalId, message);
 }
