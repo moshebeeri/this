@@ -201,7 +201,7 @@ export default class GenericListGroupView extends Component {
                         <ThisText  numberOfLines={1} ellipsizeMode='tail'  style={styles.chatListLineTitleText}>{itemChat.message}</ThisText>
                         <View style={{flexDirection:'row'}}>
                         <ThisText style={styles.chatListLineDescText}>{dateUtils.messageFormater(item.preview.comment.created)}</ThisText>
-                            {groupTyping && <View style={{marginLeft:10,marginRight:10,backgroundColor:'white',justifyContent:'center',alignItems:'flex-start'}}><ThisText style={{ backgroundColor:'white',fontSize:14,justifyContent:'center',alignItems:'center',fontWeight: '200', color: '#2FA926'}}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
+                            {groupTyping && <View style={{marginLeft:10,marginRight:10,backgroundColor:'white',justifyContent:'center',alignItems:'flex-start'}}><ThisText style={{ backgroundColor:'white',fontSize:14,justifyContent:'center',alignItems:'center',fontWeight: '300', color: '#2db6c8'}}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
 
                         </View>
                         { renderUnread && <View style={styleNotification}><ThisText style={[styles.chatListLineDescText,{color:'white',fontWeight:'bold'}]}>{unreadMessages}</ThisText></View>}
