@@ -84,8 +84,9 @@ exports.notify = function(req, res) {
   return res.status(200).json(req.body)
 };
 
-function handleNotificationAction(notification) {
-  console.log(`handleNotificationAction ${JSON.stringify(notification)}`);
+function handleNotificationAction(notification, callback) {
+  //console.log(`handleNotificationAction ${JSON.stringify(notification)}`);
+  return callback(null, notification);
 }
 
 
@@ -95,11 +96,13 @@ exports.action = function(req, res) {
     if(!notification) { return res.send(404); }
     notification.read = true;
     notification.action = req.params.type ? req.params.action : 'FOLLOW';
-    handleNotificationAction(notification);
-
-    notification.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.status(200).json(notification)
+    handleNotificationAction(notification, (err, notification) => {
+      if(err) return handleError(res, err);
+      notification.actioned = true;
+      notification.save(function (err) {
+        if (err) { return handleError(res, err); }
+        return res.status(200).json(notification)
+      });
     });
   });
 };
