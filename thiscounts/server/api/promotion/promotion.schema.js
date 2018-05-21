@@ -44,7 +44,7 @@ let PromotionSchemaObject = {
 
   automatic: {
     quantity: {type: Number},
-    discount: { type : Number, min:1, max: 100},
+    discount: {type: Number, min:1, max: 100},
     types: [{type: String, enum: promotionTypes}],
     products: [{
       product: {type: Schema.ObjectId, ref: 'Product', autopopulate: true},
@@ -60,7 +60,7 @@ let PromotionSchemaObject = {
     type: String,
     enum: promotionTypes
   },
-  on_action:{
+  on_action: {
     active: {type: Boolean, default: false},
     proximity: {type: Number, default: 5, min: [0, 'Too short'], max: [10, 'Too long']},
     type: {
@@ -71,7 +71,7 @@ let PromotionSchemaObject = {
         'FOLLOWER_PROXIMITY'
       ]
     },
-    entity :{
+    entity: {
       business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
       shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
       mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
