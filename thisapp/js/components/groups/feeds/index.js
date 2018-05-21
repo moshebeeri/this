@@ -13,11 +13,12 @@ import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComm
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
 import navigationUtils from '../../../utils/navigationUtils'
-
+import formUtils from '../../../utils/fromUtils'
+import ThisText from "../../../ui/ThisText/ThisText";
+import strings from "../../../i18n/i18n"
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
-        header: <GroupFeedHeader navigation={navigation} role={navigation.state.params.role}
-                                 item={navigation.state.params.group}/>
+        header: null
     });
 
     constructor(props) {
@@ -31,6 +32,7 @@ class GroupFeed extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
     }
+
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
@@ -55,7 +57,6 @@ class GroupFeed extends Component {
 
     handleBack() {
         this.props.actions.setCurrentGroup('');
-
     }
 
     handlePick(emoji) {
@@ -102,7 +103,12 @@ class GroupFeed extends Component {
     }
 
     render() {
+        const {chatTyping, navigation,user} = this.props;
         const group = this.props.navigation.state.params.group;
+        let groupTyping = undefined;
+        if (chatTyping) {
+            groupTyping = formUtils.getGroupTyping(chatTyping[group._id],user);
+        }
         let chatDisabled = group.chat_policy === 'OFF';
         let initPage = this.getFeedTab();
         if (this.props.navigation.state.params.chat) {
@@ -110,10 +116,14 @@ class GroupFeed extends Component {
         }
         return (
             <Container style={{backgroundColor: '#ebebeb'}}>
+                <GroupFeedHeader navigation={navigation} role={navigation.state.params.role}
+                                 item={navigation.state.params.group}/>
 
                 {chatDisabled ? <GroupFeedComponent tabLabel="promotions" navigation={this.props.navigation}
                                                     group={this.props.navigation.state.params.group}/> :
+
                     <View style={{flex: 1,}}>
+                        {groupTyping && <View style={{marginLeft:10,marginRight:10,backgroundColor:'white',justifyContent:'center',alignItems:'flex-start'}}><ThisText style={{ backgroundColor:'white',justifyContent:'center',alignItems:'center',fontWeight: '200', color: '#2FA926'}}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
 
                         {I18nManager.isRTL && (Platform.OS === 'android') ?
                             <ScrolTabView initialPage={initPage}
@@ -121,6 +131,7 @@ class GroupFeed extends Component {
                                           onChangeTab={this.onChangeTab.bind(this)}
                                           tabBarBackgroundColor='white'
                                           tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+
                                 <InstanceComment tabLabel="promotions" navigation={this.props.navigation}
                                                  group={this.props.navigation.state.params.group}/>
                                 <GroupFeedComponent tabLabel={'chat'} navigation={this.props.navigation}
@@ -133,6 +144,7 @@ class GroupFeed extends Component {
                                           onChangeTab={this.onChangeTab.bind(this)}
                                           tabBarBackgroundColor='white'
                                           tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
+
                                 <GroupFeedComponent navigateToChat={this.navigateToChat.bind(this)}
                                                     tabLabel="promotions" navigation={this.props.navigation}
                                                     navigateToAdd={this.navigateToAdd.bind(this)}
@@ -167,10 +179,13 @@ export default connect(
         userFollower: state.user.followers,
         feeds: getFeeds(state),
         showTopLoader: state.groups.showTopLoader,
+        user: state.user.user,
         loadingDone: state.groups.loadingDone,
         postUpdated: state.postForm,
         location: state.phone.currentLocation,
         currentScreen: state.render.currentScreen,
+        chatTyping: state.groups.chatTyping,
+        shouldRender: state.groups.shouldRender,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupAction, dispatch),

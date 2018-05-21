@@ -232,8 +232,24 @@ function getLocale() {
     return response;
 }
 
+function getGroupTyping(typing,user) {
+    if (typing && typing.users) {
+        let typingEntities = Object.keys(typing.users).map(key => {
+            if (user._id !== key && typing.users[key] !== 'DONE') {
+                return typing.users[key];
+            }
+        })
+        typingEntities = typingEntities.filter(type => type);
+        if (typingEntities.length > 0) {
+
+            return typingEntities[0]
+        }
+    }
+}
+
 export default {
     validateEmail,
+    getGroupTyping,
     validateWebsite,
     validateHappyHour,
     validateYouTube,

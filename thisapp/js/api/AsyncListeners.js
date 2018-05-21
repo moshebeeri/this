@@ -43,6 +43,13 @@ class AsyncListeners {
 
     }
 
+    syncChangeChild(key,subKeyValue,subKey,value) {
+
+        firebase.database().ref('events').child(key).child(subKeyValue).child(subKey).set(value);
+
+
+    }
+
 }
 const asyncListeners = new AsyncListeners();
 export default asyncListeners;

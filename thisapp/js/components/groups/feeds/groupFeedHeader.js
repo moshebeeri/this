@@ -2,7 +2,7 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions, I18nManager, Image, Platform, TouchableOpacity, View} from 'react-native';
+import {Dimensions, I18nManager, Image, Platform, TouchableOpacity, View,BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
@@ -16,6 +16,7 @@ import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComm
 import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleUtils from '../../../utils/styleUtils'
+import SyncerUtils from "../../../sync/SyncerUtils";
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 import navigationUtils from '../../../utils/navigationUtils'
@@ -36,10 +37,15 @@ class GroupFeedHeader extends Component {
         this.setState({
             userId: userId
         })
+
+        BackHandler.addEventListener('hardwareBackPress',this.navigateBack.bind(this));
     }
 
     handleBack() {
-        // this.props.actions.fetchGroups();
+        const{user,item} = this.props;
+        if(user  && item) {
+            SyncerUtils.invokeSyncChatTyping(item._id,user.user._id,'DONE');
+        }
     }
 
     showScanner() {
@@ -139,6 +145,8 @@ class GroupFeedHeader extends Component {
     }
 
     render() {
+
+        const{chatTyping} = this.props;
         let headerHeight = {
             flexDirection: 'row',
             width: StyleUtils.getWidth(),
@@ -202,7 +210,7 @@ class GroupFeedHeader extends Component {
                 </Button>
             </View>
             <View style={{flex: 10}}>
-                <GroupHeader onPressAction={this.viewGroup.bind(this)} enablePress noColor group={group}/>
+                <GroupHeader showTyping chatTyping={chatTyping} onPressAction={this.viewGroup.bind(this)} enablePress noColor group={group}/>
             </View>
             <View style={styles.group_actions}>
                 <TouchableOpacity onPress={() => this.showScanner()}
@@ -232,7 +240,9 @@ export default connect(
     state => ({
         businesses: state.businesses,
         user: state.user,
-        groupsFollowers: state.groups.groupFollowers
+        groupsFollowers: state.groups.groupFollowers,
+        chatTyping: state.groups.chatTyping,
+        shouldRender:  state.groups.shouldRender,
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),
