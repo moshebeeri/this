@@ -276,7 +276,7 @@ export default class NotificationListView extends Component {
     }
 
     getAvalibaleActions(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.actionDone) {
+        if (viewItem.actionDone || viewItem.actioned) {
             return undefined;
         }
         if (viewItem.available_actions) {
@@ -306,7 +306,7 @@ export default class NotificationListView extends Component {
     }
 
     getAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.actionDone) {
+        if (viewItem.actionDone|| viewItem.actioned)  {
             return undefined;
         }
         return <View style={actionStyle}>
@@ -317,7 +317,7 @@ export default class NotificationListView extends Component {
     }
 
     getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.actionDone) {
+        if (viewItem.actionDone || viewItem.actioned)  {
             return undefined;
         }
         return <View style={actionStyle}>
@@ -329,7 +329,7 @@ export default class NotificationListView extends Component {
     }
 
     getPromotionAction(viewItem, actionStyle) {
-        if (viewItem.actionDone) {
+        if (viewItem.actionDone || viewItem.actioned) {
             return undefined;
         }
         return <View style={actionStyle}>
