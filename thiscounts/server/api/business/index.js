@@ -18,6 +18,8 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.post('/agent/approve/:business/:code', controller.agent_approve_business);
+router.get('/letterOfIncorporation/:id', controller.letterOfIncorporation);
+router.get('/identificationCard/:id', controller.identificationCard);
 router.get('/validate/email/:id/:code', controller.validate_email);
 router.get('/update/email/:id/:email', controller.update_email);
 router.get('/review/:id/:status', controller.review);

@@ -398,7 +398,7 @@ function sendValidationEmail(businessId) {
 
 function reviewRequest(business) {
   email.send('reviewBusiness', 'THIS@low.la', {
-    name: 'moshe',
+    name: 'Dear Reviewer',
     businessEmail: business.email,
     businessName: business.name,
     businessId: business._id,
@@ -411,12 +411,33 @@ function reviewRequest(business) {
     state: business.state,
     main_phone_number: business.main_phone_number,
     email: business.email,
-    letterOfIncorporation: business.letterOfIncorporation,
-    identificationCard: business.identificationCard,
+    letterOfIncorporation: `http://low.la/api/businesses/letterOfIncorporation/${business._id}`,
+    identificationCard: `http://low.la/api/businesses/identificationCard/${business._id}`,
   }, function (err) {
     if (err) console.error(err);
   });
 }
+
+function getBusinessDocument(type, req, res) {
+  const businessId = req.params.id;
+  Business.findById(businessId)
+    .exec((err, business) => {
+      if(err) return handleError(res, err);
+      if (business.review.state === 'reviewed')
+        return handleError(res, new Error('already reviewed'));
+      let documentUrl = type === 'letter' ? business.letterOfIncorporation : business.identificationCard;
+      res.setHeader('content-type', 'text/html');
+      return res.status(200).send(`<html><body><img src="${documentUrl}"/></body></html>`);
+    })
+}
+
+exports.letterOfIncorporation = function (req, res) {
+  return getBusinessDocument('letter', req, res)
+};
+
+exports.identificationCard = function (req, res) {
+  return getBusinessDocument('id', req, res)
+};
 
 function createValidatedBusiness(business, callback) {
   qrcodeController.createAndAssign(business.creator, {
@@ -652,10 +673,16 @@ exports.create = function (req, res) {
         else return res.status(400).send(err);
       }
       body_business.location = spatial.geo_to_location(data);
-      Business.create(body_business, function (err, business) {
-        if (err) return handleError(res, err);
-        sendValidationEmail(business._id);
-        return res.status(201).json(business);
+      User.findById(body_business.creator)
+        .select('phone_number')
+        .exec((err, user) => {
+          if (err) return handleError(res, err);
+          body_business.main_phone_number = user.phone_number;
+          Business.create(body_business, function (err, business) {
+            if (err) return handleError(res, err);
+            sendValidationEmail(business._id);
+            return res.status(201).json(business);
+          });
       });
     });
   }
