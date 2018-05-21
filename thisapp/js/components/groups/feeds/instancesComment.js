@@ -55,15 +55,15 @@ class instancesComment extends Component {
         const {group, instance,comments, navigation, actions, update, loadingDone, showTopLoader, groupActions,user} = this.props;
        if(Platform.OS ==='ios') {
            return <KeyboardAvoidingView behavior={"padding"} style={{flex: 1}} contentContainerStyle={{flex: 1}}>
-               {this.createView(comments, group, user, navigation, groupActions, update, showTopLoader, loadingDone, instance)}
+               {this.createView(comments, group, user, navigation, groupActions, update, showTopLoader, loadingDone, instance, user)}
            </KeyboardAvoidingView>
        }
         return <View  style={{flex: 1}}>
-            {this.createView(comments, group, user, navigation, groupActions, update, showTopLoader, loadingDone, instance)}
+            {this.createView(comments, group, user, navigation, groupActions, update, showTopLoader, loadingDone, instance, user)}
         </View>
     }
 
-    createView(comments, group, userc, navigation, groupActions, update, showTopLoader, loadingDone, instance) {
+    createView(comments, group, userc, navigation, groupActions, update, showTopLoader, loadingDone, instance, user) {
         return <View style={{flex: 1}}>
             <View style={{flex: 1}}>
                 <GenericFeedManager feeds={comments[group._id]}
@@ -92,7 +92,7 @@ class instancesComment extends Component {
                 {instance && instance.promotionTerm &&
                 <ChatPreviewPromotion cancelReply={this.cancelReply.bind(this)} title={instance.businessName}
                                       text={instance.promotionTerm}/>}
-                <MessageBox onPress={this._onPressButton.bind(this)}/>
+                <MessageBox user={user}  group={group} onPress={this._onPressButton.bind(this)}/>
             </KeyboardAvoidingView> :
                 <View contentContainerStyle={{marginTop: 10}}>
                     {instance && instance.feed && instance.feed.activity && instance.feed.activity.post &&
@@ -103,7 +103,7 @@ class instancesComment extends Component {
                     {instance && instance.promotionTerm &&
                     <ChatPreviewPromotion cancelReply={this.cancelReply.bind(this)} title={instance.businessName}
                                           text={instance.promotionTerm}/>}
-                    <MessageBox onPress={this._onPressButton.bind(this)}/>
+                    <MessageBox user={user}  group={group} onPress={this._onPressButton.bind(this)}/>
                 </View> }
         </View>;
     }

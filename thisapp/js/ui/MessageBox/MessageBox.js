@@ -4,6 +4,7 @@ import {Button, Icon, Input} from 'native-base';
 import styles from './styles'
 import strings from "../../i18n/i18n"
 import StyleUtils from "../../utils/styleUtils";
+import SyncerUtils from "../../sync/SyncerUtils";
 import withPreventDoubleClick from '../../ui/TochButton/TouchButton';
 
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
@@ -37,11 +38,17 @@ export default class MessageBox extends Component {
         })
     }
 
-    hideEmoji() {
-        this.setState({
-            showEmoji: false,
-            iconEmoji: 'emoji-neutral'
-        })
+    handleFocus() {
+        const{user,group} = this.props;
+        if(user && group) {
+            SyncerUtils.invokeSyncChatTyping(group._id,user._id,user.name);
+        }
+    }
+    handleBlur() {
+        const{user,group} = this.props;
+        if(user  && group) {
+            SyncerUtils.invokeSyncChatTyping(group._id,user._id,'DONE');
+        }
     }
 
     _onPressButton() {
@@ -107,7 +114,8 @@ export default class MessageBox extends Component {
 
 
                     <TextInput style={styles.textInputTextStyleWhite} value={this.state.message}
-                               onFocus={this.hideEmoji.bind(this)}
+                               onFocus={this.handleFocus.bind(this)}
+                               onBlur={this.handleBlur.bind(this)}
                                blurOnSubmit={true} returnKeyType='done'
                                ref={'messageBox'}
                                onSubmitEditing={this._onPressButton.bind(this)}

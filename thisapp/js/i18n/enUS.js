@@ -321,6 +321,7 @@ const enUS = {
     XYPatternGetOne                               : "Buy {0} {1} Get {2} free",
     XYPatternBuyOneGetOne                         : "Buy {0} Get {1} free",
     XForYTitleBuyOnePattern                       : "Buy {0} Pay only {1} ",
+    typingMessage                                 : "{0} typing ...",
 };
 
 export default enUS;

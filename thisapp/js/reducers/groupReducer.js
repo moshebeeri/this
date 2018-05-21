@@ -17,7 +17,9 @@ const initialState = {
     unreadMessage: {},
     lastMessage: {},
     touch: false,
-    saving: false
+    saving: false,
+    chatTyping: {},
+    shouldRenderHeader: false,
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -147,25 +149,27 @@ export default function group(state = initialState, action) {
                 ...state,
                 saving: false,
             };
+        case actions.GROUP_CHAT_TYPING:
+            immutableState.chatTyping[action.groupId] = action.user;
+            immutableState.shouldRenderHeader = !immutableState.shouldRenderHeader;
+            return immutableState
         case actions.GROUP_UNREAD_MESSAGE:
             if (state.currentGroupId === action.groupId) {
                 return state;
             }
-
-            if( immutableState.lastMessage[action.groupId] === action.message ){
+            if (immutableState.lastMessage[action.groupId] === action.message) {
                 return state;
             }
-            if( immutableState.unreadMessage[action.groupId]) {
+            if (immutableState.unreadMessage[action.groupId]) {
                 immutableState.unreadMessage[action.groupId] = immutableState.unreadMessage[action.groupId] + 1;
-            }else{
-                immutableState.unreadMessage[action.groupId] =  1;
-
+            } else {
+                immutableState.unreadMessage[action.groupId] = 1;
             }
             immutableState.update = true;
             immutableState.lastMessage[action.groupId] = action.message;
             return immutableState;
         case actions.CURRENT_GROUP:
-            if(action.groupId) {
+            if (action.groupId) {
                 immutableState.unreadMessage[action.groupId] = 0;
             }
             immutableState.update = true;

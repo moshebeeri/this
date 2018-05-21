@@ -113,6 +113,19 @@ function addGroupChatSync(groupId) {
             asyncListener.markAsRead(snap.key);
         }
     });
+    asyncListener.addListener("group_chat_typing_users" + groupId, (snap) => {
+        let response = snap.val();
+        if (response) {
+
+            let groupId = snap.key.substring('group_chat_typing_users'.length);
+            dispatch({
+                type: actions.GROUP_CHAT_TYPING,
+                user: response,
+                groupId: groupId
+            })
+        }
+
+    });
 }
 
 function addChatSync(generalId, entity) {
@@ -294,9 +307,26 @@ function invokeSyncChat(groupId, generalId, state, message) {
     asyncListener.syncChange('group_' + groupId, 'addComment')
     asyncListener.syncChange('group_chat_' + groupId, message + new Date().getTime())
 }
+function invokeSyncChatTyping(groupId, userId,user) {
+
+    asyncListener.syncChange('group_chat_typing_users' + groupId, 'users',userId, user);
+}
+
+function invokeAllDone(groups,userId){
+
+    if(groups) {
+        Object.values(groups).forEach(group => {
+            asyncListener.syncChange('group_chat_typing_users' + group._id, 'users', userId, 'DONE');
+        })
+    }
+
+
+}
 
 export default {
     addGroupChatSync,
+    invokeAllDone,
+    invokeSyncChatTyping,
     invokeBusinessChange,
     addChatSync,
     addMyBusinessSync,

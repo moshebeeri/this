@@ -60,6 +60,7 @@ import DateUtils from "../../utils/dateUtils";
 import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
 import handler from '../../actions/ErrorHandler'
+import SyncerUtils from "../../sync/SyncerUtils";
 let dateUtils = new DateUtils();
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
@@ -192,15 +193,18 @@ class ApplicationManager extends Component {
     }
 
     async _handleAppStateChange(nextAppState) {
-
+        const{user,followGroups} = this.props;
         if (nextAppState !== 'active') {
 
+            SyncerUtils.invokeAllDone(followGroups,user._id);
             Tasks.stop();
         } else {
             let notification = await  FCM.getInitialNotification();
             NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
 
             Tasks.start();
+
+
         }
     }
 
@@ -427,6 +431,7 @@ class ApplicationManager extends Component {
 const mapStateToProps = (state) => {
     return {
         isAuthenticated: isAuthenticated(state),
+        user: state.user.user,
         showPopup: state.mainTab.showPopup,
         notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
@@ -443,6 +448,7 @@ const mapStateToProps = (state) => {
         token: state.authentication.token,
         businesses: state.follow_businesses.businesses,
         groups: state.follow_businesses.groups,
+        followGroups: state.groups.groups,
         showSearchResults: state.follow_businesses.showSearchResults,
         showSearchGroupResults: state.follow_businesses.showSearchGroupResults,
         businessesState: state.follow_businesses
