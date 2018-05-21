@@ -70,7 +70,7 @@ class Groups extends Component {
     }
 
     render() {
-        const {update, groups, navigation, actions, visibleItem,unReadMessage} = this.props;
+        const {update, groups, navigation, actions, visibleItem,unReadMessage,chatTyping,user} = this.props;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
             icon = <Icon2 active size={40} name="ios-add"/>;
@@ -79,8 +79,10 @@ class Groups extends Component {
             <View style={{flex: 1}}>
                 <GenericListManager rows={groups} navigation={navigation} actions={actions} update={update}
                                     setVisibleItem={actions.setVisibleItem}
+                                    user={user}
                                     visibleItem={visibleItem}
                                     unReadMessage={unReadMessage}
+                                    chatTyping={chatTyping}
                                     refreshing={this.state.refreshing}
                                     onRefreshing={this.refreshTop.bind(this)}
                                     onPressItem={this.onPressItem.bind(this)}
@@ -107,6 +109,7 @@ export default connect(
         groups: getGroups(state),
         update: state.groups.update,
         unReadMessage: state.groups.unreadMessage,
+        chatTyping: state.groups.chatTyping,
         user: state.user.user,
         isMain: state.render.isMain,
     }),

@@ -22,6 +22,7 @@ import {GroupHeader, ImageController, PromotionHeaderSnippet, ThisText} from '..
 import strings from '../../../i18n/i18n';
 import DateUtils from '../../../utils/dateUtils'
 import StyleUtils from '../../../utils/styleUtils'
+import formUtils from '../../../utils/fromUtils'
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
@@ -135,6 +136,12 @@ export default class GenericListGroupView extends Component {
     }
 
     createMessage(styles, item,unReadMessage) {
+        const{chatTyping,user} = this.props;
+
+        let groupTyping = undefined;
+        if (chatTyping) {
+            groupTyping = formUtils.getGroupTyping(chatTyping[item ._id],user);
+        }
         let styleNotification = {
             position: 'absolute',
             bottom: 18,
@@ -192,8 +199,13 @@ export default class GenericListGroupView extends Component {
                     <View style={{marginLeft: 15, alignItems: 'flex-start'}}>
 
                         <ThisText  numberOfLines={1} ellipsizeMode='tail'  style={styles.chatListLineTitleText}>{itemChat.message}</ThisText>
+                        <View style={{flexDirection:'row'}}>
                         <ThisText style={styles.chatListLineDescText}>{dateUtils.messageFormater(item.preview.comment.created)}</ThisText>
+                            {groupTyping && <View style={{marginLeft:10,marginRight:10,backgroundColor:'white',justifyContent:'center',alignItems:'flex-start'}}><ThisText style={{ backgroundColor:'white',fontSize:14,justifyContent:'center',alignItems:'center',fontWeight: '200', color: '#2FA926'}}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
+
+                        </View>
                         { renderUnread && <View style={styleNotification}><ThisText style={[styles.chatListLineDescText,{color:'white',fontWeight:'bold'}]}>{unreadMessages}</ThisText></View>}
+
                     </View>
                 </View>
 

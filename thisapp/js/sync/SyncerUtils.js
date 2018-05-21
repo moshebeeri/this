@@ -300,16 +300,18 @@ function invokeSocialChange(generalId, state) {
     }
 }
 
-function invokeSyncChat(groupId, generalId, state, message) {
+    function invokeSyncChat(groupId, generalId, state, message) {
     if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
         asyncListener.syncChange('promotion_' + state.instances.instances[generalId].promotion, 'add-comment');
     }
-    asyncListener.syncChange('group_' + groupId, 'addComment')
-    asyncListener.syncChange('group_chat_' + groupId, message + new Date().getTime())
+    if(groupId) {
+        asyncListener.syncChange('group_' + groupId, 'addComment')
+        asyncListener.syncChange('group_chat_' + groupId, message + new Date().getTime())
+    }
 }
 function invokeSyncChatTyping(groupId, userId,user) {
 
-    asyncListener.syncChange('group_chat_typing_users' + groupId, 'users',userId, user);
+    asyncListener.syncChangeChild('group_chat_typing_users' + groupId, 'users',userId, user);
 }
 
 function invokeAllDone(groups,userId){

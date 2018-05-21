@@ -152,6 +152,7 @@ export default function group(state = initialState, action) {
         case actions.GROUP_CHAT_TYPING:
             immutableState.chatTyping[action.groupId] = action.user;
             immutableState.shouldRenderHeader = !immutableState.shouldRenderHeader;
+            immutableState.update = true;
             return immutableState
         case actions.GROUP_UNREAD_MESSAGE:
             if (state.currentGroupId === action.groupId) {

@@ -13,6 +13,7 @@ import * as instanceGroupCommentsAction from "../../../actions/instanceGroupComm
 import {ScrolTabView} from '../../../ui/index'
 import GroupFeedComponent from './groupsFeeds'
 import navigationUtils from '../../../utils/navigationUtils'
+import formUtils from '../../../utils/fromUtils'
 import ThisText from "../../../ui/ThisText/ThisText";
 import strings from "../../../i18n/i18n"
 class GroupFeed extends Component {
@@ -32,21 +33,6 @@ class GroupFeed extends Component {
         this.handlePick = this.handlePick.bind(this);
     }
 
-    groupTyping(typing) {
-        const{user} = this.props;
-        if (typing && typing.users) {
-            let typingEntities = Object.keys(typing.users).map(key => {
-                if (user._id !== key && typing.users[key] !== 'DONE') {
-                    return typing.users[key];
-                }
-            })
-            typingEntities = typingEntities.filter(type => type);
-            if (typingEntities.length > 0) {
-
-                return typingEntities[0]
-            }
-        }
-    }
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
@@ -117,11 +103,11 @@ class GroupFeed extends Component {
     }
 
     render() {
-        const {chatTyping, navigation} = this.props;
+        const {chatTyping, navigation,user} = this.props;
         const group = this.props.navigation.state.params.group;
         let groupTyping = undefined;
         if (chatTyping) {
-            groupTyping = this.groupTyping(chatTyping[group._id]);
+            groupTyping = formUtils.getGroupTyping(chatTyping[group._id],user);
         }
         let chatDisabled = group.chat_policy === 'OFF';
         let initPage = this.getFeedTab();
