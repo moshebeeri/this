@@ -415,8 +415,8 @@ function reviewRequest(business) {
     state: business.state,
     main_phone_number: business.main_phone_number,
     email: business.email,
-    letterOfIncorporation: `http://low.la/api/businesses/letterOfIncorporation/${business._id}`,
-    identificationCard: `http://low.la/api/businesses/identificationCard/${business._id}`,
+    letterOfIncorporation: `http://${config.serverURL}/api/businesses/letterOfIncorporation/${business._id}`,
+    identificationCard: `http://${config.serverURL}/api/businesses/identificationCard/${business._id}`,
   }, function (err) {
     if (err) console.error(err);
   });
