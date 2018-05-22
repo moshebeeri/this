@@ -17,7 +17,8 @@ const initialState = {
     shouldRender: true,
     visibleFeed: undefined,
     visibleFeeds: [],
-    shouldUpdateFeeds: {}
+    shouldUpdateFeeds: {},
+    tempFeed: [],
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";

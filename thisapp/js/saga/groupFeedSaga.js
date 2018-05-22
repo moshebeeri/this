@@ -50,6 +50,7 @@ function* feedScrollDown(action) {
         yield* updateFollowers(response);
         yield* updateFeedsListeners(response,action.group._id);
     } catch (error) {
+        yield put(loadingDone(action.group));
         console.log("failed scroll down");
     }
 }
