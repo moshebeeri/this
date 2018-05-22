@@ -22,6 +22,7 @@ const email = require('../../components/email');
 const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
+const config = require('../../config/environment');
 
 exports.search = MongodbSearch.create(Business);
 
@@ -32,6 +33,7 @@ function get_businesses_state(businesses, userId, callback) {
 exports.test_email = function (req, res) {
   email.send('reviewResultBusiness',
     'moshe@low.la', {
+      serverURL: config.serverURL,
       name: 'moshe',
       businessName: 'business_name',
       accepted: false,
@@ -385,6 +387,7 @@ function sendValidationEmail(businessId) {
     if (!business) return console.error(new Error('Business not found'));
     email.send('validateBusinessEmail',
       business.email, {
+        serverURL: config.serverURL,
         name: business.creator.name,
         businessName: business.name,
         businessId: business._id,
@@ -398,6 +401,7 @@ function sendValidationEmail(businessId) {
 
 function reviewRequest(business) {
   email.send('reviewBusiness', 'THIS@low.la', {
+    serverURL: config.serverURL,
     name: 'Dear Reviewer',
     businessEmail: business.email,
     businessName: business.name,
@@ -411,8 +415,8 @@ function reviewRequest(business) {
     state: business.state,
     main_phone_number: business.main_phone_number,
     email: business.email,
-    letterOfIncorporation: `http://low.la/api/businesses/letterOfIncorporation/${business._id}`,
-    identificationCard: `http://low.la/api/businesses/identificationCard/${business._id}`,
+    letterOfIncorporation: `http://${config.serverURL}/api/businesses/letterOfIncorporation/${business._id}`,
+    identificationCard: `http://${config.serverURL}/api/businesses/identificationCard/${business._id}`,
   }, function (err) {
     if (err) console.error(err);
   });
@@ -494,6 +498,7 @@ function createValidatedBusiness(business, callback) {
 function sendRejectEmail(business) {
   email.send('reviewResultBusiness',
     business.email, {
+      serverURL: config.serverURL,
       name: business.creator.name,
       businessName: business.name,
       accepted: business.review.result === 'accepted',

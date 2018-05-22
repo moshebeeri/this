@@ -10,6 +10,9 @@ module.exports = {
   neo4j: {
     uri: process.env.NEO4J_URI || 'http://localhost:7474'
   },
+
+  serverURL: 'this.deals:9000',
+
   aws: {
     key: 'AKIAJCUWYC5LA4HQRDEQ',
     secret: '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',
