@@ -194,6 +194,64 @@ exports.youtube = function (req, res) {
   });
 };
 
+exports.createUploadVideo = function (req, res) {
+  // Create an Busyboy instance passing the HTTP Request headers.
+  const busboy = new Busboy({headers: req.headers});
+  // Listen for event when Busboy finds a file to stream.
+  busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+    const upload = s3Stream.upload({
+      Bucket: 'thiscounts',
+      ContentType: 'binary/octet-stream',
+      Key: 'videos/' + createFilename(fieldname),
+      ACL: 'public-read'
+    });
+
+    // Handle errors.
+    upload.on('error', function (err) {
+      return handleError(res, err);
+    });
+
+    // Handle progress.
+    upload.on('part', function (details) {
+      //console.log(inspect(details));
+    });
+
+    // Handle upload completion.
+    upload.on('uploaded', function (details) {
+      console.log(inspect(details));
+
+      Video.create({
+        creator: req.user.id,
+        created: Date.now(),
+        type: 'THIS',
+        url: distributionBaseURL + details.Key
+      }, function (err, video) {
+        if (err) {
+          return handleError(res, err);
+        }
+        res.status(200).json(video)
+      });
+    });
+    file.pipe(upload)
+  });
+  // Pipe the HTTP Request into Busboy.
+  req.pipe(busboy);
+};
+
+exports.createYouTubeVideo = function (req, res) {
+  Video.create({
+    creator: req.user.id,
+    created: Date.now(),
+    type: 'YOUTUBE',
+    url: req.params.youtube
+  }, function (err, video) {
+    if (err) {
+      return handleError(res, err);
+    }
+    res.status(200).json(video)
+  });
+};
+
 // Get list of videos
 exports.index = function (req, res) {
   Video.find(function (err, videos) {
