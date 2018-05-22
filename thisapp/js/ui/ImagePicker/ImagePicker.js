@@ -89,6 +89,37 @@ export default class ImagePickerComponent extends Component {
             console.log(e);
         }
     }
+
+    async pickPictureNoCropp() {
+        const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
+        let cropping = true;
+        if(cropDisable){
+            cropping = false;
+        }
+        let width =  1920;
+        let height = 1080;
+        if (logo) {
+            height = 1080;
+            width =  1080;
+        }
+        try {
+            let image = await ImagePicker.openPicker({
+                cropping: false,
+                mediaType:'photo',
+                width: width,
+                height: height,
+                compressImageQuality: 1,
+                compressVideoPreset: 'MediumQuality',
+            });
+            this.setState({
+                value: true,
+                invalid: false
+            });
+            setImage(image)
+        } catch (e) {
+            console.log(e);
+        }
+    }
 //w:1920 × h:1080
     async pickPicture() {
         const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
@@ -143,7 +174,7 @@ export default class ImagePickerComponent extends Component {
         let videoPickerOption;
         if (video) {
             videoPickerOption = <MenuOption onSelect={this.pickVideo.bind(this)}>
-                <ThisText style={{fontSize:StyleUtils.scale(14)}}>{strings.PickVideo}</ThisText>
+                <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingTop:0}}>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
         let name = "picker"  + this.state.time;
@@ -155,7 +186,9 @@ export default class ImagePickerComponent extends Component {
                 {trigger}
             </MenuTrigger>
             <MenuOptions>
-
+                <MenuOption onSelect={this.pickPictureNoCropp.bind(this)}>
+                    <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingBottom:0,paddingTop:10}}>{strings.FastPick}</ThisText>
+                </MenuOption>
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
                     <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingBottom:5}}>{strings.TakePictures}</ThisText>
                 </MenuOption>

@@ -322,6 +322,7 @@ const enUS = {
     XYPatternBuyOneGetOne                         : "Buy {0} Get {1} free",
     XForYTitleBuyOnePattern                       : "Buy {0} Pay only {1} ",
     typingMessage                                 : "{0} typing ...",
+    FastPick                                      : "Quick Pick",
 };
 
 export default enUS;

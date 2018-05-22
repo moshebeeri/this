@@ -333,6 +333,7 @@ const il = {
     XYPatternBuyOneGetOne                         : 'קנה {0} קבל {1} חינם',
     XForYTitleBuyOnePattern                       : 'קנה {0} שלם רק {1}',
     typingMessage                                 : " {0} מקליד ...",
+    FastPick                                      : "בחירת תמונה מהירה",
 };
 
 export default il;
