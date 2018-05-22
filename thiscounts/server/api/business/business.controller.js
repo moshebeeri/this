@@ -22,7 +22,7 @@ const email = require('../../components/email');
 const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
-const config = require('../config/environment');
+const config = require('../../config/environment');
 
 exports.search = MongodbSearch.create(Business);
 
