@@ -41,8 +41,8 @@ function handlePostCreation(post) {
 
   graphModel.relate_ids(post.creator._id, 'POSTED_BY', post._id);
   graphModel.relate_ids(post._id, 'POSTED_ON', getActorId(post));
-  if(post.behalf.group) {
-    Group.findById(post.behalf.group).exec(function (err, group) {
+  if(post.feed.group) {
+    Group.findById(post.feed.group).exec(function (err, group) {
       group.preview.post = post._id;
       group.preview.instance_activity = null;
       group.save();
@@ -55,7 +55,7 @@ exports.create = function(req, res) {
   let post = req.body;
 
   if(!getActorId(post))
-    return handleError(res, new Error('no actor (behalf) present'));
+    return handleError(res, new Error('no actor (feed) present'));
   if(!post.feed || !(post.feed.user || post.feed.group))
     return handleError(res, new Error('no feed specified'));
 
@@ -83,8 +83,9 @@ exports.create = function(req, res) {
 
         if (post.feed.user)
           act.audience = ['SELF', 'FOLLOWERS'];
-        else if (post.feed.group)
+        else if (post.feed.group){
           act.ids = [post.feed.group];
+        }
         else
           return handleError(res, new Error(`unsupported feed type, expects `));
 
