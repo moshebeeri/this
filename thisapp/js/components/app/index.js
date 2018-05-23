@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {AppState, I18nManager, Platform, StyleSheetm, TouchableOpacity, View} from "react-native";
+import {AppState, I18nManager, Platform, StyleSheetm, TouchableOpacity, View,BackHandler} from "react-native";
 import {connect} from "react-redux";
 import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,} from "native-base";
 import GeneralComponentHeader from "../header/index";
@@ -13,7 +13,6 @@ import SideBar from "../drawer/index";
 import * as actions from "../../reducers/reducerActions";
 import {bindActionCreators} from "redux";
 import codePush from "react-native-code-push";
-
 import {
     addComponent,
     countUnreadNotifications,
@@ -61,6 +60,7 @@ import store from 'react-native-simple-store';
 import ActionLogger from '../../actions/ActionLogger'
 import handler from '../../actions/ErrorHandler'
 import SyncerUtils from "../../sync/SyncerUtils";
+
 let dateUtils = new DateUtils();
 const height = StyleUtils.getHeight();
 let locationApi = new LocationApi();
@@ -114,13 +114,10 @@ FCM.on(FCMEvent.RefreshToken, (token) => {
 const warch = navigator.geolocation.watchPosition((position) => {
         try {
             if (reduxStore.getState().authentication.token) {
-
                 let lastTime = reduxStore.getState().phone.lastTime;
-
-                if(!lastTime || (lastTime && dateUtils.moreThenMiniute(lastTime))) {
+                if (!lastTime || (lastTime && dateUtils.moreThenMiniute(lastTime))) {
                     reduxStore.dispatch({
                         type: actions.SEND_LOCATION_TIME,
-
                     })
                     locationApi.sendLocation(position.coords.longitude, position.coords.latitude, position.timestamp, position.coords.speed);
                 }
@@ -155,7 +152,8 @@ class ApplicationManager extends Component {
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
-            activeTab: 'feed'
+            activeTab: 'feed',
+            currentTab:'',
         }
     }
 
@@ -182,35 +180,50 @@ class ApplicationManager extends Component {
         FCM.getBadgeNumber().then(number => FCM.setBadgeNumber(0));
         this.props.actions.resetBadge();
         Tasks.start();
-
         AppState.addEventListener('change', this._handleAppStateChange.bind(this));
         this.props.userActions.resetForm();
         let notification = await  FCM.getInitialNotification();
         NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
-
-
         this.props.actions.setCurrencySymbol();
+
+        BackHandler.addEventListener('hardwareBackPress', this.handleAndroidBackBehavior.bind(this));
+    }
+
+    handleAndroidBackBehavior(){
+        if(this.props.currentScreen === 'GroupFeed'){
+            return true;
+        }
+
+        if(this.props.currentScreen !== 'home'){
+            return false;
+        }
+
+        if(I18nManager.isRTL && this.state.currentTab.i !== 3) {
+            this.refs["tabs"].goToPage(0);
+            return true;
+        }
+
+        if(!I18nManager.isRTL && this.state.currentTab.i !== 0) {
+            this.refs["tabs"].goToPage(0);
+            return true;
+        }
+        return false;
     }
 
     async _handleAppStateChange(nextAppState) {
-        const{user,followGroups} = this.props;
+        const {user, followGroups} = this.props;
         if (nextAppState !== 'active') {
-
-            SyncerUtils.invokeAllDone(followGroups,user._id);
+            SyncerUtils.invokeAllDone(followGroups, user._id);
             Tasks.stop();
         } else {
             let notification = await  FCM.getInitialNotification();
             NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
-
             Tasks.start();
-
-
         }
     }
 
     onChangeTab(tab) {
-
-
+        this.setState({currentTab:tab});
     }
 
     openDrawer() {
@@ -226,7 +239,7 @@ class ApplicationManager extends Component {
     }
 
     savePromotionFromPopup(id, navigation, feed) {
-        const {feedAction,item,businessActions} = this.props;
+        const {feedAction, item, businessActions} = this.props;
         this.closePopup();
         feedAction.saveFeed(id, navigation, feed);
         businessActions.followBusiness(item.business._id);
@@ -284,7 +297,7 @@ class ApplicationManager extends Component {
                                             to={this.state.addComponent}/>
 
                     {I18nManager.isRTL && (Platform.OS === 'android') ?
-                        <ScrolTabView initialPage={3} onChangeTab={this.onChangeTab.bind(this)}
+                        <ScrolTabView ref={"tabs"} initialPage={3} onChangeTab={this.onChangeTab.bind(this)}
                                       tabBarBackgroundColor='white'
                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                             <Notification tabLabel="promotions" navigation={this.props.navigation} index={3}/>
@@ -294,7 +307,7 @@ class ApplicationManager extends Component {
 
 
                         </ScrolTabView> :
-                        <ScrolTabView initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
+                        <ScrolTabView ref={"tabs"}  initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
                                       tabBarBackgroundColor='white'
                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                             <Feeds activeTab={this.state.activeTab} tabLabel="promotions" index={0}
@@ -444,6 +457,7 @@ const mapStateToProps = (state) => {
         notificationId: state.mainTab.notificationId,
         notificationGroup: state.mainTab.notificationGroup,
         notificationBusiness: state.mainTab.notificationBusiness,
+        currentScreen: state.render.currentScreen,
         location: state.phone.currentLocation,
         token: state.authentication.token,
         businesses: state.follow_businesses.businesses,

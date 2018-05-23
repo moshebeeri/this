@@ -2,6 +2,7 @@ const initialState = {
     groups: {},
     groupFeedOrder: {},
     groupFeeds: {},
+    tempGroupFeeds: {},
     groupFeedsUnread: {},
     groupFollowers: {},
     update: true,
@@ -88,6 +89,8 @@ export default function group(state = initialState, action) {
             immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP_FEEDS_TOP:
+
+            immutableState.tempGroupFeeds[action.groupId] = [];
             action.groupFeed.forEach(item => {
                 if (!immutableState.groupFeeds[action.groupId]) {
                     immutableState.groupFeeds[action.groupId] = {};
@@ -137,6 +140,14 @@ export default function group(state = initialState, action) {
             return immutableState;
         case actions.SET_GROUPS_FOLLOWERS :
             immutableState.groupFollowers[action.groupId] = action.followers;
+            return immutableState;
+        case actions.SET_TEMP_FEED:
+            if(action.groupId) {
+                if(!immutableState.tempGroupFeeds[action.groupId]){
+                    immutableState.tempGroupFeeds[action.groupId] = [];
+                }
+                immutableState.tempGroupFeeds[action.groupId].push(action.activity);
+            }
             return immutableState;
         case actions.GROUP_SAVING:
             return {

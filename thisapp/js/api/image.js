@@ -27,6 +27,24 @@ class ImageApi {
         }, 'images', '/upload');
     }
 
+    uploadVideo(token, video) {
+        const data = new FormData();
+        data.append('video', {
+            uri: video.path,
+            type: video.mime,
+            name: 'videoUpload'
+        });
+        return serverRequestHandler.fetch_handler(`${server_host}/api/videos/create`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: data
+        }, 'images', '/upload');
+    }
+
     uploadImageLogo(token, image, entityId) {
         const data = new FormData();
         if (image.path) {

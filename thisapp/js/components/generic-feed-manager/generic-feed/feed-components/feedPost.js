@@ -19,7 +19,8 @@ import {
     Left,
     Picker,
     Right,
-    View
+    View,
+    Spinner
 } from 'native-base';
 import stylesLandscape from './styles'
 import StyleUtils from '../../../../utils/styleUtils'
@@ -183,7 +184,7 @@ export default class FeedPost extends Component {
                            videoId={item.videoId}/>
                     }
 
-                    {item.social && <View style={[styles.post_bottomContainer, {
+                    {item.social ? <View style={[styles.post_bottomContainer, {
                         backgroundColor: 'white',
                         borderTopWidth: 1,
                         borderColor: '#cccccc',
@@ -198,7 +199,22 @@ export default class FeedPost extends Component {
                                      sharable={item.sharable}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
-                    </View>}
+                    </View> : <View style={[styles.post_bottomContainer, {
+                        backgroundColor: 'white',
+                        borderTopWidth: 1,
+                        borderColor: '#cccccc',
+                        width: StyleUtils.getWidth()
+                    }]}>
+                        <ThisText
+                            style={{
+
+                                fontSize: StyleUtils.scale(18)
+                            }}>{strings.Uploading}</ThisText>
+
+                        <Spinner/>
+                    </View>
+
+                    }
 
 
                 </View>

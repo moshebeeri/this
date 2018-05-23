@@ -496,7 +496,6 @@ export function refresh(id, currentSocialState) {
     }
 }
 
-
 export function finishUpdateItem(id) {
     return async function (dispatch) {
         dispatch({
@@ -505,7 +504,6 @@ export function finishUpdateItem(id) {
         });
     }
 }
-
 
 export function inviteUser(userId, groupId) {
     return async function (dispatch, getState) {
@@ -527,6 +525,7 @@ export function searchGroup(group) {
         dispatchSearchGroups(dispatch, group, token);
     }
 }
+
 export function finishUpdate(group) {
     return function (dispatch, getState) {
         dispatch({type: actions.GROUP_UPDATED});
@@ -556,13 +555,12 @@ export function joinGroup(groupId) {
     }
 }
 
-
 export function unFollowGroup(groupId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
             await groupsApi.unFollowGroup(groupId, token);
-            dispatch({type: actions.REMOVE_GROUP,groupId:groupId})
+            dispatch({type: actions.REMOVE_GROUP, groupId: groupId})
             SyncerUtils.syncGroup(groupId);
         } catch (error) {
             handler.handleError(error, dispatch, 'unFollowBusiness')
@@ -570,6 +568,7 @@ export function unFollowGroup(groupId) {
         }
     }
 }
+
 export function setGroups(response) {
     return {
         type: actions.UPSERT_GROUP,
@@ -599,7 +598,7 @@ export function* updateGroupListener(group) {
     SyncerUtils.syncGroup(group._id);
 }
 
-export function setGroup(response,id) {
+export function setGroup(response, id) {
     return {
         type: actions.UPSERT_SINGLE_GROUP,
         group: response,

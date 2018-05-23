@@ -323,6 +323,7 @@ const enUS = {
     XForYTitleBuyOnePattern                       : "Buy {0} Pay only {1} ",
     typingMessage                                 : "{0} typing ...",
     FastPick                                      : "Quick Pick",
+    Uploading                                     : "Uploading ... ",
 };
 
 export default enUS;

@@ -53,13 +53,25 @@ class PostApi {
     }
 
     getPost(id, token) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/posts/${id}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/posts/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             },
+        }, 'posts', '/get');
+    }
+
+    createNewPost(post,token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/posts/`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify(post)
         }, 'posts', '/get');
     }
 }

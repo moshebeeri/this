@@ -24,12 +24,12 @@ function* saveGroupsRequest(action) {
 function* saveGroup(action) {
     try {
         let tempGroup = action.group;
-        tempGroup._id = 'temp_group' +  + new Date().getTime();
+        tempGroup._id = 'temp_group' + +new Date().getTime();
         let admins = [];
         admins.push(tempGroup.entity.user);
         tempGroup.admins = admins;
         tempGroup.creator = tempGroup.entity.user;
-        tempGroup.created =  new Date();
+        tempGroup.created = new Date();
         tempGroup.social_state = {};
         tempGroup.social_state.followers = action.group.groupUsers.length + 1;
         tempGroup.pictures = [];
@@ -48,7 +48,6 @@ function* saveGroup(action) {
             tempGroup.pictures.push({pictures: pictures});
         }
         yield put(setGroup(tempGroup));
-
         let imageResponse = yield call(ImageApi.uploadImage, action.token, action.group.image, 'image');
         tempGroup.pictures = imageResponse.pictures;
         let tempId = tempGroup._id
@@ -61,9 +60,8 @@ function* saveGroup(action) {
         while (user = users.pop()) {
             yield call(groupsApi.addUserToGroup, user._id, createdGroup._id, action.token);
         }
-        yield put(setGroup(createdGroup,tempId));
+        yield put(setGroup(createdGroup, tempId));
         yield* updateGroupListener(createdGroup);
-
     } catch (error) {
         console.log("failed  updateProductn");
     }
@@ -100,7 +98,7 @@ function* updateGroupFollowers(action) {
         if (action.businessId) {
             followers = yield call(groupsApi.getBusinessFollowers, action.groupId, action.businessId, action.token);
         } else {
-            followers = yield call(groupsApi.getUserFollowers, action.groupId,  action.token);
+            followers = yield call(groupsApi.getUserFollowers, action.groupId, action.token);
         }
         yield put({
             type: actions.SET_GROUPS_FOLLOWERS,

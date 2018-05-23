@@ -61,6 +61,8 @@ export const PROMOTION_NOTIFICATION = 'PROMOTION_NOTIFICATION';
 
 //product
 export const SAVE_PRODUCT = 'SAVE_PRODUCT';
+//post
+export const SAVE_POST = 'SAVE_POST';
 
 //feed comments
 

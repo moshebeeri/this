@@ -10,14 +10,14 @@ let logger = new ActionLogger();
 export function createPost(post, navigation) {
     return async function (dispatch, getState) {
         try {
-            dispatch({
-                type: actions.POST_SAVING,
-            });
             const token = getState().authentication.token;
-            await postApi.createPost(post, uploadPostPic, token);
+            const user = getState().user.user;
             dispatch({
-                type: actions.POST_SAVING_DONE,
-            });
+                type: types.SAVE_POST,
+                post: post,
+                token: token,
+                user: user
+            })
             navigation.goBack();
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
@@ -30,30 +30,18 @@ export function createPost(post, navigation) {
 export function createGroupPost(post, navigation, group) {
     return async function (dispatch, getState) {
         try {
-            dispatch({
-                type: actions.POST_SAVING,
-            });
+
             const token = getState().authentication.token;
-            await postApi.createPost(post, uploadPostPic, token);
             const user = getState().user.user;
-            const feedOrder = getState().groups.groupFeedOrder[group._id];
-            if (feedOrder) {
-                dispatch({
-                    type: types.CANCEL_GROUP_FEED_LISTENER,
-                });
-                if (feedOrder && feedOrder.length > 0) {
-                    dispatch({
-                        type: types.LISTEN_FOR_GROUP_FEED,
-                        id: feedOrder[0],
-                        group: group,
-                        token: token,
-                        user: user,
-                    });
-                }
-            }
             dispatch({
-                type: actions.POST_SAVING_DONE,
-            });
+                type: types.SAVE_POST,
+                post: post,
+                token: token,
+                group: group,
+                user: user
+            })
+          //  await postApi.createPost(post, uploadPostPic, token);
+
             navigation.goBack();
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
@@ -92,6 +80,20 @@ async function fetchPostById(id, token, dispatch) {
     }
 }
 
-export default {
-    fetchPostById,
-};
+
+export function setPostActivity(activity, group) {
+    if(group) {
+        return {
+            type: actions.SET_TEMP_FEED,
+            activity: activity,
+            groupId: group._id,
+        }
+    }
+
+    return {
+        type: actions.SET_TEMP_MAIN_FEED,
+        activity: activity,
+
+    }
+}
+

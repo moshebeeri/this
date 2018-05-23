@@ -12,6 +12,7 @@ import feedChatSaga from './feedChatSaga'
 import groupInstanceChatSaga from './groupInstanceChatSaga'
 import mainSaga from './mainSaga'
 import groupFeedSaga from './groupFeedSaga'
+import postSaga from './postSaga'
 
 function* saga() {
     yield fork(userSaga);
@@ -27,6 +28,7 @@ function* saga() {
     yield fork(groupInstanceChatSaga);
     yield fork(mainSaga);
     yield fork(groupFeedSaga);
+    yield fork(postSaga);
 
 }
 

@@ -334,6 +334,7 @@ const il = {
     XForYTitleBuyOnePattern                       : 'קנה {0} שלם רק {1}',
     typingMessage                                 : " {0} מקליד ...",
     FastPick                                      : "בחירת תמונה מהירה",
+    Uploading                                     : "טוען ... ",
 };
 
 export default il;

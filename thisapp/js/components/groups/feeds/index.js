@@ -16,6 +16,7 @@ import navigationUtils from '../../../utils/navigationUtils'
 import formUtils from '../../../utils/fromUtils'
 import ThisText from "../../../ui/ThisText/ThisText";
 import strings from "../../../i18n/i18n"
+
 class GroupFeed extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -32,7 +33,6 @@ class GroupFeed extends Component {
         };
         this.handlePick = this.handlePick.bind(this);
     }
-
 
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
@@ -103,11 +103,11 @@ class GroupFeed extends Component {
     }
 
     render() {
-        const {chatTyping, navigation,user} = this.props;
+        const {chatTyping, navigation, user} = this.props;
         const group = this.props.navigation.state.params.group;
         let groupTyping = undefined;
         if (chatTyping) {
-            groupTyping = formUtils.getGroupTyping(chatTyping[group._id],user);
+            groupTyping = formUtils.getGroupTyping(chatTyping[group._id], user);
         }
         let chatDisabled = group.chat_policy === 'OFF';
         let initPage = this.getFeedTab();
@@ -121,9 +121,20 @@ class GroupFeed extends Component {
 
                 {chatDisabled ? <GroupFeedComponent tabLabel="promotions" navigation={this.props.navigation}
                                                     group={this.props.navigation.state.params.group}/> :
-
                     <View style={{flex: 1,}}>
-                        {groupTyping && <View style={{marginLeft:10,marginRight:10,backgroundColor:'white',justifyContent:'center',alignItems:'flex-start'}}><ThisText style={{ backgroundColor:'white',justifyContent:'center',alignItems:'center',fontWeight: '300', color: '#2db6c8'}}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
+                        {groupTyping && <View style={{
+                            marginLeft: 10,
+                            marginRight: 10,
+                            backgroundColor: 'white',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start'
+                        }}><ThisText style={{
+                            backgroundColor: 'white',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontWeight: '300',
+                            color: '#2db6c8'
+                        }}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
 
                         {I18nManager.isRTL && (Platform.OS === 'android') ?
                             <ScrolTabView initialPage={initPage}

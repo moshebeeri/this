@@ -28,6 +28,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
         };
         let feedsUi = [];
         let feedsOrder = feeds.feedView;
+        let feedTemp  = feeds.feedTempActivity;
         let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds,true);
         if (feedsOrder.length > 0) {
             try {
@@ -35,6 +36,9 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                 let assembledFeeds = feedArray.map(function (feed) {
                     return assemblers.assembler(feed, collections);
                 });
+                if(feedTemp.length > 0){
+                    assembledFeeds = feedTemp.concat(assembledFeeds);
+                }
                 feedsUi = assembledFeeds.map(feed => {
                     try {
                         return feedUiConverter.createFeed(feed, instanceLifeCycle);
@@ -46,10 +50,7 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                 feedsUi = feedsUi.filter(feed => feed);
                 feedsUi = feedsUi.filter(filter => filter.id);
                 feedsUi = feedsUi.filter(filter => !filter.blocked);
-                if (store.getState().render.currentScreen !== 'home') {
-                    feedsUi = feedsUi.slice(0, 10)
-                    return feedsUi;
-                }
+
                 return feedsUi;
             } catch (err) {
                 console.error(err)

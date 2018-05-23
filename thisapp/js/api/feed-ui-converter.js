@@ -57,6 +57,9 @@ class FeedConverter {
         }
         if (feed.activity.post.video) {
             responseFeed.video = feed.activity.post.video.url;
+            if(!responseFeed.video){
+                responseFeed.video = feed.activity.post.video.path;
+            }
         }
         if (feed.activity.post.url && FormUtils.youtube_parser(feed.activity.post.url)) {
             responseFeed.videoId = FormUtils.youtube_parser(feed.activity.post.url)

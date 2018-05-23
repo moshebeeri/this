@@ -17,7 +17,9 @@ const initialState = {
     shouldRender: true,
     visibleFeed: undefined,
     visibleFeeds: [],
-    shouldUpdateFeeds: {}
+    shouldUpdateFeeds: {},
+    feedTempActivity:[],
+    tempFeed: [],
 };
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
@@ -70,6 +72,7 @@ export default function feeds(state = initialState, action) {
             if (action.item && action.item._id && !feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.push(action.item._id);
             }
+
             feedstate.feeds = currentFeeds;
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
@@ -81,6 +84,7 @@ export default function feeds(state = initialState, action) {
                     currentFeeds[item._id] = item;
                     if (!feedstate.feedView.includes(item._id)) {
                         feedstate.feedView.push(item._id);
+
                     }
                 }
                 feedstate.shouldUpdateFeeds[item._id] = true;
@@ -93,6 +97,8 @@ export default function feeds(state = initialState, action) {
             return feedstate;
         case actions.UPSERT_FEEDS_TOP:
             currentFeeds[action.item._id] = action.item;
+            feedstate.feedTempActivity = [];
+
             if (!feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.unshift(action.item._id);
             } else {
@@ -100,6 +106,12 @@ export default function feeds(state = initialState, action) {
                 feedstate.feedView.unshift(action.item._id);
             }
             feedstate.feeds = currentFeeds;
+            feedstate.renderFeed = true;
+            feedstate.shouldRender = true;
+            feedstate.updated = true;
+            return feedstate;
+        case actions.SET_TEMP_MAIN_FEED:
+            feedstate.feedTempActivity.unshift(action.activity);
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
             feedstate.updated = true;

@@ -27,6 +27,7 @@ export const getFeeds = createSelector([getStateFeeds, getPosts, getInstance, ge
         };
         let feedsOrder = groups.groupFeedOrder;
         let feeds = groups.groupFeeds;
+        let tempFeeds = groups.tempGroupFeeds;
         let clientMessage = groups.clientMessages;
         let feedsUi = new Map();
         let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds,true);
@@ -40,6 +41,9 @@ export const getFeeds = createSelector([getStateFeeds, getPosts, getInstance, ge
                     }
                     return assemblers.assembler(feed, collections);
                 });
+                if(tempFeeds[groupId]){
+                    assembledFeeds = tempFeeds[groupId].concat(assembledFeeds);
+                }
                 let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed, instanceLifeCycle));
                 newFeedsList = newFeedsList.filter(feed => feed);
                 newFeedsList = newFeedsList.filter(feed => feed.id);
