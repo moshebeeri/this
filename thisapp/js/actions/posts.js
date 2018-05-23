@@ -10,14 +10,14 @@ let logger = new ActionLogger();
 export function createPost(post, navigation) {
     return async function (dispatch, getState) {
         try {
-            dispatch({
-                type: actions.POST_SAVING,
-            });
             const token = getState().authentication.token;
-            await postApi.createPost(post, uploadPostPic, token);
+            const user = getState().user.user;
             dispatch({
-                type: actions.POST_SAVING_DONE,
-            });
+                type: types.SAVE_POST,
+                post: post,
+                token: token,
+                user: user
+            })
             navigation.goBack();
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
@@ -82,11 +82,18 @@ async function fetchPostById(id, token, dispatch) {
 
 
 export function setPostActivity(activity, group) {
+    if(group) {
+        return {
+            type: actions.SET_TEMP_FEED,
+            activity: activity,
+            groupId: group._id,
+        }
+    }
 
     return {
-        type: actions.SET_TEMP_FEED,
+        type: actions.SET_TEMP_MAIN_FEED,
         activity: activity,
-        groupId: group._id,
+
     }
 }
 
