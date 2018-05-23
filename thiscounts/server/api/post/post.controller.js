@@ -36,6 +36,7 @@ function getActorId(post){
 }
 
 function handlePostCreation(post) {
+  console.log(`handlePostCreation ${JSON.stringify(post)}`);
   if(!post || !post.creator || !post._id)
     return console.log(`handlePostCreation param post invalid: post._id})`);
 
