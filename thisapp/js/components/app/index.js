@@ -190,6 +190,14 @@ class ApplicationManager extends Component {
     }
 
     handleAndroidBackBehavior(){
+        if(this.props.currentScreen === 'GroupFeed'){
+            return true;
+        }
+
+        if(this.props.currentScreen !== 'home'){
+            return false;
+        }
+
         if(I18nManager.isRTL && this.state.currentTab.i !== 3) {
             this.refs["tabs"].goToPage(0);
             return true;
@@ -449,6 +457,7 @@ const mapStateToProps = (state) => {
         notificationId: state.mainTab.notificationId,
         notificationGroup: state.mainTab.notificationGroup,
         notificationBusiness: state.mainTab.notificationBusiness,
+        currentScreen: state.render.currentScreen,
         location: state.phone.currentLocation,
         token: state.authentication.token,
         businesses: state.follow_businesses.businesses,
