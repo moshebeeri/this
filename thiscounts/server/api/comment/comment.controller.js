@@ -162,12 +162,18 @@ exports.update = function(req, res) {
 
 // Deletes a comment from the DB.
 exports.destroy = function(req, res) {
-  Comment.findById(req.params.id, function (err, comment) {
-    if(err) { return handleError(res, err); }
-    if(!comment) { return res.send(404); }
-    comment.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
+  let checkUserOwnsEntityQuery = `MATCH (u:user{_id:'${req.user.id}'})-[r:GROUP_ADMIN|ROLE]->(e{_id:'${req.params.entity}'}) return count(r) as count`
+  graphModel.query(checkUserOwnsEntityQuery, (err, results) =>{
+    if (err) { return handleError(res, err); }
+    if(results[0].count < 1) {return res.status(500).json(`unauthorized user`);}
+    Comment.findById(req.params.id, function (err, comment) {
+      if (err) { return handleError(res, err); }
+      if(!comment) { return res.send(404); }
+      comment.deleted = true;
+      comment.save(function (err) {
+        if (err) { return handleError(res, err); }
+        return res.status(200).json(comment);
+      });
     });
   });
 };

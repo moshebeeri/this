@@ -6,6 +6,7 @@ const utils = require('../../components/utils').createUtils();
 const autopopulate = require('mongoose-autopopulate');
 
 let CommentSchema = new Schema({
+  deleted: {type: Boolean, default:false},
   gid: { type: Number, index: true},
   user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions, required: true},
   created: {type: Date, required: true},
