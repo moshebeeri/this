@@ -71,7 +71,8 @@ class instancesComment extends Component {
                                     entity={group}
                                     initialNumToRender={7}
                                     chat
-                                    user={userc}
+                                    group={group}
+                                    user={user}
                                     navigation={navigation}
                                     setNextFeeds={this.setNextFeed.bind(this)}
                                     actions={groupActions}

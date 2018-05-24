@@ -31,12 +31,14 @@ export const getFeeds = createSelector([getStateFeeds, getStateSavedInstances],
                         if (post) {
                             post = feedUiConverter.createPost(post)
                         }
-                        response[groupId].unshift({
-                            id: feedId,
-                            instance: instance,
-                            post: post,
-                            message: createFeed(feeds[groupId][feedId])
-                        });
+                        if(!feeds[groupId][feedId].deleted) {
+                            response[groupId].unshift({
+                                id: feedId,
+                                instance: instance,
+                                post: post,
+                                message: createFeed(feeds[groupId][feedId])
+                            });
+                        }
                     })
                 }
             })

@@ -21,8 +21,41 @@ export default class GroupChat extends Component {
         navigationUtils.doNavigation(navigation, 'realizePromotion', {item: item.instance});
     }
 
+    isGroupAdmin() {
+        const{group,user} = this.props;
+        if (!group.admins) {
+            return false;
+        }
+        if (group.admins.length === 0) {
+            return false;
+        }
+        let userId = user._id;
+        let isGroupAdmin = false;
+        if (Array.isArray(group.admins)) {
+            group.admins.forEach(function (adminId) {
+                if (userId === adminId) {
+                    isGroupAdmin = true;
+                }
+            });
+        } else {
+            Object.keys(group.admins).forEach(key => {
+                if (userId === group.admins[key]) {
+                    isGroupAdmin = true;
+                }
+            });
+        }
+        return isGroupAdmin;
+    }
+
+
+    deleteMessage(){
+        const {actions, item, group} = this.props;
+        actions.deleteMessage(item.id,group)
+    }
+
     render() {
         const {item, currentUser} = this.props;
+        const showDelete =this.isGroupAdmin();
         if (item.message) {
             if (!currentUser) {
                 return <View></View>
@@ -38,7 +71,7 @@ export default class GroupChat extends Component {
                 isUser: isUser
             };
             return <View style={{backgroundColor: '#E6E6E6', flex: 1}}>
-                <ChatMessage realize={this.realize.bind(this)} claim={this.claim.bind(this)} key={item.id}
+                <ChatMessage showDelete={showDelete} deleteMessage={this.deleteMessage.bind(this)} realize={this.realize.bind(this)} claim={this.claim.bind(this)} key={item.id}
                              item={messageItem}/>
             </View>
         } else {

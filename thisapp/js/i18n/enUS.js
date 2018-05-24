@@ -324,6 +324,8 @@ const enUS = {
     typingMessage                                 : "{0} typing ...",
     FastPick                                      : "Quick Pick",
     Uploading                                     : "Uploading ... ",
+    DeleteMessage                                 : "Delete Message",
+    MessageIsDeleted                              : "message deleted",
 };
 
 export default enUS;

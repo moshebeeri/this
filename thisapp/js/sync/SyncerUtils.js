@@ -106,6 +106,7 @@ function addGroupChatSync(groupId) {
                 groupId: groupId,
                 message: response
             })
+
             dispatch({
                 type: types.SAVE_GROUPS_REQUEST,
                 token: token,
@@ -116,7 +117,6 @@ function addGroupChatSync(groupId) {
     asyncListener.addListener("group_chat_typing_users" + groupId, (snap) => {
         let response = snap.val();
         if (response) {
-
             let groupId = snap.key.substring('group_chat_typing_users'.length);
             dispatch({
                 type: actions.GROUP_CHAT_TYPING,
@@ -124,8 +124,24 @@ function addGroupChatSync(groupId) {
                 groupId: groupId
             })
         }
-
     });
+    asyncListener.addListener('deleteMessage_' + groupId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead) {
+            const token = state.authentication.token;
+
+            dispatch({
+                type: actions.DELETE_MESSAGE,
+                messageId: response,
+                groupId: groupId
+            });
+            dispatch({
+                type: types.SAVE_GROUPS_REQUEST,
+                token: token,
+            });
+            asyncListener.markAsRead(snap.key);
+        }
+    })
 }
 
 function addChatSync(generalId, entity) {
@@ -158,6 +174,8 @@ function addChatSync(generalId, entity) {
             asyncListener.markAsRead(snap.key);
         }
     })
+
+
 }
 
 function addChatGroupEntitySync(groupId, generalId) {
@@ -181,6 +199,7 @@ function addChatGroupEntitySync(groupId, generalId) {
             asyncListener.markAsRead(snap.key);
         }
     })
+
 }
 
 function syncGroup(groupId) {
@@ -288,9 +307,13 @@ function syncPromotion(promotionId) {
 }
 
 function invokeEntityCommentSendEvent(generalId, message, state, groupId) {
-    invokeSyncChat(groupId, generalId, state,message);
+    invokeSyncChat(groupId, generalId, state, message);
     invokeSocialChange(generalId, state);
     asyncListener.syncChange('instanceMessage_' + generalId, message);
+}
+
+function invokeEntityCommentDeleteEvent(generalId, messageId) {
+    asyncListener.syncChange('deleteMessage_' + generalId, messageId);
 }
 
 function invokeSocialChange(generalId, state) {
@@ -300,29 +323,26 @@ function invokeSocialChange(generalId, state) {
     }
 }
 
-    function invokeSyncChat(groupId, generalId, state, message) {
+function invokeSyncChat(groupId, generalId, state, message) {
     if (state.instances.instances[generalId] && state.instances.instances[generalId].promotion) {
         asyncListener.syncChange('promotion_' + state.instances.instances[generalId].promotion, 'add-comment');
     }
-    if(groupId) {
+    if (groupId) {
         asyncListener.syncChange('group_' + groupId, 'addComment')
         asyncListener.syncChange('group_chat_' + groupId, message + new Date().getTime())
     }
 }
-function invokeSyncChatTyping(groupId, userId,user) {
 
-    asyncListener.syncChangeChild('group_chat_typing_users' + groupId, 'users',userId, user);
+function invokeSyncChatTyping(groupId, userId, user) {
+    asyncListener.syncChangeChild('group_chat_typing_users' + groupId, 'users', userId, user);
 }
 
-function invokeAllDone(groups,userId){
-
-    if(groups) {
+function invokeAllDone(groups, userId) {
+    if (groups) {
         Object.values(groups).forEach(group => {
             asyncListener.syncChange('group_chat_typing_users' + group._id, 'users', userId, 'DONE');
         })
     }
-
-
 }
 
 export default {
@@ -341,5 +361,6 @@ export default {
     invokeSyncChat,
     invokeBusinessPromotionsChange,
     invokeBusinessProductsChange,
-    invokeBusinessUserChange
+    invokeBusinessUserChange,
+    invokeEntityCommentDeleteEvent
 }

@@ -335,6 +335,8 @@ const il = {
     typingMessage                                 : " {0} מקליד ...",
     FastPick                                      : "בחירת תמונה מהירה",
     Uploading                                     : "טוען ... ",
+    DeleteMessage                                 : "מחק הודעה",
+    MessageIsDeleted                              : "הודעה נחמקה",
 };
 
 export default il;

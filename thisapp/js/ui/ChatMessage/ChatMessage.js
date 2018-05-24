@@ -5,9 +5,10 @@
  * Created by roilandshut on 19/07/2017.
  */
 import React, {Component} from 'react';
-import {I18nManager, View} from 'react-native';
+import {I18nManager, View,TouchableOpacity} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Footer, Thumbnail} from 'native-base';
+import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-menu';
 import styles from './styles'
 import DateUtils from '../../utils/dateUtils'
 import StyleUtils from '../../utils/styleUtils'
@@ -16,7 +17,7 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import strings from "../../i18n/i18n"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import instanceUtils from '../../utils/instanceUtils';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 let dateUtils = new DateUtils();
 export default class ChatMessage extends Component {
     constructor(props) {
@@ -35,8 +36,14 @@ export default class ChatMessage extends Component {
         realize();
     }
 
+    deleteMessage(){
+        const {deleteMessage} = this.props;
+        deleteMessage();
+
+
+    }
     render() {
-        const {item, wide} = this.props;
+        const {item, wide,showDelete} = this.props;
         const containerStyle = {
             marginTop: 10,
             marginLeft: 10,
@@ -48,6 +55,38 @@ export default class ChatMessage extends Component {
         let styleContainer = styles.messageUserName;
         if (wide) {
             styleContainer = styles.messageWideUserName;
+        }
+        let menu = undefined;
+        let menuUser = undefined;
+        if (showDelete) {
+            menu = <Menu>
+                <MenuTrigger customStyles={{alignItems: 'center', justifyContent: 'center'}}>
+                    <MaterialIcons style={{fontWeight: 'bold', color: 'black', fontSize: 15}}
+                                   name="keyboard-arrow-down"/>
+
+                </MenuTrigger>
+                <MenuOptions >
+
+                    <MenuOption onSelect={this.deleteMessage.bind(this)}>
+                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.DeleteMessage}</ThisText>
+                    </MenuOption>
+
+                </MenuOptions>
+            </Menu>
+            menuUser = <Menu>
+                <MenuTrigger customStyles={{alignItems: 'center', justifyContent: 'center'}}>
+                    <MaterialIcons style={{fontWeight: 'bold', color: 'white', fontSize: 15}}
+                                   name="keyboard-arrow-down"/>
+
+                </MenuTrigger>
+                <MenuOptions >
+
+                    <MenuOption onSelect={this.deleteMessage.bind(this)}>
+                        <ThisText style={{padding: 10, paddingBottom: 5}}>{strings.DeleteMessage}</ThisText>
+                    </MenuOption>
+
+                </MenuOptions>
+            </Menu>
         }
         if (!item.isUser) {
             return <View style={containerStyle}>
@@ -82,6 +121,11 @@ export default class ChatMessage extends Component {
 
                             </View>
                             <View style={styleContainer}>
+                                {showDelete  &&  <View style={{  zIndex: 1,position:'absolute',width:15,height:15,right:5,top:5,}}>
+                                    {menu}
+                                </View>}
+                                {showDelete  &&  <View style={{height:15,}}>
+                                </View>}
                                 {item.instance && <View>
                                     <View style={{
                                         marginTop: 5,
@@ -189,6 +233,7 @@ export default class ChatMessage extends Component {
 
                                 </View>}
                                 <View style={styles.message_container_user}>
+
                                     <ThisText numberOfLines={3} style={styles.messageText}>{item.message}</ThisText>
 
 
@@ -227,6 +272,11 @@ export default class ChatMessage extends Component {
                         <View style={styles.messageName}>
 
                             <View>
+                                {showDelete  && <View style={{  zIndex: 1,position:'absolute',width:15,height:15,left:5,top:5,}}>
+                                    {menuUser}
+                                </View>}
+                                {showDelete  && <View style={{height:15,}}>
+                                </View>}
                                 {item.instance &&
                                 <View>
                                     <View style={{

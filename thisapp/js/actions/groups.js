@@ -2,6 +2,7 @@ import GroupsApi from "../api/groups";
 import FeedApi from "../api/feed";
 import UserApi from "../api/user";
 import PtomotionApi from "../api/promotion";
+import CommentApi from "../api/commet";
 import imageApi from "../api/image";
 import ActivityApi from "../api/activity";
 import * as assemblers from "./collectionAssembler";
@@ -19,6 +20,7 @@ let feedApi = new FeedApi();
 let promotionApi = new PtomotionApi();
 let activityApi = new ActivityApi();
 let userApi = new UserApi();
+let commentsApi = new CommentApi();
 let logger = new ActionLogger();
 
 async function getAll(dispatch, token, state) {
@@ -158,6 +160,20 @@ export function createGroup(group, navigation) {
         } catch (error) {
             handler.handleError(error, dispatch, 'createGroup')
             logger.actionFailed('groupsApi.createGroup')
+        }
+    }
+}
+
+export function deleteMessage(messageId, group,) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        try {
+            await commentsApi.deleteComment(messageId, group._id, token);
+            SyncerUtils.invokeEntityCommentDeleteEvent(group._id, messageId);
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'createGlobalComment')
+            await logger.actionFailed('createGlobalComment')
         }
     }
 }

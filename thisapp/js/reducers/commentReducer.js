@@ -50,6 +50,12 @@ export default function comment(state = initialState, action) {
             }
             return currentState;
 
+        case actions.DELETE_MESSAGE:
+            groupsComment[action.groupId][action.messageId] = undefined;
+            currentState.groupCommentsOrder[action.groupId] =  currentState.groupCommentsOrder[action.groupId].
+            filter(id =>id !== action.messageId );
+            return currentState;
+
         case actions.UPSERT_GROUP_TOP_COMMENT :
             action.item.forEach(comment => {
                 if (!groupsComment[action.gid]) {

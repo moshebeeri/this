@@ -38,6 +38,17 @@ class CommentApi {
         }, 'comments', '/create');
     }
 
+    deleteComment(commentId, groupId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/comments/${commentId}/${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'comments', '/delete');
+    }
+
     getComment(entities, token, skip) {
         let request = {};
         request.entities = entities;

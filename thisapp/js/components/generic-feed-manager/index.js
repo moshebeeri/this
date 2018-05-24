@@ -50,7 +50,7 @@ export default class GenericFeedManager extends Component {
         return <ItemDetail
             key={id}
             navigateToChat={navigateToChat}
-            user={entity}
+            user={user}
             token={token}
             currentUser={user}
             location={location}

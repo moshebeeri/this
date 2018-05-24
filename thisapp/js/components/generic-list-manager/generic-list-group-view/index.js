@@ -160,8 +160,9 @@ export default class GenericListGroupView extends Component {
             if (user && user.pictures && user.pictures.length > 0) {
                 itemChat = {
                     date: item.preview.comment.created,
-                    message: item.preview.comment.message,
+                    message: item.preview.comment.deleted ? strings.MessageIsDeleted : item.preview.comment.message,
                     isUser: true,
+                    deleted: item.preview.comment.deleted,
                     avetar: {uri: user.pictures[user.pictures.length - 1].pictures[3]},
                     name: user.name
                 }
@@ -173,7 +174,8 @@ export default class GenericListGroupView extends Component {
                 itemChat = {
                     date: item.preview.comment.created,
                     isUser: true,
-                    message: item.preview.comment.message,
+                    deleted: item.preview.comment.deleted,
+                    message: item.preview.comment.deleted ? strings.MessageIsDeleted : item.preview.comment.message,
                     avetar: require('../../../../images/client_1.png'),
                     name: name
                 }
@@ -198,7 +200,7 @@ export default class GenericListGroupView extends Component {
 
                     <View style={{marginLeft: 15, alignItems: 'flex-start'}}>
 
-                        <ThisText  numberOfLines={1} ellipsizeMode='tail'  style={styles.chatListLineTitleText}>{itemChat.message}</ThisText>
+                        <ThisText  numberOfLines={1} ellipsizeMode='tail'  style={[styles.chatListLineTitleText,{textDecorationLine:itemChat.deleted ?  'line-through' : 'none', fontWeight: itemChat.deleted ? 'normal' : 'bold',}]}>{itemChat.message}</ThisText>
                         <View style={{flexDirection:'row'}}>
                         <ThisText style={styles.chatListLineDescText}>{dateUtils.messageFormater(item.preview.comment.created)}</ThisText>
                             {groupTyping && <View style={{marginLeft:10,marginRight:10,backgroundColor:'white',justifyContent:'center',alignItems:'flex-start'}}><ThisText style={{ backgroundColor:'white',fontSize:14,justifyContent:'center',alignItems:'center',fontWeight: '300', color: '#2db6c8'}}>{strings.typingMessage.formatUnicorn(groupTyping)}</ThisText></View>}
