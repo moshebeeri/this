@@ -162,11 +162,10 @@ exports.update = function(req, res) {
 
 // Deletes a comment from the DB.
 exports.destroy = function(req, res) {
-  let checkUserOwnsEntityQuery = `MATCH (u:user{_id:'${req.user.id}'})-[r:ROLE{name:'OWNS'}]->(e{_id:'${req.user.id}'}) return count(r)`
+  let checkUserOwnsEntityQuery = `MATCH (u:user{_id:'${req.user.id}'})-[r:GROUP_ADMIN|ROLE]->(e{_id:'${req.params.entity}'}) return count(r) as count`
   graphModel.query(checkUserOwnsEntityQuery, (err, results) =>{
     if (err) { return handleError(res, err); }
-    console.log(JSON.stringify(results));
-    if(results[0].count < 1) {return res.status(401).json(`unauthorized user`);}
+    if(results[0].count < 1) {return res.status(500).json(`unauthorized user`);}
     Comment.findById(req.params.id, function (err, comment) {
       if (err) { return handleError(res, err); }
       if(!comment) { return res.send(404); }
