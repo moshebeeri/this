@@ -31,6 +31,15 @@ class Feed extends Component {
         this.props.userActions.fetchUsersFollowers();
     }
 
+    //TODO: let roi know this is better then componentWillMount that will be deprected in nnext version
+    // componentDidMount() {
+    //     const {feeds, actions} = this.props;
+    //     if (!feeds || feeds.length === 0) {
+    //         actions.setNextFeeds(feeds);
+    //     }
+    //     this.props.userActions.fetchUsersFollowers();
+    // }
+
     shouldComponentUpdate() {
         return this.props.updated;
     }
@@ -42,6 +51,7 @@ class Feed extends Component {
 
 
     refreshTop() {
+        //TODO: Do it with saga
         console.log('refreshing')
         this.setState({refreshing: true})
         this.props.actions.setTopFeeds();
