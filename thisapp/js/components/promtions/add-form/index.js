@@ -825,7 +825,7 @@ class AddPromotion extends Component {
                     <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.Details}</ThisText>
                 </View>
                 {!this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <TextInput field={strings.Name} value={this.state.name}
+                    <TextInput field={strings.PromotionName} value={this.state.name}
                                returnKeyType='done' ref="4" refNext="4"
 
                                onChangeText={(name) => this.setState({name})} isMandatory={true}/>
@@ -876,13 +876,13 @@ class AddPromotion extends Component {
                     </View>
                 </View>
                 {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <TextInput field={strings.Name} value={this.state.name}
+                    <TextInput field={strings.PromotionName} value={this.state.name}
                                returnKeyType='next' ref="4" refNext="4"
                                onSubmitEditing={this.focusNextField.bind(this, "5")}
                                onChangeText={(name) => this.setState({name})} isMandatory={true}/>
                 </View>}
                 {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <TextInput field={strings.Description} value={this.state.info}
+                    <TextInput field={strings.PromotioDescription} value={this.state.info}
                                returnKeyType='next' ref="5" refNext="5"
                                onSubmitEditing={this.dismiss.bind(this)}
                                onChangeText={(info) => this.setState({info})}/>

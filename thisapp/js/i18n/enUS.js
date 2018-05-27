@@ -326,6 +326,8 @@ const enUS = {
     Uploading                                     : "Uploading ... ",
     DeleteMessage                                 : "Delete Message",
     MessageIsDeleted                              : "message deleted",
+    PromotionName                                 : "Promotion Name",
+    PromotioDescription                           : "Promotion Description",
 };
 
 export default enUS;
