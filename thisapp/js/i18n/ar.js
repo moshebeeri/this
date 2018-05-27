@@ -13,7 +13,7 @@ const ar = {
     Permissions                                   : "أذونات",
     Follow                                        : "إتبع",
     PleaseScanCode                                : "الرجاء مسح الرمز" ,
-    PasswordRecoverySMSNotificationMessage        : " سيتم إرسال كلمة مرور مؤقتة عبر رسالة نصية  قصيرة " ,
+    PasswordRecoverySMSNotificationMessage        : "سيتم إرسال كلمة مرور مؤقتة عبر رسالة نصية  قصيرة" ,
     SendSMS                                       : "أرسل رسالة نصية قصيرة",
     PostRequest                                   : "طلب رسالة" ,
     Save                                          : "حفظ",
