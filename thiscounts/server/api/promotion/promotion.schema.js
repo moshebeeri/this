@@ -107,6 +107,35 @@ let PromotionSchemaObject = {
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
     mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
   },
+  cross_entities: {
+    is_cross_entities: {type: Boolean, default: false},
+    status: {
+      type: String,
+      enum: [
+        'CONDITION_CREATED',
+        'BENEFICIARY_RECIEVED',
+        'BENEFICIARY_APPROVED',
+      ]
+    },
+    condition:{
+      creator: {type: Schema.ObjectId, ref: 'User'},
+      entity: {
+        business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+        shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+        mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+      },
+      created: {type: Date}
+    },
+    beneficiary: {
+      creator: {type: Schema.ObjectId, ref: 'User'},
+      entity: {
+        business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
+        shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
+        mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
+      },
+      created: {type: Date},
+    }
+  },
   created: {type: Date, required: true},
   gid: {type: Number, index: true},
 

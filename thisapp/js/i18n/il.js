@@ -337,6 +337,8 @@ const il = {
     Uploading                                     : "טוען ... ",
     DeleteMessage                                 : "מחק הודעה",
     MessageIsDeleted                              : "הודעה נחמקה",
+    PromotionName                                 : "כותרת ההנחה",
+    PromotioDescription                           : "תאור / הסבר",
 };
 
 export default il;
