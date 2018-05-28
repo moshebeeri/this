@@ -13,7 +13,7 @@ class ActivityApi {
     }
 
     reportActivity(activityId, report, token) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/activities/feedback/${activity}/${report}`, {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/activities/feedback/${activityId}/${report}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

@@ -31,8 +31,8 @@ export default class ActivityActions extends Component {
     }
 
     showFeedBack() {
-        const {showActions, id} = this.props;
-        showActions(true, id);
+        const {showActions, id,itemId} = this.props;
+        showActions(true, id,itemId);
     }
 
     render() {

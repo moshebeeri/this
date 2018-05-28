@@ -31,6 +31,8 @@ export default class GenericFeedManager extends Component {
         super(props);
         this.state = {
             showActions: false,
+            activityId: undefined,
+            itemId: undefined,
         }
     }
 
@@ -76,7 +78,7 @@ export default class GenericFeedManager extends Component {
         const {showFab} = this.props;
         this.setState({
             showActions: show,
-            activityId: activityId
+            activityId: activityId,
         })
         if (showFab) {
             showFab(!show);
@@ -84,8 +86,8 @@ export default class GenericFeedManager extends Component {
     }
 
     reportActivity(report) {
-        const {activityAction} = this.props;
-        activityAction.reportActivity(this.state.activityId, report);
+        const {activityAction,group} = this.props;
+        activityAction.reportActivity(this.state.activityId, report,group);
         this.setState({
             showActions: false,
             activityId: undefined

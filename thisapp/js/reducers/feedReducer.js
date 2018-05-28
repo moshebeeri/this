@@ -18,7 +18,7 @@ const initialState = {
     visibleFeed: undefined,
     visibleFeeds: [],
     shouldUpdateFeeds: {},
-    feedTempActivity:[],
+    feedTempActivity: [],
     tempFeed: [],
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -72,8 +72,12 @@ export default function feeds(state = initialState, action) {
             if (action.item && action.item._id && !feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.push(action.item._id);
             }
-
             feedstate.feeds = currentFeeds;
+            feedstate.renderFeed = true;
+            feedstate.shouldRender = true;
+            feedstate.updated = true;
+            return feedstate;
+        case actions.REMOVE_FEED:
             feedstate.renderFeed = true;
             feedstate.shouldRender = true;
             feedstate.updated = true;
@@ -84,7 +88,6 @@ export default function feeds(state = initialState, action) {
                     currentFeeds[item._id] = item;
                     if (!feedstate.feedView.includes(item._id)) {
                         feedstate.feedView.push(item._id);
-
                     }
                 }
                 feedstate.shouldUpdateFeeds[item._id] = true;
@@ -98,7 +101,6 @@ export default function feeds(state = initialState, action) {
         case actions.UPSERT_FEEDS_TOP:
             currentFeeds[action.item._id] = action.item;
             feedstate.feedTempActivity = [];
-
             if (!feedstate.feedView.includes(action.item._id)) {
                 feedstate.feedView.unshift(action.item._id);
             } else {
