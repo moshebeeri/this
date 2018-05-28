@@ -38,7 +38,17 @@ const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 
 let PromotionSchemaObject = {
   social_state : {},
-
+  qrcode: {type: Schema.ObjectId, ref:'QRCode'},
+  qrcode_action: {
+    action: {
+      type: String,
+      enum: [
+        'INSTANCE',
+        'SAVED_INSTANCE',
+        'ELIGIBILITY',
+        'GENERATE_AUTOMATIC'
+      ]
+  },
   //barcode validation required upon claim
   validate_barcode :{type: Boolean, default: false},
 
@@ -113,7 +123,7 @@ let PromotionSchemaObject = {
       type: String,
       enum: [
         'CONDITION_CREATED',
-        'BENEFICIARY_RECIEVED',
+        'BENEFICIARY_RECEIVED',
         'BENEFICIARY_APPROVED',
       ]
     },
