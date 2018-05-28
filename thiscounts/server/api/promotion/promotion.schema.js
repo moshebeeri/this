@@ -48,6 +48,7 @@ let PromotionSchemaObject = {
         'ELIGIBILITY',
         'GENERATE_AUTOMATIC'
       ]
+    }
   },
   //barcode validation required upon claim
   validate_barcode :{type: Boolean, default: false},
