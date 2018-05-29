@@ -328,6 +328,8 @@ const enUS = {
     MessageIsDeleted                              : "message deleted",
     PromotionName                                 : "Promotion Name",
     PromotioDescription                           : "Promotion Description",
+    Version                                       : "Version {0}",
+
 };
 
 export default enUS;

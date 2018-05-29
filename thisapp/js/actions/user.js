@@ -53,6 +53,24 @@ export function fetchUsers() {
     }
 }
 
+export function getServerVersion() {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token
+        if (token) {
+            try {
+                let version = await userApi.getServerVersion(token);
+                dispatch({
+                    type: actions.SERVER_VERSION,
+                    version: version
+                });
+            } catch (error) {
+                handler.handleError(error, dispatch, 'getServerVersion')
+                await logger.actionFailed('users-getServerVersion')
+            }
+        }
+    }
+}
+
 export function fetchUsersFollowers() {
     return function (dispatch, getState) {
         const token = getState().authentication.token

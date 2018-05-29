@@ -39,6 +39,7 @@ class ProfileDrawer extends Component {
                 phoneNumber: user.country_code + '-' + user.phone_number
             })});
         }
+        this.getServerVersiom();
     }
 
     setImage(image) {
@@ -73,7 +74,11 @@ class ProfileDrawer extends Component {
     help(){
         Linking.openURL(`${help_url}/` );
     }
+    getServerVersiom(){
+        this.props.actions.getServerVersion();
+    }
     render() {
+        const{serverVersion} = this.props;
         let source = noPic;
         if (this.props.user) {
             if (this.props.user.pictures && this.props.user.pictures.length > 0) {
@@ -207,6 +212,10 @@ class ProfileDrawer extends Component {
 
                     </TouchableOpacityFix>
                 </View>
+
+                <TouchableOpacityFix  onPress={() => this.getServerVersiom()} style={{position:'absolute' , bottom: 5, right: 5}}>
+                    <ThisText style={{color:'white',fontSize:10}}>{strings.Version.formatUnicorn(`${versionClient}` + ' / ' + serverVersion)} </ThisText>
+                </TouchableOpacityFix>
             </View>
             </ScrollView>
 
@@ -218,6 +227,7 @@ class ProfileDrawer extends Component {
 export default connect(
     state => ({
         user: state.user.user,
+        serverVersion: state.network.serverVersion,
         token: state.authentication.token
     }),
     (dispatch) => ({
