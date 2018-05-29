@@ -185,6 +185,7 @@ export const UPSERT_ACTIVITY = 'UPSERTactivity';
 export const NETWORK_IS_OFFLINE = 'NETWORK_IS_OFFLINE';
 export const NETWORK_IS_ONLINE = 'NETWORK_IS_ONLINE';
 export const TIME_OUT = 'TIME_OUT';
+export const SERVER_VERSION = 'SERVER_VERSION';
 //Render
 export const CURRENT_SCREEN = 'CURRENT_SCREEN';
 export const CURRENT_MAIN = 'CURRENT_MAIN';

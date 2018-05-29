@@ -5,18 +5,15 @@ import store from "react-native-simple-store";
 import Timer from "./LogTimer";
 import * as actions from "../reducers/reducerActions";
 import EntityUtils from "../utils/createEntity";
-import * as errors from './Errors'
 import PhoneUtils from "../utils/phoneUtils";
 import CallingCallUtils from '../utils/LocalToCallingCode'
+import serverRequestHandler from './serverRequestHandler';
 
 let entityUtils = new EntityUtils();
 let timer = new Timer();
 
-import serverRequestHandler from './serverRequestHandler';
-
 class UserApi {
-
-    noTokenReject(){
+    noTokenReject() {
         return new Promise(async (resolve, reject) => {
             reject('no token');
         })
@@ -25,6 +22,18 @@ class UserApi {
     getUser(token) {
         if (!token) return this.noTokenReject();
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/me`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
+            }
+        }, 'user', 'users/me');
+    }
+
+    getServerVersion(token) {
+        if (!token) return this.noTokenReject();
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/server/version`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -57,7 +66,6 @@ class UserApi {
             }
         }, 'user', 'profiles/follow/followers');
     }
-
 
     async getFullContacts(contactPhones) {
         return new Promise(async (resolve, reject) => {
@@ -96,7 +104,7 @@ class UserApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token
             }
-        }, 'user', 'like/:id','BOOLEAN')
+        }, 'user', 'like/:id', 'BOOLEAN')
     }
 
     unlike(id, token) {
@@ -107,14 +115,13 @@ class UserApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token
             }
-        }, 'user', 'delete /like/:id','BOOLEAN')
+        }, 'user', 'delete /like/:id', 'BOOLEAN')
     }
 
     async getUserByPhone(phone) {
         let token = await store.get('token');
         let callingCode = await CallingCallUtils.getCallingCode();
         let phoneNumber = PhoneUtils.clean_phone_number(phone);
-
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/get/user/by/phone/${callingCode}/${phoneNumber}`, {
             method: 'GET',
             headers: {
@@ -125,7 +132,7 @@ class UserApi {
         }, 'user', 'get/user/by/phone');
     }
 
-    async setUserRole(user, business, role,token) {
+    async setUserRole(user, business, role, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/role/${user}/${role}/${business}`, {
             method: 'GET',
             headers: {
@@ -136,7 +143,7 @@ class UserApi {
         }, 'user', 'users/role/:user/:role/:business');
     }
 
-    async removeUserRole(user, business,token) {
+    async removeUserRole(user, business, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/role/${user}/${business}`, {
             method: 'DELETE',
             headers: {
@@ -168,7 +175,7 @@ class UserApi {
                 'Authorization': 'Bearer ' + token,
             },
             body: JSON.stringify(user)
-        }, 'user', 'update user','BOOLEAN');
+        }, 'user', 'update user', 'BOOLEAN');
     }
 
     async setUser(dispatch, token) {

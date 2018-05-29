@@ -203,7 +203,6 @@ class AddPromotion extends Component {
     }
 
     async componentWillMount() {
-
         if (this.props.navigation.state.params.onBoardType) {
             this.setState({toggle: true, onBoardType: this.props.navigation.state.params.onBoardType});
             return;
@@ -219,7 +218,6 @@ class AddPromotion extends Component {
             this.setPromotion(this.props.navigation.state.params.followerProximity);
             return;
         }
-
         this.props.actions.resetForm();
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
@@ -488,14 +486,15 @@ class AddPromotion extends Component {
     }
 
     createDiscountConditionForm() {
-        const{currencySymbol} = this.props;
+        const {currencySymbol} = this.props;
         let result = undefined;
         let discountForm = undefined;
         if (this.state.type) {
             switch (this.state.type) {
                 case 'PERCENT':
                     discountForm =
-                        <PercentComponent currencySymbol={currencySymbol} toggle={this.state.toggle} navigation={this.props.navigation} api={this}
+                        <PercentComponent currencySymbol={currencySymbol} toggle={this.state.toggle}
+                                          navigation={this.props.navigation} api={this}
                                           state={this.state}
                                           ref={"precent"} setState={this.setState.bind(this)}/>;
                     break;
@@ -505,22 +504,26 @@ class AddPromotion extends Component {
                     break;
                 case 'X+Y':
                     discountForm =
-                        <XPlusYComponent  currencySymbol={currencySymbol} ref={"X+Y"} navigation={this.props.navigation} api={this} state={this.state}
+                        <XPlusYComponent currencySymbol={currencySymbol} ref={"X+Y"} navigation={this.props.navigation}
+                                         api={this} state={this.state}
                                          setState={this.setState.bind(this)}/>;
                     break;
                 case 'GIFT':
                     discountForm =
-                        <GiftComponent  currencySymbol={currencySymbol} ref={"GIFT"} navigation={this.props.navigation} api={this} state={this.state}
+                        <GiftComponent currencySymbol={currencySymbol} ref={"GIFT"} navigation={this.props.navigation}
+                                       api={this} state={this.state}
                                        setState={this.setState.bind(this)}/>;
                     break;
                 case 'X+N%OFF':
-                    discountForm = <XPlusYOffComponent  currencySymbol={currencySymbol} ref={"X+N%OFF"} navigation={this.props.navigation} api={this}
+                    discountForm = <XPlusYOffComponent currencySymbol={currencySymbol} ref={"X+N%OFF"}
+                                                       navigation={this.props.navigation} api={this}
                                                        state={this.state}
                                                        setState={this.setState.bind(this)}/>;
                     break;
                 case 'X_FOR_Y':
                     discountForm =
-                        <XForYComponent  currencySymbol={currencySymbol} ref={"X_FOR_Y"} navigation={this.props.navigation} api={this} state={this.state}
+                        <XForYComponent currencySymbol={currencySymbol} ref={"X_FOR_Y"}
+                                        navigation={this.props.navigation} api={this} state={this.state}
                                         setState={this.setState.bind(this)}/>;
                     break;
                 case 'REDUCED_AMOUNT':
@@ -660,17 +663,13 @@ class AddPromotion extends Component {
 
     getDefaultDate(toggle) {
         let defaultDate = new Date();
-        if (toggle) {
-            defaultDate.setDate(defaultDate.getDate() + 1);
+        let month = defaultDate.getMonth();
+        if (month < 12) {
+            defaultDate.setMonth(month + 1);
         } else {
-            let month = defaultDate.getMonth();
-            if (month < 12) {
-                defaultDate.setMonth(month + 1);
-            } else {
-                let year = defaultDate.getYear();
-                defaultDate.setMonth(1);
-                defaultDate.setYear(year + 1);
-            }
+            let year = defaultDate.getYear();
+            defaultDate.setMonth(1);
+            defaultDate.setYear(year + 1);
         }
         return defaultDate;
     }
@@ -678,7 +677,6 @@ class AddPromotion extends Component {
     setToggleOff() {
         let defaultDate = this.getDefaultDate(false);
         this.refs["discountType"].selectPromotionType("PERCENT");
-
         this.setState({
             token: '',
             path: '',
@@ -893,7 +891,7 @@ class AddPromotion extends Component {
                 </View>
                 {proximityForm}
                 {this.state.toggle && distributionForm}
-                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+                <View style={{height: StyleUtils.scale(30), width: StyleUtils.getWidth()}}></View>
 
             </ScrollView>
 
@@ -949,8 +947,8 @@ class AddPromotion extends Component {
         if (this.state.image) {
             let coverImage = <Image
                 style={{
-                    width:StyleUtils.getWidth(),
-                    height:StyleUtils.getWidth() * 9 / 16
+                    width: StyleUtils.getWidth(),
+                    height: StyleUtils.getWidth() * 9 / 16
                 }}
                 resizeMode={'cover'}
                 source={{uri: this.state.image.path}}
