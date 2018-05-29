@@ -63,6 +63,9 @@ export default function group(state = initialState, action) {
             currentGroups[action.groupId] = undefined;
             immutableState.update = true;
             return immutableState;
+        case actions.REMOVE_FEED:
+            immutableState.update = true;
+            return immutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             action.groupFeed.forEach(item => {
                 if (!immutableState.groupFeeds[action.groupId]) {
@@ -89,7 +92,6 @@ export default function group(state = initialState, action) {
             immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP_FEEDS_TOP:
-
             immutableState.tempGroupFeeds[action.groupId] = [];
             action.groupFeed.forEach(item => {
                 if (!immutableState.groupFeeds[action.groupId]) {
@@ -142,8 +144,8 @@ export default function group(state = initialState, action) {
             immutableState.groupFollowers[action.groupId] = action.followers;
             return immutableState;
         case actions.SET_TEMP_FEED:
-            if(action.groupId) {
-                if(!immutableState.tempGroupFeeds[action.groupId]){
+            if (action.groupId) {
+                if (!immutableState.tempGroupFeeds[action.groupId]) {
                     immutableState.tempGroupFeeds[action.groupId] = [];
                 }
                 immutableState.tempGroupFeeds[action.groupId].push(action.activity);

@@ -252,6 +252,7 @@ export default class FeedPromotion extends Component {
                                     bgColor={'transparent'}
                                     textColor={'white'}
                                     hideMenu={hideMenu}
+                                    subTitle={item.name}
                                     size={60}
                                     id={item.activityId} showActions={showActions}
                     />}

@@ -116,6 +116,7 @@ exports.createAndAssign = function (userId, data, callback) {
     })
   });
 };
+
 exports.allocateOneAndAssign = function (req, res) {
   this.createAndAssign(req.user._id, req.body, function (err, qrcode) {
     if (err) {
@@ -124,6 +125,7 @@ exports.allocateOneAndAssign = function (req, res) {
     return res.status(201).json(qrcode);
   });
 };
+
 exports.code = function (req, res) {
   QRCode.findOne({code: req.params.code}, function (err, qrcode) {
     if (err) {
@@ -132,6 +134,7 @@ exports.code = function (req, res) {
     return res.json(qrcode);
   });
 };
+
 exports.image_id = function (req, res) {
   QRCode.findById(req.params.id, function (err, qrcode) {
     if (err) {
@@ -153,7 +156,7 @@ exports.image_id = function (req, res) {
   });
 };
 
-exports.image_code = function (req, res) {
+exports.image_html = function (req, res) {
   QRCodeImg.toDataURL(JSON.stringify({
     t: 'g',
     code: req.params.code
@@ -163,6 +166,19 @@ exports.image_code = function (req, res) {
     }
     res.setHeader('content-type', 'text/html');
     return res.status(200).send(`<html><body><img src="${url}"/></body></html>`);
+  });
+};
+
+exports.image_png = function (req, res) {
+  QRCodeImg.toDataURL(JSON.stringify({
+    t: 'g',
+    code: req.params.code
+  }), qr_opt, function (err, url) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.setHeader('content-type', 'image/png');
+    return res.status(200).send(url);
   });
 };
 

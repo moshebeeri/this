@@ -190,7 +190,7 @@ class BusinessHeader extends Component {
     }
 
     headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction) {
-        const {bgColor, textColor} = this.props;
+        const {bgColor, textColor,subTitle} = this.props;
         let backgroundColor = 'white';
         if (bgColor) {
             backgroundColor = bgColor;
@@ -203,6 +203,8 @@ class BusinessHeader extends Component {
             <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
                 <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
                           note>{businessName}</ThisText>
+                <ThisText style={[nameTextStyle, {color: textColor}]}
+                          note>{subTitle}</ThisText>
             </View>
             {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>
                 <View style={{marginTop: 10, marginRight: 10}}>

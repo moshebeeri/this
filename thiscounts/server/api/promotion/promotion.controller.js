@@ -22,6 +22,8 @@ const feed = require('../../components/feed-tools');
 const pricing = require('../../components/pricing');
 const Instance = require('../../components/instance');
 const groupCtrl = require('../group/group.controller');
+const qrcodeController = require('../qrcode/qrcode.controller');
+const QRCode = require('../qrcode/qrcode.model');
 
 exports.search = MongodbSearch.create(Promotion);
 
@@ -62,6 +64,22 @@ function to_graph(promotion) {
     validate_barcode: promotion.validate_barcode
   }
 }
+
+exports.qrcode_action = function (req, res) {
+  QRCode.findById(req.params.code)
+    .exec((err, qrcode) =>{
+      if (err) {return handleError(res, err)}
+      if (!qrcode) {return res.send(404)}
+      if(qrcode.type !== 'PROMOTION')
+        return res.status(400).json('bad request qrcode.type !== PROMOTION');
+      Promotion.findById(qrcode.assignment.promotion, function (err, promotion) {
+        if (err) {return handleError(res, err)}
+        if (!promotion) {return res.send(404)}
+        return res.json(promotion);
+      });
+    });
+};
+
 
 let set_promotion_location = function (promotion, callback) {
   if (!utils.defined(promotion.entity))
@@ -321,21 +339,29 @@ function handlePromotionPostCreate(promotion, callback) {
 }
 
 function create_promotion(promotion, callback) {
-  promotion.created = Date.now();
-  if(!promotion.start) promotion.start = Date.now();
-  set_promotion_location(promotion, function (err, promotion) {
-    if (err) return callback(err, null);
-    Promotion.create(promotion, function (err, promotion) {
+  qrcodeController.createAndAssign(promotion.creator, {
+    type: 'PROMOTION',
+    assignment: {
+      promotion: promotion._id
+    }
+  }, function (err, qrcode) {
+    promotion.qrcode = qrcode;
+    promotion.created = Date.now();
+    if (!promotion.start) promotion.start = Date.now();
+    set_promotion_location(promotion, function (err, promotion) {
       if (err) return callback(err, null);
-      handlePromotionPostCreate(promotion, function(err){
-        if(err) return callback(err);
-        Promotion.findById(promotion._id)
-          .populate('condition.product')
-          .exec(callback)
-        //callback(null, promotion);
+      Promotion.create(promotion, function (err, promotion) {
+        if (err) return callback(err, null);
+        handlePromotionPostCreate(promotion, function (err) {
+          if (err) return callback(err);
+          Promotion.findById(promotion._id)
+            .populate('condition.product')
+            .exec(callback)
+          //callback(null, promotion);
+        });
       });
     });
-  });
+  })
 }
 
 // router.get('/action/:type/:entity', auth.isAuthenticated(), controller.get_action);

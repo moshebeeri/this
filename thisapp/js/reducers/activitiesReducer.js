@@ -12,13 +12,18 @@ export default function activities(state = initialState, action) {
         };
     }
     let activityState = {...state};
-  //      console.log(action.type);
+    //      console.log(action.type);
+    let currentActivities = activityState.activities;
     switch (action.type) {
         case actions.UPSERT_ACTIVITY:
-            let currentActivities = activityState.activities;
             action.item.forEach(eventItem => {
                 currentActivities[eventItem._id] = eventItem;
             });
+            return activityState;
+        case actions.REMOVE_FEED:
+            if(currentActivities[action.activityId]) {
+                currentActivities[action.activityId].blocked = true;
+            }
             return activityState;
         default:
             return state;

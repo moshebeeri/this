@@ -16,6 +16,7 @@ router.get('/find/:code', auth.isAuthenticated(), controller.code);
 router.post('/assign/:code', auth.isAuthenticated(), controller.assign);
 router.post('/allocateOneAndAssign', auth.isAuthenticated(), controller.allocateOneAndAssign);
 
-router.get('/image/code/:code', auth.isAuthenticated(), controller.image_code);
+router.get('/image/code/:code', auth.isAuthenticated(), controller.image_html);
+router.get('/image/png/:code', auth.isAuthenticated(), controller.image_png);
 
 module.exports = router;
