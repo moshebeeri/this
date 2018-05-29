@@ -52,6 +52,10 @@ exports.terms = function (req, res) {
   return res.status(404).send('Not Found');
 };
 
+exports.version = function (req, res) {
+  return res.status(200).json('1.0.8');
+};
+
 /**
  * Get list of users
  * restriction: 'admin'
