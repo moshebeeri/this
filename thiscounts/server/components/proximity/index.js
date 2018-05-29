@@ -86,12 +86,13 @@ function handleFollowersProximityActions(userId, location, callback) {
                   RETURN distinct promo, entity, labels(entity) as labels, distance(coordinate, promoLocation) as d
                   ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
-
+  console.log(`handleFollowersProximityActions ${query}`);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {
       console.error(err);
       return callback(err);
     }
+    console.log(`handleFollowersProximityActions ${JSON.stringify(eligibilities)}`);
     return callback(null, eligibilities);
   });
 }
@@ -137,6 +138,10 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
     if (err) return callback(err);
     if (!promotion) return callback(new Error('promotion not found for _id:' + eligible.promo._id));
     const action = isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity';
+
+    console.log(`proximityEligibility: (userId=${userId}) 'ON_ACTION_SENT', promotion=${promotion._id}`);
+    graphModel.relate_ids(userId, 'ON_ACTION_SENT', promotion._id,  `{time: timestamp(), action: '${action}'`);
+
     Instance.createSingleInstance(promotion, function (err, instance) {
       activity.activity({
         instance: instance._id,
@@ -145,8 +150,6 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
         action: action,
         location: location
       });
-
-      graphModel.relate_ids(userId, 'ON_ACTION_SENT', eligible.promo._id,  `{time: timestamp(), action: '${action}'`);
 
       Instance.notify(instance, [userId]);
       //Notify new costumer received eligible by proximity
@@ -192,7 +195,7 @@ exports.reportLastLocation = function(userId, location, callback) {
     //console.log(JSON.stringify(eligibilities));
 
     async.each(eligibilities, function(eligible, callback) {
-      proximityEligibility(userId, location, eligible, callback);
+        proximityEligibility(userId, location, eligible, true, callback);
     }, function(err) {
       // if any of the file processing produced an error, err would equal that error
       if( err ) {
@@ -208,7 +211,7 @@ exports.reportLastLocation = function(userId, location, callback) {
     if(!eligibilities)
       return console.log('no eligibilities found');
     async.each(eligibilities, function(eligible, callback) {
-      proximityEligibility(userId, location, eligible, callback);
+      proximityEligibility(userId, location, eligible, false, callback);
     }, function(err) {
       // if any of the file processing produced an error, err would equal that error
       if( err ) {

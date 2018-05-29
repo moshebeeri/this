@@ -6,6 +6,7 @@ const Activity = require('./activity.model');
 let activityUtils = require('../../components/activity').createActivity();
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('activity');
+const fireEvent = require('../../components/firebaseEvent');
 
 // Get list of activities
 exports.index = function (req, res) {
@@ -168,11 +169,7 @@ function shouldBlock(activity) {
     return false;
   }
 
-  if(count>50)
-    return true;
-  else if(checkByType(counts))
-
-  return false;
+  return count>50 || checkByType(counts);
 }
 
 function updateFeedback(activity, userId, type, callback) {
@@ -191,6 +188,9 @@ function updateFeedback(activity, userId, type, callback) {
   feedback[type].push(userId);
   activity.feedback = feedback;
   activity.blocked = shouldBlock(activity);
+  if(activity.blocked)
+    fireEvent.info('blocked', '_activity', 'blocked', {activityId: activity._id.toString()});
+
   activity.save(callback)
 }
 
