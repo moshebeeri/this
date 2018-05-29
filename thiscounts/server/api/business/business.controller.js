@@ -351,7 +351,7 @@ function create_business_default_group(business) {
         if(err) return console.error(err);
         console.log(`graphModel.owner_followers_follow_default_group ${JSON.stringify(results)}`);
         results.forEach(user_group => {
-          fireEvent.info('user', user_group.userId, 'group_user_follow', {
+          fireEvent.info('user', user_group.userId, 'user_follow_group', {
             userId: user_group.userId,
             groupId: user_group.groupId
           });

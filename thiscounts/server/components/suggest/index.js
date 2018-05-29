@@ -106,7 +106,7 @@ Suggest.usersToFollow =
 Suggest.promotionsToNewBusinessFollower =
   Suggest.prototype.promotionsToNewBusinessFollower = function (businessId, userId, callback) {
     const query = `match (u:user{_id:'${userId}'})-[:FOLLOW]->(b:business{_id:'${businessId}'})<-[:BUSINESS_PROMOTION]-(p:promotion)<-[:INSTANCE_OF]-(i:instance)
-                   where not (u)-[:SAVED]->(saved:SavedInstance)-[:SAVE_OF]->(i)
+                   where not (u)-[:SAVED]->(:SavedInstance)-[:SAVE_OF]->(i)
                          and i.quantity > 0
                    return distinct i._id as instanceId, p._id as promotionId limit 5`;
     graphModel.query(query, (err, suggestions) => {

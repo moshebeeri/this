@@ -86,13 +86,13 @@ function handleFollowersProximityActions(userId, location, callback) {
                   RETURN distinct promo, entity, labels(entity) as labels, distance(coordinate, promoLocation) as d
                   ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
-  console.log(`handleFollowersProximityActions ${query}`);
+  //console.log(`handleFollowersProximityActions ${query}`);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {
       console.error(err);
       return callback(err);
     }
-    console.log(`handleFollowersProximityActions ${JSON.stringify(eligibilities)}`);
+    //console.log(`handleFollowersProximityActions ${JSON.stringify(eligibilities)}`);
     return callback(null, eligibilities);
   });
 }
@@ -115,11 +115,13 @@ function handleProximityActions(userId, location, callback) {
                   ORDER BY d desc
                   SKIP ${skip} LIMIT ${limit}`;
 
+  //console.log(`handleProximityActions ${query}`);
   graphModel.query(query, function (err, eligibilities) {
     if (err) {
       console.error(err);
       return callback(err);
     }
+    //console.log(`handleProximityActions ${JSON.stringify(eligibilities)}`);
     return callback(null, eligibilities);
   });
 }
@@ -139,8 +141,8 @@ function proximityEligibility(userId, location, eligible, isFollower, callback) 
     if (!promotion) return callback(new Error('promotion not found for _id:' + eligible.promo._id));
     const action = isFollower? 'follower_eligible_by_proximity' : 'eligible_by_proximity';
 
-    console.log(`proximityEligibility: (userId=${userId}) 'ON_ACTION_SENT', promotion=${promotion._id}`);
-    graphModel.relate_ids(userId, 'ON_ACTION_SENT', promotion._id,  `{time: timestamp(), action: '${action}'`);
+    //console.log(`proximityEligibility: (userId=${userId}) 'ON_ACTION_SENT', promotion=${promotion._id}`);
+    graphModel.relate_ids(userId, 'ON_ACTION_SENT', promotion._id,  `{time: timestamp(), action: '${action}'}`);
 
     Instance.createSingleInstance(promotion, function (err, instance) {
       activity.activity({
@@ -189,9 +191,9 @@ exports.reportLastLocation = function(userId, location, callback) {
   //   if (err) return console.error(err);
   // }
   handleFollowersProximityActions(userId, location, function (err, eligibilities) {
-    if(err) return console.log('error calling handleFollowersProximityActions');
+    if(err) return console.error('error calling handleFollowersProximityActions');
     if(!eligibilities)
-      return console.log('no eligibilities found');
+      return console.error('no eligibilities found');
     //console.log(JSON.stringify(eligibilities));
 
     async.each(eligibilities, function(eligible, callback) {
@@ -199,7 +201,7 @@ exports.reportLastLocation = function(userId, location, callback) {
     }, function(err) {
       // if any of the file processing produced an error, err would equal that error
       if( err ) {
-        console.log('handleFollowersProximityActions - one of the eligible failed to process with the following error:');
+        console.error('handleFollowersProximityActions - one of the eligible failed to process with the following error:');
         console.error(err);
       }
       //const entitiesUniqueIds = [...new Set( eligibilities.map(eligible => eligible.entity)) ];
@@ -207,15 +209,15 @@ exports.reportLastLocation = function(userId, location, callback) {
   });
 
   handleProximityActions(userId, location, function (err, eligibilities) {
-    if(err) return console.log('error calling handleFollowersProximityActions');
+    if(err) return console.error('error calling handleFollowersProximityActions');
     if(!eligibilities)
-      return console.log('no eligibilities found');
+      return console.error('no eligibilities found');
     async.each(eligibilities, function(eligible, callback) {
       proximityEligibility(userId, location, eligible, false, callback);
     }, function(err) {
       // if any of the file processing produced an error, err would equal that error
       if( err ) {
-        console.log('handleFollowersProximityActions - one of the eligible failed to process with the following error:');
+        console.error('handleFollowersProximityActions - one of the eligible failed to process with the following error:');
         console.error(err);
       }
       //const entitiesUniqueIds = [...new Set( eligibilities.map(eligible => eligible.entity)) ];
@@ -230,8 +232,8 @@ exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
 
   ProximityModel.findById(userId, function (err, proximity) {
     if (err) return console.error(err);
-    if (!proximity) return console.log(`no proximity for user ${userId}`);
-    if (!proximity.location) return console.log(`no proximity.location for user ${userId}`);
+    if (!proximity) return console.error(`no proximity for user ${userId}`);
+    if (!proximity.location) return console.error(`no proximity.location for user ${userId}`);
 
     let coordinate = spatial.location_to_special(proximity.location);
 
