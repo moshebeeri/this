@@ -2,6 +2,7 @@ import getStore from "../store";
 import asyncListener from "../api/AsyncListeners";
 import SyncUtils from "./SyncerUtils";
 import * as types from '../saga/sagaActions';
+import * as actions from '../reducers/reducerActions';
 
 const store = getStore();
 
@@ -85,6 +86,18 @@ class DataSync {
     }
 
     syncMainFeed(user, state, dispatch) {
+        asyncListener.addListener('blocked_activity', (snap) => {
+            let response = snap.val();
+            if (response && response.activityId) {
+                const activities = state.activities.activities;
+                if (activities[response.activityId]) {
+                    dispatch({
+                        type: actions.REMOVE_FEED,
+                        activityId: response.activityId,
+                    });
+                }
+            }
+        });
         if (user) {
             asyncListener.addListener('feed_' + user._id, (snap) => {
                 let response = snap.val();

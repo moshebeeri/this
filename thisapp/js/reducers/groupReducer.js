@@ -64,10 +64,7 @@ export default function group(state = initialState, action) {
             immutableState.update = true;
             return immutableState;
         case actions.REMOVE_FEED:
-            if (action.groupId) {
-                immutableState.update = true;
-                return immutableState;
-            }
+            immutableState.update = true;
             return immutableState;
         case actions.UPSERT_GROUP_FEEDS_BOTTOM:
             action.groupFeed.forEach(item => {

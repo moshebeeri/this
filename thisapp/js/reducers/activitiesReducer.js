@@ -21,7 +21,9 @@ export default function activities(state = initialState, action) {
             });
             return activityState;
         case actions.REMOVE_FEED:
-            currentActivities[action.activityId].blocked = true;
+            if(currentActivities[action.activityId]) {
+                currentActivities[action.activityId].blocked = true;
+            }
             return activityState;
         default:
             return state;
