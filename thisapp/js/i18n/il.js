@@ -339,7 +339,7 @@ const il = {
     MessageIsDeleted                              : "הודעה נחמקה",
     PromotionName                                 : "כותרת ההנחה",
     PromotioDescription                           : "תאור / הסבר",
-    Version                                       : "גירסה {0ֿ}",
+    Version                                       : "גירסה {0}",
 };
 
 export default il;

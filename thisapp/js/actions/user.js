@@ -1,5 +1,6 @@
 import UserApi from "../api/user";
 import LoginAPI from "../api/login";
+import LocationApi from "../api/location";
 import * as actions from "../reducers/reducerActions";
 import * as errors from "../api/Errors";
 import simpleStore from 'react-native-simple-store';
@@ -10,6 +11,7 @@ import * as types from '../saga/sagaActions';
 import handler from './ErrorHandler'
 
 let userApi = new UserApi();
+let locationApi = new LocationApi();
 let loginApi = new LoginAPI();
 let logger = new ActionLogger();
 
@@ -56,8 +58,11 @@ export function fetchUsers() {
 export function getServerVersion() {
     return async function (dispatch, getState) {
         const token = getState().authentication.token
+        const location = getState().phone.currentLocation;
         if (token) {
             try {
+                locationApi.sendLocation(location.long, location.lat, new Date().getTime(), 0);
+
                 let version = await userApi.getServerVersion(token);
                 dispatch({
                     type: actions.SERVER_VERSION,
