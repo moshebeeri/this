@@ -6,7 +6,7 @@ import * as actions from "../reducers/reducerActions";
 import ActionLogger from './ActionLogger'
 import * as errors from '../api/Errors'
 import handler from './ErrorHandler'
-
+import SyncUtils from "../sync/SyncerUtils";
 let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let groupApi = new GroupApi();
@@ -123,7 +123,9 @@ export function realizePromotion(code) {
         const token = getState().authentication.token;
         try {
             dispatch({type: actions.SCANNER_RESET});
-            await promotionApi.realizePromotion(code, token)
+            let response = await promotionApi.realizePromotion(code, token);
+            SyncUtils.invokePromotionSocialChange(response.savedInstance.instance.promotion._id);
+            console.log(response)
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'scanner-realizePromotion')

@@ -1,4 +1,13 @@
-const initialState = {socialState: [], groups: [], businesses: [], promotions: [], chats: {}, chatsGroups: {},chatsGroupInstance:{}};
+const initialState = {
+    syncMessages: {},
+    socialState: [],
+    groups: [],
+    businesses: [],
+    promotions: [],
+    chats: {},
+    chatsGroups: {},
+    chatsGroupInstance: {}
+};
 import * as actions from './reducerActions';
 import {REHYDRATE} from 'redux-persist/constants'
 
@@ -51,7 +60,6 @@ export default function syncServer(state = initialState, action) {
                 syncServerState.chatsGroups[action.groupId][action.id] = action.entities;
             }
             return syncServerState;
-
         case actions.CHAT_LISTENER_GROUP_INSTANCE:
             if (!syncServerState.chatsGroupInstance[action.groupId]) {
                 syncServerState.chatsGroupInstance[action.groupId] = [];
@@ -59,6 +67,9 @@ export default function syncServer(state = initialState, action) {
             if (!syncServerState.chatsGroupInstance[action.groupId].includes(action.id)) {
                 syncServerState.chatsGroupInstance[action.groupId].push(action.id);
             }
+            return syncServerState;
+        case actions.SYNC_MESSAGE:
+            syncServerState.syncMessages[action.id] = action.lastMessage;
             return syncServerState;
         default:
             return state;

@@ -71,7 +71,7 @@ class DataSync {
                                 token: token, user: user
                             });
                     }
-                    asyncListener.markAsRead(snap.key);
+
                 }
             })
             asyncListener.addListener('business_' + user._id, (snap) => {
@@ -80,7 +80,7 @@ class DataSync {
                     type: types.UPDATE_BUSINESS_REQUEST,
                     token: token,
                 })
-                asyncListener.markAsRead(snap.key);
+
             })
         }
     }
@@ -112,7 +112,7 @@ class DataSync {
                             user: user,
                         });
                     }
-                    asyncListener.markAsRead(snap.key);
+
                 }
             })
         }
