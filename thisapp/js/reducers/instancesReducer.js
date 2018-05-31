@@ -38,6 +38,7 @@ export default function instances(state = initialState, action) {
 
             if (action.social_state && currentState.instances[action.id]) {
                 currentState.instances[action.id].social_state = action.social_state;
+                currentState.instances[action.id].social_state.updatedTime = new Date().getTime();
                 return currentState;
             } else {
                 return state;

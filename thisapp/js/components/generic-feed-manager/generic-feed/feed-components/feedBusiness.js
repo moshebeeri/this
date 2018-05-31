@@ -121,6 +121,7 @@ export default class FeedBusiness extends Component {
                                      onPressLike={() => like(item.id)}
                                      sharable={item.sharable}
                                      groupChat={group}
+                                     social={item.social}
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
 
 

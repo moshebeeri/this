@@ -197,6 +197,7 @@ export default class FeedPost extends Component {
                                      shareDisabled={shared}
                                      groupChat={group && group.chat_policy === 'ON'}
                                      sharable={item.sharable}
+                                     social={item.social}
                                      share={item.social.share} shares={item.social.shares}
                                      shareAction={showUsers}/>
                     </View> : <View style={[styles.post_bottomContainer, {

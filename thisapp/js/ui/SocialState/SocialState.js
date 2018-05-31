@@ -15,11 +15,29 @@ export default class SocialState extends Component {
         this.state = {
             type: '',
             valid: true,
+
         }
+    }
+
+    componentWillMount() {
+        const {like,likes} = this.props;
+        this.setState({like: like,likes:likes,updatedTime: new Date().getTime()});
     }
 
     isValid() {
         return true;
+    }
+
+    like() {
+        const {onPressLike} = this.props
+        this.setState({like: true, likes: this.state.likes + 1,updatedTime: new Date().getTime()});
+        onPressLike()
+    }
+
+    unlike() {
+        const {onPressUnLike} = this.props
+        this.setState({like: false,likes: this.state.likes -1,updatedTime: new Date().getTime()});
+        onPressUnLike();
     }
 
     render() {
@@ -47,7 +65,8 @@ export default class SocialState extends Component {
             }
         }
         return <View transparent style={styles.promotion_iconView}>
-            <Ionicons size={StyleUtils.scale(40)} color={componenColor} style={{marginRight: 10, width: StyleUtils.scale(40), height: StyleUtils.scale(40)}}
+            <Ionicons size={StyleUtils.scale(40)} color={componenColor}
+                      style={{marginRight: 10, width: StyleUtils.scale(40), height: StyleUtils.scale(40)}}
                       name="ios-people"/>
             <ThisText style={styles.socialTextColor}>{followers}</ThisText>
         </View>;
@@ -83,7 +102,8 @@ export default class SocialState extends Component {
         }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
-                <SimpleLineIcons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10, width: 40, height: 40}}
+                <SimpleLineIcons size={StyleUtils.scale(30)} color={componenColor}
+                                 style={{marginRight: 10, width: 40, height: 40}}
                                  name="bubbles"/>
 
                 <ThisText style={styles.socialTextColor}>{comments}</ThisText>
@@ -97,7 +117,7 @@ export default class SocialState extends Component {
     }
 
     createLikeButton() {
-        const {like, likes, disabled, onPressUnLike, onPressLike, feed} = this.props;
+        const {  disabled, feed,social,likes} = this.props;
         let componenColor = '#e19c73';
         if (feed) {
             componenColor = '#2db6c8';
@@ -105,29 +125,34 @@ export default class SocialState extends Component {
                 componenColor = '#cccccc';
             }
         }
+
+        let numberOfLikes = this.state.likes;
+        if(this.state.updatedTime < social.updatedTime){
+            numberOfLikes = likes;
+        }
         if (disabled) {
             return <View transparent style={styles.promotion_iconView}>
 
                 <Ionicons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                           name="md-heart-outline"/>
-                <ThisText style={styles.socialTextColor}>{likes}</ThisText>
+                <ThisText style={styles.socialTextColor}>{numberOfLikes}</ThisText>
             </View>
         }
-        if (like) {
-            return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressUnLike}>
+        if (this.state.like) {
+            return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={this.unlike.bind(this)}>
 
 
                 <Ionicons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                           name="md-heart"/>
-                <ThisText style={styles.socialTextColor}>{likes}</ThisText>
+                <ThisText style={styles.socialTextColor}>{numberOfLikes}</ThisText>
 
             </TouchableOpacityFix>
         }
-        return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={onPressLike}>
+        return <TouchableOpacityFix transparent style={styles.promotion_iconView} onPress={this.like.bind(this)}>
 
             <Ionicons size={StyleUtils.scale(30)} color={componenColor} style={{marginRight: 10}}
                       name="md-heart-outline"/>
-            <ThisText style={styles.socialTextColor}>{likes}</ThisText>
+            <ThisText style={styles.socialTextColor}>{numberOfLikes}</ThisText>
 
         </TouchableOpacityFix>
     }
@@ -170,5 +195,7 @@ export default class SocialState extends Component {
             <ThisText style={styles.socialTextColor}>{shares}</ThisText>
         </TouchableOpacityFix>;
     }
+
+
 }
 

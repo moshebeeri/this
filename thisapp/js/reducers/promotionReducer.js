@@ -49,6 +49,7 @@ export default function promotion(state = initialState, action) {
         case actions.FEED_UPDATE_SOCIAL_STATE:
             if (action.social_state && currentPromotions[action.id]) {
                 currentPromotions[action.id].social_state = action.social_state;
+                currentPromotions[action.id].social_state.updatedTime = new Date().getTime();
             }
             promotionsState.promotions = currentPromotions;
             return promotionsState;
