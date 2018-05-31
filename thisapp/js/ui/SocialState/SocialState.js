@@ -29,14 +29,22 @@ export default class SocialState extends Component {
     }
 
     like() {
-        const {onPressLike} = this.props
-        this.setState({like: true, likes: this.state.likes + 1,updatedTime: new Date().getTime()});
+        const {onPressLike,likes,social} = this.props;
+        let numberOfLikes = this.state.likes;
+        if(this.state.updatedTime < social.updatedTime){
+            numberOfLikes = likes;
+        }
+        this.setState({like: true, likes: numberOfLikes + 1,updatedTime: new Date().getTime()});
         onPressLike()
     }
 
     unlike() {
-        const {onPressUnLike} = this.props
-        this.setState({like: false,likes: this.state.likes -1,updatedTime: new Date().getTime()});
+        const {onPressUnLike,likes,social} = this.props
+        let numberOfLikes = this.state.likes;
+        if(this.state.updatedTime < social.updatedTime){
+            numberOfLikes = likes;
+        }
+        this.setState({like: false,likes: numberOfLikes -1,updatedTime: new Date().getTime()});
         onPressUnLike();
     }
 
