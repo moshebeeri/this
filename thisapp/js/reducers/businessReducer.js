@@ -143,6 +143,7 @@ export default function business(state = initialState, action) {
         case actions.FEED_UPDATE_SOCIAL_STATE:
             if (businessesState.businesses[action.id]) {
                 businessesState.businesses[action.id].social_state = action.social_state;
+                businessesState.businesses[action.id].social_state.updatedTime = new Date().getTime();
                 return businessesState;
             } else {
                 return state;
