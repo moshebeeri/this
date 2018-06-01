@@ -9,7 +9,7 @@ let graphModel = graphTools.createGraphModel('cart');
 exports.index = function(req, res) {
   Cart.find(function (err, carts) {
     if(err) { return handleError(res, err); }
-    return res.json(200, carts);
+    return res.status(200).json(carts);
   });
 };
 
@@ -17,8 +17,8 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   Cart.findById(req.params.id, function (err, cart) {
     if(err) { return handleError(res, err); }
-    if(!cart) { return res.send(404); }
-    return res.json(cart);
+    if(!cart) { return res.status(404).send(); }
+    return res.status(200).json(cart);
   });
 };
 
@@ -29,7 +29,7 @@ exports.create = function(req, res) {
     graphModel.reflect(cart, function (err) {
       if (err) {  return handleError(res, err); }
     });
-    return res.json(201, cart);
+    return res.status(201).json(cart);
   });
 };
 
@@ -38,11 +38,11 @@ exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
   Cart.findById(req.params.id, function (err, cart) {
     if (err) { return handleError(res, err); }
-    if(!cart) { return res.send(404); }
+    if(!cart) { return res.status(404).send(); }
     let updated = _.merge(cart, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, cart);
+      return res.status(200).json(cart);
     });
   });
 };
@@ -51,14 +51,14 @@ exports.update = function(req, res) {
 exports.destroy = function(req, res) {
   Cart.findById(req.params.id, function (err, cart) {
     if(err) { return handleError(res, err); }
-    if(!cart) { return res.send(404); }
+    if(!cart) { return res.status(404).send(); }
     cart.remove(function(err) {
       if(err) { return handleError(res, err); }
-      return res.send(204);
+      return res.status(204).send();
     });
   });
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).json(err.message);
 }
