@@ -41,7 +41,7 @@ export default class SocialState extends Component {
     unlike() {
         const {onPressUnLike,likes,social} = this.props
         let numberOfLikes = this.state.likes;
-        if(this.state.updatedTime < social.updatedTime){
+        if(social && this.state.updatedTime < social.updatedTime){
             numberOfLikes = likes;
         }
         this.setState({like: false,likes: numberOfLikes -1,updatedTime: new Date().getTime()});
@@ -135,7 +135,7 @@ export default class SocialState extends Component {
         }
 
         let numberOfLikes = this.state.likes;
-        if(this.state.updatedTime < social.updatedTime){
+        if(social && this.state.updatedTime < social.updatedTime){
             numberOfLikes = likes;
         }
         if (disabled) {
