@@ -240,8 +240,9 @@ class AddBusiness extends Component {
     }
 
     setCoverImage(image) {
+
         this.setReduxState({
-            coverImage: {uri: image.path, width: image.width, height: image.height, mime: image.mime},
+            coverImage: {uri: image.path, width: image.width, height: image.height, mime: image.mime,inServer:image.inServer},
             coverPath: image.path
         });
     }
@@ -314,7 +315,7 @@ class AddBusiness extends Component {
                 return <TouchableOpacity onPress={this.openLogoMenu.bind(this)}
                                          style={styles.business_no_pic_upper_image_container}>
 
-                    <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory color='black' pickFromCamera
+                    <ImagePicker logo name={"logoImage"} ref={"logoImage"}  mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
                     <ThisText>{strings.Logo}</ThisText>
 
@@ -323,7 +324,7 @@ class AddBusiness extends Component {
                 return <TouchableOpacity onPress={this.openLogoMenu.bind(this)}
                                          style={styles.business_no_pic_no_cover_upper_image_container}>
 
-                    <ImagePicker logo name={"logoImage"} ref={"logoImage"} mandatory color='black' pickFromCamera
+                    <ImagePicker logo name={"logoImage"} ref={"logoImage"}  mandatory color='black' pickFromCamera
                                  setImage={this.setImage.bind(this)}/>
                     <ThisText>{strings.Logo}</ThisText>
 
@@ -361,14 +362,14 @@ class AddBusiness extends Component {
             return (
                 <View style={styles.addCoverContainer}>
                     <ImagePicker name={"coverImage"} ref={"coverImage"} mandatory image={coverImage} color='white'
-                                 pickFromCamera
+                                 pickFromCamera addDefault
                                  setImage={this.setCoverImage.bind(this)}/>
                 </View>)
         }
         return (
             <TouchableOpacity onPress={this.openoMenu.bind(this)} style={styles.addCoverNoImageContainer}>
                 {this.createImageComponent(false)}
-                <ImagePicker name={"coverImage"} ref={"coverImage"} mandatory color='white' pickFromCamera
+                <ImagePicker name={"coverImage"} ref={"coverImage"} mandatory addDefault color='white' pickFromCamera
                              setImage={this.setCoverImage.bind(this)}/>
                 <ThisText style={styles.addCoverText}>{strings.AddACoverPhoto}</ThisText>
             </TouchableOpacity>)

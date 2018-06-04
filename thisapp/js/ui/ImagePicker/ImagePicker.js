@@ -5,9 +5,20 @@ import {Menu, MenuOption, MenuOptions, MenuTrigger,} from 'react-native-popup-me
 import Icon from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker'
 import strings from "../../i18n/i18n"
-import {ThisText} from '../../ui/index';
+import {ImageController, ThisText} from '../../ui/index';
 import StyleUtils from '../../utils/styleUtils';
-
+const Images = ["basket_bakground.jpg",
+    "blackfabrique_background.jpg",
+    "blueglass_background.jpg",
+    "bread_background.jpg",
+    "metal_background.jpg",
+    "Spruce_backgrouns.jpg",
+    "stow_background.jpg",
+    "sunflower_background.jpg",
+    "sweets_background.jpg",
+    "thisnetwork_background.png",
+    "wofer_background.jpg",
+    "wood_background.jpg"]
 export default class ImagePickerComponent extends Component {
     constructor(props) {
         super(props);
@@ -26,9 +37,9 @@ export default class ImagePickerComponent extends Component {
 
     openMenu() {
         if (this.state.name) {
-            this.refs[this.state.name  + this.state.time].open();
+            this.refs[this.state.name + this.state.time].open();
         } else {
-            this.refs["picker"  + this.state.time].open();
+            this.refs["picker" + this.state.time].open();
         }
     }
 
@@ -46,20 +57,20 @@ export default class ImagePickerComponent extends Component {
     }
 
     async pickFromCamera() {
-        const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
+        const {setImage, imageWidth, imageHeight, logo, cropDisable} = this.props;
         let cropping = true;
-        if(cropDisable){
+        if (cropDisable) {
             cropping = false;
         }
-        let width =  1920;
+        let width = 1920;
         let height = 1080;
         if (logo) {
             height = 1080;
-            width =  1080;
+            width = 1080;
         }
         try {
             let image = await ImagePicker.openCamera({
-                mediaType:'photo',
+                mediaType: 'photo',
                 cropping: cropping,
                 width: width,
                 height: height,
@@ -90,22 +101,27 @@ export default class ImagePickerComponent extends Component {
         }
     }
 
+    pickDefault(url) {
+        const {setImage} = this.props;
+        setImage({path:url,inServer:true});
+    }
+
     async pickPictureNoCropp() {
-        const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
+        const {setImage, imageWidth, imageHeight, logo, cropDisable} = this.props;
         let cropping = true;
-        if(cropDisable){
+        if (cropDisable) {
             cropping = false;
         }
-        let width =  1920;
+        let width = 1920;
         let height = 1080;
         if (logo) {
             height = 1080;
-            width =  1080;
+            width = 1080;
         }
         try {
             let image = await ImagePicker.openPicker({
                 cropping: false,
-                mediaType:'photo',
+                mediaType: 'photo',
                 width: width,
                 height: height,
                 compressImageQuality: 1,
@@ -120,23 +136,24 @@ export default class ImagePickerComponent extends Component {
             console.log(e);
         }
     }
+
 //w:1920 × h:1080
     async pickPicture() {
-        const {setImage, imageWidth, imageHeight, logo,cropDisable} = this.props;
+        const {setImage, imageWidth, imageHeight, logo, cropDisable} = this.props;
         let cropping = true;
-        if(cropDisable){
+        if (cropDisable) {
             cropping = false;
         }
-        let width =  1920;
+        let width = 1920;
         let height = 1080;
         if (logo) {
             height = 1080;
-            width =  1080;
+            width = 1080;
         }
         try {
             let image = await ImagePicker.openPicker({
                 cropping: cropping,
-                mediaType:'photo',
+                mediaType: 'photo',
                 width: width,
                 height: height,
                 compressImageQuality: 1,
@@ -153,7 +170,7 @@ export default class ImagePickerComponent extends Component {
     }
 
     render() {
-        const {color, image, video, customStyles, text} = this.props;
+        const {color, image, video, customStyles, text, addDefault} = this.props;
         let cameraColor = '#003d99';
         if (color) {
             cameraColor = color;
@@ -174,12 +191,13 @@ export default class ImagePickerComponent extends Component {
         let videoPickerOption;
         if (video) {
             videoPickerOption = <MenuOption onSelect={this.pickVideo.bind(this)}>
-                <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingTop:0}}>{strings.PickVideo}</ThisText>
+                <ThisText
+                    style={{fontSize: StyleUtils.scale(14), padding: 10, paddingTop: 0}}>{strings.PickVideo}</ThisText>
             </MenuOption>
         }
-        let name = "picker"  + this.state.time;
+        let name = "picker" + this.state.time;
         if (this.state.name) {
-            name = this.state.name  + this.state.time;
+            name = this.state.name + this.state.time;
         }
         return <Menu ref={name} name={name}>
             <MenuTrigger customStyles={customStyles}>
@@ -187,14 +205,32 @@ export default class ImagePickerComponent extends Component {
             </MenuTrigger>
             <MenuOptions>
                 <MenuOption onSelect={this.pickPictureNoCropp.bind(this)}>
-                    <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingBottom:0,paddingTop:10}}>{strings.FastPick}</ThisText>
+                    <ThisText style={{
+                        fontSize: StyleUtils.scale(14),
+                        padding: 10,
+                        paddingBottom: 0,
+                        paddingTop: 10
+                    }}>{strings.FastPick}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
-                    <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingBottom:5}}>{strings.TakePictures}</ThisText>
+                    <ThisText style={{
+                        fontSize: StyleUtils.scale(14),
+                        padding: 10,
+                        paddingBottom: 5
+                    }}>{strings.TakePictures}</ThisText>
                 </MenuOption>
                 <MenuOption onSelect={this.pickPicture.bind(this)}>
-                    <ThisText style={{fontSize:StyleUtils.scale(14),padding:10,paddingTop:5}}>{strings.PickFromPhotos}</ThisText>
+                    <ThisText style={{
+                        fontSize: StyleUtils.scale(14),
+                        padding: 10,
+                        paddingTop: 5
+                    }}>{strings.PickFromPhotos}</ThisText>
                 </MenuOption>
+                {addDefault && Images.map(image => { return <MenuOption onSelect={this.pickDefault.bind(this,'https://s3.amazonaws.com/thiscounts/backgrounds/' + image)}>
+                    <View style={{flexDirection: 'row'}}>
+                        <ImageController source={{uri: 'https://s3.amazonaws.com/thiscounts/backgrounds/'+ image}} thumbnail size={30} square/>
+                    </View>
+                </MenuOption>})}
                 {videoPickerOption}
 
             </MenuOptions>

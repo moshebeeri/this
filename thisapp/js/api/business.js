@@ -37,6 +37,17 @@ class BusinessApi {
             body: JSON.stringify(business)
         }, 'businesses', '/update');
     }
+    updatePicturess(id,pictures, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/businesses/pictures/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify(pictures)
+        }, 'businesses', '/update');
+    }
 
     get(token, id) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/businesses/${id}`, {
