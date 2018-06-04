@@ -162,6 +162,7 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
+        I18nManager.forceRTL(true);
         codePush.sync({
             updateDialog: true,
             installMode: codePush.InstallMode.IMMEDIATE
