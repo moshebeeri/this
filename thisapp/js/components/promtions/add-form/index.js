@@ -202,7 +202,14 @@ class AddPromotion extends Component {
         this.refs["coverImage"].openMenu();
     }
 
+
     async componentWillMount() {
+        const{templatePromotion} = this.props;
+        if(templatePromotion.businessId  === this.getBusinessId()){
+            this.setState(templatePromotion);
+        }
+
+        this.setState({businessId: this.getBusinessId()})
         if (this.props.navigation.state.params.onBoardType) {
             this.setState({toggle: true, onBoardType: this.props.navigation.state.params.onBoardType});
             return;
@@ -218,7 +225,6 @@ class AddPromotion extends Component {
             this.setPromotion(this.props.navigation.state.params.followerProximity);
             return;
         }
-        this.props.actions.resetForm();
         try {
             if (this.props.navigation.state.params && this.props.navigation.state.params.item) {
                 let item = this.props.navigation.state.params.item;
@@ -277,6 +283,7 @@ class AddPromotion extends Component {
             let businessId = this.getBusinessId();
             let simpleProductPercent = !this.state.toggle && this.state.discount_on === 'PRODUCT' && this.state.type === 'PERCENT'
             actions.savePromotion(promotion, businessId, navigation, simpleProductPercent)
+            actions.resetForm()
         }
     }
 
@@ -295,7 +302,7 @@ class AddPromotion extends Component {
         if (!image && promotion.pictures && promotion.pictures.length > 0) {
             image = promotion.pictures[0].pictures[0]
         }
-        this.setState({
+        this.setReduxState({
             image: image,
             type: promotion.type,
             // percent_range: this.state.percent_range,
@@ -305,6 +312,10 @@ class AddPromotion extends Component {
             name: promotion.name,
         })
         //TODO add all parameters
+    }
+    async setReduxState(value) {
+        this.setState(value);
+        this.props.actions.savePromotionsTemplate(this.state);
     }
 
     createPromotionFromState() {
@@ -437,7 +448,7 @@ class AddPromotion extends Component {
     }
 
     async selectDiscount(value) {
-        this.setState({
+        this.setReduxState({
             type: value,
             choose_distribution: false,
             showProductsList: false,
@@ -446,25 +457,25 @@ class AddPromotion extends Component {
             show_save: false,
         });
         if (this.props.navigation.state.params.group) {
-            this.setState({
+            this.setReduxState({
                 distribution: 'GROUP',
                 show_save: true,
             })
         } else {
-            this.setState({
+            this.setReduxState({
                 distribution: '',
             })
         }
     }
 
     async selectDiscountType(value) {
-        this.setState({
+        this.setReduxState({
             discount_on: value
         })
     }
 
     setQuantity(quantity) {
-        this.setState({
+        this.setReduxState({
             quantity: quantity
         })
     }
@@ -479,7 +490,7 @@ class AddPromotion extends Component {
     }
 
     selectProduct(product) {
-        this.setState({
+        this.setReduxState({
             product: product,
             showProductsList: false,
         })
@@ -496,47 +507,47 @@ class AddPromotion extends Component {
                         <PercentComponent currencySymbol={currencySymbol} toggle={this.state.toggle}
                                           navigation={this.props.navigation} api={this}
                                           state={this.state}
-                                          ref={"precent"} setState={this.setState.bind(this)}/>;
+                                          ref={"precent"} setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'PUNCH_CARD':
                     discountForm = <PunchCardComponent navigation={this.props.navigation} api={this} state={this.state}
-                                                       ref={"PUNCH_CARD"} setState={this.setState.bind(this)}/>;
+                                                       ref={"PUNCH_CARD"} setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'X+Y':
                     discountForm =
                         <XPlusYComponent currencySymbol={currencySymbol} ref={"X+Y"} navigation={this.props.navigation}
                                          api={this} state={this.state}
-                                         setState={this.setState.bind(this)}/>;
+                                         setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'GIFT':
                     discountForm =
                         <GiftComponent currencySymbol={currencySymbol} ref={"GIFT"} navigation={this.props.navigation}
                                        api={this} state={this.state}
-                                       setState={this.setState.bind(this)}/>;
+                                       setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'X+N%OFF':
                     discountForm = <XPlusYOffComponent currencySymbol={currencySymbol} ref={"X+N%OFF"}
                                                        navigation={this.props.navigation} api={this}
                                                        state={this.state}
-                                                       setState={this.setState.bind(this)}/>;
+                                                       setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'X_FOR_Y':
                     discountForm =
                         <XForYComponent currencySymbol={currencySymbol} ref={"X_FOR_Y"}
                                         navigation={this.props.navigation} api={this} state={this.state}
-                                        setState={this.setState.bind(this)}/>;
+                                        setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'REDUCED_AMOUNT':
                     discountForm =
                         <ReduceAmountComponent ref={"REDUCED_AMOUNT"} navigation={this.props.navigation} api={this}
                                                state={this.state}
                                                currencySymbol={currencySymbol}
-                                               setState={this.setState.bind(this)}/>;
+                                               setState={this.setReduxState.bind(this)}/>;
                     break;
                 case 'HAPPY_HOUR':
                     discountForm = <HappyHourComponent ref={"HAPPY_HOUR"} navigation={this.props.navigation} api={this}
                                                        state={this.state}
-                                                       setState={this.setState.bind(this)}/>;
+                                                       setState={this.setReduxState.bind(this)}/>;
                     break;
             }
         }
@@ -552,12 +563,12 @@ class AddPromotion extends Component {
 
     selectDistributionType(type) {
         if (type === 'PERSONAL') {
-            this.setState({
+            this.setReduxState({
                 distribution: type,
                 show_save: true,
             })
         } else {
-            this.setState({
+            this.setReduxState({
                 distribution: type,
                 show_save: false,
             })
@@ -565,12 +576,12 @@ class AddPromotion extends Component {
     }
 
     selectProximity(proximity) {
-        this.setState({proximity: proximity});
+        this.setReduxState({proximity: proximity});
     }
 
     selectGroup(group) {
         if (group && group.length > 0) {
-            this.setState({
+            this.setReduxState({
                 groups: group,
                 show_save: true,
             })
@@ -586,9 +597,14 @@ class AddPromotion extends Component {
     }
 
     createDistributionForm() {
+        const distributionToString = Distribution.reduce(function(map, obj) {
+            map[obj.value] = obj.label;
+            return map;})
+        distributionToString[Distribution[0].value] = Distribution[0].label
         let distribution = <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
             <SimplePicker ref="TypePicker" list={Distribution} itemTitle={strings.DistributionType}
                           defaultHeader={strings.ChooseDistribution}
+                          value={distributionToString[this.state.distribution]}
                           isMandatory onValueSelected={this.selectDistributionType.bind(this)}/>
         </View>;
         let button = undefined;
@@ -628,9 +644,14 @@ class AddPromotion extends Component {
     }
 
     createProximityForm() {
+        const proximityToString = Proximity.reduce(function(map, obj) {
+            map[obj.value] = obj.label;
+            return map;})
+        proximityToString[Proximity[0].value] = Proximity[0].label
         let proximity = <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
             <SimplePicker ref="TypePicker" list={Proximity} itemTitle={strings.Proximity}
                           defaultHeader={strings.chooseProximityDistance}
+                          value={distributionToString[this.state.proximity]}
                           isMandatory onValueSelected={this.selectProximity.bind(this)}/>
         </View>;
         return <View>
@@ -677,7 +698,7 @@ class AddPromotion extends Component {
     setToggleOff() {
         let defaultDate = this.getDefaultDate(false);
         this.refs["discountType"].selectPromotionType("PERCENT");
-        this.setState({
+        this.setReduxState({
             token: '',
             path: '',
             type: 'PERCENT',
@@ -710,7 +731,7 @@ class AddPromotion extends Component {
     setToggleOn() {
         let defaultDate = this.getDefaultDate(true);
         this.refs["discountType"].selectPromotionType('');
-        this.setState({
+        this.setReduxState({
             token: '',
             path: '',
             type: '',
@@ -741,7 +762,7 @@ class AddPromotion extends Component {
     }
 
     selectPromotionType(type) {
-        this.setState({
+        this.setReduxState({
             onBoardType: type,
         })
     }
@@ -783,6 +804,15 @@ class AddPromotion extends Component {
     }
 
     createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed) {
+        const typeToString = types.reduce(function(map, obj) {
+            map[obj.value] = obj.label;
+            return map;})
+        typeToString[types[0].value] = types[0].label
+        const promotiontypeToString = promotion_type.reduce(function(map, obj) {
+            map[obj.value] = obj.label;
+            return map;})
+        promotiontypeToString[promotion_type[0].value] = promotion_type[0].label
+
         return <View>
             <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                         title={strings.AddPromotion} bgc="#FA8559"/>
@@ -826,18 +856,21 @@ class AddPromotion extends Component {
                     <TextInput field={strings.PromotionName} value={this.state.name}
                                returnKeyType='done' ref="4" refNext="4"
 
-                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                               onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
                 </View>}
                 {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                     {header ?
                         <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
-                                      selectedValue={this.props.navigation.state.params.onBoardType}
-                                      value={header}
+                                      selectedValue={this.props.navigation.state.params.onBoardType ? this.props.navigation.state.params.onBoardType : this.state.type}
+                                      value={promotiontypeToString[this.state.onBoardType]}
                                       defaultHeader={strings.ChooseType} isMandatory
+
                                       onValueSelected={this.selectPromotionType.bind(this)}/> :
                         <SimplePicker ref="promotionType" list={promotion_type} itemTitle={strings.PromotionType}
                                       defaultHeader={strings.ChooseType} isMandatory
+                                      value={promotiontypeToString[this.state.onBoardType]}
+
                                       onValueSelected={this.selectPromotionType.bind(this)}/>
                     }
 
@@ -846,10 +879,12 @@ class AddPromotion extends Component {
                     {this.state.toggle ?
                         <SimplePicker ref="discountType" list={types} itemTitle={strings.DiscountType}
                                       defaultHeader={strings.ChooseType} isMandatory
+                                      selectedValue={this.state.type}
+                                      value={typeToString[this.state.type]}
                                       onValueSelected={this.selectDiscount.bind(this)}/> :
                         <SimplePicker ref="discountType" list={types_simple} itemTitle={strings.DiscountType}
-                                      selectedValue="PERCENT"
-                                      value={strings.PercentageOff}
+                                      selectedValue={this.state.type}
+                                      value={typeToString[this.state.type]}
                                       defaultHeader={strings.ChooseType} isMandatory
                                       onValueSelected={this.selectDiscount.bind(this)}/>}
                 </View>
@@ -863,13 +898,13 @@ class AddPromotion extends Component {
                                    keyboardType='numeric'
                                    returnKeyType='next' ref="2" refNext="2"
                                    onSubmitEditing={this.focusNextField.bind(this, "4")}
-                                   onChangeText={(quantity) => this.setState({quantity})} isMandatory={true}/>
+                                   onChangeText={(quantity) => this.setReduxState({quantity})} isMandatory={true}/>
                     </View>}
                     <View style={{flex: 3,}}>
                         <DatePicker field={strings.ExpirationDate} value={this.state.end}
                                     returnKeyType='next' ref="3" refNext="3"
                                     onChangeDate={(date) => {
-                                        this.setState({end: date})
+                                        this.setReduxState({end: date})
                                     }} isMandatory={true}/>
                     </View>
                 </View>
@@ -877,13 +912,13 @@ class AddPromotion extends Component {
                     <TextInput field={strings.PromotionName} value={this.state.name}
                                returnKeyType='next' ref="4" refNext="4"
                                onSubmitEditing={this.focusNextField.bind(this, "5")}
-                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                               onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
                 </View>}
                 {this.state.toggle && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                     <TextInput field={strings.PromotioDescription} value={this.state.info}
                                returnKeyType='next' ref="5" refNext="5"
                                onSubmitEditing={this.dismiss.bind(this)}
-                               onChangeText={(info) => this.setState({info})}/>
+                               onChangeText={(info) => this.setReduxState({info})}/>
                 </View>}
 
                 <View style={[styles.conditionForm, {width: StyleUtils.getWidth()}]}>
@@ -929,7 +964,7 @@ class AddPromotion extends Component {
     }
 
     setCoverImage(image) {
-        this.setState({
+        this.setReduxState({
             image: image
         })
     }
@@ -1010,6 +1045,7 @@ class AddPromotion extends Component {
 export default connect(
     state => ({
         promotions: state.promotions,
+        templatePromotion: state.promotions.templatePromotion,
         saving: state.promotions.savingForm,
         savingFailed: state.promotions.savingFormFailed,
         products: state.products,

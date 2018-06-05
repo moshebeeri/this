@@ -43,8 +43,7 @@ class Promotions extends Component {
     }
 
     navigateToAdd() {
-        const {navigation, promotionActions} = this.props;
-        promotionActions.resetForm();
+        const {navigation} = this.props;
         navigationUtils.doNavigation(navigation, "addPromotions", {business: navigation.state.params.business});
     }
 
