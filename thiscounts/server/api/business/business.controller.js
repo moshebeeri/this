@@ -23,7 +23,6 @@ const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
 const config = require('../../config/environment');
-
 exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
@@ -42,40 +41,7 @@ exports.test_email = function (req, res) {
     }, function (err) {
       if (err) console.error(err);
       return res.status(200).send();
-    });
-  // email.send('reviewBusiness', 'moshe@low.la', {
-  //   name: 'moshe',
-  //   businessEmail: "business@email.com",
-  //   businessName: "business_name",
-  //   businessId: "business._id",
-  //   address: "business.address",
-  //   address2: "business.address2",
-  //   city: "business.city",
-  //   country: "business.country",
-  //   category: "business.category",
-  //   subcategory: "business.subcategory",
-  //   state: "business.state",
-  //   main_phone_number: "business.main_phone_number",
-  //   email: "business.email",
-  //   letterOfIncorporation: "business.letterOfIncorporation",
-  //   identificationCard: "business.identificationCard",
-  // }, function (err) {
-  //   if (err) console.error(err);
-  // });
-  // email.send('validateBusinessEmail',
-  //   'moshe.beeri@gmail.com', {
-  //     name: 'business.creator.name',
-  //     businessName: 'business.name',
-  //     businessId: 'business._id',
-  //     validationCode: 'business.validationCode',
-  //   }, function (err) {
-  //     if (err) console.error(err);
-  //     return res.status(200).send();
-  //   });
-  // email.send('mars', 'moshe.beeri@gmail.com', {locale: 'fr', name: 'moshe'}, function (err) {
-  //   if(err) console.error(err);
-  //   return res.status(200).send();
-  // });
+    })
 };
 
 exports.address2 = function (req, res) {
@@ -121,7 +87,7 @@ exports.show = function (req, res) {
 };
 
 function getUserBusinesses(userId, includeSellers, callback) {
-  let roles = includeSellers?  "['OWNS', 'Admin', 'Manager', 'Seller']" : "['OWNS', 'Admin', 'Manager']";
+  let roles = includeSellers ? "['OWNS', 'Admin', 'Manager', 'Seller']" : "['OWNS', 'Admin', 'Manager']";
   let query = `MATCH (user:user{_id:"${userId}"})-[role:ROLE]->(b:business) 
                WHERE role.name IN ${roles}
                return b._id as business_id, role
@@ -156,18 +122,19 @@ function getUserBusinesses(userId, includeSellers, callback) {
 exports.mine = function (req, res) {
   let userId = req.user._id;
   getUserBusinesses(userId, true, (err, info) => {
-    if(err) return handleError(res, err);
+    if (err) return handleError(res, err);
     return res.status(200).json(info);
   });
 };
-
 exports.getUserBusinessesByPhone = function (req, res) {
-  User.findOne({ $and: [{phone_number: req.params.phone},
-    {country_code: req.params.country_code}]}, function (err, user) {
-    if(err) return handleError(res, err);
+  User.findOne({
+    $and: [{phone_number: req.params.phone},
+      {country_code: req.params.country_code}]
+  }, function (err, user) {
+    if (err) return handleError(res, err);
     getUserBusinesses(user._id, false, (err, info) => {
-      if(err) return handleError(res, err);
-      return res.status(200).json({user,info});
+      if (err) return handleError(res, err);
+      return res.status(200).json({user, info});
     });
   });
 };
@@ -185,7 +152,7 @@ function business_follow_activity(follower, business) {
 
 function debugFunc(param) {
   let q = `match (user:user{_id:"5a8ac830d984c43b756fa89b"}) return count(user) as n`;
-  graphModel.query(q, (err, res)=>console.log(`debugFunc: ${param} ${JSON.stringify(res)}`))
+  graphModel.query(q, (err, res) => console.log(`debugFunc: ${param} ${JSON.stringify(res)}`))
 }
 
 function doFollowBusiness(userId, businessId, callback) {
@@ -198,31 +165,29 @@ function doFollowBusiness(userId, businessId, callback) {
         graphModel.is_related_ids(userId, 'UN_FOLLOW', businessId, function (err, unFollowExist) {
           if (err) return callback(err);
           graphModel.relate_ids(userId, 'FOLLOW', businessId, function (err) {
-            suggest.promotionsToNewBusinessFollower(businessId, userId, (err, results) => {});
+            suggest.promotionsToNewBusinessFollower(businessId, userId, (err, results) => {
+            });
             if (err) return callback(err);
             if (unFollowExist) return callback(null);
             //first time follow
             business_follow_activity(userId, businessId);
-
             let query = `MATCH (user:user{_id:"${userId}"}), (b:business{_id:"${businessId}"})-[d:DEFAULT_GROUP]->(g:group) 
                          CREATE UNIQUE (user)-[f:FOLLOW]->(g)
                          return user._id as userId, g._id as groupId
                          `;
-
             graphModel.query(query, function (err, results) {
               if (err) return callback(err);
               onAction.follow(userId, businessId);
-              fireEvent.info('business', businessId, 'follow_business', {status:  business.review.status});
+              fireEvent.info('business', businessId, 'follow_business', {status: business.review.status});
               if (business.shopping_chain) {
                 return graphModel.relate_ids(userId, 'FOLLOW', businessId, callback)
               }
               results.forEach(user_group => {
                 fireEvent.info('user', user_group.userId, 'group_user_follow', {
-                  userId : user_group.userId,
-                  groupId : user_group.groupId
+                  userId: user_group.userId,
+                  groupId: user_group.groupId
                 });
               });
-
               return callback(null)
             })
           });
@@ -231,10 +196,9 @@ function doFollowBusiness(userId, businessId, callback) {
     });
 }
 
-exports.followBusiness = function(userId, businessId, callback){
+exports.followBusiness = function (userId, businessId, callback) {
   return doFollowBusiness(userId, businessId, callback)
 };
-
 exports.follow = function (req, res) {
   let userId = req.user._id;
   let businessId = req.params.business;
@@ -346,9 +310,9 @@ function create_business_default_group(business) {
     if (err) return console.error(err.message);
     business.groups.push(group._id);
     business.save((err) => {
-      if(err) return console.error(err);
-      graphModel.owner_followers_follow_default_group(business.creator._id, (err, results)=>{
-        if(err) return console.error(err);
+      if (err) return console.error(err);
+      graphModel.owner_followers_follow_default_group(business.creator._id, (err, results) => {
+        if (err) return console.error(err);
         console.log(`graphModel.owner_followers_follow_default_group ${JSON.stringify(results)}`);
         results.forEach(user_group => {
           fireEvent.info('user', user_group.userId, 'user_follow_group', {
@@ -356,7 +320,6 @@ function create_business_default_group(business) {
             groupId: user_group.groupId
           });
         });
-
       });
       //graphModel.relate_ids(business.creator._id, 'FOLLOW', group._id);
     });
@@ -372,10 +335,10 @@ exports.check_address = function (req, res) {
       else if (err.code === 202) {
         return res.status(202).json(data);
       }
-      else{
+      else {
         return res.status(400).json(err);
       }
-    }else {
+    } else {
       return res.status(200).json(data);
     }
   })
@@ -426,7 +389,7 @@ function getBusinessDocument(type, req, res) {
   const businessId = req.params.id;
   Business.findById(businessId)
     .exec((err, business) => {
-      if(err) return handleError(res, err);
+      if (err) return handleError(res, err);
       if (business.review.state === 'reviewed')
         return handleError(res, new Error('already reviewed'));
       let documentUrl = type === 'letter' ? business.letterOfIncorporation : business.identificationCard;
@@ -438,7 +401,6 @@ function getBusinessDocument(type, req, res) {
 exports.letterOfIncorporation = function (req, res) {
   return getBusinessDocument('letter', req, res)
 };
-
 exports.identificationCard = function (req, res) {
   return getBusinessDocument('id', req, res)
 };
@@ -467,11 +429,9 @@ function createValidatedBusiness(business, callback) {
       Role.createRole(business.creator._id, business._id, Role.Roles.get('OWNS'), function (err) {
         if (err) return callback(err);
         graphModel.relate_ids(business.creator._id, 'FOLLOW', business._id);
-
         if (business.type === 'PERSONAL_SERVICES' || business.type === 'SMALL_BUSINESS') {
           graphModel.owner_followers_follow_business(business.creator._id);
         }
-
         if (defined(business.shopping_chain))
           graphModel.relate_ids(business._id, 'BRANCH_OF', business.shopping_chain._id);
         if (defined(business.mall))
@@ -514,28 +474,25 @@ function review(businessId, status, callback) {
     if (err) return callback(err);
     if (!business) return callback(null, null);
     if (business.review.state === 'reviewed') return callback('already reviewed');
-
     business.review.state = 'reviewed';
     if (status === 'accepted') {
       business.review.result = 'accepted';
       let create_business = false;
-
-      if(!business.review.created){
+      if (!business.review.created) {
         business.review.created = true;
         create_business = true;
       }
-
       business.save((err, business) => {
         if (err) return callback(err);
-        if(create_business){
+        if (create_business) {
           createValidatedBusiness(business, (err, business) => {
-            if(err) {
+            if (err) {
               console.error(err);
               return callback(err);
             }
             return callback(null, business);
           });
-        }else{
+        } else {
           return callback(null, business);
         }
       });
@@ -555,7 +512,7 @@ exports.review = function (req, res) {
   review(businessId, status, (err, business) => {
     if (err) return res.status(400).send(err);
     if (!business) return res.status(404).send('Not Found');
-    fireEvent.info('business', businessId, 'review', {status:  business.review.status});
+    fireEvent.info('business', businessId, 'review', {status: business.review.status});
     return res.status(201).json(business);
   })
 };
@@ -573,7 +530,7 @@ function validate_email(businessId, validationCode, callback) {
       if (business.review.status !== 'reviewed') {
         reviewRequest(business);
       }
-      fireEvent.info('business', businessId, 'validate_email', {status:  business.review.status});
+      fireEvent.info('business', businessId, 'validate_email', {status: business.review.status});
       return callback(null, business);
     });
   })
@@ -583,7 +540,7 @@ function approveBusiness(business, callback) {
   review(business._id, 'accepted', (err, business) => {
     if (err) return callback(err);
     if (!business) return callback(null, null);
-    fireEvent.info('business', approveBusiness, 'review', {status:  business.review.status});
+    fireEvent.info('business', approveBusiness, 'review', {status: business.review.status});
     return callback(null, business);
   })
 }
@@ -605,7 +562,6 @@ exports.agent_approve_business = function (req, res) {
           {latitude: business.location.lat, longitude: business.location.lng}
         ) > 500)
         return handleError(res, new Error(`Agent should be in proximity to business in order to approve it`));
-
       approveBusiness(business, (err, business) => {
         if (err) return handleError(res, err);
         if (!business) return res.status(404).send('Not Found');
@@ -616,7 +572,6 @@ exports.agent_approve_business = function (req, res) {
   else
     return handleError(res, new Error(`Usr is not an agent`));
 };
-
 exports.validate_email = function (req, res) {
   const businessId = req.params.id;
   const validationCode = req.params.code;
@@ -635,7 +590,7 @@ function update_email(businessId, newEmail, callback) {
     business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
     business.review.status = 'waiting';
     business.review.state = 'validation';
-    business.save( (err, business) => {
+    business.save((err, business) => {
       if (err) return callback(err);
       sendValidationEmail(business._id);
       callback(null, business)
@@ -646,17 +601,14 @@ function update_email(businessId, newEmail, callback) {
 exports.update_email = function (req, res) {
   const businessId = req.params.id;
   const newEmail = req.params.email;
-
-  update_email(businessId, newEmail, (err, business) =>{
+  update_email(businessId, newEmail, (err, business) => {
     if (err) return handleError(res, err);
     return res.status(201).json(business);
   })
 };
-
 exports.create = function (req, res) {
   let body_business = req.body;
   let userId = req.user._id;
-
   body_business.creator = userId;
   body_business.validationCode = randomstring.generate({length: 12, charset: 'numeric'});
   body_business.review = {
@@ -688,7 +640,7 @@ exports.create = function (req, res) {
             sendValidationEmail(business._id);
             return res.status(201).json(business);
           });
-      });
+        });
     });
   }
 
@@ -730,68 +682,98 @@ function notifyOnAction(business) {
   })
 }
 
+exports.test = function (req, res) {
+  permitted(req.params.user, req.params.entity, (err, has)=>{
+    if(err) handleError(res, err);
+    return res.status(200).json(has);
+  })
+};
+
+function permitted(userId, entityId, callback){
+  const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','ADMIN'] RETURN count(r)>0 as has`;
+  graphModel.query(query, (err, results) => {
+    if(err)  return callback(err);
+    if(results.length !== 1) return callback(new Error('unexpected result length'));
+    return callback(null, results[0].has)
+  })
+}
+
 // Updates an existing business in the DB.
 exports.update = function (req, res) {
-
   if (req.body._id) {
     delete req.body._id;
   }
-  Business.findById(req.params.id, function (err, business) {
+  permitted(req.user._id, req.params.id, (err, hasPermissions)=> {
+    if (err) return handleError(res, err);
+    if(!hasPermissions) return res.status(401).json(`user not permitted`);
 
-    function update_location(callback){
-      const updated = req.body;
-      const current = business;
-      if(updated.country !== current.country ||
-        updated.city !== current.city ||
-        updated.address !== current.address ||
-        updated.address2 !== current.address2 ||
-        updated.country !== current.country ||
-        !updated.location ||
-        updated.location.lng !==  current.location.lng ||
-        updated.location.lat !==  current.location.lat ){
-        location.address_location(updated, function (err, data) {
-          if (err) {
-            console.error(err);
-            if (err.code >= 400) return res.status(err.code).send(err.message);
-            else if (err.code === 202) {
+    Business.findById(req.params.id, function (err, business) {
+      function update_location(updated, current, callback) {
+        if (updated.country !== current.country ||
+          updated.city !== current.city ||
+          updated.address !== current.address ||
+          updated.address2 !== current.address2 ||
+          updated.country !== current.country ||
+          !updated.location ||
+          updated.location.lng !== current.location.lng ||
+          updated.location.lat !== current.location.lat) {
+          location.address_location(updated, function (err, data) {
+            if (err) {
               console.error(err);
-              return res.status(202).json(data);
+              if (err.code >= 400) return res.status(err.code).send(err.message);
+              else if (err.code === 202) {
+                console.error(err);
+                return res.status(202).json(data);
+              }
+              else return res.status(400).send(err);
             }
-            else return res.status(400).send(err);
-          }
-          updated.location = spatial.geo_to_location(data);
+            updated.location = spatial.geo_to_location(data);
+            return callback(null);
+          })
+        } else {
           return callback(null);
-        })
-      }else{
-        return callback(null);
-      }
-    }
-
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!business) {
-      return res.status(404).send('Not Found');
-    }
-    let should_validate_email = false;
-    if(req.body.email && req.body.email !== business.email)
-      should_validate_email = true;
-    update_location(err => {
-      if (err) return handleError(res, err);
-
-      let updated = _.merge(business, req.body);
-      updated.save(function (err) {
-        if (err) {
-          return handleError(res, err);
         }
-        if(should_validate_email)
-          update_email(business, business.email, (err)=>{
-            if(err) return console.error(err);
-          });
-        return res.status(200).json(business);
+      }
+
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!business) {
+        return res.status(404).send('Not Found');
+      }
+      let should_validate_email = false;
+      if (req.body.email && req.body.email !== business.email)
+        should_validate_email = true;
+      let updated = _.merge(business, req.body);
+      update_location(updated, business, err => {
+        if (err) return handleError(res, err);
+        updated.save(function (err, business) {
+          if (err) {
+            return handleError(res, err)
+          }
+          if (should_validate_email)
+            update_email(business, business.email, (err) => {
+              if (err) return console.error(err);
+            });
+          return res.status(200).json(business);
+        });
       });
     });
-  });
+  })
+};
+
+exports.update_pictures = function (req, res) {
+  permitted(req.user._id, req.params.id, (err, hasPermissions)=> {
+    if (err) return handleError(res, err);
+    if (!hasPermissions) return res.status(401).json(`user not permitted`);
+    Business.findById(req.params.id, function (err, business) {
+      business.pictures = req.body;
+      business.save((err, business) => {
+        if (err) return handleError(res, err);
+        return res.status(200).json(business);
+      })
+    });
+  })
 };
 
 // Deletes a business from the DB.
