@@ -104,7 +104,7 @@ class ProfileDrawer extends Component {
             <View style={{width:deviceWidth/5*4,justifyContent:'flex-start',height:deviceHeight,opacity:0.9,backgroundColor: '#41aad9'}}>
 
                 <View style={{
-                    height:  StyleUtils.scale(55),
+                    height: StyleUtils.isIphoneX() ? StyleUtils.scale(65):StyleUtils.scale(55),
 
                     alignItems: 'center',
                     opacity:1,
@@ -114,13 +114,13 @@ class ProfileDrawer extends Component {
 
                 }}>
                     <TouchableOpacityFix onPress={() => this.showUserProfile()}
-                                      style={{marginLeft:StyleUtils.scale(15),width:  StyleUtils.scale(40), height:  StyleUtils.scale(30),flexDirection: 'column', alignItems: 'center'}} regular>
+                                      style={{marginTop: StyleUtils.isIphoneX() ? 30:0,marginLeft:StyleUtils.scale(15),width:  StyleUtils.scale(40), height:  StyleUtils.scale(30),flexDirection: 'column', alignItems: 'center'}} regular>
                         <ImageController style={{tintColor: 'white', width:  StyleUtils.scale(30), height:  StyleUtils.scale(30)}}
                                source={settings}/>
 
 
                     </TouchableOpacityFix>
-                    <View style={{marginRight:StyleUtils.scale(20)}}>
+                    <View style={{marginTop: StyleUtils.isIphoneX() ? 30:0 ,marginRight:StyleUtils.scale(20)}}>
                     <CloseDrawer active color={'white'} size={ StyleUtils.scale(30)} onPress={() => this.props.closeDrawer()}/>
                     </View>
                 </View>

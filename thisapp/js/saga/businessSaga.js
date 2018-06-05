@@ -106,8 +106,10 @@ function* saveBusiness(action) {
             createdBusiness.social_state.realizes = 0;
             yield* setBusiness(createdBusiness);
             yield* setBusinessListener(createdBusiness);
-            if (action.business.image) {
+            if (action.business.image && !action.business.image.inServer) {
                 yield call(ImageApi.uploadImage, action.token, action.business.image, createdBusiness._id);
+            }else{
+                yield call(businessApi.updatePicturess,createdBusiness._id, createdBusiness.pictures, action.token);
             }
             if (action.business.logoImage) {
                 yield call(ImageApi.uploadImageLogo, action.token, action.business.logoImage, createdBusiness._id);
@@ -118,6 +120,7 @@ function* saveBusiness(action) {
             if (action.business.LetterOfIncorporationImage) {
                 yield call(ImageApi.uploadImagletter, action.token, action.business.LetterOfIncorporationImage, createdBusiness._id);
             }
+
         }
     } catch (error) {
         console.log("failed  updateBusiness")
@@ -134,7 +137,14 @@ function* updateBusiness(action) {
         if (!currentPicturePath) {
             currentPicturePath = action.business.image.uri;
         }
-        if (updatedBusiness.pictures[0].pictures[1] !== currentPicturePath) {
+        if (updatedBusiness.pictures.length > 0 && updatedBusiness.pictures[0].pictures[1] !== currentPicturePath) {
+            uploadCoverImage = true;
+            pictures.push(currentPicturePath);
+            pictures.push(currentPicturePath);
+            pictures.push(currentPicturePath);
+            pictures.push(currentPicturePath);
+            updatedBusiness.pictures.push({pictures: pictures});
+        }else{
             uploadCoverImage = true;
             pictures.push(currentPicturePath);
             pictures.push(currentPicturePath);
@@ -159,9 +169,13 @@ function* updateBusiness(action) {
                 updatedBusiness.logo = action.business.logoImage.uri;
             }
         }
-        yield* setBusiness(createdBusiness);
-        if (action.business.image && uploadCoverImage) {
-            yield call(ImageApi.uploadImage, action.token, action.business.image, updatedBusiness._id);
+        yield* setBusiness(updatedBusiness);
+        if(uploadCoverImage) {
+            if (action.business.image && !action.business.image.inServer) {
+                yield call(ImageApi.uploadImage, action.token, action.business.image, updatedBusiness._id);
+            } else {
+                yield call(businessApi.updatePicturess,updatedBusiness._id,  updatedBusiness.pictures, action.token);
+            }
         }
         if (action.business.logoImage && uploadLogo) {
             yield call(ImageApi.uploadImageLogo, action.token, action.business.logoImage, updatedBusiness._id);

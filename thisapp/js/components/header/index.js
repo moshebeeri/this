@@ -85,7 +85,7 @@ class GeneralComponentHeader extends Component {
         let arrowName = I18nManager.isRTL ? "ios-arrow-forward" : "ios-arrow-back";
         if (state.searchType) {
             return (
-                <View style={{justifyContent:'center',alignItems:'center',height: StyleUtils.scale(50),width: StyleUtils.getWidth(),backgroundColor:'white'}}>
+                <View style={{ marginTop: StyleUtils.isIphoneX() ? 30: 0,justifyContent:'center',alignItems:'center',height: StyleUtils.scale(50),width: StyleUtils.getWidth(),backgroundColor:'white'}}>
                     {network.offline && <View style={{
                         width: StyleUtils.getWidth(),
                         height: StyleUtils.scale(20),
@@ -158,9 +158,10 @@ class GeneralComponentHeader extends Component {
             </MenuOptions>
         </Menu>
         return (
-            <View style={{width: StyleUtils.getWidth()}}>
+            <View style={{marginTop: StyleUtils.isIphoneX() ? 10: 0, width: StyleUtils.getWidth()}}>
                 {network.offline && <View style={{
                     width: StyleUtils.getWidth(),
+
                     height: 20,
                     justifyContent: 'center',
                     alignItems: 'center',
