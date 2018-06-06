@@ -589,6 +589,33 @@ exports.verification = function (req, res) {
   });
 };
 
+exports.followers = function (req, res) {
+  let user = req.user._id;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+  let query = graphModel.paginate_query(`MATCH (:user {_id:'${user}'})<-[r:FOLLOW]-(u:user) RETURN u._id as _id`, skip, limit);
+  graphModel.query_objects(User, query,
+    function (err, objects) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(objects);
+    });
+};
+
+exports.following = function (req, res) {
+  let user = req.user._id;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+  let query = graphModel.paginate_query(`MATCH (:user {_id:'${user}'})-[r:FOLLOW]->(g:group)
+     OPTIONAL MATCH (:user {_id:'${user}'})-[r:FOLLOW]->(u:user) 
+     OPTIONAL MATCH (:user {_id:'${user}'}})-[r:FOLLOW]->(b:business) 
+     RETURN g._id as gid, u._id as uid, b._id as bid`, skip, limit);
+  graphModel.query_objects_parallel({gid: Group, uid: User, bid: Business}, query,
+    function (err, objects) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(objects);
+    });
+};
+
 exports.suggest_businesses = function(req, res) {
   let userId = req.user._id;
   suggest.findBusinesses(userId, (err, businesses)=>{

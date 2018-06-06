@@ -31,6 +31,7 @@ router.get('/following/groups/:group/:skip/:limit', auth.isAuthenticated(), cont
 router.get('/following/users/:group/:skip/:limit', auth.isAuthenticated(), controller.following_users);
 router.get('/user/follow/:skip/:limit', auth.isAuthenticated(), controller.user_follow);
 //This REST API is not yet functional
+router.get('/followers/:group/:skip/:limit', auth.isAuthenticated(), controller.followers);
 router.get('/following/:group/:skip/:limit', auth.isAuthenticated(), controller.following);
 router.post('/message/:group', auth.isAuthenticated(), controller.message);
 

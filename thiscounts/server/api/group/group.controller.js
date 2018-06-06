@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const Group = require('./group.model');
 const User = require('../user/user.model');
+const Business = require('../business/business.model');
 const Product = require('../product/product.model');
 const Notifications = require('../../components/notification');
 const graphTools = require('../../components/graph-tools');
@@ -530,14 +531,28 @@ exports.groups_following_business = function (req, res) {
 exports.test_add_user = function (req, res) {
   return res.status(200).json("tested");
 };
+exports.followers = function (req, res) {
+  let group = req.params.group;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+  let query = graphModel.paginate_query(`MATCH (:group {_id:'${group}'})<-[r:FOLLOW]-(g:group)
+     OPTIONAL MATCH (:group {_id:'${group}'})<-[r:FOLLOW]-(u:user) 
+     RETURN g._id as gid, u._id as uid`, skip, limit);
+  graphModel.query_objects_parallel({gid: Group, uid: User}, query,
+    function (err, objects) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(objects);
+    });
+};
 exports.following = function (req, res) {
   let group = req.params.group;
   let skip = req.params.skip;
   let limit = req.params.limit;
-  let query = graphModel.paginate_query(`MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(g:group)
-     OPTIONAL MATCH (g:group {_id:'${group}'})<-[r:FOLLOW]-(u:user) 
-     RETURN g._id as gid, u._id as uid`, skip, limit);
-  graphModel.query_objects_parallel({gid: Group, uid: User}, query,
+  let query = graphModel.paginate_query(`MATCH (:group {_id:'${group}'})-[r:FOLLOW]->(g:group)
+     OPTIONAL MATCH (:group {_id:'${group}'})-[r:FOLLOW]->(u:user) 
+     OPTIONAL MATCH (:group {_id:'${group}'})-[r:FOLLOW]->(b:business) 
+     RETURN g._id as gid, u._id as uid, b._id as bid`, skip, limit);
+  graphModel.query_objects_parallel({gid: Group, uid: User, bid: Business}, query,
     function (err, objects) {
       if (err) return handleError(res, err);
       return res.status(200).json(objects);
