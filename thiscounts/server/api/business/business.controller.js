@@ -125,7 +125,8 @@ exports.followers = function (req, res) {
   let business = req.params.business;
   let skip = req.params.skip;
   let limit = req.params.limit;
-  let query = graphModel.paginate_query(`MATCH (:business {_id:'${business}'})<-[r:FOLLOW]-(u:user) RETURN u._id as _id`, skip, limit);
+  let query = graphModel.paginate_query(`MATCH (:business {_id:'${business}'})<-[r:FOLLOW]-(u:user) 
+                                          RETURN u._id as _id`, skip, limit);
   graphModel.query_objects(User, query,
     function (err, objects) {
       if (err) return handleError(res, err);

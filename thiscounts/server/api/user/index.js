@@ -29,8 +29,8 @@ router.get('/share/:id', auth.isAuthenticated(), controller.share);
 router.post('/phonebook', auth.isAuthenticated(), controller.phonebook);
 router.get('/follow/:id', auth.isAuthenticated(), controller.follow);
 router.delete('/follow/:id', auth.isAuthenticated(), controller.unfollow);
-router.get('/followers/:group/:skip/:limit', auth.isAuthenticated(), controller.followers);
-router.get('/following/:group/:skip/:limit', auth.isAuthenticated(), controller.following);
+router.get('/followers/:skip/:limit', auth.isAuthenticated(), controller.followers);
+router.get('/following/:skip/:limit', auth.isAuthenticated(), controller.following);
 router.get('/suggest/businesses', auth.isAuthenticated(), controller.suggest_businesses);
 
 

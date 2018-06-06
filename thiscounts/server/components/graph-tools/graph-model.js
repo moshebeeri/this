@@ -398,7 +398,11 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
   db.query(query, function(err, table) {
     if (err) { callback(err, null) }
     let acc = {};
-    Object.keys(table[0]).forEach(k => acc[k] = new Set());
+    console.log('query_objects_parallel:');
+    console.log(JSON.stringify(query));
+    console.log(JSON.stringify(table));
+    if(table.length > 0)
+      Object.keys(table[0]).forEach(k => acc[k] = new Set());
     let reduced = table.reduce(function (acc, obj) {
       Object.keys(obj).forEach(k => acc[k].add(obj[k]));
       return acc;
