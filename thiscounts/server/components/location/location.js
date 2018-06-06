@@ -6,10 +6,18 @@ let config = require('../../config/environment');
 let https = require('https');
 let logger = require('../logger').createLogger();
 
-const googleMaps = require('@google/maps').createClient({
-  key: config.google_maps.key,
-  Promise: Promise
+const NodeGeocoder = require('node-geocoder');
+
+const geocoder = NodeGeocoder({
+  provider: 'google',
+  apiKey: config.google_maps.key,
+  formatter: null
 });
+
+// const googleMaps = require('@google/maps').createClient({
+//   key: config.google_maps.key,
+//   Promise: Promise
+// });
 
 function Location() {
 }
@@ -32,21 +40,17 @@ function format_address(addressed) {
 }
 
 
-Location.prototype.getReverseGeocodingData = function(lat, lng) {
+Location.prototype.getReverseGeocodingData = function(lat, lon) {
+  return new Promise((resolve, reject) =>{
+    geocoder.reverse({lat, lon})
+      .then(function(res) {
+        resolve(res);
+      })
+      .catch(function(err) {
+        reject(err);
+      });
 
-  const latlng = new googleMaps.LatLng(lat, lng);
-  // This is making the Geocode request
-  const geocoder = new googleMaps.Geocoder();
-  geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-    if (status !== googleMaps.GeocoderStatus.OK) {
-      console.error(status);
-    }
-    // This is checking to see if the Geoeode Status is OK before proceeding
-    if (status === googleMaps.GeocoderStatus.OK) {
-      console.log(results);
-      const address = (results[0].formatted_address);
-    }
-  });
+  })
 };
 
 

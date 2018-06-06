@@ -63,8 +63,9 @@ exports.address2 = function (req, res) {
 };
 
 exports.coordinates = function (req, res) {
-  location.getReverseGeocodingData(req.params.lat, req.params.lng);
-  return res.status(200).send('OK');
+  location.getReverseGeocodingData(req.params.lat, req.params.lng)
+    .then(address => res.status(200).json(address))
+    .catch(e => handleError(res, e));
 };
 
 // Get list of businesses

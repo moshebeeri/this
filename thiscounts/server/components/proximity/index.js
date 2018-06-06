@@ -73,6 +73,8 @@ function handleFollowersProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
+  if(!coordinate.latitude || !coordinate.latitude)
+    return callback(new Error(`defected coordinated location:${location} coordinate:${coordinate}`));
   const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity)<-[f:FOLLOW]-(u:user{_id:'${userId}'})
                   WITH   entity,promo,u,on, 
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
@@ -101,6 +103,8 @@ function handleProximityActions(userId, location, callback) {
   let skip = 0;
   let limit = 20;
   let coordinate = spatial.location_to_special(location);
+  if(!coordinate.latitude || !coordinate.latitude)
+    return callback(new Error(`defected coordinated location:${location} coordinate:${coordinate}`));
   const query = ` MATCH (promo:promotion)<-[on:ON_ACTION]-(entity),(u:user{_id:'${userId}'})  
                   WITH   entity,promo,on, 
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
@@ -237,6 +241,8 @@ exports.businessesWithinDistance = function(userId, distanceInMeters, callback){
 
     let coordinate = spatial.location_to_special(proximity.location);
 
+    if(!coordinate.latitude || !coordinate.latitude)
+      return callback(new Error(`defected coordinated location:${proximity.location} coordinate:${coordinate}`));
     const query = ` MATCH (b:business),(u:user{_id:'${userId}'})  
                     WITH  b,u,
                           point({longitude:${coordinate.longitude},latitude:${coordinate.latitude}}) AS coordinate,
