@@ -18,6 +18,7 @@ import {
 import * as sagaActions from './sagaActions'
 import ImageApi from "../api/image";
 import {handleSucsess} from './SagaSuccsesHandler'
+import * as actions from '../reducers/reducerActions'
 
 let businessApi = new BusinessApi();
 let promotionApi = new PromotionApi();
@@ -213,6 +214,23 @@ function* updateCategory(action) {
     }
 }
 
+
+function* getNextBusinessFollowers(action) {
+    try {
+        let followers = yield call(businessApi.getBusinessFollowers ,action.businessId, action.token,action.skip, action.limit);
+        console.log(followers)
+        if(followers && followers.length > 0) {
+            yield put({
+                type: actions.SET_BUSINESS_FOLLOWERS,
+                followers: followers,
+                businessId: action.businessId
+            })
+        }
+    } catch (error) {
+        console.log("failed  getNextBusinessFollowers " + error);
+    }
+}
+
 function* businessSaga() {
     yield throttle(2000, sagaActions.UPDATE_BUSINESS_REQUEST, getAll);
     yield throttle(2000, sagaActions.UPDATE_BUSINESS_PRODUCTS, getBusinessProducts);
@@ -222,6 +240,7 @@ function* businessSaga() {
     yield throttle(2000, sagaActions.SAVE_BUSINESS, saveBusiness);
     yield throttle(2000, sagaActions.UPDATE_BUSINESS, updateBusiness);
     yield takeEvery(sagaActions.UPDATE_BUSINESS_CATEGORY_REQUEST, updateCategory);
+    yield takeEvery(sagaActions.UPDATE_BUSINESS_FOLLOWERS, getNextBusinessFollowers);
 }
 
 export default businessSaga;

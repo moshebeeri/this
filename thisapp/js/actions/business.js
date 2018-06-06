@@ -506,6 +506,27 @@ export function saveBusinessTemplate(templateBusiness) {
     }
 }
 
+
+export function getNextBusinessFollowers(businessId) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        const followers = getState().businesses.allBusinessFollowers[businessId];
+        let skip = 0;
+        if (followers) {
+            skip = followers.length;
+        }
+        dispatch({type: types.UPDATE_BUSINESS_FOLLOWERS, businessId: businessId, token: token, skip: skip, limit: 10})
+    }
+}
+
+export function getBusinessTopFollowers(businessId) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+
+        dispatch({type: types.UPDATE_BUSINESS_FOLLOWERS, businessId: businessId, token: token, skip: 0, limit: 10})
+    }
+}
+
 export function resetForm() {
     return async function (dispatch) {
         dispatch({

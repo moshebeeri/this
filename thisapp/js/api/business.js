@@ -139,6 +139,16 @@ class BusinessApi {
             }
         }, 'businesses', '/search');
     }
+    getBusinessFollowers(businessId, token,skip,limit) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/businesses/followers/${businessId}/${skip}/${limit}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            }
+        }, 'businesses', '/followers');
+    }
 
     searchBusinessByCode(qrCode, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/qrcodes/find/${qrCode}`, {
