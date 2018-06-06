@@ -128,26 +128,17 @@ function getUserBusinesses(userId, includeSellers, callback) {
 }
 
 exports.followers = function (req, res) {
-  let group = req.params.group;
+  let business = req.params.business;
   let skip = req.params.skip;
   let limit = req.params.limit;
-  let query = graphModel.paginate_query(`MATCH (:group {_id:'${group}'})<-[:FOLLOW]-(follower)
+  let query = graphModel.paginate_query(`MATCH (:business {_id:'${business}'})<-[:FOLLOW]-(follower)
                                         WHERE follower:user or follower:group 
-                                        RETURN follower._id as _id, labels(follower) skip 0 limit 10`, skip, limit);
-  graphModel.query_objects_parallel({gid: Group, uid: User}, query,
+                                        RETURN follower._id as _id, labels(follower)[0] as label`, skip, limit);
+  graphModel.query_objects_parallel({group: Group, user: User}, query,
     function (err, objects) {
       if (err) return handleError(res, err);
       return res.status(200).json(objects);
     });
-  // let business = req.params.business;
-  // let skip = req.params.skip;
-  // let limit = req.params.limit;
-  // let query = `MATCH (:business {_id:'${business}'})<-[r:FOLLOW]-(u:user) RETURN u._id as _id`;
-  // graphModel.query_objects(User, query, '', skip, limit,
-  //   function (err, objects) {
-  //     if (err) return handleError(res, err);
-  //     return res.status(200).json(objects);
-  //   });
 };
 
 exports.mine = function (req, res) {

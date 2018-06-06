@@ -605,10 +605,10 @@ exports.following = function (req, res) {
   let user = req.user._id;
   let skip = req.params.skip;
   let limit = req.params.limit;
-  let query = graphModel.paginate_query(`MATCH (:user {_id:'${user}'})-[:FOLLOW]->(follower)
+  let query = graphModel.paginate_query(`MATCH (:user {_id:'${user}'})<-[:FOLLOW]-(follower)
                                         WHERE follower:user or follower:group or follower:business 
-                                        RETURN follower._id as _id, labels(follower) skip 0 limit 10`, skip, limit);
-  graphModel.query_objects_parallel({gid: Group, uid: User, bid: Business}, query,
+                                        RETURN follower._id as _id, labels(follower)[0] as label`, skip, limit);
+  graphModel.query_objects_parallel({group: Group, user: User, business: Business}, query,
     function (err, objects) {
       if (err) return handleError(res, err);
       return res.status(200).json(objects);
