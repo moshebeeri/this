@@ -34,6 +34,6 @@ router.get('/groups/following/:business/:skip/:limit', auth.isAuthenticated(), c
 router.get('/users/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.users_following_default_group);
 router.get('/groups/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.groups_following_default_group);
 router.get('/user/businesses/by/phone/:country_code/:phone', auth.isAuthenticated(), controller.getUserBusinessesByPhone);
-router.get('/coordinates/address/:lat/:lng', controller.coordinates);
+router.get('/coordinates/address/:lat/:lng', auth.isAuthenticated(), controller.coordinates);
 
 module.exports = router;
