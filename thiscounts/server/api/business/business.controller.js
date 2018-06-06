@@ -23,6 +23,8 @@ const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
 const config = require('../../config/environment');
+const Promise = require('bluebird');
+
 exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
@@ -118,6 +120,18 @@ function getUserBusinesses(userId, includeSellers, callback) {
       });
   })
 }
+
+exports.followers = function (req, res) {
+  let business = req.params.business;
+  let skip = req.params.skip;
+  let limit = req.params.limit;
+  let query = graphModel.paginate_query(`MATCH (:business {_id:'${business}'})<-[r:FOLLOW]-(u:user) RETURN u._id as _id`, skip, limit);
+  graphModel.query_objects(User, query,
+    function (err, objects) {
+      if (err) return handleError(res, err);
+      return res.status(200).json(objects);
+    });
+};
 
 exports.mine = function (req, res) {
   let userId = req.user._id;
@@ -683,19 +697,34 @@ function notifyOnAction(business) {
 }
 
 exports.test = function (req, res) {
-  permitted(req.params.user, req.params.entity, (err, has)=>{
-    if(err) handleError(res, err);
-    return res.status(200).json(has);
-  })
+  // let checkPermitted = Promise.promisify(permitted);
+  // checkPermitted(req.params.user, req.params.entity)
+  permitted2(req.params.user, req.params.entity)
+    .then(has => res.status(200).json(has))
+    .catch(e=>handleError(res, e));
+  // permitted(req.params.user, req.params.entity, (err, has)=>{
+  //   if(err) handleError(res, err);
+  //   return res.status(200).json(has);
+  // })
 };
 
 function permitted(userId, entityId, callback){
-  const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','ADMIN'] RETURN count(r)>0 as has`;
+  const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as has`;
   graphModel.query(query, (err, results) => {
     if(err)  return callback(err);
     if(results.length !== 1) return callback(new Error('unexpected result length'));
     return callback(null, results[0].has)
   })
+}
+function permitted2(userId, entityId){
+  return new Promise(function(resolve, reject) {
+    const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as has`;
+    graphModel.query(query, (err, results) => {
+      if(err)  return reject(err);
+      if(results.length !== 1) return reject(new Error('unexpected result length'));
+      return resolve(results[0].has)
+    });
+  });
 }
 
 // Updates an existing business in the DB.
