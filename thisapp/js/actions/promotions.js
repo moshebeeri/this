@@ -113,6 +113,11 @@ export function resetForm() {
         dispatch({
             type: actions.PROMOTION_RESET,
         });
+        dispatch({
+            type: actions.SAVE_PROMOTION_TAMPLATE,
+            templatePromotion: {},
+        });
+
     }
 }
 
@@ -200,6 +205,18 @@ export function updatePromotion(promotion, businessId, navigation, itemId) {
         }
     }
 }
+
+
+export function savePromotionsTemplate(templatePromotion) {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.SAVE_PROMOTION_TAMPLATE,
+            templatePromotion: templatePromotion,
+        });
+    }
+}
+
+
 
 async function refershBusinessPromotion(item, businessId, token, dispatch) {
     try {

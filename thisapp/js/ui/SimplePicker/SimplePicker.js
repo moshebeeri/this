@@ -28,10 +28,16 @@ export default class SimplePicker extends Component {
     }
 
     selectIos(value) {
-        const {onValueSelected, list} = this.props;
+        const {onValueSelected, list,defaultHeader} = this.props;
         let options = list.map((s) => {
             return s.value;
         });
+        if(!options[value - 1]){
+            this.setState({
+                type: defaultHeader,
+            });
+            return;
+        }
         this.setState({
             type: options[value - 1],
         });
@@ -74,7 +80,11 @@ export default class SimplePicker extends Component {
         if (this.state.invalid) {
             pickerStyle = styles.modalViewInvalid;
         }
-        options.unshift(defaultValue);
+        if(!defaultValue) {
+            options.unshift('');
+        }else{
+            options.unshift(defaultValue);
+        }
         let selectValue = strings.PleaseSelect;
         if (value) {
             selectValue = value
