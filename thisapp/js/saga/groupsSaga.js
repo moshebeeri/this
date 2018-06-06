@@ -110,11 +110,27 @@ function* updateGroupFollowers(action) {
     }
 }
 
+function* getNextGroupFollowers(action) {
+    try {
+        let followers = yield call(groupsApi.getGroupsFollowers ,action.groupId, action.token,action.skip, action.limit);
+        if(followers && followers.length > 0) {
+            yield put({
+                type: actions.SET_CURRENT_GROUPS_FOLLOWERS,
+                followers: followers,
+                groupId: action.groupId
+            })
+        }
+    } catch (error) {
+        console.log("failed  getNextGroupFollowers " + error);
+    }
+}
+
 function* groupsSaga() {
     yield throttle(2000, sagaActions.SAVE_GROUPS_REQUEST, saveGroupsRequest);
     yield throttle(2000, sagaActions.UPDATE_GROUPS_REQUEST, updateGroup);
     yield throttle(2000, sagaActions.UPDATE_GROUPS_FOLLOWERS, updateGroupFollowers);
     yield throttle(2000, sagaActions.SAVE_GROUP, saveGroup);
+    yield throttle(2000, sagaActions.GET_NEXT_GROUPS_FOLLOWERS, getNextGroupFollowers);
 }
 
 export default groupsSaga;

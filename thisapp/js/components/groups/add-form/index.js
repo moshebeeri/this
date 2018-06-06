@@ -1,8 +1,19 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Keyboard, Platform, ScrollView, Switch, TouchableOpacity, View,KeyboardAvoidingView} from 'react-native';
+import {
+    Dimensions,
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    Switch,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
 import {getMyBusinesses} from '../../../selectors/businessesSelector'
+import GenericListManager from '../../generic-list-manager'
 import SelectUsersComponent from '../selectUser';
 import {
     FormHeader,
@@ -22,6 +33,7 @@ import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 import navigationUtils from '../../../utils/navigationUtils'
 
+const noPic = require('../../../../images/client_1.png');
 const {width, height} = Dimensions.get('window');
 const groupPolicy = [
     {
@@ -66,7 +78,7 @@ class AddGroup extends Component {
             this.state = {
                 name: group.name,
                 info: group.description,
-                groupChat: (group.chat_policy==='ON') ? true : false,
+                groupChat: (group.chat_policy === 'ON') ? true : false,
                 showUsers: false,
                 images: '',
                 users: [],
@@ -79,7 +91,13 @@ class AddGroup extends Component {
                 currentImage: currentImage,
                 business: '',
                 updateMode: true,
-                codeStyle: {width: StyleUtils.scale(80), height: StyleUtils.scale(80),  marginBottom:-10, alignItems: 'center', justifyContent: 'center'},
+                codeStyle: {
+                    width: StyleUtils.scale(80),
+                    height: StyleUtils.scale(80),
+                    marginBottom: -10,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
                 codeTextStyle: {fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
@@ -92,13 +110,14 @@ class AddGroup extends Component {
                     shadowOffset: {width: 0, height: 0},
                     shadowOpacity: 0.2,
                     shadowRadius: 5,
-                    borderWidth:2,
-                    borderRadius:10,
+                    borderWidth: 2,
+                    borderRadius: 10,
                     elevation: 10,
-                    borderColor:'gray',
+                    borderColor: 'gray',
                 },
                 codeFullSize: false,
                 showQrcCode: true,
+                group: group,
                 viewOnly: props.navigation.state.params.view,
                 services: []
             };
@@ -136,9 +155,13 @@ class AddGroup extends Component {
     }
 
     componentWillMount() {
-        const {businessActions, userActions, actions} = this.props;
+        const {businessActions, userActions, actions, groupsFollowers} = this.props;
         if (this.state.showQrcCode && this.props.navigation.state.params.group) {
-            actions.setGroupQrCode(this.props.navigation.state.params.group)
+            const group = this.props.navigation.state.params.group;
+            actions.setGroupQrCode(group)
+            if (!groupsFollowers[group._id] || (groupsFollowers[group._id] && groupsFollowers[group._id].length === 0 )) {
+                actions.getNextGroupsFollowers(group._id);
+            }
         }
         businessActions.setBusinessUsers();
         userActions.fetchUsersFollowers();
@@ -260,7 +283,6 @@ class AddGroup extends Component {
                 users: userFollowers,
                 selectUsers: this.selectUsers.bind(this)
             });
-           
         }
     }
 
@@ -278,13 +300,13 @@ class AddGroup extends Component {
             let coverImage = undefined;
             if (this.state.image) {
                 coverImage = <ImageController
-                    style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30,30)}}
+                    style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30, 30)}}
                     source={{uri: this.state.image.path}}
                 >
                 </ImageController>
             } else {
                 coverImage = <ImageController
-                    style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30,30),}}
+                    style={{width: StyleUtils.getWidth(), height: StyleUtils.relativeHeight(30, 30),}}
                     source={{uri: this.state.currentImage}}
                 >
                 </ImageController>
@@ -319,14 +341,21 @@ class AddGroup extends Component {
 
         </TouchableOpacity>
     }
-    openMenu(){
+
+    openMenu() {
         this.refs["coverImage"].openMenu();
     }
 
     changeQrLook() {
         if (this.state.codeFullSize) {
             this.setState({
-                codeStyle: {width: StyleUtils.scale(80), height: StyleUtils.scale(80),  marginBottom:-10, alignItems: 'center', justifyContent: 'center'},
+                codeStyle: {
+                    width: StyleUtils.scale(80),
+                    height: StyleUtils.scale(80),
+                    marginBottom: -10,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
                 codeTextStyle: {fontSize: 14, marginTop: 5},
                 codeContainerStyle: {
                     backgroundColor: 'white',
@@ -339,40 +368,75 @@ class AddGroup extends Component {
                     shadowOffset: {width: 0, height: 0},
                     shadowOpacity: 0.2,
                     shadowRadius: 5,
-                    borderWidth:2,
-                    borderRadius:10,
+                    borderWidth: 2,
+                    borderRadius: 10,
                     elevation: 10,
-                    borderColor:'gray',
+                    borderColor: 'gray',
                 },
                 codeFullSize: false,
             })
         } else {
             this.setState({
-                codeStyle: {width: StyleUtils.scale(150), height: StyleUtils.scale(150),  alignItems: 'center', marginBottom:-10, justifyContent: 'center'},
+                codeStyle: {
+                    width: StyleUtils.scale(150),
+                    height: StyleUtils.scale(150),
+                    alignItems: 'center',
+                    marginBottom: -10,
+                    justifyContent: 'center'
+                },
                 codeTextStyle: {fontSize: 14, marginTop: 5,},
                 codeContainerStyle: {
                     backgroundColor: 'white',
                     position: 'absolute',
-                    top:  (StyleUtils.relativeHeight(30,30) - StyleUtils.scale(170)) /2 ,
-                    right: (StyleUtils.getWidth() -  StyleUtils.scale(170))/2,
+                    top: (StyleUtils.relativeHeight(30, 30) - StyleUtils.scale(170)) / 2,
+                    right: (StyleUtils.getWidth() - StyleUtils.scale(170)) / 2,
                     width: StyleUtils.scale(170), height: StyleUtils.scale(170),
                     alignItems: 'center',
                     justifyContent: 'center',
                     shadowOffset: {width: 0, height: 0},
                     shadowOpacity: 0.2,
                     shadowRadius: 5,
-                    borderWidth:2,
-                    borderRadius:10,
+                    borderWidth: 2,
+                    borderRadius: 10,
                     elevation: 10,
-                    borderColor:'gray',
+                    borderColor: 'gray',
                 },
                 codeFullSize: true,
             })
         }
     }
 
+    nextGroupFollowers() {
+        const {actions} = this.props;
+        if (this.state.group) {
+            actions.getNextGroupsFollowers(this.state.group._id);
+        }
+    }
+
+    renderFollowerItem(item) {
+        let source = noPic;
+        if (item.item.pictures && item.item.pictures.length > 0) {
+            source = {
+                uri: item.item.pictures[item.item.pictures.length - 1].pictures[3]
+            }
+        }
+        return <View style={{
+            flex: 1,
+            width: StyleUtils.getWidth() - 10,
+            flexDirection: 'row',
+            backgroundColor: 'white',
+            alignItems:'center',
+
+            height: StyleUtils.scale(70)
+        }}>
+            <ImageController thumbnail size={StyleUtils.scale(50)} source={source}/>
+            <ThisText style={{marginLeft:10,marginRight:10}}>{item.item.name}</ThisText>
+
+        </View>
+    }
+
     render() {
-        const {businesses, lastGroupQrCode} = this.props;
+        const {businesses, lastGroupQrCode, groupsFollowers} = this.props;
         let selectedGroupPolicy = this.state.groupPolocy
         if (Platform.OS === 'ios') {
             selectedGroupPolicy = this.getGroupPolicy(this.state.groupPolocy);
@@ -405,27 +469,29 @@ class AddGroup extends Component {
                 </TouchableOpacity>
             }
         }
-        if(Platform.OS ==='ios') {
+        if (Platform.OS === 'ios') {
             return (
                 <KeyboardAvoidingView behavior={'position'} style={styles.product_container}>
                     {this.createView(qrcodeView, selectedGroupPolicy, BusinessPiker)}
+
                 </KeyboardAvoidingView>
             );
         }
         return (
-            <View  style={styles.product_container}>
+            <View style={styles.product_container}>
                 {this.createView(qrcodeView, selectedGroupPolicy, BusinessPiker)}
+
             </View>
         );
     }
 
-
     createView(qrcodeView, selectedGroupPolicy, BusinessPiker) {
+        const {groupsFollowers} = this.props;
         let backgroundColor = `${appBackgroundColor}`;
-        if(this.state.viewOnly){
+        if (this.state.viewOnly) {
             backgroundColor = 'white';
         }
-        return <View style={{backgroundColor:backgroundColor}}>
+        return <View style={{backgroundColor: backgroundColor}}>
             {this.state.updateMode && !this.state.viewOnly &&
             <FormHeader showBack submitForm={this.updateGroup.bind(this)} navigation={this.props.navigation}
                         title={strings.UpdateGroup} bgc="#2db6c8"/>}
@@ -438,7 +504,7 @@ class AddGroup extends Component {
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor:backgroundColor,
+                backgroundColor: backgroundColor,
             }} style={styles.contentContainer}>
 
 
@@ -457,10 +523,11 @@ class AddGroup extends Component {
                         value={this.state.groupChat}/>
                 </View>}
                 {!this.state.viewOnly && <SimplePicker value={selectedGroupPolicy} ref="groupPolicyType"
-                              disable={this.state.viewOnly}
-                              list={groupPolicy} itemTitle={strings.GroupPolicy}
-                              defaultHeader={strings.ChooseType} isMandatory={!this.state.updateMode}
-                              onValueSelected={this.selectGroupPolocy.bind(this)}/>}
+                                                       disable={this.state.viewOnly}
+                                                       list={groupPolicy} itemTitle={strings.GroupPolicy}
+                                                       defaultHeader={strings.ChooseType}
+                                                       isMandatory={!this.state.updateMode}
+                                                       onValueSelected={this.selectGroupPolocy.bind(this)}/>}
                 {!this.state.updateMode &&
                 <SimplePicker ref="groupType" list={groupType} itemTitle={strings.GroupType}
                               disable={this.state.viewOnly}
@@ -472,36 +539,44 @@ class AddGroup extends Component {
 
                 <View style={styles.inputTextLayour}>
                     {this.state.viewOnly ? <View>
-                        <ThisText style={{marginTop:20,marginLeft:10,fontSize:14,color:'#A9A9A9'}} >{strings.GroupName}</ThisText>
-                        <ThisText style={{marginTop:5,marginLeft:10,fontSize:20}}>{this.state.name}</ThisText>
-                    </View>:  <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
-                               returnKeyType='next' ref="1" refNext="1"
-                               onSubmitEditing={this.focusNextField.bind(this, "2")}
-                               onChangeText={(name) => this.setState({name})} isMandatory={true}/>
-                        }
+                            <ThisText style={{
+                                marginTop: 20,
+                                marginLeft: 10,
+                                fontSize: 14,
+                                color: '#A9A9A9'
+                            }}>{strings.GroupName}</ThisText>
+                            <ThisText style={{marginTop: 5, marginLeft: 10, fontSize: 20}}>{this.state.name}</ThisText>
+                        </View> :
+                        <TextInput disabled={this.state.viewOnly} field={strings.GroupName} value={this.state.name}
+                                   returnKeyType='next' ref="1" refNext="1"
+                                   onSubmitEditing={this.focusNextField.bind(this, "2")}
+                                   onChangeText={(name) => this.setState({name})} isMandatory={true}/>
+                    }
 
                 </View>
 
-                <View style={styles.inputTextLayour}>
+                {this.state.info &&  <View style={styles.inputTextLayour}>
 
                     {this.state.viewOnly ? <View>
-                            <ThisText style={{marginLeft:10,fontSize:14,color:'#A9A9A9'}} >{strings.Description}</ThisText>
-                            <ThisText style={{marginTop:5,marginLeft:10,fontSize:20}}>{this.state.info}</ThisText>
-                        </View>:
-                    <TextInput disabled={this.state.viewOnly} field={strings.Description} value={this.state.info}
-                               returnKeyType='next' ref="2"
-                               refNext="2"
+                            <ThisText
+                                style={{marginLeft: 10, fontSize: 14, color: '#A9A9A9'}}>{strings.Description}</ThisText>
+                            <ThisText style={{marginTop: 5, marginLeft: 10, fontSize: 20}}>{this.state.info}</ThisText>
+                        </View> :
+                        <TextInput disabled={this.state.viewOnly} field={strings.Description} value={this.state.info}
+                                   returnKeyType='next' ref="2"
+                                   refNext="2"
 
 
-                               onChangeText={(info) => this.setState({info})}/>}
-                </View>
+                                   onChangeText={(info) => this.setState({info})}/>}
+                </View>}
                 {this.state.viewOnly &&
                 <View style={styles.inputTextLayour}>
 
                     <View>
-                            <ThisText style={{marginLeft:10,fontSize:14,color:'#A9A9A9'}} >{strings.GroupPolicy}</ThisText>
-                            <ThisText style={{marginTop:5,marginLeft:10,fontSize:20}}>{selectedGroupPolicy}</ThisText>
-                        </View>
+                        <ThisText
+                            style={{marginLeft: 10, fontSize: 14, color: '#A9A9A9'}}>{strings.GroupPolicy}</ThisText>
+                        <ThisText style={{marginTop: 5, marginLeft: 10, fontSize: 20}}>{selectedGroupPolicy}</ThisText>
+                    </View>
                 </View>}
 
                 {!this.state.updateMode && <View style={styles.groupSelectUserContainer}>
@@ -510,11 +585,22 @@ class AddGroup extends Component {
                         title="Members"
                         action={this.showUsers.bind(this, true)}/>
                     {this.state.selectedUsers &&
-                    <ThisText style={{fontSize:StyleUtils.scale(14)}}> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
+                    <ThisText
+                        style={{fontSize: StyleUtils.scale(14)}}> {strings.SelectedMembers}: {this.state.selectedUsers.length}</ThisText>}
 
                 </View>}
-                <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
+                <View style={{height: StyleUtils.scale(30), width: StyleUtils.getWidth()}}></View>
 
+                {(this.state.viewOnly ||  this.state.updateMode) &&  groupsFollowers[this.state.group._id] &&   <View style={styles.inputTextLayour}>
+                        <ThisText
+                            style={{marginLeft: 10, fontSize: 14, color: '#A9A9A9'}}>{strings.Members}</ThisText>
+                    </View>}
+                {(this.state.viewOnly || this.state.updateMode) && groupsFollowers[this.state.group._id] && groupsFollowers[this.state.group._id].length > 0 &&
+
+                <GenericListManager rows={groupsFollowers[this.state.group._id]}
+                                    onEndReached={this.nextGroupFollowers.bind(this)}
+                                    ItemDetail={this.renderFollowerItem.bind(this)}/>
+                }
             </ScrollView>
 
         </View>;
@@ -550,7 +636,8 @@ export default connect(
         userFollowers: state.user.followers,
         saving: state.groups.saving,
         currentScreen: state.render.currentScreen,
-        lastGroupQrCode: state.groups.lastGroupQrcode
+        lastGroupQrCode: state.groups.lastGroupQrcode,
+        groupsFollowers: state.groups.allGroupFollowers
     }),
     (dispatch) => ({
         actions: bindActionCreators(groupsAction, dispatch),

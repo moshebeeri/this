@@ -585,6 +585,18 @@ export function unFollowGroup(groupId) {
     }
 }
 
+export function getNextGroupsFollowers(groupId) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        const followers = getState().groups.allGroupFollowers[groupId];
+        let skip = 0;
+        if (followers) {
+            skip = followers.length;
+        }
+        dispatch({type: types.GET_NEXT_GROUPS_FOLLOWERS, groupId: groupId, token: token, skip: skip, limit: 10})
+    }
+}
+
 export function setGroups(response) {
     return {
         type: actions.UPSERT_GROUP,
