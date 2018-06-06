@@ -93,25 +93,6 @@ class Promotions extends Component {
         if (Platform.OS === 'ios') {
             icon = <Icon3 active color={"#FA8559"} size={25} name="ios-add"/>;
         }
-        let headerMenu = <Menu>
-            <MenuTrigger placement="right">
-                {icon}
-            </MenuTrigger>
-            <MenuOptions>
-                <MenuOption onSelect={this.navigateToAdd.bind(this)}>
-                    <ThisText>{strings.AddPromotion}</ThisText>
-                </MenuOption>
-                <MenuOption onSelect={this.onBoardingPromotion.bind(this)}>
-                    <ThisText>{strings.OnBoardingPromotion}</ThisText>
-                </MenuOption>
-                <MenuOption onSelect={this.onProximityPromotion.bind(this)}>
-                    <ThisText>{strings.OnProximityPromotion}</ThisText>
-                </MenuOption>
-                <MenuOption onSelect={this.onProximityPromotion.bind(this)}>
-                    <ThisText>{strings.OnFollowerProximity}</ThisText>
-                </MenuOption>
-            </MenuOptions>
-        </Menu>;
         return (
             <View style={{flex:1}}>
                 <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}

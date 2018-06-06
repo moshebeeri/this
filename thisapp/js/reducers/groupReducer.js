@@ -5,6 +5,7 @@ const initialState = {
     tempGroupFeeds: {},
     groupFeedsUnread: {},
     groupFollowers: {},
+    allGroupFollowers: {},
     update: true,
     loadingDone: {},
     showTopLoader: {},
@@ -142,6 +143,19 @@ export default function group(state = initialState, action) {
             return immutableState;
         case actions.SET_GROUPS_FOLLOWERS :
             immutableState.groupFollowers[action.groupId] = action.followers;
+            return immutableState;
+        case actions.SET_CURRENT_GROUPS_FOLLOWERS :
+            if(!immutableState.allGroupFollowers[action.groupId]){
+                immutableState.allGroupFollowers[action.groupId] =  action.followers
+            }else{
+                let newFollowers = action.followers.filter(follower => {
+                    let followerExist = immutableState.allGroupFollowers[action.groupId].filter(currentFolloer => currentFolloer._id === follower._id );
+                    return followerExist.length === 0
+                })
+                if(newFollowers.length > 0) {
+                    immutableState.allGroupFollowers[action.groupId] = immutableState.allGroupFollowers[action.groupId].concat(newFollowers);
+                }
+            }
             return immutableState;
         case actions.SET_TEMP_FEED:
             if (action.groupId) {

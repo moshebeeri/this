@@ -80,6 +80,17 @@ class GroupsApi {
         }, 'groups', '/groups/candidates');
     }
 
+    getGroupsFollowers(groupId, token,skip,limit) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/groups/following/users/${groupId}/${skip}/${limit}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'groups', '/groups/following');
+    }
+
     getAll(token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/groups/user/follow/0/100`, {
             method: 'GET',
