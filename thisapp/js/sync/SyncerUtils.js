@@ -280,6 +280,14 @@ function syncGroup(groupId) {
                 type: types.SAVE_GROUPS_REQUEST,
                 token: token,
             });
+
+            dispatch({
+                type: types.GET_NEXT_GROUPS_FOLLOWERS,
+                token: token,
+                groupId:groupId,
+                skip:0,
+                limit:0
+            });
             dispatch({
                 type: actions.SYNC_MESSAGE,
                 id: 'user_follow_group_' + groupId,
