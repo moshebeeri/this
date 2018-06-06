@@ -379,10 +379,7 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
         return callback(null, objects)});
 
     }
-
   });
-
-
 };
 
 function make_schema_query_function(schema, _ids){
@@ -413,7 +410,7 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
         queryFunctions.push(make_schema_query_function(schema, _ids));
       })(schemas[key], Array.from(reduced[key]));
     });
-    return async.parallel(queryFunctions, function(err, result) {
+    async.parallel(queryFunctions, function(err, result) {
       if (err) return callback(err, null);
       return callback(null, result)
     });

@@ -6,7 +6,8 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.get('/test/:user/:entity', controller.test);
+router.get('/test/coordinates/:lat/:lng', controller.coordinates);
+//router.get('/test/:user/:entity', controller.test);
 //router.get('/test/email', controller.test_email);
 
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);

@@ -6,6 +6,11 @@ let config = require('../../config/environment');
 let https = require('https');
 let logger = require('../logger').createLogger();
 
+const googleMaps = require('@google/maps').createClient({
+  key: config.google_maps.key,
+  Promise: Promise
+});
+
 function Location() {
 }
 
@@ -27,13 +32,30 @@ function format_address(addressed) {
 }
 
 
+Location.prototype.getReverseGeocodingData = function(lat, lng) {
+
+  const latlng = new googleMaps.LatLng(lat, lng);
+  // This is making the Geocode request
+  const geocoder = new googleMaps.Geocoder();
+  geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+    if (status !== googleMaps.GeocoderStatus.OK) {
+      console.error(status);
+    }
+    // This is checking to see if the Geoeode Status is OK before proceeding
+    if (status === googleMaps.GeocoderStatus.OK) {
+      console.log(results);
+      const address = (results[0].formatted_address);
+    }
+  });
+};
+
+
 Location.prototype.address_location = function address_location(addressed, callback) {
   if(defined(addressed.lat) && defined(addressed.lng))
     return callback(null, {lat: addressed.lat, lng: addressed.lng});
   else if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
     return callback(null, {lat: addressed.location.lat, lng: addressed.location.lng});
 
-  console.log(JSON.stringify(addressed));
   if( !addressed.city || !addressed.address || !addressed.country ||
     addressed.city === "" || addressed.address === "" || addressed.country === "" ) {
     return callback({
