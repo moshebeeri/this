@@ -13,6 +13,7 @@ const initialState = {
     paymentMessage: '',
     templateBusiness: {},
     businessPictures: [],
+    allBusinessFollowers:{},
     lastBusinessQrCode: undefined
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -256,6 +257,19 @@ export default function business(state = initialState, action) {
                 }
                 else {
                     businessesPromotions[action.businessId].push(action.item)
+                }
+            }
+            return businessesState;
+        case actions.SET_BUSINESS_FOLLOWERS :
+            if(!businessesState.allBusinessFollowers[action.businessId]){
+                businessesState.allBusinessFollowers[action.businessId] =  action.followers
+            }else{
+                let newFollowers = action.followers.filter(follower => {
+                    let followerExist = businessesState.allBusinessFollowers[action.businessId].filter(currentFolloer => currentFolloer._id === follower._id );
+                    return followerExist.length === 0
+                })
+                if(newFollowers.length > 0) {
+                    businessesState.allBusinessFollowers[action.businessId] = businessesState.allBusinessFollowers[action.businessId].concat(newFollowers);
                 }
             }
             return businessesState;
