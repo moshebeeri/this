@@ -61,6 +61,13 @@ exports.address2 = function (req, res) {
     return res.status(200).send();
   });
 };
+
+exports.coordinates = function (req, res) {
+  location.getReverseGeocodingData(req.params.lat, req.params.lng)
+    .then(address => res.status(200).json(address))
+    .catch(e => handleError(res, e));
+};
+
 // Get list of businesses
 exports.index = function (req, res) {
   Business.find(function (err, businesses) {
@@ -125,8 +132,10 @@ exports.followers = function (req, res) {
   let business = req.params.business;
   let skip = req.params.skip;
   let limit = req.params.limit;
-  let query = graphModel.paginate_query(`MATCH (:business {_id:'${business}'})<-[r:FOLLOW]-(u:user) RETURN u._id as _id`, skip, limit);
-  graphModel.query_objects(User, query,
+  let query = graphModel.paginate_query(`MATCH (:business {_id:'${business}'})<-[:FOLLOW]-(follower)
+                                        WHERE follower:user or follower:group 
+                                        RETURN follower._id as _id, labels(follower)[0] as label`, skip, limit);
+  graphModel.query_objects_parallel({group: Group, user: User}, query,
     function (err, objects) {
       if (err) return handleError(res, err);
       return res.status(200).json(objects);

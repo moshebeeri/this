@@ -379,10 +379,7 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
         return callback(null, objects)});
 
     }
-
   });
-
-
 };
 
 function make_schema_query_function(schema, _ids){
@@ -398,9 +395,10 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
   db.query(query, function(err, table) {
     if (err) { callback(err, null) }
     let acc = {};
-    Object.keys(table[0]).forEach(k => acc[k] = new Set());
     let reduced = table.reduce(function (acc, obj) {
-      Object.keys(obj).forEach(k => acc[k].add(obj[k]));
+      if(!acc[obj.label])
+        acc[obj.label] = new Set();
+      acc[obj.label].add(obj._id);
       return acc;
     }, acc);
     let queryFunctions = [];
@@ -409,9 +407,23 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
         queryFunctions.push(make_schema_query_function(schema, _ids));
       })(schemas[key], Array.from(reduced[key]));
     });
-    return async.parallel(queryFunctions, function(err, result) {
+
+    async.parallel(queryFunctions, function(err, result) {
       if (err) return callback(err, null);
-      return callback(null, result)
+      console.log('query_objects_parallel:');
+      let all = [];
+      result.forEach(arr => all = all.concat(arr));
+      all.sort(function(a, b) {
+        if (a._id > b._id) {
+          return -1;
+        }
+        if (a._id < b._id) {
+          return 1;
+        }
+        return 0;
+      });
+      console.log(JSON.stringify(all));
+      return callback(null, all)
     });
   });
 };

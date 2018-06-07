@@ -6,6 +6,19 @@ let config = require('../../config/environment');
 let https = require('https');
 let logger = require('../logger').createLogger();
 
+const NodeGeocoder = require('node-geocoder');
+
+const geocoder = NodeGeocoder({
+  provider: 'google',
+  apiKey: config.google_maps.key,
+  formatter: null
+});
+
+// const googleMaps = require('@google/maps').createClient({
+//   key: config.google_maps.key,
+//   Promise: Promise
+// });
+
 function Location() {
 }
 
@@ -27,13 +40,26 @@ function format_address(addressed) {
 }
 
 
+Location.prototype.getReverseGeocodingData = function(lat, lon) {
+  return new Promise((resolve, reject) =>{
+    geocoder.reverse({lat, lon})
+      .then(function(res) {
+        resolve(res);
+      })
+      .catch(function(err) {
+        reject(err);
+      });
+
+  })
+};
+
+
 Location.prototype.address_location = function address_location(addressed, callback) {
   if(defined(addressed.lat) && defined(addressed.lng))
     return callback(null, {lat: addressed.lat, lng: addressed.lng});
   else if(defined(addressed.location) && defined(addressed.location.lat) && defined(addressed.location.lng))
     return callback(null, {lat: addressed.location.lat, lng: addressed.location.lng});
 
-  console.log(JSON.stringify(addressed));
   if( !addressed.city || !addressed.address || !addressed.country ||
     addressed.city === "" || addressed.address === "" || addressed.country === "" ) {
     return callback({

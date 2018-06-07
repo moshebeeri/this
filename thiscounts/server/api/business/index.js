@@ -6,7 +6,7 @@ let auth = require('../../auth/auth.service');
 
 let router = express.Router();
 
-router.get('/test/:user/:entity', controller.test);
+//router.get('/test/:user/:entity', controller.test);
 //router.get('/test/email', controller.test_email);
 
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
@@ -34,5 +34,6 @@ router.get('/groups/following/:business/:skip/:limit', auth.isAuthenticated(), c
 router.get('/users/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.users_following_default_group);
 router.get('/groups/following/default/group/:business/:skip/:limit', auth.isAuthenticated(), controller.groups_following_default_group);
 router.get('/user/businesses/by/phone/:country_code/:phone', auth.isAuthenticated(), controller.getUserBusinessesByPhone);
+router.get('/coordinates/address/:lat/:lng', auth.isAuthenticated(), controller.coordinates);
 
 module.exports = router;

@@ -28,7 +28,7 @@ function getActivityActor(activity) {
   if (activity.actor_chain)
     actor = activity.actor_chain;
 
-  if(actor._id)
+  if(actor && actor._id)
     return actor._id.toString();
   return actor;
 }
