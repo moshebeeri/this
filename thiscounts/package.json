@@ -54,6 +54,7 @@
     "morgan": "1.0.1",
     "multer": "1.2.0",
     "multiparty": "4.1.2",
+    "node-geocoder": "^3.22.0",
     "nodejs-license-file": "^1.1.0",
     "nodemailer": "^4.4.1",
     "npm": "^4.5.0",

@@ -1,4 +1,4 @@
-#docker build -t lowla/thiscounts .
+#docker build -t lowla/thiscounts . --no-cache
 #docker tag lowla/thiscounts eu.gcr.io/this-1000/thiscounts:latest
 
 #docker run -it -p 9000:9000 -e MONGODB_URI='mongodb://localhost/lowla-dev' lowla/thiscounts
