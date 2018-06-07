@@ -49,6 +49,7 @@ class AddBusiness extends Component {
                 name: item.name,
                 address: item.address,
                 email: item.email,
+                phone: item.phone,
                 website: item.website,
                 country: item.country,
                 city: item.city,
@@ -99,6 +100,7 @@ class AddBusiness extends Component {
                 address: templateBusiness.address,
                 email: templateBusiness.email,
                 website: templateBusiness.website,
+                phone:templateBusiness.phone,
                 country: strings.Israel,
                 city: templateBusiness.city,
                 state: '',
@@ -176,6 +178,7 @@ class AddBusiness extends Component {
             name: this.state.name,
             tax_id: this.state.tax_id,
             type: this.state.type,
+            phone: this.state.phone,
             website: this.state.website,
             logoImage: this.state.image,
             IdIdentifierImage: this.state.IdIdentifierImage,
@@ -418,9 +421,16 @@ class AddBusiness extends Component {
                 </View>
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                     <TextInput field={strings.BusinessName} value={this.state.name}
-                               returnKeyType='next' ref="1" refNext="1"
-                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               returnKeyType='next' ref="1" refNext="phone"
+                               onSubmitEditing={this.focusNextField.bind(this, "phone")}
                                onChangeText={(name) => this.setReduxState({name})} isMandatory={true}/>
+                </View>
+
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.PhoneNumber} value={this.state.phone}
+                               returnKeyType='next' ref="phone" refNext="phone"
+                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               onChangeText={(phone) => this.setReduxState({phone})} />
                 </View>
 
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>

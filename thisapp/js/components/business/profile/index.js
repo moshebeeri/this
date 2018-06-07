@@ -195,6 +195,13 @@ class BusinessProfile extends Component {
         }
     }
 
+
+    call(){
+        let business = this.getBusiness();
+        if (business.phone) {
+            Linking.openURL('tel:' + business.phone);
+        }
+    }
     showAddress() {
         let business = this.getBusiness();
         let address = business.country + ' ' + business.city + ' ' + business.address
@@ -292,6 +299,16 @@ class BusinessProfile extends Component {
                                 }}>{business.email}</ThisText>
 
                             </TouchableOpacity>
+                            {business.phone && <TouchableOpacity onPress={() => this.call()}
+                                              style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                                <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"phone"}/>
+                                <ThisText note style={{
+                                    fontSize: 20,
+                                    color: '#A9A9A9',
+                                    marginLeft: 15
+                                }}>{business.phone}</ThisText>
+
+                            </TouchableOpacity>}
 
 
                             <TouchableOpacity onPress={() => this.showAddress()}

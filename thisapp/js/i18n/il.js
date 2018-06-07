@@ -340,6 +340,15 @@ const il = {
     PromotionName                                 : "כותרת ההנחה",
     PromotioDescription                           : "תאור / הסבר",
     Version                                       : "גירסה {0}",
+    Points                                        : "הנחת נקודות",
+    PointsDiscount                                : "הנחת נקודות",
+    MinPointsTerm                                 : "מספר נקודות מינימלי המאפשרות מימוש",
+    PointsRatio                                   : "היחס בין נקדוה לשקל",
+    PointsRatioExample                            : "לדוגמא 2 המשמעות היא ש 2 נקודות שוות 1 שקל",
+    PointsAccumulationRatio                       : " יחס צבירת נקודות (%)",
+    PointsAccumulationExample                     : "לדוגמא 10 המשמעות שבקנייה של 100 נצבר 10 ",
+
+
 };
 
 export default il;

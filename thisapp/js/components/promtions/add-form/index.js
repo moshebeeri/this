@@ -18,6 +18,7 @@ import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
 import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index";
+import PointsComponent from "./points/index";
 import PunchCardComponent from "./punch-card/index";
 import XPlusYComponent from "./xPlusY/index";
 import GiftComponent from "./gift/index";
@@ -47,6 +48,10 @@ const types = [
             value: 'PUNCH_CARD',
             label: strings.PunchCard
         },
+        // {
+        //     value: 'POINTS',
+        //     label: strings.Points
+        // },
         {
             value: 'HAPPY_HOUR',
             label: strings.HappyHour
@@ -171,6 +176,7 @@ class AddPromotion extends Component {
             product: '',
             productList: [],
             percent: {},
+            points: {},
             amount: '',
             retail_price: '',
             total_discount: '',
@@ -502,6 +508,13 @@ class AddPromotion extends Component {
         let discountForm = undefined;
         if (this.state.type) {
             switch (this.state.type) {
+                case 'POINTS':
+                    discountForm =
+                        <PointsComponent currencySymbol={currencySymbol} toggle={this.state.toggle}
+                                          navigation={this.props.navigation} api={this}
+                                          state={this.state}
+                                          ref={"points"} setState={this.setReduxState.bind(this)}/>;
+                    break;
                 case 'PERCENT':
                     discountForm =
                         <PercentComponent currencySymbol={currencySymbol} toggle={this.state.toggle}

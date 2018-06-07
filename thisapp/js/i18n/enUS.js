@@ -329,6 +329,13 @@ const enUS = {
     PromotionName                                 : "Promotion Name",
     PromotioDescription                           : "Promotion Description",
     Version                                       : "Version {0}",
+    Points                                        : "Points",
+    PointsDiscount                                : "Points Discount",
+    MinPointsTerm                                 : "Minimum Points For Redeem",
+    PointsRatio                                   : "Ratio Between Point and Local Currency",
+    PointsAccumulationRatio                       : "Point Accumulation Ratio (%)",
+    PointsAccumulationExample                     : "10 means pay 100 Accumulate 10 points",
+    PointsRatioExample                            : "2 means 2 points worth 1 Local Currency ",
 
 };
 
