@@ -8,6 +8,7 @@ const utils = require('../../components/utils').createUtils();
 //pricing free tier
 let BusinessSchema = new Schema({
   social_state: {},
+  phone: {type: String, index: true, required: true},
   pricing: {type: Schema.ObjectId, ref: 'Pricing', autopopulate: true},
   name: {type: String, index: true, required: true},
   gid: {type: Number, index: true},

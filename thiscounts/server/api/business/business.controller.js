@@ -440,6 +440,7 @@ function createValidatedBusiness(business, callback) {
     graphModel.reflect(business, {
       _id: business._id,
       name: business.name,
+      phone: business.phone,
       type: business.type,
       creator: business.creator._id,
       lat: business.location.lat,
