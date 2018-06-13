@@ -732,7 +732,10 @@ exports.entityRoles = function (req, res) {
 };
 
 exports.userEntityRole = function (req, res) {
-  return Role.getUserEntityRoles(req, res)
+  return Role.getUserEntityRoles(req.user._id, req.params.entity, (err, ret) => {
+    if(err) return handleError(res, err);
+    return res.status(200).json(ret);
+  })
 };
 
 exports.getUserByPhone = function (req, res) {
