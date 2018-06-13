@@ -64,6 +64,7 @@ let PromotionSchemaObject = {
     }],
   },
   name: {type: String, required: true},
+  cardType: {type: Schema.ObjectId, ref:'CardType'},
   client: {},
   pictures : [],
   video: {type: Schema.ObjectId, ref: 'Video', autopopulate: true},

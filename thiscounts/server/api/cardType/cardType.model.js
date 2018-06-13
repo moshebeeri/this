@@ -18,6 +18,11 @@ let CardTypeSchema = new Schema({
       'BRAND'
     ]
   },
+  points: {
+    min_points: {type: Number, required: true},
+    points_ratio: {type: Number, required: true},
+    accumulate_ratio: {type: Number, required: true}
+  },
   client: {},
   pictures: []
 });
