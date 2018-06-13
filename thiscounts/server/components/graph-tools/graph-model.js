@@ -410,7 +410,6 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
 
     async.parallel(queryFunctions, function(err, result) {
       if (err) return callback(err, null);
-      console.log('query_objects_parallel:');
       let all = [];
       result.forEach(arr => all = all.concat(arr));
       all.sort(function(a, b) {
@@ -422,7 +421,6 @@ GraphModel.prototype.query_objects_parallel = function query_objects_parallel(sc
         }
         return 0;
       });
-      console.log(JSON.stringify(all));
       return callback(null, all)
     });
   });

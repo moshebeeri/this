@@ -24,7 +24,6 @@ const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
 const config = require('../../config/environment');
 const Promise = require('bluebird');
-
 exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
@@ -45,7 +44,6 @@ exports.test_email = function (req, res) {
       return res.status(200).send();
     })
 };
-
 exports.address2 = function (req, res) {
   location.address(req.body.address, function (err, data) {
     if (err) {
@@ -61,13 +59,11 @@ exports.address2 = function (req, res) {
     return res.status(200).send();
   });
 };
-
 exports.coordinates = function (req, res) {
   location.getReverseGeocodingData(req.params.lat, req.params.lng)
     .then(address => res.status(200).json(address))
     .catch(e => handleError(res, e));
 };
-
 // Get list of businesses
 exports.index = function (req, res) {
   Business.find(function (err, businesses) {
@@ -141,7 +137,6 @@ exports.followers = function (req, res) {
       return res.status(200).json(objects);
     });
 };
-
 exports.mine = function (req, res) {
   let userId = req.user._id;
   getUserBusinesses(userId, true, (err, info) => {
@@ -711,27 +706,36 @@ exports.test = function (req, res) {
   // checkPermitted(req.params.user, req.params.entity)
   permitted2(req.params.user, req.params.entity)
     .then(has => res.status(200).json(has))
-    .catch(e=>handleError(res, e));
+    .catch(e => handleError(res, e));
   // permitted(req.params.user, req.params.entity, (err, has)=>{
   //   if(err) handleError(res, err);
   //   return res.status(200).json(has);
   // })
 };
 
-function permitted(userId, entityId, callback){
+function permitted(userId, business, callback) {
+  //update before business established
+  if(!business.gid) {
+    if(business.creator._id.toString() === userId.toString())
+      return callback(null, true);
+    else
+      return callback(null, false);
+  }
+  const entityId =  business._id;
   const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as has`;
   graphModel.query(query, (err, results) => {
-    if(err)  return callback(err);
-    if(results.length !== 1) return callback(new Error('unexpected result length'));
+    if (err) return callback(err);
+    if (results.length !== 1) return callback(new Error('unexpected result length'));
     return callback(null, results[0].has)
   })
 }
-function permitted2(userId, entityId){
-  return new Promise(function(resolve, reject) {
+
+function permitted2(userId, entityId) {
+  return new Promise(function (resolve, reject) {
     const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as has`;
     graphModel.query(query, (err, results) => {
-      if(err)  return reject(err);
-      if(results.length !== 1) return reject(new Error('unexpected result length'));
+      if (err) return reject(err);
+      if (results.length !== 1) return reject(new Error('unexpected result length'));
       return resolve(results[0].has)
     });
   });
@@ -742,11 +746,17 @@ exports.update = function (req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  permitted(req.user._id, req.params.id, (err, hasPermissions)=> {
-    if (err) return handleError(res, err);
-    if(!hasPermissions) return res.status(401).json(`user not permitted`);
+  Business.findById(req.params.id, function (err, business) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!business) {
+      return res.status(404).send('Not Found');
+    }
+    permitted(req.user._id, business, (err, hasPermissions) => {
+      if (err) return handleError(res, err);
+      if (!hasPermissions) return res.status(401).json(`user not permitted`);
 
-    Business.findById(req.params.id, function (err, business) {
       function update_location(updated, current, callback) {
         if (updated.country !== current.country ||
           updated.city !== current.city ||
@@ -774,12 +784,6 @@ exports.update = function (req, res) {
         }
       }
 
-      if (err) {
-        return handleError(res, err);
-      }
-      if (!business) {
-        return res.status(404).send('Not Found');
-      }
       let should_validate_email = false;
       if (req.body.email && req.body.email !== business.email)
         should_validate_email = true;
@@ -800,9 +804,8 @@ exports.update = function (req, res) {
     });
   })
 };
-
 exports.update_pictures = function (req, res) {
-  permitted(req.user._id, req.params.id, (err, hasPermissions)=> {
+  permitted(req.user._id, req.params.id, (err, hasPermissions) => {
     if (err) return handleError(res, err);
     if (!hasPermissions) return res.status(401).json(`user not permitted`);
     Business.findById(req.params.id, function (err, business) {
@@ -814,7 +817,6 @@ exports.update_pictures = function (req, res) {
     });
   })
 };
-
 // Deletes a business from the DB.
 exports.destroy = function (req, res) {
   Business.findById(req.params.id, function (err, business) {
