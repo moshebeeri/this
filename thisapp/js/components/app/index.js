@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {AppState, I18nManager, Platform, StyleSheetm, TouchableOpacity, View,BackHandler} from "react-native";
 import {connect} from "react-redux";
-import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,} from "native-base";
+import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,Spinner} from "native-base";
 import GeneralComponentHeader from "../header/index";
 import Feeds from "../feed/index";
 import MydPromotions from "../my-promotions/index";
@@ -247,12 +247,14 @@ class ApplicationManager extends Component {
 
     render() {
         const {
-            showAdd, showComponent, notifications, feedAction,
+            stateReady,showAdd, showComponent, notifications, feedAction,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults, notificationOnAction
         } = this.props;
-        console.log(this.state.activeTab);
+        if(!stateReady){
+            return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}><Spinner/></View>
+        }
         if (!showComponent) {
             return <View></View>
         }
@@ -280,6 +282,7 @@ class ApplicationManager extends Component {
             this.drawer._root.open()
         };
         let notificationLabel = 'notification_' + notifications;
+
         return (
 
             <Drawer
@@ -443,6 +446,7 @@ class ApplicationManager extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        stateReady: state.mainTab.stateReady,
         isAuthenticated: isAuthenticated(state),
         user: state.user.user,
         showPopup: state.mainTab.showPopup,

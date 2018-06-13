@@ -97,7 +97,7 @@ export default class PointsComponent extends Component {
                 <View style={styles.inputTextLayout}>
 
                     <TextInput field={strings.MinPointsTerm} value={this.props.state.points.min_points}
-                               returnKeyType='next' ref="retail" refNext="retail"
+                               returnKeyType='next' ref="min_points" refNext="points_ratio"
                                keyboardType='numeric'
                                validateContent={FormUtils.validateNumberic}
                                onChangeText={(value) => this.setMinPoints(value)} isMandatory={true}/>
@@ -105,7 +105,7 @@ export default class PointsComponent extends Component {
                 <View style={[styles.inputTextLayout, {flexDirection: 'column', width: StyleUtils.getWidth() - 15}]}>
 
                     <TextInput field={strings.PointsRatio} value={this.props.state.points.points_ratio}
-                               returnKeyType='next' ref="retail" refNext="retail"
+                               returnKeyType='next' ref="points_ratio" refNext="accumulate_ratio"
                                keyboardType='numeric'
                                validateContent={FormUtils.validateNumberic}
                                placeholder={strings.PointsRatioExample}
@@ -115,7 +115,7 @@ export default class PointsComponent extends Component {
                 <View style={[styles.inputTextLayout, {flexDirection: 'column', width: StyleUtils.getWidth() - 15}]}>
 
                     <TextInput field={strings.PointsAccumulationRatio} value={this.props.state.points.accumulate_ratio}
-                               returnKeyType='next' ref="retail" refNext="retail"
+                               returnKeyType='done' ref="accumulate_ratio" refNext="retail"
                                keyboardType='numeric'
                                validateContent={FormUtils.validatePercent}
                                placeholder={strings.PointsAccumulationExample}
