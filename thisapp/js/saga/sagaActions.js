@@ -72,3 +72,6 @@ export const FEED_CHAT_SCROLL_UP = 'FEED_CHAT_SCROLL_UP';
 export const FEED_SYNC_CHAT = 'FEED_SYNC_CHAT';
 // change tav
 export const CHANGE_TAB = 'CHANGE_TAB';
+
+// user
+export const GET_USER_ENTITY_ROLES = 'GET_USER_ENTITY_ROLES';

@@ -58,6 +58,12 @@ function addMyBusinessSync(businessId) {
                 businessId: businessId,
                 token: token,
             })
+
+            dispatch({
+                type: types.GET_USER_ENTITY_ROLES,
+                entityId: businessId,
+                token: token,
+            })
             dispatch({
                 type: actions.SYNC_MESSAGE,
                 id:  "business_permissions" + businessId,

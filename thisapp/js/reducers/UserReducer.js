@@ -7,7 +7,7 @@
 /**
  * Created by stan229 on 5/27/16.
  */
-const initialState = {selectedUsers: [], users: {}, userPictures:[],followers: [], user: undefined, saving: false};
+const initialState = {entityRoles:{}, selectedUsers: [], users: {}, userPictures:[],followers: [], user: undefined, saving: false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -25,6 +25,9 @@ export default function user(state = initialState, action) {
     switch (action.type) {
         case actions.UPSERT_SINGLE_USER:
             currentUsers[action.item._id] = action.item;
+            return userState;
+        case actions.SET_USER_ENTITY_ROLES:
+            userState.entityRoles[action.entityId] = action.roles;
             return userState;
         case actions.UPSERT_USER:
             action.item.forEach(eventItem => {

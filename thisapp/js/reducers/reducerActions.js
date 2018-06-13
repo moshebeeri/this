@@ -174,6 +174,7 @@ export const CURRENT_GROUP = 'CURRENT_GROUP';
 export const UPSERT_USER = 'UPSERTuser';
 export const UPSERT_SINGLE_USER = 'UPSERT_SINGLE_USER';
 export const SET_USER = 'SET_USER';
+export const SET_USER_ENTITY_ROLES= 'SET_USER_ENTITY_ROLES';
 export const USER_FOLLOW = 'USER_FOLLOW';
 export const SAVING_USER = 'SAVING_USER';
 export const SAVING_USER_DONE = 'SAVING_USER_DONE';

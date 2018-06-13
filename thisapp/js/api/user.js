@@ -31,6 +31,18 @@ class UserApi {
         }, 'user', 'users/me');
     }
 
+    getUserEntityRoles(token,entity) {
+        if (!token) return this.noTokenReject();
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/user/roles/${entity}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
+            }
+        }, 'user', '/user/roles/');
+    }
+
     getServerVersion(token) {
         if (!token) return this.noTokenReject();
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/server/version`, {

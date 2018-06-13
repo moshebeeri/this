@@ -166,6 +166,20 @@ export function resetPasswordForm() {
     }
 }
 
+export function getUserEntityRoles(entityId) {
+    return function (dispatch,getState) {
+        const token = getState().authentication.token;
+        const roles = getState().user.entityRoles[entityId];
+        if(!roles) {
+            dispatch({
+                type: types.GET_USER_ENTITY_ROLES,
+                token: token,
+                entityId: entityId
+            });
+        }
+    }
+}
+
 async function updateUserLocale(dispatch, token, user, locale) {
     try {
         if (!user.locale || (user.locale && user.locale !== locale)) {

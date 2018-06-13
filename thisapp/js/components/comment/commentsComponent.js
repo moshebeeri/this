@@ -7,6 +7,7 @@ import GenericFeedManager from "../generic-feed-manager/index";
 import styles from "./styles";
 import {bindActionCreators} from "redux";
 import * as commentEntitiesAction from "../../actions/commentsEntities";
+import * as userAction from "../../actions/user";
 import {getFeeds} from "../../selectors/commentsEntitiesSelector";
 import {ChatMessage, MessageBox, PromotionHeader} from '../../ui/index';
 import StyleUtils from "../../utils/styleUtils";
@@ -21,12 +22,15 @@ class CommentsComponent extends Component {
 
     componentWillMount() {
         const item = this.getInstance();
-        const {group, actions} = this.props;
+        const {group, actions,userAction} = this.props;
         if (group) {
             actions.fetchTopComments(group, item);
         } else {
             actions.setNextFeeds(item.entities, item.generalId);
 
+        }
+        if(item.business){
+            userAction.getUserEntityRoles(item.business._id);
         }
     }
 
@@ -138,10 +142,13 @@ class CommentsComponent extends Component {
     }
 
     checkDeletePermissions(){
-        const {user} = this.props;
+        const {userEntityRoles} = this.props;
         const instance = this.getInstance();
         if(instance.business){
-            return instance.business.creator._id === user._id;
+            let roles = userEntityRoles[instance.business._id];
+            if(roles && roles.length > 0) {
+                return true;
+            }
         }
 
         return false;
@@ -159,13 +166,15 @@ export default connect(
     state => ({
         token: state.authentication.token,
         userFollower: state.user.followers,
+        userEntityRoles: state.user.entityRoles,
         user: state.user.user,
         feeds: getFeeds(state),
         showTopLoader: state.entityComments.showTopLoader,
         loadingDone: state.entityComments.loadingDone,
     }),
     (dispatch) => ({
-        actions: bindActionCreators(commentEntitiesAction, dispatch)
+        actions: bindActionCreators(commentEntitiesAction, dispatch),
+        userAction: bindActionCreators(userAction, dispatch)
     })
 )(CommentsComponent);
 

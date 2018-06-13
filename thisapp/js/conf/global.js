@@ -7,6 +7,6 @@ module.exports = {
 };
 global.server_host = Config.API_URL;
 global.help_url = Config.HELP_URL;
-global.versionClient = '1.0.12';
+global.versionClient = '1.0.13';
 global.debug = true;
 global.appBackgroundColor= '#E6E6E6';
