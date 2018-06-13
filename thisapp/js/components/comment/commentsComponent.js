@@ -126,13 +126,32 @@ class CommentsComponent extends Component {
         let isUser = item.actor === user._id;
         let messageItem = {
             name: item.name,
+            id: item.id,
             avetar: item.logo,
             message: item.description,
             date: item.date,
             isUser: isUser
         };
-        return <ChatMessage key={item.id}
+        let showDelete = this.checkDeletePermissions()
+        return <ChatMessage  showDelete={showDelete} key={item.id} deleteMessage={this.deleteMessage.bind(this)}
                             item={messageItem}/>
+    }
+
+    checkDeletePermissions(){
+        const {user} = this.props;
+        const instance = this.getInstance();
+        if(instance.business){
+            return instance.business.creator._id === user._id;
+        }
+
+        return false;
+    }
+    deleteMessage(messageItem){
+        const instance = this.getInstance();
+        if(instance.business){
+            this.props.actions.deleteMessage(messageItem.id,instance.id,instance.business._id)
+        }
+
     }
 }
 

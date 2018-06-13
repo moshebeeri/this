@@ -190,15 +190,13 @@ function addGroupChatSync(groupId) {
     })
 }
 
-function addChatSync(generalId, entity) {
+function addChatSync(generalId, entities) {
     let dispatch = store.dispatch;
     let state = store.getState();
     asyncListener.addListener('instanceMessage_' + generalId, (snap) => {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            let entities = [];
-            entities.push(entity);
             let entitiesComents = state.entityComments.entityCommentsOrder[generalId];
             if(state.syncServer.syncMessages['instanceMessage_' + generalId] && state.syncServer.syncMessages['instanceMessage_' + generalId]=== response ){
                 return;
@@ -227,6 +225,26 @@ function addChatSync(generalId, entity) {
                     lastMessage: response
                 })
             }
+        }
+    })
+
+    asyncListener.addListener('deleteMessage_' + generalId, (snap) => {
+        let response = snap.val();
+        if (response && !response.markAsRead ) {
+            if(state.syncServer.syncMessages['deleteMessage_' + generalId] && state.syncServer.syncMessages['deleteMessage_' + generalId]=== response ){
+                return;
+            }
+            dispatch({
+                type: actions.DELETE_INSTANCE_MESSAGE,
+                messageId: response,
+                generalId: generalId
+            });
+
+            dispatch({
+                type: actions.SYNC_MESSAGE,
+                id:  'deleteMessage_' + generalId,
+                lastMessage: response
+            })
         }
     })
 }

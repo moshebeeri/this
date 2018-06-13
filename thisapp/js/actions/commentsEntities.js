@@ -73,6 +73,21 @@ export function sendMessage(entities, generalId, message) {
     }
 }
 
+export function deleteMessage(messageId, syncId,deleteId ) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        try {
+            commentsApi.deleteComment(messageId, deleteId, token);
+            SyncUtils.invokeEntityCommentDeleteEvent(syncId, messageId);
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'createGlobalComment')
+            await logger.actionFailed('createGlobalComment')
+        }
+    }
+}
+
+
 function createMessage(message, user) {
     return {
         activity: {

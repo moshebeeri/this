@@ -24,6 +24,13 @@ export default function entityComments(state = initialState, action) {
     let clientMessage = currentState.clientMessages;
     let entitiesComments = currentState.entityComments;
     switch (action.type) {
+
+        case actions.DELETE_INSTANCE_MESSAGE:
+            if(action.messageId && entitiesComments[action.generalId]) {
+                entitiesComments[action.generalId][action.messageId] = undefined;
+                currentState.entityCommentsOrder[action.generalId] = currentState.entityCommentsOrder[action.generalId].filter(id => id !== action.messageId)
+            }
+            return currentState;
         case actions.UPSERT_ENTITIES_COMMENT :
             if (!entitiesComments[action.generalId]) {
                 entitiesComments[action.generalId] = {}

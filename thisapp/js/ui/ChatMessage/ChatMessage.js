@@ -37,8 +37,8 @@ export default class ChatMessage extends Component {
     }
 
     deleteMessage(){
-        const {deleteMessage} = this.props;
-        deleteMessage();
+        const {deleteMessage,item} = this.props;
+        deleteMessage(item);
 
 
     }

@@ -38,8 +38,8 @@ class CommentApi {
         }, 'comments', '/create');
     }
 
-    deleteComment(commentId, groupId, token) {
-        return serverRequestHandler.fetch_handler(`${server_host}/api/comments/${commentId}/${groupId}`, {
+    deleteComment(commentId, entityId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/comments/${commentId}/${entityId}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain, */*',

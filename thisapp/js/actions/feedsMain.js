@@ -329,23 +329,29 @@ export function* updateFeedsListeners(feeds) {
         let feed;
         while (feed = values.pop()) {
             let id;
+            let entities
             switch (feed.activity.action) {
                 case 'created':
                     id = feed.activity.business._id;
+                    entities = [{business: id}];
                     break;
                 case 'share':
                     if (feed.activity.activity.instance) {
                         id = feed.activity.activity.instance._id;
+                        entities = [{instance: id}];
                     }
                     if (feed.activity.activity.post) {
                         id = feed.activity.activity.post._id;
+                        entities = [{post: id}];
                     }
                     break;
                 case 'eligible':
                     id = feed.activity.instance._id;
+                    entities = [{instance: id}];
                     break;
                 case 'post':
                     id = feed.activity.post._id;
+                    entities = [{post: id}];
                     break;
             }
             if (id) {
@@ -354,6 +360,12 @@ export function* updateFeedsListeners(feeds) {
                     id: id
                 });
                 SyncerUtils.syncSocialState(id);
+                yield put({
+                    type: actions.CHAT_LISTENER,
+                    id: id,
+                    entities: entities
+                });
+                SyncerUtils.addChatSync(id,entities);
             }
         }
     }

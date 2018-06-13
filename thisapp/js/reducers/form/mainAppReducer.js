@@ -16,6 +16,7 @@ const initialState = {
     showAdd: false,
     showPopup: false,
     instance: undefined,
+    stateReady: false,
     notificationTitle: '',
     notificationId: '',
     notificationAction: '',
@@ -28,7 +29,7 @@ export default function mainTab(state = initialState, action) {
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
         return {
-            ...state, ...savedData.mainTab
+            ...state, ...savedData.mainTab, stateReady: true
         };
     }
     switch (action.type) {
