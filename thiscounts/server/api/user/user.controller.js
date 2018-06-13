@@ -731,6 +731,10 @@ exports.entityRoles = function (req, res) {
   return Role.entityRoles(req, res)
 };
 
+exports.userEntityRole = function (req, res) {
+  return Role.getUserEntityRoles(req, res)
+};
+
 exports.getUserByPhone = function (req, res) {
   //country_code
   User.findOne({ phone_number: req.params.country_code + req.params.phone}, function (err, user) {

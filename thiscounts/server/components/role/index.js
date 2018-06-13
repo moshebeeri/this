@@ -143,7 +143,7 @@ Role.entityRoles = function (req, res) {
 };
 
 Role.getUserEntityRoles = function (userId, entityId, callback) {
-  graphModel.query(`MATCH (user:user{_id:"${entityId}"})-[roles:ROLE]->(e{_id:"${entityId}"}) return roles`,  function (err, roles) {
+  graphModel.query(`MATCH (user:user{_id:"${userId}"})-[roles:ROLE]->(e{_id:"${entityId}"}) return roles`,  function (err, roles) {
       if (err) return callback(err);
       return callback(null, roles.map(role=>{Roles.get(role)}));
   })

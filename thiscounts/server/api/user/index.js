@@ -40,6 +40,7 @@ router.get('/role/by/phone/:country_code/:phone/:role/:entity', auth.isAuthentic
 router.delete('/role/:user/:entity', auth.isAuthenticated(), controller.deleteEntityUserRole);
 router.get('/roles/:role/:entity/:skip/:limit', auth.isAuthenticated(), controller.entityRoles);
 router.get('/roles/:entity/:skip/:limit', auth.isAuthenticated(), controller.entityRoles);
+router.get('/user/roles/:entity', auth.isAuthenticated(), controller.userEntityRole);
 router.get('/get/user/by/phone/:country_code/:phone', auth.isAuthenticated(), controller.getUserByPhone);
 
 module.exports = router;
