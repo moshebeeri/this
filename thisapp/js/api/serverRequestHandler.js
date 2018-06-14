@@ -7,12 +7,16 @@ class ServerRequestHandler {
     handleServerRequest(status) {
         if (status < 400) {
             return '';
-        } else if (status === 401 || status === 403) {
+        } else if (status === 401 || status === 403 ) {
             return errors.UN_AUTHOTIZED_ACCESS;
         } else if (status === 402) {
             return errors.PAYMENT_REQUIRED;
         } else {
-            return errors.UNHANDLED_ERROR;
+            if (status === 404) {
+                return errors.REALIZATIOn_NOT_ALLOWED;
+            } else {
+                return errors.UNHANDLED_ERROR;
+            }
         }
     }
 

@@ -66,13 +66,15 @@ export default class BusinessFollow extends Component {
         }
 
         if(showAssigmentMessage){
-            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'white' , height: height -10,
+                width:width,padding:10,alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <ThisText>{strings.AssignmentOfQRCodeSucceeded}</ThisText>
             </View>)
 
         }
         if(ShowOutOffScope){
-            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'white' , height: height -10,
+                width:width,padding:10,alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <ThisText>{strings.ConditionOutOfScope}</ThisText>
             </View>)
 
@@ -80,14 +82,15 @@ export default class BusinessFollow extends Component {
 
 
         if(showNotAuthorizedMessage){
-            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'white' , height: height -10,
+                width:width,padding:10,alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <ThisText>{strings.notAuthorizedMessage}</ThisText>
             </View>)
 
         }
 
         if(showAssigmentMessageFailed){
-            return (<View style={{backgroundColor:'transparent',alignItems:'center',justifyContent:'flex-start',flex:1}}>
+            return (<View style={{backgroundColor:'׳white',alignItems:'center',justifyContent:'flex-start',flex:1}}>
                 <ThisText>{strings.AssignmentOfQRCodeFailed}</ThisText>
             </View>)
 

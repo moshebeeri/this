@@ -245,7 +245,7 @@ const il = {
     punchCardTerm                                 : "כרטיס ניקוב - כל {0} קבל {1} חינם",
     ConfirmLast                                   : "אשר ניקוב אחרון",
     Realized                                      : "ממש",
-    notAuthorizedMessage                          : "אין לך הרשאות תואמות כדי לאשר קוד זה",
+    notAuthorizedMessage                          : "אין לך הרשאות תואמות כדי לאשר קוד זה או שקוד זה לא פעיל",
     validateByEmail                               : "נשלח email אימות",
     ConditionOutOfScope                           : "לא ניתן לממש הנחה שפג תוקפה",
     PromotionFailedSavingMessage                  : "שגיאה זמנית לא מאפשרת שמירת ההטבה, אנא נסו בממועד מאוחר יותר",

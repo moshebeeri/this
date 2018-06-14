@@ -193,17 +193,21 @@ class ApplicationManager extends Component {
         if(this.props.currentScreen === 'GroupFeed'){
             return true;
         }
+        if(!this.refs["tabs"]){
+            return true;
+        }
+
 
         if(this.props.currentScreen !== 'home'){
             return false;
         }
 
-        if(I18nManager.isRTL && this.state.currentTab.i !== 3) {
+        if(I18nManager.isRTL && this.state.currentTab.i !== 3 ) {
             this.refs["tabs"].goToPage(0);
             return true;
         }
 
-        if(!I18nManager.isRTL && this.state.currentTab.i !== 0) {
+        if(!I18nManager.isRTL && this.state.currentTab.i !== 0 ) {
             this.refs["tabs"].goToPage(0);
             return true;
         }

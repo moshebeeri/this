@@ -73,13 +73,13 @@ export function scanResult(barcode, businessAssign) {
                         }
                     }
                 }
-                dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
+                dispatch({type: actions.SCANNER_SHOW_SEARCH_SPIN, searching: false})
             }
             handler.handleSuccses(getState(), dispatch)
         }
         catch (error) {
-            dispatch({type: actions.SHOW_SEARCH_SPIN, searching: false})
-            if (error && error === errors.REALIZATIOn_NOT_ALLOWED) {
+            dispatch({type: actions.SCANNER_SHOW_SEARCH_SPIN, searching: false})
+            if (error && (error === errors.REALIZATIOn_NOT_ALLOWED)) {
                 dispatch({
                     type: actions.SCANNER_SHOW_NOT_AUTHOTIZED,
                 });

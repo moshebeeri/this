@@ -244,7 +244,7 @@ const enUS = {
     punchCardTerm                                 : "Punch Card {0} Slots - Get {1} For Free",
     ConfirmLast                                   : "Confirm Last Punch",
     Realized                                      : "Redeemed",
-    notAuthorizedMessage                          : "You are unauthorized to accept this QR Code",
+    notAuthorizedMessage                          : "You are unauthorized to accept this QR Code Or QR code is invalid",
     validateByEmail                               : "Email Validation Will be Sent",
     ConditionOutOfScope                           : "Outdated Promotions Cannot be Redeemed",
     PromotionFailedSavingMessage                  : "Temporally unable to save promotion, Please try again later ",

@@ -74,7 +74,7 @@ export default class FeedPromotion extends Component {
     }
 
     componentDidUpdate(){
-        if(this.props.actions.finishUpdateItem) {
+        if(this.props.actions && this.props.actions.finishUpdateItem) {
             this.props.actions.finishUpdateItem(this.props.item.id)
         }
 
