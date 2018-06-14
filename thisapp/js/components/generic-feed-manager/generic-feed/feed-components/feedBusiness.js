@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import InViewPort from '../../../../utils/inviewport'
+import {Linking, TouchableOpacity} from 'react-native';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -51,18 +51,25 @@ export default class FeedBusiness extends Component {
         }
     }
 
+    showAddress() {
+        const {item} = this.props;
+        let address = item.business.country + ' ' + item.business.city + ' ' + item.business.address
+        let encodeAddress = encodeURI(address);
+        Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + encodeAddress);
+    }
+
     shouldComponentUpdate() {
         const {item, shouldUpdateFeeds} = this.props;
-        if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
+        if (shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined) {
             return true
         }
         return false;
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         this.props.actions.finishUpdateItem(this.props.item.id)
-
     }
+
     createBusiness(item, like, unlike, showUsers, comment, group) {
         const {location, refresh, showActions} = this.props;
         if (!item.name) {
@@ -72,7 +79,7 @@ export default class FeedBusiness extends Component {
         const imageBusiness = this.createBusinessImage(item, styles, showActions,);
         const result =
             <View
-                        style={[styles.businesses_container, {width: StyleUtils.getWidth()}]}>
+                style={[styles.businesses_container, {width: StyleUtils.getWidth()}]}>
                 <View style={[styles.promotion_card, {width: StyleUtils.getWidth()}]}>
 
                     <View style={{
@@ -99,7 +106,7 @@ export default class FeedBusiness extends Component {
                         <View style={styles.businessLocationdescription}>
 
 
-                            <View style={styles.promotion_bottom_location}>
+                            <TouchableOpacity  onPress={() => this.showAddress()} style={styles.promotion_bottom_location}>
                                 <Icon3 style={styles.promotion_location} size={StyleUtils.scale(25)}
                                        name="location-on"/>
                                 <View style={{flexDirection: 'row'}}>
@@ -109,7 +116,7 @@ export default class FeedBusiness extends Component {
                                         {FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}
                                     </ThisText>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
@@ -143,7 +150,7 @@ export default class FeedBusiness extends Component {
                     height: StyleUtils.relativeHeight(15, 10),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    bottom:0,
+                    bottom: 0,
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>

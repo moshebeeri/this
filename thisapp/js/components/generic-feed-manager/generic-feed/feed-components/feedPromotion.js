@@ -2,7 +2,7 @@
  * Created by roilandshut on 23/07/2017.
  */
 import React, {Component} from 'react';
-import {Dimensions} from 'react-native';
+import {Dimensions, Linking, TouchableOpacity} from 'react-native';
 import InViewPort from '../../../../utils/inviewport'
 import instanceUtils from '../../../../utils/instanceUtils'
 import navigationUtils from '../../../../utils/navigationUtils'
@@ -73,6 +73,13 @@ export default class FeedPromotion extends Component {
         return false;
     }
 
+    showAddress() {
+        const {item} = this.props;
+        let address = item.business.country + ' ' + item.business.city + ' ' + item.business.address
+        let encodeAddress = encodeURI(address);
+        Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + encodeAddress);
+    }
+
     componentDidUpdate(){
         if(this.props.actions && this.props.actions.finishUpdateItem) {
             this.props.actions.finishUpdateItem(this.props.item.id)
@@ -127,11 +134,11 @@ export default class FeedPromotion extends Component {
 
                     {!shared && location &&
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
-                        <View style={styles.promotionLoctionContainer}>
+                        <TouchableOpacity onPress={() => this.showAddress()} style={styles.promotionLoctionContainer}>
                             <View><ThisText style={styles.detailsTitleText}>{strings.Location}</ThisText></View>
                             <View><ThisText
                                 style={styles.detailsText}>{FormUtils.getDistanceString(location.lat, location.long, item.location.lat, item.location.lng)}</ThisText></View>
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.expireDateContainer}>
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
                             <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
