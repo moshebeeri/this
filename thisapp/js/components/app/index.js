@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {AppState, I18nManager, Platform, StyleSheetm, TouchableOpacity, View,BackHandler} from "react-native";
+import {AppState, BackHandler, I18nManager, Platform, StyleSheetm, TouchableOpacity, View} from "react-native";
 import {connect} from "react-redux";
-import {Container, Drawer, Fab, Icon, Tab, TabHeading, Tabs,Spinner} from "native-base";
+import {Container, Drawer, Fab, Icon, Spinner, Tab, TabHeading, Tabs} from "native-base";
 import GeneralComponentHeader from "../header/index";
 import Feeds from "../feed/index";
 import MydPromotions from "../my-promotions/index";
@@ -153,7 +153,7 @@ class ApplicationManager extends Component {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
             activeTab: 'feed',
-            currentTab:'',
+            currentTab: '',
         }
     }
 
@@ -162,6 +162,8 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
+        this.props.myPromotionsAction.setFirstTime();
+        this.props.groupsActions.fetchGroups();
         codePush.sync({
             updateDialog: true,
             installMode: codePush.InstallMode.IMMEDIATE
@@ -185,29 +187,24 @@ class ApplicationManager extends Component {
         let notification = await  FCM.getInitialNotification();
         NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
         this.props.actions.setCurrencySymbol();
-
         BackHandler.addEventListener('hardwareBackPress', this.handleAndroidBackBehavior.bind(this));
     }
 
-    handleAndroidBackBehavior(){
-        if(this.props.currentScreen === 'GroupFeed'){
+    handleAndroidBackBehavior() {
+        if (this.props.currentScreen === 'GroupFeed') {
             return true;
         }
-        if(!this.refs["tabs"]){
+        if (!this.refs["tabs"]) {
             return true;
         }
-
-
-        if(this.props.currentScreen !== 'home'){
+        if (this.props.currentScreen !== 'home') {
             return false;
         }
-
-        if(I18nManager.isRTL && this.state.currentTab.i !== 3 ) {
+        if (I18nManager.isRTL && this.state.currentTab.i !== 3) {
             this.refs["tabs"].goToPage(0);
             return true;
         }
-
-        if(!I18nManager.isRTL && this.state.currentTab.i !== 0 ) {
+        if (!I18nManager.isRTL && this.state.currentTab.i !== 0) {
             this.refs["tabs"].goToPage(0);
             return true;
         }
@@ -227,7 +224,7 @@ class ApplicationManager extends Component {
     }
 
     onChangeTab(tab) {
-        this.setState({currentTab:tab});
+        this.setState({currentTab: tab});
     }
 
     openDrawer() {
@@ -251,13 +248,13 @@ class ApplicationManager extends Component {
 
     render() {
         const {
-            stateReady,showAdd, showComponent, notifications, feedAction,
+            stateReady, showAdd, showComponent, notifications, feedAction,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
             showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults, notificationOnAction
         } = this.props;
-        if(!stateReady){
-            return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}><Spinner/></View>
+        if (!stateReady) {
+            return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}><Spinner/></View>
         }
         if (!showComponent) {
             return <View></View>
@@ -286,7 +283,6 @@ class ApplicationManager extends Component {
             this.drawer._root.open()
         };
         let notificationLabel = 'notification_' + notifications;
-
         return (
 
             <Drawer
@@ -314,7 +310,7 @@ class ApplicationManager extends Component {
 
 
                         </ScrolTabView> :
-                        <ScrolTabView ref={"tabs"}  initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
+                        <ScrolTabView ref={"tabs"} initialPage={0} onChangeTab={this.onChangeTab.bind(this)}
                                       tabBarBackgroundColor='white'
                                       tabBarUnderlineStyle={{backgroundColor: '#2db6c8'}}>
                             <Feeds activeTab={this.state.activeTab} tabLabel="promotions" index={0}
