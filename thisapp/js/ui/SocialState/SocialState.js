@@ -180,7 +180,7 @@ export default class SocialState extends Component {
         }
         if (disabled || shareDisabled || !sharable) {
             return <View transparent style={styles.promotion_iconView}>
-                <SimpleLineIcons size={StyleUtils.scale(28)} color={'#cccccc'} style={{marginRight: 10}}
+                <SimpleLineIcons size={StyleUtils.scale(28)} color={feed ? '#cccccc' : componenColor } style={{marginRight: 10}}
                                  name="share"/>
                 <ThisText style={styles.socialTextColor}>{shares}</ThisText>
 
