@@ -29,7 +29,7 @@ export default class ProductPreview extends Component {
                             marginLeft: 8,
                             marginRight: 8
                         }}>{productName}</ThisText>
-                        <Thumbnail square source={{uri: this.props.product.pictures[0].pictures[3]}}/>
+                        {this.props.product.pictures.length > 0 ?  <Thumbnail square source={{uri: this.props.product.pictures[0].pictures[3]}}/> : <Thumbnail square source={require('../../../../images/client_1.png')}/> }
                     </View> :
                     <View style={styles.textLayout}>
                         <ThisText style={{

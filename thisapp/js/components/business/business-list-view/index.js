@@ -192,10 +192,33 @@ export default class BusinessListView extends Component {
                 </LinearGradient>
             </View>
         }
-        return <ImageController
+        return <View style={{}}><ImageController
             style={{padding: 0, flex: -1,  height:  StyleUtils.relativeHeight(40,40),}}
             source={require('../../../../images/client_1.png')}>
+
         </ImageController>
+            <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
+                            locations={[0, 0.8]}
+                            colors={['#00000099', 'transparent']} style={{
+                height: StyleUtils.relativeHeight(15, 10),
+                position: 'absolute',
+                justifyContent: 'flex-end',
+                bottom:1,
+                backgroundColor: 'transparent',
+                width: StyleUtils.getWidth()
+            }}>
+
+                <BusinessHeader  navigation={this.props.navigation} business={item.business}
+                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
+                                 businessName={item.business.name} noMargin businessView
+                                 editButton={editButton}
+                                 bgColor={'transparent'}
+                                 size={60}
+                                 textColor={'white'}/>
+
+
+            </LinearGradient>
+        </View>
     }
 
     createPermissionsTag(item) {
