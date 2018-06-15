@@ -201,14 +201,14 @@ class ApplicationManager extends Component {
 
         if (I18nManager.isRTL && this.state.currentTab.i !== 3) {
             if (!this.refs["tabs"]) {
-                return true;
+                return false;
             }
             this.refs["tabs"].goToPage(0);
             return true;
         }
         if (!I18nManager.isRTL && this.state.currentTab.i !== 0) {
             if (!this.refs["tabs"]) {
-                return true;
+                return false;
             }
             this.refs["tabs"].goToPage(0);
             return true;
