@@ -26,7 +26,10 @@ export const getFeeds = createSelector([getStateFeeds],
                         if (!response[generalId]) {
                             response[generalId] = new Array();
                         }
-                        response[generalId].push(createFeed(feeds[generalId][feedId]))
+                        let feed = createFeed(feeds[generalId][feedId]);
+                        if(feed) {
+                            response[generalId].push(feed)
+                        }
                     })
                 }
             })
@@ -50,6 +53,10 @@ function createFeed(message) {
     } else {
         user = message.user;
     }
+    if(!user){
+        return undefined;
+    }
+
     let name = user.phone_number;
     if (user.name) {
         name = user.name;

@@ -32,7 +32,10 @@ export const getFeeds = createSelector([getStateFeeds],
                                 if (!response[groupId][instanceId]) {
                                     response[groupId][instanceId] = new Array();
                                 }
-                                response[groupId][instanceId].unshift(createFeed(feeds[groupId][instanceId][feedId]))
+                                let feed = createFeed(feeds[groupId][instanceId][feedId]);
+                                if(feed) {
+                                    response[groupId][instanceId].unshift(feed);
+                                }
                             })
                         }
                     })
@@ -64,6 +67,9 @@ function createFeed(message) {
         message = message.activity;
     } else {
         user = message.user;
+    }
+    if(!user){
+        return undefined;
     }
     let name = user.phone_number;
     if (user.name) {
