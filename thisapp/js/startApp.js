@@ -20,6 +20,7 @@ import Signup from "./components/signup/index";
 import Register from "./components/register/index";
 import Products from "./components/product/index";
 import Promotions from "./components/promtions/index";
+import Cards from "./components/memberCards/index";
 import UserProfile from "./components/user-profile/index";
 import RealizePromotion from "./components/realize-promotion/index";
 import SelectProductsComponent from "./components/promtions/add-form/selectProducts/index";
@@ -86,6 +87,7 @@ const AppNavigator = StackNavigator({
         ReadQrCode: {screen: QrCode},
         Products: {screen: Products},
         Promotions: {screen: Promotions},
+        Cards: {screen: Cards},
         UserProfile: {screen: UserProfile},
         SelectProductsComponent: {screen: SelectProductsComponent},
         SelectGroupsComponent: {screen: SelectGroupsComponent},

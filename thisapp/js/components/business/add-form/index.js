@@ -53,6 +53,7 @@ class AddBusiness extends Component {
                 website: item.website,
                 country: item.country,
                 city: item.city,
+                description: item.description,
                 updateMode: true,
                 state: '',
                 path: item.logo,
@@ -102,6 +103,7 @@ class AddBusiness extends Component {
                 website: templateBusiness.website,
                 phone:templateBusiness.phone,
                 country: strings.Israel,
+                description: templateBusiness.description,
                 city: templateBusiness.city,
                 state: '',
                 path: path,
@@ -177,6 +179,7 @@ class AddBusiness extends Component {
             location: businessAddress.location,
             name: this.state.name,
             tax_id: this.state.tax_id,
+            description: this.state.description,
             type: this.state.type,
             phone: this.state.phone,
             website: this.state.website,
@@ -429,10 +432,19 @@ class AddBusiness extends Component {
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                     <TextInput field={strings.PhoneNumber} value={this.state.phone}
                                returnKeyType='next' ref="phone" refNext="phone"
-                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               onSubmitEditing={this.focusNextField.bind(this, "description")}
                                onChangeText={(phone) => this.setReduxState({phone})} />
                 </View>
 
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.Description} value={this.state.description}
+                               multiline={true}
+                               numberOfLines={3}
+                               textArea={true}
+                               returnKeyType='next' ref="description" refNext="description"
+                               onSubmitEditing={this.focusNextField.bind(this, "2")}
+                               onChangeText={(description) => this.setReduxState({description})} />
+                </View>
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
 
