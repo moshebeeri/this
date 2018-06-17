@@ -190,12 +190,17 @@ class BusinessHeader extends Component {
     }
 
     headerInternals(headerContainerStyle, back, nameTextStyle, businessName, showEdit, editButton, hideMenu, menuAction) {
+        const{headerWidth} = this.props;
+        let defaultHeaderWidth = StyleUtils.getWidth();
+        if(headerWidth){
+            defaultHeaderWidth = headerWidth;
+        }
         const {bgColor, textColor,subTitle} = this.props;
         let backgroundColor = 'white';
         if (bgColor) {
             backgroundColor = bgColor;
         }
-        return <View style={[headerContainerStyle, {backgroundColor: backgroundColor, width: StyleUtils.getWidth()}]}>
+        return <View style={[headerContainerStyle, {backgroundColor: backgroundColor, width: defaultHeaderWidth}]}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 {back}
             </View>
