@@ -60,7 +60,7 @@ export default class CardListView extends Component {
                 width: StyleUtils.getWidth() - 15
             }]}>
 
-                {card.business.pictures && <ImageController
+                {card.business && card.business.pictures && Object.keys(card.business.pictures).length > 0 && <ImageController
                     style={[styles.bannerImageContainer, {width: StyleUtils.getWidth() - 20}]} resizeMode="cover"
                     source={{uri: card.business.pictures[Object.keys(card.business.pictures).length - 1].pictures[0]}}>
 

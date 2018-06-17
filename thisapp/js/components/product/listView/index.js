@@ -17,7 +17,7 @@ export default class ProductListView extends Component {
     createImage(item) {
         if (item.pictures && item.pictures.length > 0) {
             return <ImageController thumbnail size={StyleUtils.scale(50)} square
-                                    source={{uri: this.props.item.pictures[0].pictures[3]}}/>
+                                    source={{uri: this.props.item.pictures[item.pictures.length -1].pictures[3]}}/>
         } else {
             return <ImageController thumbnail size={StyleUtils.scale(50)}
                                     source={require('../../../../images/client_1.png')}/>
@@ -31,6 +31,11 @@ export default class ProductListView extends Component {
 
     createEditTag(item) {
         return <EditButton color={"#FA8559"} onPress={this.navigateToEdit.bind(this, item)}/>
+    }
+
+    deleteProduct(item){
+        const {actions,businessId} = this.props;
+        actions.deleteBusinessProduct(item,businessId);
     }
 
     createSelectTag(item) {
@@ -55,8 +60,11 @@ export default class ProductListView extends Component {
             </View>
             {!select && <View style={styles.productEditContainer}>
                 {this.createEditTag(item)}
-            </View>}
 
+            </View>}
+            {!select &&  <View style={{flex: 0.5, justifyContent: 'center'}}>
+                <EditButton iconName={'delete'} color={'#FA8559'} onPress={this.deleteProduct.bind(this, item)}/>
+            </View>}
 
             {select && <View style={[styles.productEditContainer, {marginRight: 20}]}>
                 {this.createSelectTag(item)}

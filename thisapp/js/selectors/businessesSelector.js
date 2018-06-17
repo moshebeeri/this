@@ -57,6 +57,7 @@ export const getBusinessProducts = createSelector([getStateMyBusinesses],
                         }
                         return 0;
                     });
+                    responseMap[key] =  responseMap[key].filter(product => !product.deleted);
                 }
             )
             return responseMap;

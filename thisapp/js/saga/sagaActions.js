@@ -63,6 +63,8 @@ export const PROMOTION_NOTIFICATION = 'PROMOTION_NOTIFICATION';
 
 //product
 export const SAVE_PRODUCT = 'SAVE_PRODUCT';
+export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const DELETE_PRODUCT = 'DELETE_PODUCT';
 //post
 export const SAVE_POST = 'SAVE_POST';
 

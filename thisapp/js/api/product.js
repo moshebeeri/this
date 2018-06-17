@@ -25,6 +25,31 @@ class ProductsApi {
         }, 'products', '/create');
     }
 
+
+   updateProduct(product, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/products/${product._id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify(product)
+        }, 'products', '/update');
+    }
+
+
+   deleteProduct(product, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/products/${product._id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'products', '/delete');
+    }
+
     findByBusinessId(id, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/products/entity/scroll/${id}/start/down`, {
             method: 'GET',

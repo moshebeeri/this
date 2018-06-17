@@ -68,6 +68,7 @@ class Product extends Component {
                 {!productsLoading[businessId] && <Spinner/>}
                 <GenericListManager rows={products[businessId]} navigation={navigation} actions={actions}
                                     update={update}
+                                    businessId={businessId}
                                     onEndReached={this.setBusinessProducts.bind(this)}
                                     ItemDetail={ProductListView}/>
 
