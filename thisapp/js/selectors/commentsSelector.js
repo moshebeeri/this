@@ -15,7 +15,7 @@ export const getFeeds = createSelector([getStateFeeds, getStateSavedInstances],
         let feeds = comments.groupComments;
         let clientComments = comments.clientMessages;
         let response = {}
-        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds,true);
+        let instanceLifeCycle = new InstanceLifeCycle(savedPromotion.feeds, true);
         if (!_.isEmpty(feedsOrder)) {
             Object.keys(feedsOrder).forEach(function (groupId) {
                 if (!response[groupId]) {
@@ -31,13 +31,16 @@ export const getFeeds = createSelector([getStateFeeds, getStateSavedInstances],
                         if (post) {
                             post = feedUiConverter.createPost(post)
                         }
-                        if(!feeds[groupId][feedId].deleted) {
-                            response[groupId].unshift({
-                                id: feedId,
-                                instance: instance,
-                                post: post,
-                                message: createFeed(feeds[groupId][feedId])
-                            });
+                        if (!feeds[groupId][feedId].deleted) {
+                            let feed = createFeed(feeds[groupId][feedId]);
+                            if (feed) {
+                                response[groupId].unshift({
+                                    id: feedId,
+                                    instance: instance,
+                                    post: post,
+                                    message: feed
+                                });
+                            }
                         }
                     })
                 }
@@ -66,6 +69,9 @@ function createFeed(message) {
         message = message.activity;
     } else {
         user = message.user;
+    }
+    if (!user) {
+        return undefined;
     }
     let name = user.phone_number;
     if (user.name) {

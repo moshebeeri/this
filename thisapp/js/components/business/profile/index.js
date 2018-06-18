@@ -28,6 +28,7 @@ import StyleUtils from "../../../utils/styleUtils";
 import ThisText from "../../../ui/ThisText/ThisText";
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import GenericListManager from '../../generic-list-manager'
 
 const noPic = require('../../../../images/client_1.png');
@@ -283,7 +284,7 @@ class BusinessProfile extends Component {
                                                                    style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"web"}/>
                                 <ThisText note style={{
-                                    fontSize: 20,
+                                    fontSize: StyleUtils.scale(20),
                                     color: '#A9A9A9',
                                     marginLeft: 15
                                 }}>{business.website}</ThisText>
@@ -293,7 +294,7 @@ class BusinessProfile extends Component {
                                               style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"email-outline"}/>
                                 <ThisText note style={{
-                                    fontSize: 20,
+                                    fontSize: StyleUtils.scale(20),
                                     color: '#A9A9A9',
                                     marginLeft: 15
                                 }}>{business.email}</ThisText>
@@ -303,19 +304,28 @@ class BusinessProfile extends Component {
                                               style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"phone"}/>
                                 <ThisText note style={{
-                                    fontSize: 20,
+                                    fontSize: StyleUtils.scale(20),
                                     color: '#A9A9A9',
                                     marginLeft: 15
                                 }}>{business.phone}</ThisText>
 
                             </TouchableOpacity>}
 
+                            {business.description &&  <View onPress={() => this.call()}
+                                                                 style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                                <MaterialIcons size={StyleUtils.scale(20)} name={"description"}/>
+                                <ThisText note style={{
+                                    fontSize: StyleUtils.scale(20),
+                                    color: '#A9A9A9',
+                                    marginLeft: 15
+                                }}>{business.description}</ThisText>
 
+                            </View>}
                             <TouchableOpacity onPress={() => this.showAddress()}
-                                              style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                                <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"map-marker"}/>
+                                              style={[styles.inputFullTextLayout, { width: StyleUtils.getWidth() - 15}]}>
+                                <MaterialCommunityIcons  size={StyleUtils.scale(20)} name={"map-marker"}/>
                                 <ThisText note
-                                          style={{fontSize: 20, color: '#A9A9A9', marginLeft: 15}}>{address}</ThisText>
+                                          style={{fontSize:StyleUtils.scale(20), color: '#A9A9A9', alignItems:'center',justifyContent:'center',height:StyleUtils.scale(20),marginLeft: 15}}>{address}</ThisText>
 
                             </TouchableOpacity>
                         </View>

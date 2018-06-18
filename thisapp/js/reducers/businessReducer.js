@@ -13,7 +13,7 @@ const initialState = {
     paymentMessage: '',
     templateBusiness: {},
     businessPictures: [],
-    allBusinessFollowers:{},
+    allBusinessFollowers: {},
     lastBusinessQrCode: undefined
 };
 import {REHYDRATE} from "redux-persist/constants";
@@ -190,11 +190,17 @@ export default function business(state = initialState, action) {
                             businessesProducts[action.businessId].unshift(product);
                         }
                     })
-
                 }
             } else {
                 businessesProducts[action.businessId] = action.businessProducts;
             }
+            return businessesState;
+        case actions.DELETE_PRODUCT:
+            businessesState.update = !businessesState.update;
+            if (!businessesProducts[action.businessId]) {
+                return businessesState;
+            }
+            businessesProducts[action.businessId] = businessesProducts[action.businessId].filter(product => product._id !== action.id);
             return businessesState;
         case actions.UPSERT_PRODUCT_SINGLE:
             businessesState.update = !businessesState.update;
@@ -210,8 +216,8 @@ export default function business(state = initialState, action) {
                 else {
                     businessesProducts[action.businessId].push(action.item)
                 }
-                if(action.tempId){
-                    businessesProducts[action.businessId] =  businessesProducts[action.businessId].filter(product => !product._id || product._id !== action.tempId)
+                if (action.tempId) {
+                    businessesProducts[action.businessId] = businessesProducts[action.businessId].filter(product => !product._id || product._id !== action.tempId)
                 }
             }
             businessesProducts[action.businessId] = businessesProducts[action.businessId].filter(product => product._id);
@@ -261,14 +267,14 @@ export default function business(state = initialState, action) {
             }
             return businessesState;
         case actions.SET_BUSINESS_FOLLOWERS :
-            if(!businessesState.allBusinessFollowers[action.businessId]){
-                businessesState.allBusinessFollowers[action.businessId] =  action.followers
-            }else{
+            if (!businessesState.allBusinessFollowers[action.businessId]) {
+                businessesState.allBusinessFollowers[action.businessId] = action.followers
+            } else {
                 let newFollowers = action.followers.filter(follower => {
-                    let followerExist = businessesState.allBusinessFollowers[action.businessId].filter(currentFolloer => currentFolloer._id === follower._id );
+                    let followerExist = businessesState.allBusinessFollowers[action.businessId].filter(currentFolloer => currentFolloer._id === follower._id);
                     return followerExist.length === 0
                 })
-                if(newFollowers.length > 0) {
+                if (newFollowers.length > 0) {
                     businessesState.allBusinessFollowers[action.businessId] = businessesState.allBusinessFollowers[action.businessId].concat(newFollowers);
                 }
             }

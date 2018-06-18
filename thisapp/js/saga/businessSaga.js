@@ -138,7 +138,7 @@ function* updateBusiness(action) {
         if (!currentPicturePath) {
             currentPicturePath = action.business.image.uri;
         }
-        if (updatedBusiness.pictures.length > 0 && updatedBusiness.pictures[0].pictures[1] !== currentPicturePath) {
+        if (updatedBusiness.pictures.length > 0 && updatedBusiness.pictures[updatedBusiness.pictures.length -1 ].pictures[1] !== currentPicturePath) {
             uploadCoverImage = true;
             pictures.push(currentPicturePath);
             pictures.push(currentPicturePath);
@@ -146,7 +146,7 @@ function* updateBusiness(action) {
             pictures.push(currentPicturePath);
             updatedBusiness.pictures.push({pictures: pictures});
         }else{
-            uploadCoverImage = true;
+            uploadCoverImage = false;
             pictures.push(currentPicturePath);
             pictures.push(currentPicturePath);
             pictures.push(currentPicturePath);

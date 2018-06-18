@@ -25,9 +25,12 @@ class AddProduct extends Component {
             if (item.pictures.length > 0 && item.pictures[0].pictures[1]) {
                 picture = item.pictures[0].pictures[1]
             }
-            let categories = item.category.split(',');
-            if (categories.length > 0) {
-                categories = categories.filter(catString => catString).map(catString => parseInt(catString));
+            let categories = []
+            if(item.category) {
+                categories = item.category.split(',');
+                if (categories.length > 0) {
+                    categories = categories.filter(catString => catString).map(catString => parseInt(catString));
+                }
             }
             this.state = {
                 name: item.name,
@@ -88,6 +91,18 @@ class AddProduct extends Component {
         if (this.validateForm()) {
             const businessId = this.getBusinessId(navigation);
             actions.saveProduct(product, businessId, navigation)
+        }
+    }
+    updateFormData() {
+        const {navigation, actions, saving} = this.props;
+        if (saving) {
+            return
+        }
+        Keyboard.dismiss();
+        const product = this.createProduct();
+        if (this.validateForm()) {
+            const businessId = this.getBusinessId(navigation);
+            actions.updateProduct(product, businessId, navigation)
         }
     }
 
@@ -200,8 +215,9 @@ class AddProduct extends Component {
 
     createView() {
         return <View>
-            <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
-                        title={strings.AddProduct} bgc="#FA8559"/>
+            {this.state.item ? <FormHeader showBack submitForm={this.updateFormData.bind(this)} navigation={this.props.navigation}
+                        title={strings.AddProduct} bgc="#FA8559"/> : <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
+                                                                                 title={strings.AddProduct} bgc="#FA8559"/>}
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',

@@ -97,6 +97,32 @@ export function saveProduct(product, businessId, navigation) {
     }
 }
 
+
+export function updateProduct(product, businessId, navigation) {
+    return async function (dispatch, getState) {
+        try {
+            dispatch({
+                type: actions.PRODUCT_SAVING,
+            });
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.UPDATE_PRODUCT,
+                product: product,
+                businessId: businessId,
+                token: token
+            });
+            dispatch({
+                type: actions.PRODUCT_SAVING_DONE,
+            });
+            navigation.goBack();
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveProduct')
+        }
+    }
+}
+
 export function setProduct(response, businessId, tempId) {
 
     return {
@@ -104,6 +130,16 @@ export function setProduct(response, businessId, tempId) {
         item: response,
         businessId: businessId,
         tempId: tempId
+    }
+}
+
+
+export function removeProduct(businessId, id) {
+
+    return {
+        type: actions.DELETE_PRODUCT,
+        businessId: businessId,
+        id: id
     }
 }
 

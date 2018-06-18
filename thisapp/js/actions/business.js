@@ -506,7 +506,6 @@ export function saveBusinessTemplate(templateBusiness) {
     }
 }
 
-
 export function getNextBusinessFollowers(businessId) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
@@ -522,7 +521,6 @@ export function getNextBusinessFollowers(businessId) {
 export function getBusinessTopFollowers(businessId) {
     return async function (dispatch, getState) {
         const token = getState().authentication.token;
-
         dispatch({type: types.UPDATE_BUSINESS_FOLLOWERS, businessId: businessId, token: token, skip: 0, limit: 10})
     }
 }
@@ -533,6 +531,24 @@ export function resetForm() {
             type: actions.SAVE_BUSINESS_TAMPLATE,
             templateBusiness: {},
         });
+    }
+}
+
+export function deleteBusinessProduct(product, businessId) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.DELETE_PRODUCT,
+                product: product,
+                businessId: businessId,
+                token: token
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveProduct')
+        }
     }
 }
 
@@ -571,7 +587,6 @@ export function* updateBusinessesProducts(response, businessId) {
 
 export function* updateBusinessesPromotions(response, businessId) {
     if (response.length > 0) {
-
         yield put({
             type: actions.SET_PROMOTION_BUSINESS,
             businessesPromotions: response,
