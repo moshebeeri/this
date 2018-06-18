@@ -2,9 +2,12 @@
 
 let _ = require('lodash');
 let Card = require('./card.model');
+let CardType = require('../cardType/cardType.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('card');
 let MongodbSearch = require('../../components/mongo-search');
+const qrcodeController = require('../qrcode/qrcode.controller');
+const QRCode = require('../qrcode/qrcode.model');
 
 
 exports.search = MongodbSearch.create(Card);
@@ -26,17 +29,58 @@ exports.show = function(req, res) {
   });
 };
 
+exports.chargeCode = function(req, res) {
+  Card.findById(req.params.card, function (err, card) {
+    if(err) { return handleError(res, err); }
+    if(!card) { return res.send(404); }
+    return qrcodeController.image_png(req, res)
+  });
+};
+
+exports.charge = function(req, res) {
+  const userId = req.user._id;
+  const cardId = req.params.card;
+  Card.findById(req.params.id, function (err, card) {
+    if(err) { return handleError(res, err); }
+    if(!card) { return res.send(404); }
+    return res.json(card);
+  });
+};
+
+exports.redeem = function(req, res) {
+  Card.findById(req.params.id, function (err, card) {
+    if(err) { return handleError(res, err); }
+    if(!card) { return res.send(404); }
+    return res.json(card);
+  });
+};
+
 // Creates a new card in the DB.
 exports.create = function(req, res) {
-  Card.create(req.body, function(err, card) {
-    if(err) { return handleError(res, err); }
-    graphModel.reflect(card, function (err, card) {
-      if (err) { return handleError(res, err); }
-      graphModel.relate_ids(req.user._id, 'CARD_MEMBER', card._id);
-      graphModel.relate_ids(card._id, 'CARD_TYPE', card.card_type._id);
+  let card = req.body;
+  card.user = req.user._id;
+  const cardTypeId = card.card_type._id;
+  CardType.findById(cardTypeId).exec((err, cardType) => {
+    if (err) return handleError(res, err);
+    qrcodeController.createAndAssign(card.user, {
+      type: 'PROMOTION',
+      assignment: {
+        //card: card._id
+      }
+    }, function (err, qrcode) {
+      if (err) return handleError(res, err);
+      card.qrcode = qrcode;
+      Card.create(card, function (err, card) {
+        if (err) { return handleError(res, err)}
+        graphModel.reflect(card, function (err, card) {
+          if (err) {return handleError(res, err)}
+          graphModel.relate_ids(req.user._id, 'CARD_MEMBER', card._id);
+          graphModel.relate_ids(card._id, 'CARD_TYPE', cardType._id);
+        });
+        return res.json(201, card);
+      });
     });
-    return res.json(201, card);
-  });
+  })
 };
 
 // Updates an existing card in the DB.

@@ -10,6 +10,7 @@ let ProductSchema = new Schema({
   info: String,
   url: String,
   inAppOrder: {type:Boolean, default: false},
+  deleted: {type:Boolean, default: false},
   SKU: String,
   barcode: String,
   price: Number,

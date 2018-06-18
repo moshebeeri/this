@@ -713,20 +713,23 @@ exports.test = function (req, res) {
   // })
 };
 
-function permitted(userId, business, callback) {
-  //update before business established
-  if(!business.gid) {
-    if(business.creator._id.toString() === userId.toString())
-      return callback(null, true);
-    else
-      return callback(null, false);
-  }
-  const entityId =  business._id;
-  const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as has`;
-  graphModel.query(query, (err, results) => {
+function permitted(userId, businessId, callback) {
+  Business.findById(businessId).exec((err,business) => {
     if (err) return callback(err);
-    if (results.length !== 1) return callback(new Error('unexpected result length'));
-    return callback(null, results[0].has)
+    //update before business established
+    if(!business.gid) {
+      if(business.creator._id.toString() === userId.toString())
+        return callback(null, true);
+      else
+        return callback(null, false);
+    }
+    const entityId =  business._id;
+    const query = `MATCH (u:user{_id:'${userId}'})-[r:ROLE]->(e{_id:'${entityId}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as has`;
+    graphModel.query(query, (err, results) => {
+      if (err) return callback(err);
+      if (results.length !== 1) return callback(new Error('unexpected result length'));
+      return callback(null, results[0].has)
+    })
   })
 }
 

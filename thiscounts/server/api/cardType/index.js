@@ -2,8 +2,11 @@
 
 let express = require('express');
 let controller = require('./cardType.controller');
+let auth = require('../../auth/auth.service');
 
 let router = express.Router();
+
+router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);

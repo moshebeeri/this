@@ -4,6 +4,9 @@ let _ = require('lodash');
 let CardType = require('./cardType.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('cardType');
+const MongodbSearch = require('../../components/mongo-search');
+
+exports.search = MongodbSearch.create(CardType);
 
 // Get list of cardTypes
 exports.index = function(req, res) {
@@ -22,15 +25,50 @@ exports.show = function(req, res) {
   });
 };
 
+function getCardEntity(card){
+  if(!card.entity) return null;
+  if(card.entity.business      ) return card.entity.business      ;
+  if(card.entity.shopping_chain) return card.entity.shopping_chain;
+  if(card.entity.mall          ) return card.entity.mall          ;
+  if(card.entity.brand         ) return card.entity.brand         ;
+  if(card.entity.group         ) return card.entity.group         ;
+  return null;
+}
+
+function createGraphParams(card) {
+  return `{add_policy: ${card.add_policy}, min_points: ${card.min_points}, points_ratio: ${card.points_ratio}, accumulate_ratio: ${card.accumulate_ratio}}`;
+}
+
 // Creates a new cardType in the DB.
 exports.create = function(req, res) {
-  CardType.create(req.body, function(err, cardType) {
-    if(err) { return handleError(res, err); }
-    graphModel.reflect(cardType, function (err) {
-      if (err) { return handleError(res, err); }
+  let card = req.body;
+  const entity = getCardEntity(card);
+  if (!entity) return handleError(res, new Error(`bad request no entity found`));
+  //check for user permissions
+  const query = `MATCH (u:user{_id:'${req.user._id}'})-[r:ROLE]->(e{_id:'${entity}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as permitted`;
+  graphModel.query(query, (err, results) => {
+    if (err) return handleError(res, err);
+    if (results.length !== 1) return handleError(res, new Error('unexpected result length'));
+    if(!results[0].permitted) return handleError(res, new Error('unauthorized user'));
+
+    CardType.create(card, function (err, cardType) {
+      if (err) {
+        return handleError(res, err);
+      }
+      graphModel.reflect(cardType, function (err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        const params = createGraphParams(card);
+        graphModel.relate_ids(entity, 'LOYALTY_CARD', cardType._id, params, (err) => {
+          if (err) {
+            return handleError(res, err);
+          }
+          return res.status(201).json(cardType);
+        });
+      });
     });
-    return res.status(201).json(cardType);
-  });
+  })
 };
 
 // Updates an existing cardType in the DB.

@@ -2,18 +2,19 @@
 
 let mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+const utils = require('../../components/utils').createUtils();
+const autopopulate = require('mongoose-autopopulate');
 
 let CardSchema = new Schema({
   name: String,
-  gid: { type: Number, index: true},
-  card_id: String,
+  description: String,
   password: String,
-  card_type: {type: Schema.ObjectId, ref: 'CardType'},
-  type_id: String,
-  holder: String,
-  info: String,
-  active: Boolean
+  gid: {type: Number, index: true},
+  user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions},
+  cardType: {type: Schema.ObjectId, ref: 'CardType'},
 });
-CardSchema.index({name: 'text', info: 'text'});
+CardSchema.plugin(autopopulate);
+
+CardSchema.index({name: 'text', description: 'text'});
 
 module.exports = mongoose.model('Card', CardSchema);

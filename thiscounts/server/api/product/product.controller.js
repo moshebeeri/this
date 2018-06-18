@@ -284,18 +284,19 @@ exports.destroy = function (req, res) {
       return handleError(res, err);
     }
     if (!product) {
-      return res.send(404);
+      console.log('product not found');
+      return res.status(404).json('product not found');
     }
-    product.remove(function (err) {
+    product.deleted = true;
+    product.save(function (err) {
       if (err) {
         return handleError(res, err);
       }
-      return res.send(204);
+      return res.status(200).json(product);
     });
   });
 };
 
 function handleError(res, err) {
-  console.error(err);
-  return res.send(500, err);
+  return res.status(500).json(err);
 }
