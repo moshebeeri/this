@@ -41,8 +41,8 @@ function createGraphParams(card) {
 
 // Creates a new cardType in the DB.
 exports.create = function(req, res) {
-  let card = req.body;
-  const entity = getCardEntity(card);
+  let cardType = req.body;
+  const entity = getCardEntity(cardType);
   if (!entity) return handleError(res, new Error(`bad request no entity found`));
   //check for user permissions
   const query = `MATCH (u:user{_id:'${req.user._id}'})-[r:ROLE]->(e{_id:'${entity}'}) where r.name in ['OWNS','Admin'] RETURN count(r)>0 as permitted`;
@@ -51,19 +51,27 @@ exports.create = function(req, res) {
     if (results.length !== 1) return handleError(res, new Error('unexpected result length'));
     if(!results[0].permitted) return handleError(res, new Error('unauthorized user'));
 
-    CardType.create(card, function (err, cardType) {
+    CardType.create(cardType, function (err, cardType) {
       if (err) {
         return handleError(res, err);
       }
-      graphModel.reflect(cardType, function (err) {
+      graphModel.reflect(cardType, {
+        add_policy: cardType.add_policy,
+        min_points: cardType.min_points,
+        points_ratio: cardType.points_ratio,
+        accumulate_ratio: cardType.accumulate_ratio
+      }, function (err) {
+        console.log(`I am here e1`);
         if (err) {
+          console.log(`I am here e2`);
           return handleError(res, err);
         }
-        const params = createGraphParams(card);
-        graphModel.relate_ids(entity, 'LOYALTY_CARD', cardType._id, params, (err) => {
+        console.log(`I am here e4`);
+        graphModel.relate_ids(entity, 'LOYALTY_CARD', cardType._id, '', (err) => {
           if (err) {
             return handleError(res, err);
           }
+          console.log(`I am here e5`);
           return res.status(201).json(cardType);
         });
       });

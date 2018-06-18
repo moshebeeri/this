@@ -16,7 +16,7 @@ exports.search = MongodbSearch.create(Card);
 exports.index = function(req, res) {
   Card.find(function (err, cards) {
     if(err) { return handleError(res, err); }
-    return res.json(200, cards);
+    return res.status(200).json(cards);
   });
 };
 
@@ -25,33 +25,46 @@ exports.show = function(req, res) {
   Card.findById(req.params.id, function (err, card) {
     if(err) { return handleError(res, err); }
     if(!card) { return res.send(404); }
-    return res.json(card);
+    return res.status(200).json(card);
   });
 };
 
 exports.chargeCode = function(req, res) {
   Card.findById(req.params.card, function (err, card) {
     if(err) { return handleError(res, err); }
-    if(!card) { return res.send(404); }
+    if(!card) { return res.status(404).send(); }
+    req.params.code = card.qrcode.code;
     return qrcodeController.image_png(req, res)
   });
 };
 
 exports.charge = function(req, res) {
-  const userId = req.user._id;
-  const cardId = req.params.card;
-  Card.findById(req.params.id, function (err, card) {
-    if(err) { return handleError(res, err); }
-    if(!card) { return res.send(404); }
-    return res.json(card);
+  QRCode.findOne({code: req.params.code}, function (err, qrcode) {
+    if (err) {return handleError(res, err)}
+    if(!qrcode.assignment || !qrcode.assignment.cardId)
+      return handleError(res, new Error('no cardId found'));
+    Card.findById(qrcode.assignment.cardId, function (err, card) {
+      if(err) { return handleError(res, err)}
+      if(!card) { return res.status(404).send()}
+      card.points = card.points? card.points + req.params.points : req.params.points;
+      return res.status(200).json(card);
+    });
   });
 };
 
 exports.redeem = function(req, res) {
-  Card.findById(req.params.id, function (err, card) {
-    if(err) { return handleError(res, err); }
-    if(!card) { return res.send(404); }
-    return res.json(card);
+  QRCode.findOne({code: req.params.code}, function (err, qrcode) {
+    if (err) {return handleError(res, err)}
+    if(!qrcode.assignment || !qrcode.assignment.cardId)
+      return handleError(res, new Error('no cardId found'));
+    Card.findById(qrcode.assignment.cardId, function (err, card) {
+      if(err) { return handleError(res, err)}
+      if(!card) { return res.status(404).send()}
+      if(card.points < req.params.points)
+        return res.status(500).json(new Error(`insufficient points`));
+      card.points =  card.points - req.params.points;
+      return res.status(200).json(card);
+    });
   });
 };
 
@@ -62,22 +75,23 @@ exports.create = function(req, res) {
   const cardTypeId = card.card_type._id;
   CardType.findById(cardTypeId).exec((err, cardType) => {
     if (err) return handleError(res, err);
-    qrcodeController.createAndAssign(card.user, {
-      type: 'PROMOTION',
-      assignment: {
-        //card: card._id
-      }
-    }, function (err, qrcode) {
-      if (err) return handleError(res, err);
-      card.qrcode = qrcode;
-      Card.create(card, function (err, card) {
-        if (err) { return handleError(res, err)}
+    Card.create(card, function (err, card) {
+      if (err) { return handleError(res, err)}
+      qrcodeController.createAndAssign(card.user, {
+        type: 'Card',
+        assignment: {
+          cardId: card._id
+        }
+      }, function (err, qrcode) {
+        if (err) return handleError(res, err);
+        //will be save with the reflect process
+        card.qrcode = qrcode;
         graphModel.reflect(card, function (err, card) {
           if (err) {return handleError(res, err)}
-          graphModel.relate_ids(req.user._id, 'CARD_MEMBER', card._id);
-          graphModel.relate_ids(card._id, 'CARD_TYPE', cardType._id);
+          graphModel.relate_ids(req.user._id, 'LOYALTY_CARD', card._id);
+          graphModel.relate_ids(cardType._id, 'CARD_OF_TYPE', card._id);
+          return res.status(201).json(card);
         });
-        return res.json(201, card);
       });
     });
   })
@@ -88,11 +102,11 @@ exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
   Card.findById(req.params.id, function (err, card) {
     if (err) { return handleError(res, err); }
-    if(!card) { return res.send(404); }
+    if(!card) { return res.status(404).send(); }
     let updated = _.merge(card, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, card);
+      return res.status(200).json(card);
     });
   });
 };
@@ -104,11 +118,11 @@ exports.destroy = function(req, res) {
     if(!card) { return res.send(404); }
     card.remove(function(err) {
       if(err) { return handleError(res, err); }
-      return res.send(204);
+      return res.status(204).send();
     });
   });
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.status(500).send(err);
 }
