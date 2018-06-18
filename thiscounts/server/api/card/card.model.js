@@ -7,8 +7,9 @@ const autopopulate = require('mongoose-autopopulate');
 
 let CardSchema = new Schema({
   name: String,
-  description: String,
+  points: {type: Number, default: 0},
   password: String,
+  number: String,
   gid: {type: Number, index: true},
   user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions},
   cardType: {type: Schema.ObjectId, ref: 'CardType'},
