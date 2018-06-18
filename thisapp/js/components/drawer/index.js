@@ -231,7 +231,7 @@ showMemberCards() {
                                     {/*fontStyle: 'normal',*/}
                                     {/*marginLeft: StyleUtils.scale(20),*/}
                                     {/*fontSize: StyleUtils.scale(16)*/}
-                                {/*}}>Memeber Cards</ThisText>*/}
+                                {/*}}>{strings.MemberCard}</ThisText>*/}
                         {/*</TouchableOpacityFix>*/}
                     {/*</View>*/}
                     <View style={{

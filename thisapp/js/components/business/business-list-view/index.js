@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity,Platform} from 'react-native';
+import {Platform, TouchableOpacity} from 'react-native';
 import {
     Button,
     Card,
@@ -17,7 +17,6 @@ import {
     Tabs,
     Thumbnail,
     Title,
-
     View
 } from 'native-base';
 import styles from './styles'
@@ -29,9 +28,11 @@ import StyleUtils from '../../../utils/styleUtils'
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import Entypo from "react-native-vector-icons/Entypo";
 import withPreventDoubleClick from '../../../ui/TochButton/TouchButton';
 import navigationUtils from '../../../utils/navigationUtils'
 import LinearGradient from 'react-native-linear-gradient';
+
 const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 export default class BusinessListView extends Component {
     constructor(props) {
@@ -48,24 +49,26 @@ export default class BusinessListView extends Component {
     showBusiness(p) {
         const {item, navigation, actions} = this.props;
         actions.resetForm();
-        navigationUtils.doNavigation(navigation,"addBusiness", {item: item.business, updating: true})
+        navigationUtils.doNavigation(navigation, "addBusiness", {item: item.business, updating: true})
     }
 
     showUsersRoles() {
         const {item, navigation} = this.props;
-        navigationUtils.doNavigation(navigation,"userPermittedRoles", {business: item.business})
-
+        navigationUtils.doNavigation(navigation, "userPermittedRoles", {business: item.business})
     }
 
     showProducts() {
         const {item, navigation} = this.props;
-        navigationUtils.doNavigation(navigation,"Products", {business: item.business})
-
+        navigationUtils.doNavigation(navigation, "Products", {business: item.business})
     }
 
     showPromotions() {
         const {item, navigation} = this.props;
-        navigationUtils.doNavigation(navigation,"Promotions", {business: item.business})
+        navigationUtils.doNavigation(navigation, "Promotions", {business: item.business})
+    }
+    showMemberCard() {
+        const {item, navigation} = this.props;
+        navigationUtils.doNavigation(navigation, "AddMemberCard", {business: item.business})
     }
 
     refreshBusiness() {
@@ -76,9 +79,9 @@ export default class BusinessListView extends Component {
     createView() {
         const {item, index} = this.props;
         const editButton = this.createEditTag(item);
-        const banner = this.createBannerTag(item,editButton);
-
+        const banner = this.createBannerTag(item, editButton);
         const promotionButton = this.createPromotionsTag(item);
+        const memberButton = this.createMemberTag(item);
         const permissionsButton = this.createPermissionsTag(item);
         const productsButton = this.createPoductsTag(item);
         const inReview = item.business.review && (item.business.review.state === 'validation' || item.business.review.state === 'review');
@@ -109,6 +112,7 @@ export default class BusinessListView extends Component {
                             {permissionsButton}
                             {productsButton}
                             {promotionButton}
+                            {/*{memberButton}*/}
 
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'validation' &&
@@ -161,7 +165,7 @@ export default class BusinessListView extends Component {
         return undefined;
     }
 
-    createBannerTag(item,editButton) {
+    createBannerTag(item, editButton) {
         if (item.business.pictures && item.business.pictures.length > 0) {
             let picLength = item.business.pictures.length;
             return <View style={{}}><ImageController
@@ -175,25 +179,25 @@ export default class BusinessListView extends Component {
                     height: StyleUtils.relativeHeight(15, 10),
                     position: 'absolute',
                     justifyContent: 'flex-end',
-                    bottom:1,
+                    bottom: 1,
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
 
-                    <BusinessHeader  navigation={this.props.navigation} business={item.business}
+                    <BusinessHeader navigation={this.props.navigation} business={item.business}
                                     categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
                                     businessName={item.business.name} noMargin businessView
                                     editButton={editButton}
-                                     bgColor={'transparent'}
-                                     size={60}
-                                     textColor={'white'}/>
+                                    bgColor={'transparent'}
+                                    size={60}
+                                    textColor={'white'}/>
 
 
                 </LinearGradient>
             </View>
         }
         return <View style={{}}><ImageController
-            style={{padding: 0, flex: -1,  height:  StyleUtils.relativeHeight(40,40),}}
+            style={{padding: 0, flex: -1, height: StyleUtils.relativeHeight(40, 40),}}
             source={require('../../../../images/client_1.png')}>
 
         </ImageController>
@@ -203,18 +207,18 @@ export default class BusinessListView extends Component {
                 height: StyleUtils.relativeHeight(15, 10),
                 position: 'absolute',
                 justifyContent: 'flex-end',
-                bottom:1,
+                bottom: 1,
                 backgroundColor: 'transparent',
                 width: StyleUtils.getWidth()
             }}>
 
-                <BusinessHeader  navigation={this.props.navigation} business={item.business}
-                                 categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
-                                 businessName={item.business.name} noMargin businessView
-                                 editButton={editButton}
-                                 bgColor={'transparent'}
-                                 size={60}
-                                 textColor={'white'}/>
+                <BusinessHeader navigation={this.props.navigation} business={item.business}
+                                categoryTitle={item.categoryTitle} businessLogo={item.business.logo}
+                                businessName={item.business.name} noMargin businessView
+                                editButton={editButton}
+                                bgColor={'transparent'}
+                                size={60}
+                                textColor={'white'}/>
 
 
             </LinearGradient>
@@ -224,7 +228,7 @@ export default class BusinessListView extends Component {
     createPermissionsTag(item) {
         if (this.checkPermission(item)) {
             return <TouchableOpacityFix onPress={() => this.showUsersRoles()}
-                                        style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
+                                        style={{margin: 3, alignItems: 'center',}}
                                         regular>
                 <Feather size={StyleUtils.scale(25)} color={'#ff6400'}
                          name="user-check"/>
@@ -243,7 +247,7 @@ export default class BusinessListView extends Component {
     createPoductsTag(item) {
         if (this.checkPermission(item)) {
             return <TouchableOpacityFix onPress={() => this.showProducts()}
-                                        style={{margin: 3, flexDirection: 'row', alignItems: 'center',}} regular>
+                                        style={{margin: 3, alignItems: 'center',}} regular>
 
                 <FontAwesome size={StyleUtils.scale(25)} color={'#ff6400'}
                              name="barcode"/>
@@ -277,10 +281,10 @@ export default class BusinessListView extends Component {
     createPromotionsTag(item) {
         if (this.checkPermission(item)) {
             return <TouchableOpacityFix onPress={() => this.showPromotions()}
-                                        style={{margin: 3, flexDirection: 'row', alignItems: 'center',}}
+                                        style={{margin: 3, alignItems: 'center',}}
                                         regular>
 
-                <SimpleLineIcons size={StyleUtils.scale(25)} color={'#ff6400'}
+                <SimpleLineIcons size={StyleUtils.scale(22)} color={'#ff6400'}
                                  name="tag"/>
                 <ThisText style={{
                     marginLeft: 5,
@@ -288,6 +292,27 @@ export default class BusinessListView extends Component {
                     fontStyle: 'normal',
                     fontSize: StyleUtils.scale(13)
                 }}>{strings.Promotions}</ThisText>
+
+            </TouchableOpacityFix>
+        }
+        return undefined;
+    }
+
+    createMemberTag(item) {
+        if (this.checkPermission(item)) {
+            return <TouchableOpacityFix onPress={() => this.showMemberCard()}
+                                        style={{margin: 3, alignItems: 'center',}}
+                                        regular>
+                <Entypo style={{marginLeft: StyleUtils.scale(17), marginBottom: -6}} color={'#ff6400'}
+                        size={StyleUtils.scale(25)} name="credit-card"/>
+
+
+                <ThisText style={{
+                    marginLeft: 5,
+                    color: '#ff6400',
+                    fontStyle: 'normal',
+                    fontSize: StyleUtils.scale(13)
+                }}>{strings.MemberCard}</ThisText>
 
             </TouchableOpacityFix>
         }

@@ -8,6 +8,7 @@ import myPromotionsnSaga from './myPromotionsSaga'
 import groupsChatSaga from './groupsChatSaga'
 import promotionSaga from './promotionSaga'
 import productSaga from './productSaga'
+import cardSage from './cardSaga'
 import feedChatSaga from './feedChatSaga'
 import groupInstanceChatSaga from './groupInstanceChatSaga'
 import mainSaga from './mainSaga'
@@ -29,6 +30,7 @@ function* saga() {
     yield fork(mainSaga);
     yield fork(groupFeedSaga);
     yield fork(postSaga);
+    yield fork(cardSage);
 
 }
 

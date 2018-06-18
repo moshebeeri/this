@@ -2,6 +2,7 @@ const initialState = {
     businesses: {},
     categories: [],
     myBusinesses: {},
+    businessesCard: {},
     myBusinessOrder: [],
     businessesUsers: {},
     businessesProducts: {},
@@ -278,6 +279,10 @@ export default function business(state = initialState, action) {
                     businessesState.allBusinessFollowers[action.businessId] = businessesState.allBusinessFollowers[action.businessId].concat(newFollowers);
                 }
             }
+            return businessesState;
+
+        case actions.SET_BUSINESS_CARD :
+            businessesState.businessesCard[action.businessId] = action.card;
             return businessesState;
         case actions.BUSSINESS_LOADING:
             return {

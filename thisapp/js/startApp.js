@@ -15,6 +15,7 @@ import EditPromotions from "./components/promtions/add-form/edit_form";
 import AddGroups from "./components/groups/add-form/index";
 import SelectUsersComponent from "./components/groups/selectUser/index";
 import AddProduct from "./components/product/add-form/index";
+import AddMemberCard from "./components/memberCards/add-form/index";
 import GroupFeed from "./components/groups/feeds/index";
 import Signup from "./components/signup/index";
 import Register from "./components/register/index";
@@ -79,7 +80,7 @@ const AppNavigator = StackNavigator({
         editPromotion: {screen: EditPromotions},
         AddGroups: {screen: AddGroups},
         SelectUsersComponent: {screen: SelectUsersComponent},
-        AddProduct: {screen: AddProduct},
+        AddMemberCard: {screen: AddMemberCard},
         GroupFeed: {screen: GroupFeed},
         Signup: {screen: Signup},
         realizePromotion: {screen: RealizePromotion},

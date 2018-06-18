@@ -303,7 +303,7 @@ export function nextLoad() {
 }
 
 export function fetchGroups() {
-    return function (dispatch) {
+    return function (dispatch,getState) {
         getAll(dispatch);
     }
 }
@@ -320,13 +320,13 @@ export function directAddMessage(group, message) {
 
 async function getAll(dispatch) {
     try {
-        let response = await groupsApi.getAll();
-        if (response.length > 0) {
-            dispatch({
-                type: 'GET_GROUPS',
-                groups: response,
-            });
-        }
+      //  let response = await groupsApi.getAll();
+      //   if (response.length > 0) {
+      //       dispatch({
+      //           type: 'GET_GROUPS',
+      //           groups: response,
+      //       });
+      //   }
     } catch (error) {
         console.log(error);
     }
