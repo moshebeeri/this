@@ -88,9 +88,7 @@ exports.create = function(req, res) {
           return handleError(res, err);
         }
         graphModel.relate_ids(entity.toString(), 'LOYALTY_CARD', cardType._id.toString(), '', (err) => {
-          if (err) {
-            return handleError(res, err);
-          }
+          if (err) {return handleError(res, err)}
           if(cardType.add_policy === 'OPEN')
             addEntityFollowerToCard(cardType, (err) => {if(err) console.error(err)});
           return res.status(201).json(cardType);
@@ -103,7 +101,7 @@ exports.create = function(req, res) {
 exports.entity = function (req, res) {
   //TODO: add social state
   let paginate = utils.to_paginate(req);
-  const query = `MATCH (e:entity{_id:'${req.params.entity}'})-[:LOYALTY_CARD]->(cardType:CardType) RETURN cardType._id as _id`;
+  const query = `MATCH (e{_id:'${req.params.entity}'})-[:LOYALTY_CARD]->(cardType:cardType) RETURN cardType._id as _id`;
   graphModel.query_objects(CardType, query,
     'order by _id DESC', paginate.skip, paginate.limit, function (err, cards) {
       if (err) {
