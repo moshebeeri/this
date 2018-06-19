@@ -6,7 +6,7 @@ let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('cardType');
 const MongodbSearch = require('../../components/mongo-search');
 const utils = require('../../components/utils').createUtils();
-
+const cardController = require('../card/card.controller');
 exports.search = MongodbSearch.create(CardType);
 
 // Get list of cardTypes
@@ -40,6 +40,24 @@ function createGraphParams(card) {
   return `{add_policy: ${card.add_policy}, min_points: ${card.min_points}, points_ratio: ${card.points_ratio}, accumulate_ratio: ${card.accumulate_ratio}}`;
 }
 
+function addEntityFollowerToCard(userId, cardType, callback) {
+  if(cardType.add_policy !== 'OPEN')
+    return;
+  const entity = getCardEntity(cardType);
+  let query = `MATCH (u:user)-[:FOLLOW]->(e{_id{'${entity}'}}-[:LOYALTY_CARD]->(ct{_id:'${cardType._id}'})               
+               return u._id ad _id` ;
+  graphModel.query(query, (err, results) => {
+    if (err) return callback(err);
+    results.for(result => {
+      console.log(JSON.stringify(result));
+      cardController.createCard(userId, cardType, (err, card) => {
+        if (err) { return callback(err); }
+        return callback(null, card);
+      });
+    })
+  })
+}
+
 // Creates a new cardType in the DB.
 exports.create = function(req, res) {
   let cardType = req.body;
@@ -57,18 +75,23 @@ exports.create = function(req, res) {
         return handleError(res, err);
       }
       graphModel.reflect(cardType, {
+        _id: cardType._id,
         add_policy: cardType.add_policy,
-        min_points: cardType.min_points,
+        min_points: cardType.points.min_points,
         points_ratio: cardType.points_ratio,
-        accumulate_ratio: cardType.accumulate_ratio
-      }, function (err) {
+        accumulate_ratio: cardType.points.accumulate_ratio
+      }, function (err, cardType) {
         if (err) {
           return handleError(res, err);
         }
-        graphModel.relate_ids(entity, 'LOYALTY_CARD', cardType._id, '', (err) => {
+        console.log(`cardType2: ${JSON.stringify(cardType)}`);
+        console.log(`relate_ids: ${entity} -> ${cardType._id}`);
+        graphModel.relate_ids(entity.toString(), 'LOYALTY_CARD', cardType._id.toString(), '', (err) => {
           if (err) {
             return handleError(res, err);
           }
+          if(cardType.add_policy === 'OPEN')
+            addEntityFollowerToCard(cardType);
           return res.status(201).json(cardType);
         });
       });

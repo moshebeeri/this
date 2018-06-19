@@ -85,44 +85,57 @@ exports.mine = function (req, res) {
     });
 };
 
-
-// Creates a new card in the DB.
-exports.create = function(req, res) {
-  let card = req.body;
-  card.user = req.user._id;
-  const cardTypeId = card.card_type._id;
+exports.createCard = function(userId, cardTypeId, callback) {
+  let card = {};
+  card.cardType = cardTypeId;
+  card.user = userId;
   CardType.findById(cardTypeId).exec((err, cardType) => {
-    if (err) return handleError(res, err);
+    if (err) return callback(err);
     //check if user has this cardType card
-    const query = `MATCH (u:user{_id:'${req.user._id}'})-[:LOYALTY_CARD]->(c:Card)-[]->(ct:CardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
+    const query = `MATCH (u:user{_id:'${userId}'})-[:LOYALTY_CARD]->(c:Card)-[]->(ct:CardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
     graphModel.query(query, (err, results) => {
-      if (err) return handleError(res, err);
-      if (results.length !== 1) return handleError(res, new Error('unexpected result length'));
-      if(results[0].has) return handleError(res, new Error('already has instance of this'));
+      if (err) return callback(err);
+      if (results.length !== 1) return callback(new Error('unexpected result length'));
+      if (results[0].has) return callback(new Error('already has instance of this'));
       Card.create(card, function (err, card) {
-        if (err) { return handleError(res, err)}
+        if (err) {
+          return callback(err)
+        }
         qrcodeController.createAndAssign(card.user, {
           type: 'Card',
           assignment: {
             cardId: card._id
           }
         }, function (err, qrcode) {
-          if (err) return handleError(res, err);
+          if (err) return callback(err);
           //will be save with the reflect process
           card.qrcode = qrcode;
           graphModel.reflect(card, {
-              user: req.user._id
+              _id: card._id,
+              user: userId
             },
             function (err, card) {
-              if (err) {return handleError(res, err)}
-              graphModel.relate_ids(req.user._id, 'LOYALTY_CARD', card._id);
+              if (err) {
+                return callback(err)
+              }
+              graphModel.relate_ids(userId, 'LOYALTY_CARD', card._id);
               graphModel.relate_ids(cardType._id, 'CARD_OF_TYPE', card._id);
-              return res.status(201).json(card);
+              return callback(null, card);
             });
         });
       });
     })
   })
+};
+
+// Creates a new card in the DB.
+exports.create = function(req, res) {
+  let card = req.body;
+  card.user = req.user._id;
+  this.createCard(card.user, card.card_type._id, (err, card) => {
+    if (err) { return handleError(res, err); }
+    return res.status(200).json(card);
+  });
 };
 
 // Updates an existing card in the DB.

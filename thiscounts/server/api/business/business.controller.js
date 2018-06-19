@@ -170,11 +170,6 @@ function business_follow_activity(follower, business) {
   });
 }
 
-function debugFunc(param) {
-  let q = `match (user:user{_id:"5a8ac830d984c43b756fa89b"}) return count(user) as n`;
-  graphModel.query(q, (err, res) => console.log(`debugFunc: ${param} ${JSON.stringify(res)}`))
-}
-
 function doFollowBusiness(userId, businessId, callback) {
   Business.findById(businessId)
     .exec(function (err, business) {
