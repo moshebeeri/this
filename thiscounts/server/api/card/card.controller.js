@@ -31,7 +31,7 @@ exports.show = function(req, res) {
 };
 
 exports.chargeCode = function(req, res) {
-  Card.findById(req.params.card, function (err, card) {
+  Card.findById(req.params.cardId, function (err, card) {
     if(err) { return handleError(res, err); }
     if(!card) { return res.status(404).send(); }
     req.params.code = card.qrcode.code;
@@ -84,7 +84,6 @@ function touch(userId, cardId, callback) {
 }
 
 exports.mine = function (req, res) {
-  //TODO: add touch and sort by touched
   let paginate = utils.to_paginate(req);
   const query = `MATCH (u:user{_id:'${req.user._id}'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType) RETURN card._id as _id`;
   graphModel.query_objects(Card, query,
