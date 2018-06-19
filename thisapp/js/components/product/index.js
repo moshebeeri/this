@@ -57,7 +57,7 @@ class Product extends Component {
         const businessId = navigation.state.params.business._id;
         let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
         if (Platform.OS === 'ios') {
-            icon = <Icon3 active color={"#FA8559"} size={25} name="ios-add"/>;
+            icon = <Icon3 active color={"#FA8559"} size={50} name="ios-add"/>;
         }
         return (
             <Container style={{flex: -1,backgroundColor:`${appBackgroundColor}`}}>

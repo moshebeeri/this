@@ -664,7 +664,7 @@ class AddPromotion extends Component {
         let proximity = <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
             <SimplePicker ref="TypePicker" list={Proximity} itemTitle={strings.Proximity}
                           defaultHeader={strings.chooseProximityDistance}
-                          value={distributionToString[this.state.proximity]}
+                          value={proximityToString[this.state.proximity]}
                           isMandatory onValueSelected={this.selectProximity.bind(this)}/>
         </View>;
         return <View>

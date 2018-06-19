@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Content, Fab, Header, Input, InputGroup, View} from 'native-base';
@@ -8,6 +9,7 @@ import {bindActionCreators} from "redux";
 import {getBusinessUsers} from '../../selectors/businessesSelector'
 import GenericListManager from '../generic-list-manager/index'
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon3 from 'react-native-vector-icons/Ionicons';
 import {FormHeader} from '../../ui/index';
 import strings from "../../i18n/i18n"
 import navigationUtils from '../../utils/navigationUtils'
@@ -60,17 +62,21 @@ class UserPermittedRoles extends Component {
     render() {
         const {users, navigation, actions, update,user} = this.props;
         let business = navigation.state.params.business;
+        let icon = <Icon5 active color={"#FA8559"} size={25} name="plus"/>
+        if (Platform.OS === 'ios') {
+            icon = <Icon3 active color={"#FA8559"} size={50} name="ios-add"/>;
+        }
         return (
             <Container>
                 {this.showAdd() ?
                     <FormHeader showBack submitForm={this.navigateToAdd.bind(this)} navigation={this.props.navigation}
                                 title={strings.AddUserPermission} bgc="white"
-                                submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                                submitIcon={icon}
                                 titleColor="#FA8559" backIconColor="#FA8559"/>
                     :
                     <FormHeader showBack navigation={this.props.navigation}
                                 title={strings.AddUserPermission} bgc="white"
-                                submitIcon={<Icon5 active color={"#FA8559"} size={25} name="plus"/>}
+                                submitIcon={icon}
                                 titleColor="#FA8559" backIconColor="#FA8559"/>
                 }
 

@@ -60,7 +60,7 @@ class ApplicationBusinessManager extends Component {
     render() {
         let icon = <Icon2 active color={"#FA8559"} size={StyleUtils.scale(25)} name="plus"/>
         if (Platform.OS === 'ios') {
-            icon = <Icon active color={"#FA8559"} size={StyleUtils.scale(25)} name="ios-add"/>;
+            icon = <Icon active color={"#FA8559"} size={StyleUtils.scale(50)} name="ios-add"/>;
         }
 
         return (

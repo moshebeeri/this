@@ -228,7 +228,7 @@ showMemberCards() {
                             {/*<ThisText*/}
                                 {/*style={{*/}
                                     {/*color: 'white',*/}
-                                    {/*fontStyle: 'normal',*/}
+                                     {/*fontStyle: 'normal',*/}
                                     {/*marginLeft: StyleUtils.scale(20),*/}
                                     {/*fontSize: StyleUtils.scale(16)*/}
                                 {/*}}>{strings.MemberCard}</ThisText>*/}
