@@ -75,25 +75,35 @@ exports.create = function(req, res) {
   const cardTypeId = card.card_type._id;
   CardType.findById(cardTypeId).exec((err, cardType) => {
     if (err) return handleError(res, err);
-    Card.create(card, function (err, card) {
-      if (err) { return handleError(res, err)}
-      qrcodeController.createAndAssign(card.user, {
-        type: 'Card',
-        assignment: {
-          cardId: card._id
-        }
-      }, function (err, qrcode) {
-        if (err) return handleError(res, err);
-        //will be save with the reflect process
-        card.qrcode = qrcode;
-        graphModel.reflect(card, function (err, card) {
-          if (err) {return handleError(res, err)}
-          graphModel.relate_ids(req.user._id, 'LOYALTY_CARD', card._id);
-          graphModel.relate_ids(cardType._id, 'CARD_OF_TYPE', card._id);
-          return res.status(201).json(card);
+    //check if user has this cardType card
+    const query = `MATCH (u:user{_id:'${req.user._id}'})-[:LOYALTY_CARD]->(c:Card)-[]->(ct:CardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
+    graphModel.query(query, (err, results) => {
+      if (err) return handleError(res, err);
+      if (results.length !== 1) return handleError(res, new Error('unexpected result length'));
+      if(results[0].has) return handleError(res, new Error('already has instance of this'));
+      Card.create(card, function (err, card) {
+        if (err) { return handleError(res, err)}
+        qrcodeController.createAndAssign(card.user, {
+          type: 'Card',
+          assignment: {
+            cardId: card._id
+          }
+        }, function (err, qrcode) {
+          if (err) return handleError(res, err);
+          //will be save with the reflect process
+          card.qrcode = qrcode;
+          graphModel.reflect(card, {
+              user: req.user._id
+            },
+            function (err, card) {
+              if (err) {return handleError(res, err)}
+              graphModel.relate_ids(req.user._id, 'LOYALTY_CARD', card._id);
+              graphModel.relate_ids(cardType._id, 'CARD_OF_TYPE', card._id);
+              return res.status(201).json(card);
+            });
         });
       });
-    });
+    })
   })
 };
 

@@ -61,17 +61,13 @@ exports.create = function(req, res) {
         points_ratio: cardType.points_ratio,
         accumulate_ratio: cardType.accumulate_ratio
       }, function (err) {
-        console.log(`I am here e1`);
         if (err) {
-          console.log(`I am here e2`);
           return handleError(res, err);
         }
-        console.log(`I am here e4`);
         graphModel.relate_ids(entity, 'LOYALTY_CARD', cardType._id, '', (err) => {
           if (err) {
             return handleError(res, err);
           }
-          console.log(`I am here e5`);
           return res.status(201).json(cardType);
         });
       });
