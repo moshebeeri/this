@@ -68,11 +68,19 @@ exports.redeem = function(req, res) {
     });
   });
 };
-
+/*
+function touch(userId, groupId, callback) {
+  let query = `match (u:user{_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:'${groupId}'}) set r.timestamp=timestamp()`;
+  graphModel.query(query, callback ? callback : (err) => {
+    if (err) console.error(err);
+  });
+  graphModel.relate_ids(user_id, 'FOLLOW', group._id, `{timestamp: ${Date.now()}}`, function (err) {
+}
+ */
 exports.mine = function (req, res) {
   //TODO: add touch and sort by touched
   let paginate = utils.to_paginate(req);
-  const query = `MATCH (u:card{_id:'${req.user._id}'})-[:LOYALTY_CARD]->(card:Card)<-[:CARD_OF_TYPE]-(cardType:CardType) RETURN card._id as _id`;
+  const query = `MATCH (u:user{_id:'${req.user._id}'})-[:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType) RETURN card._id as _id`;
   graphModel.query_objects(Card, query,
     'order by _id DESC', paginate.skip, paginate.limit, function (err, cards) {
       if (err) {
@@ -92,7 +100,7 @@ exports.createCard = function(userId, cardTypeId, callback) {
   CardType.findById(cardTypeId).exec((err, cardType) => {
     if (err) return callback(err);
     //check if user has this cardType card
-    const query = `MATCH (u:user{_id:'${userId}'})-[:LOYALTY_CARD]->(c:Card)-[r]->(ct:CardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
+    const query = `MATCH (u:user{_id:'${userId}'})-[:LOYALTY_CARD]->(c:card)-[r]->(ct:cardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
     graphModel.query(query, (err, results) => {
       if (err) return callback(err);
       if (results.length !== 1) return callback(new Error('unexpected result length'));

@@ -12,7 +12,7 @@ let CardSchema = new Schema({
   number: String,
   gid: {type: Number, index: true},
   user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions},
-  cardType: {type: Schema.ObjectId, ref: 'CardType'},
+  cardType: {type: Schema.ObjectId, ref: 'CardType', autopopulate: true},
 });
 CardSchema.plugin(autopopulate);
 
