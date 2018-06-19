@@ -23,7 +23,7 @@ const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
 const config = require('../../config/environment');
-const Promise = require('bluebird');
+//const Promise = require('bluebird');
 exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
@@ -170,6 +170,18 @@ function business_follow_activity(follower, business) {
   });
 }
 
+function addToLoyaltyCard(userId, businessId, callback) {
+  const query = `MATCH (e{_id:'${businessId}'})-[:LOYALTY_CARD]->(cardType:CardType) return cardType._id as _id`;
+  graphModel.query(query, (err, cardTypes) => {
+    if(err) return callback(err);
+    if(cardTypes.length !== 1) return callback(new Error(`unexpected cardTypes.length`));
+    cardController.createCard(userId, cardTypes[0]._id, (err, card) => {
+      if (err) { return callback(err); }
+      return callback(null, card);
+    });
+  });
+}
+
 function doFollowBusiness(userId, businessId, callback) {
   Business.findById(businessId)
     .exec(function (err, business) {
@@ -203,6 +215,7 @@ function doFollowBusiness(userId, businessId, callback) {
                   groupId: user_group.groupId
                 });
               });
+              addToLoyaltyCard(userId, businessId, (err) => console.error(err));
               return callback(null)
             })
           });

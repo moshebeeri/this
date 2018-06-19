@@ -84,8 +84,6 @@ exports.create = function(req, res) {
         if (err) {
           return handleError(res, err);
         }
-        console.log(`cardType2: ${JSON.stringify(cardType)}`);
-        console.log(`relate_ids: ${entity} -> ${cardType._id}`);
         graphModel.relate_ids(entity.toString(), 'LOYALTY_CARD', cardType._id.toString(), '', (err) => {
           if (err) {
             return handleError(res, err);
