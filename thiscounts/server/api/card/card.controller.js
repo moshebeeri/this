@@ -8,6 +8,7 @@ let graphModel = graphTools.createGraphModel('card');
 let MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const QRCode = require('../qrcode/qrcode.model');
+const utils = require('../../components/utils').createUtils();
 
 
 exports.search = MongodbSearch.create(Card);
@@ -67,6 +68,23 @@ exports.redeem = function(req, res) {
     });
   });
 };
+
+exports.mine = function (req, res) {
+  //TODO: add touch and sort by touched
+  let paginate = utils.to_paginate(req);
+  const query = `MATCH (u:card{_id:'${req.user._id}'})-[:LOYALTY_CARD]->(card:Card)<-[:CARD_OF_TYPE]-(cardType:CardType) RETURN card._id as _id`;
+  graphModel.query_objects(Card, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function (err, cards) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!cards) {
+        return res.send(404)
+      }
+      return res.status(200).json(cards);
+    });
+};
+
 
 // Creates a new card in the DB.
 exports.create = function(req, res) {

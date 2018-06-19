@@ -11,6 +11,7 @@ router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), control
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', auth.isAuthenticated(), controller.create);
+router.get('/list/:entity', auth.isAuthenticated(), controller.entity);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);

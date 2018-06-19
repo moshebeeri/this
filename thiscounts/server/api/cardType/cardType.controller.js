@@ -5,6 +5,7 @@ let CardType = require('./cardType.model');
 let graphTools = require('../../components/graph-tools');
 let graphModel = graphTools.createGraphModel('cardType');
 const MongodbSearch = require('../../components/mongo-search');
+const utils = require('../../components/utils').createUtils();
 
 exports.search = MongodbSearch.create(CardType);
 
@@ -74,6 +75,23 @@ exports.create = function(req, res) {
     });
   })
 };
+
+exports.entity = function (req, res) {
+  //TODO: add social state
+  let paginate = utils.to_paginate(req);
+  const query = `MATCH (e:entity{_id:'${req.params.entity}'})-[:LOYALTY_CARD]->(cardType:CardType) RETURN cardType._id as _id`;
+  graphModel.query_objects(CardType, query,
+    'order by _id DESC', paginate.skip, paginate.limit, function (err, cards) {
+      if (err) {
+        return handleError(res, err)
+      }
+      if (!cards) {
+        return res.send(404)
+      }
+      return res.status(200).json(cards);
+    });
+};
+
 
 // Updates an existing cardType in the DB.
 exports.update = function(req, res) {

@@ -137,6 +137,7 @@ exports.followers = function (req, res) {
       return res.status(200).json(objects);
     });
 };
+
 exports.mine = function (req, res) {
   let userId = req.user._id;
   getUserBusinesses(userId, true, (err, info) => {
@@ -144,6 +145,7 @@ exports.mine = function (req, res) {
     return res.status(200).json(info);
   });
 };
+
 exports.getUserBusinessesByPhone = function (req, res) {
   User.findOne({
     $and: [{phone_number: req.params.phone},
