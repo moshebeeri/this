@@ -68,21 +68,27 @@ exports.redeem = function(req, res) {
     });
   });
 };
-/*
-function touch(userId, groupId, callback) {
-  let query = `match (u:user{_id:'${userId}'})-[r:FOLLOW]->(g:group{_id:'${groupId}'}) set r.timestamp=timestamp()`;
+
+exports.touch = function (req, res) {
+  touch(req.user._id, req.params.cardId, function (err) {
+    if (err) console.error(err.message);
+  });
+  return res.status(200).send();
+};
+
+function touch(userId, cardId, callback) {
+  let query = `match (u:user{_id:'${userId}'})-[r:LOYALTY_CARD]->(c:card{_id:'${cardId}'}) set r.timestamp=timestamp()`;
   graphModel.query(query, callback ? callback : (err) => {
     if (err) console.error(err);
   });
-  graphModel.relate_ids(user_id, 'FOLLOW', group._id, `{timestamp: ${Date.now()}}`, function (err) {
 }
- */
+
 exports.mine = function (req, res) {
   //TODO: add touch and sort by touched
   let paginate = utils.to_paginate(req);
-  const query = `MATCH (u:user{_id:'${req.user._id}'})-[:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType) RETURN card._id as _id`;
+  const query = `MATCH (u:user{_id:'${req.user._id}'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType) RETURN card._id as _id`;
   graphModel.query_objects(Card, query,
-    'order by _id DESC', paginate.skip, paginate.limit, function (err, cards) {
+    'order by r.timestamp desc', paginate.skip, paginate.limit, function (err, cards) {
       if (err) {
         return handleError(res, err)
       }
@@ -126,9 +132,9 @@ exports.createCard = function(userId, cardTypeId, callback) {
               if (err) {
                 return callback(err)
               }
-              graphModel.relate_ids(userId, 'LOYALTY_CARD', card._id);
+              graphModel.relate_ids(userId, 'LOYALTY_CARD', card._id, `{timestamp: ${Date.now()}}`);
               graphModel.relate_ids(cardType._id, 'CARD_OF_TYPE', card._id);
-              return callback(null, card);
+                return callback(null, card);
             });
         });
       });
