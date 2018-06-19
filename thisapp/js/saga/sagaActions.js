@@ -65,6 +65,9 @@ export const PROMOTION_NOTIFICATION = 'PROMOTION_NOTIFICATION';
 export const SAVE_PRODUCT = 'SAVE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PODUCT';
+//card
+export const SAVE_CARD = 'SAVE_CARD';
+export const UPDATE_CARD = 'UPDATE_CARD';
 //post
 export const SAVE_POST = 'SAVE_POST';
 

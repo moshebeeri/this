@@ -2,7 +2,7 @@
  * Created by roilandshut on 08/06/2017.
  */
 import React, {Component} from "react";
-import {Dimensions,Platform} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 import {Provider} from "react-redux";
 import {StackNavigator} from "react-navigation";
 import ApplicationManager from "./components/app/index";
@@ -15,6 +15,7 @@ import EditPromotions from "./components/promtions/add-form/edit_form";
 import AddGroups from "./components/groups/add-form/index";
 import SelectUsersComponent from "./components/groups/selectUser/index";
 import AddProduct from "./components/product/add-form/index";
+import AddMemberCard from "./components/memberCards/add-form/index";
 import GroupFeed from "./components/groups/feeds/index";
 import Signup from "./components/signup/index";
 import Register from "./components/register/index";
@@ -45,11 +46,10 @@ import setCustomStyles from './styles'
 import * as actions from "./reducers/reducerActions";
 import ActionLogger from './actions/ActionLogger';
 import RNRestart from 'react-native-restart';
-import {setJSExceptionHandler, getJSExceptionHandler,setNativeExceptionHandler} from 'react-native-exception-handler';
-
+import {getJSExceptionHandler, setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler';
 // registering the error handler (maybe u can do this in the index.android.js or index.ios.js)
 setJSExceptionHandler((error, isFatal) => {
-    if(isFatal){
+    if (isFatal) {
         RNRestart.Restart();
     }
     // This is your custom global error handler
@@ -57,15 +57,13 @@ setJSExceptionHandler((error, isFatal) => {
     // or hit google analytics to track crashes
     // or hit a custom api to inform the dev team.
 });
-
 // getJSExceptionHandler gives the currently set JS exception handler
 const currentHandler = getJSExceptionHandler();
 setNativeExceptionHandler((exceptionString) => {
-    if(Platform.OS !== 'ios'){
+    if (Platform.OS !== 'ios') {
         RNRestart.Restart();
     }
 });
-
 const store = getStore();
 setCustomStyles();
 let logger = new ActionLogger();
@@ -79,7 +77,7 @@ const AppNavigator = StackNavigator({
         editPromotion: {screen: EditPromotions},
         AddGroups: {screen: AddGroups},
         SelectUsersComponent: {screen: SelectUsersComponent},
-        AddProduct: {screen: AddProduct},
+        AddMemberCard: {screen: AddMemberCard},
         GroupFeed: {screen: GroupFeed},
         Signup: {screen: Signup},
         realizePromotion: {screen: RealizePromotion},
@@ -87,6 +85,7 @@ const AppNavigator = StackNavigator({
         ReadQrCode: {screen: QrCode},
         Products: {screen: Products},
         Promotions: {screen: Promotions},
+        AddProduct: {screen: AddProduct},
         Cards: {screen: Cards},
         UserProfile: {screen: UserProfile},
         SelectProductsComponent: {screen: SelectProductsComponent},
@@ -118,9 +117,9 @@ function getCurrentRouteName(navigationState) {
     }
     return route.routeName;
 }
+
 function isMain(currentScreen, prevScreen) {
     return currentScreen.routes.length === 2 && prevScreen.routes.length === 1
-
 }
 
 class AppWithNavigationState extends Component {
@@ -141,18 +140,15 @@ class AppWithNavigationState extends Component {
                     onNavigationStateChange={(prevState, currentState) => {
                         const currentScreen = getCurrentRouteName(currentState);
                         const prevScreen = getCurrentRouteName(prevState);
-                        const result = isMain(prevState,currentState);
+                        const result = isMain(prevState, currentState);
                         store.dispatch({
                             type: actions.CURRENT_SCREEN,
                             screen: prevScreen
                         });
-
                         store.dispatch({
                             type: actions.CURRENT_MAIN,
                             isMain: result
                         });
-
-
                         logger.screenVisited(currentScreen, prevScreen);
                     }}/>
             </MenuContext>

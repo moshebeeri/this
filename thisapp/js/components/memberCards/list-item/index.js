@@ -33,7 +33,23 @@ export default class CardListView extends Component {
     }
 
     createCard(card) {
+        const {noAction, showStats,image} = this.props;
+        let noProfile = false;
+        let businessView = false;
+        if (noAction) {
+            noProfile = true;
+            businessView = true;
+        }
         const styles = this.createStyle();
+        let source = undefined;
+        if(image){
+            source = {uri: image.path};
+        }else{
+            if(card.business && card.business.pictures && Object.keys(card.business.pictures).length > 0){
+                source = {uri: card.business.pictures[Object.keys(card.business.pictures).length - 1].pictures[0]};
+            }
+        }
+
         return <View style={[styles.promotion_container, {
             marginTop: 0.5,
             marginBottom: 9.5,
@@ -60,9 +76,10 @@ export default class CardListView extends Component {
                 width: StyleUtils.getWidth() - 15
             }]}>
 
-                {card.business && card.business.pictures && Object.keys(card.business.pictures).length > 0 && <ImageController
+                {source &&
+                <ImageController
                     style={[styles.bannerImageContainer, {width: StyleUtils.getWidth() - 20}]} resizeMode="cover"
-                    source={{uri: card.business.pictures[Object.keys(card.business.pictures).length - 1].pictures[0]}}>
+                    source={source}>
 
                 </ImageController>}
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 0, y: 1}}
@@ -79,7 +96,9 @@ export default class CardListView extends Component {
                                     businessLogo={card.business.logo}
                                     businessName={card.business.name} noMargin
                                     headerWidth={100}
+                                    noProfile={noProfile}
                                     hideMenu
+                                    businessView={businessView}
                                     bgColor={'transparent'}
                                     size={60}
                                     textColor={'white'}/>
@@ -94,7 +113,13 @@ export default class CardListView extends Component {
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth() - 15
                 }}>
-                    <ThisText style={{color: 'white', fontSize: 40, fontWeight: 'bold'}}>{card.points}</ThisText>
+                    {showStats ? <View style={{alignItems:'center',justifyContent:'center'}}>
+                            <ThisText style={{color: 'white', fontSize: StyleUtils.scale(20), fontWeight: 'bold'}}>Total Points</ThisText><ThisText
+                            style={{color: 'white', fontSize:  StyleUtils.scale(20), fontWeight: 'bold'}}>{card.points}</ThisText><ThisText
+                            style={{color: 'white', fontSize:  StyleUtils.scale(20), fontWeight: 'bold'}}>Members</ThisText><ThisText
+                            style={{color: 'white', fontSize:  StyleUtils.scale(20), fontWeight: 'bold'}}>{card.members}</ThisText>
+                        </View> :
+                        <ThisText style={{color: 'white', fontSize:  StyleUtils.scale(40), fontWeight: 'bold'}}>{card.points}</ThisText>}
 
                 </View>
 
@@ -111,14 +136,14 @@ export default class CardListView extends Component {
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth()
                 }}>
-                    <View style={{marginLeft: StyleUtils.scale(20)}}>
-                        <SubmitButton textColor={'#399E32'} title={'CHARGE'} color={'transparent'}
+                    {!noAction && <View style={{marginLeft: StyleUtils.scale(20)}}>
+                        <SubmitButton textColor={'white'} title={'CHARGE'} color={'transparent'}
                                       onPress={() => this.chargeCard(item)}/>
-                    </View>
-                    <View style={{marginRight: StyleUtils.scale(30)}}>
+                    </View>}
+                    {!noAction && <View style={{marginRight: StyleUtils.scale(30)}}>
                         <SubmitButton textColor={'white'} title={'REDEEM'} color={'transparent'}
                                       onPress={() => this.chargeCard(item)}/>
-                    </View>
+                    </View>}
 
                 </LinearGradient>
 

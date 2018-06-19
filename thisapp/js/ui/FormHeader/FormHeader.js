@@ -70,8 +70,8 @@ class FormHeader extends Component {
         let icon = <Icon2 active color={"white"} size={StyleUtils.scale(25)} name={'check'}/>
         let headerHeight = vh * 9;
         if (Platform.OS === 'ios') {
-            icon = <Icon active color={"white"} size={StyleUtils.scale(30)} name={'ios-checkmark'}/>
-            headerHeight = vh * 9;
+            icon = <Icon active color={"white"} size={StyleUtils.scale(50)} name={'ios-checkmark'}/>
+            headerHeight = vh * 11;
         }
         if (submitIcon) {
             icon = submitIcon;
@@ -90,7 +90,7 @@ class FormHeader extends Component {
                 marginLeft: StyleUtils.scale(5),
                 marginRight: StyleUtils.scale(5)
             }} onPress={() => this.back()}>
-                <Icon active color={iconColor} size={StyleUtils.scale(25)} name={arrowName}/>
+                <Icon active color={iconColor} size={Platform.OS === 'ios' ? StyleUtils.scale(40): StyleUtils.scale(25)} name={arrowName}/>
 
             </TouchableOpacityFix>
         }
@@ -167,7 +167,7 @@ class FormHeader extends Component {
                                               width:  StyleUtils.scale(50),
                                               marginRight:  StyleUtils.scale(10),
                                               alignItems: 'flex-end',
-                                              justifyContent: 'flex-end'
+                                              justifyContent: 'center'
                                           }}
                                           onPress={() => this.submitForm()}>
                             {icon}
