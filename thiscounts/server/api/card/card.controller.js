@@ -92,7 +92,7 @@ exports.createCard = function(userId, cardTypeId, callback) {
   CardType.findById(cardTypeId).exec((err, cardType) => {
     if (err) return callback(err);
     //check if user has this cardType card
-    const query = `MATCH (u:user{_id:'${userId}'})-[:LOYALTY_CARD]->(c:Card)-[]->(ct:CardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
+    const query = `MATCH (u:user{_id:'${userId}'})-[:LOYALTY_CARD]->(c:Card)-[r]->(ct:CardType{_id:'${cardTypeId}'}) RETURN count(r)>0 as has`;
     graphModel.query(query, (err, results) => {
       if (err) return callback(err);
       if (results.length !== 1) return callback(new Error('unexpected result length'));
@@ -102,7 +102,7 @@ exports.createCard = function(userId, cardTypeId, callback) {
           return callback(err)
         }
         qrcodeController.createAndAssign(card.user, {
-          type: 'Card',
+          type: 'LOYALTY_CARD',
           assignment: {
             cardId: card._id
           }

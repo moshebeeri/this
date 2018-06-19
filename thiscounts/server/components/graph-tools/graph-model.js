@@ -201,7 +201,6 @@ GraphModel.prototype.relate_ids = function relate_id(from, name, to, params, cal
     params = ''; //`{timestamp: "${Date.now()}"}`;
 
   let query = 'MATCH (f { _id:"' + from + '"}), (t { _id:"' + to + '"}) CREATE UNIQUE (f)-[:' + name + params + ']->(t)';
-  console.log(`relate_ids: ${query}`);
   if (utils.defined(callback)) {
     db.query(query, callback);
   } else {

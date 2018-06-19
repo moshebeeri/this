@@ -40,17 +40,20 @@ function createGraphParams(card) {
   return `{add_policy: ${card.add_policy}, min_points: ${card.min_points}, points_ratio: ${card.points_ratio}, accumulate_ratio: ${card.accumulate_ratio}}`;
 }
 
-function addEntityFollowerToCard(userId, cardType, callback) {
+function addEntityFollowerToCard(cardType, callback) {
   if(cardType.add_policy !== 'OPEN')
     return;
   const entity = getCardEntity(cardType);
-  let query = `MATCH (u:user)-[:FOLLOW]->(e{_id{'${entity}'}}-[:LOYALTY_CARD]->(ct{_id:'${cardType._id}'})               
-               return u._id ad _id` ;
+  let query = `MATCH (u:user)-[:FOLLOW]->(e{_id:'${entity}'})-[:LOYALTY_CARD]->(ct{_id:'${cardType._id}'}) 
+                return u._id as _id` ;
+  console.log('addEntityFollowerToCard');
+  console.log(query);
   graphModel.query(query, (err, results) => {
     if (err) return callback(err);
-    results.for(result => {
+    console.log(JSON.stringify(results));
+    results.forEach(result => {
       console.log(JSON.stringify(result));
-      cardController.createCard(userId, cardType, (err, card) => {
+      cardController.createCard(result._id, cardType._id, (err, card) => {
         if (err) { return callback(err); }
         return callback(null, card);
       });
@@ -89,7 +92,7 @@ exports.create = function(req, res) {
             return handleError(res, err);
           }
           if(cardType.add_policy === 'OPEN')
-            addEntityFollowerToCard(cardType);
+            addEntityFollowerToCard(cardType, (err) => {if(err) console.error(err)});
           return res.status(201).json(cardType);
         });
       });

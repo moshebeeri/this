@@ -7,7 +7,8 @@ let Validate = require('../../components/validate');
 
 let QRCodeType = [
   'FOLLOW_BUSINESS',
-  'FOLLOW_GROUP'
+  'FOLLOW_GROUP',
+  'LOYALTY_CARD'
 ];
 
 let Action = [

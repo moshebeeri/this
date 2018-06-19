@@ -23,7 +23,7 @@ const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
 const config = require('../../config/environment');
-//const Promise = require('bluebird');
+const Promise = require('bluebird');
 exports.search = MongodbSearch.create(Business);
 
 function get_businesses_state(businesses, userId, callback) {
