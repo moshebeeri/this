@@ -13,7 +13,7 @@ module.exports = {
     },
     product_upper_container: {
         width: width,
-        height: StyleUtils.relativeHeight(30, 30),
+        height: StyleUtils.scale(220),
         backgroundColor: '#FA8559',
         marginBottom: 4,
         alignItems: 'center',

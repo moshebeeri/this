@@ -5,11 +5,10 @@ import {actions} from 'react-native-navigation-redux-helpers';
 import {Button, Container, Content, Fab, Header, Input, InputGroup, Item, Spinner, View} from 'native-base';
 import GenericListManager from '../generic-list-manager/index';
 import CardItem from './list-item/index'
-import * as businessAction from "../../actions/business";
+import * as cardAction from "../../actions/cardAction";
 import {getMyCards} from '../../selectors/memberCardsSelector'
 import {bindActionCreators} from "redux";
 import {FormHeader} from '../../ui/index';
-import * as promotionsAction from "../../actions/promotions";
 import navigationUtils from '../../utils/navigationUtils'
 import strings from "../../i18n/i18n"
 
@@ -27,6 +26,7 @@ class MemberCards extends Component {
     }
 
     componentWillMount() {
+        this.props.actions.setMyCards();
     }
 
 
@@ -79,8 +79,7 @@ export default connect(
         currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({
-        actions: bindActionCreators(businessAction, dispatch),
-        promotionActions: bindActionCreators(promotionsAction, dispatch)
+        actions: bindActionCreators(cardAction, dispatch),
     })
 )(MemberCards);
 

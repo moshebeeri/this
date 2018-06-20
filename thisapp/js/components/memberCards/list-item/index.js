@@ -19,6 +19,7 @@ import stylesPortrate from './styles'
 import StyleUtils from '../../../utils/styleUtils'
 import {BusinessHeader, ImageController, SubmitButton, ThisText} from '../../../ui/index';
 import LinearGradient from 'react-native-linear-gradient';
+import navigationUtils from '../../../utils/navigationUtils'
 
 export default class CardListView extends Component {
     constructor(props) {
@@ -29,8 +30,11 @@ export default class CardListView extends Component {
         return this.createCard(this.props.item);
     }
 
-    chargeCard(item) {
+    chargeCard(card) {
+        navigationUtils.doNavigation(this.props.navigation, 'ChargeCard',{card:card});
+
     }
+
 
     createCard(card) {
         const {noAction, showStats,image} = this.props;
@@ -67,7 +71,7 @@ export default class CardListView extends Component {
                 shadowOffset: {width: 0, height: 0},
                 shadowOpacity: 0.2,
                 shadowRadius: 5,
-                height: 200,
+                height: StyleUtils.scale(200),
                 elevation: 10,
                 overflow: 'hidden',
                 backgroundColor: 'white',
@@ -85,7 +89,7 @@ export default class CardListView extends Component {
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 0, y: 1}}
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
-                    height: StyleUtils.relativeHeight(15, 10),
+                    height: StyleUtils.scale(90),
                     position: 'absolute',
                     justifyContent: 'flex-end',
                     top: 0,
@@ -114,8 +118,7 @@ export default class CardListView extends Component {
                     width: StyleUtils.getWidth() - 15
                 }}>
                     {showStats ? <View style={{alignItems:'center',justifyContent:'center'}}>
-                            <ThisText style={{color: 'white', fontSize: StyleUtils.scale(20), fontWeight: 'bold'}}>Total Points</ThisText><ThisText
-                            style={{color: 'white', fontSize:  StyleUtils.scale(20), fontWeight: 'bold'}}>{card.points}</ThisText><ThisText
+                        <ThisText
                             style={{color: 'white', fontSize:  StyleUtils.scale(20), fontWeight: 'bold'}}>Members</ThisText><ThisText
                             style={{color: 'white', fontSize:  StyleUtils.scale(20), fontWeight: 'bold'}}>{card.members}</ThisText>
                         </View> :
@@ -138,11 +141,7 @@ export default class CardListView extends Component {
                 }}>
                     {!noAction && <View style={{marginLeft: StyleUtils.scale(20)}}>
                         <SubmitButton textColor={'white'} title={'CHARGE'} color={'transparent'}
-                                      onPress={() => this.chargeCard(item)}/>
-                    </View>}
-                    {!noAction && <View style={{marginRight: StyleUtils.scale(30)}}>
-                        <SubmitButton textColor={'white'} title={'REDEEM'} color={'transparent'}
-                                      onPress={() => this.chargeCard(item)}/>
+                                      onPress={() => this.chargeCard(card)}/>
                     </View>}
 
                 </LinearGradient>

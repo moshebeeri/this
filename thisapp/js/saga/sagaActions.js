@@ -67,6 +67,8 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PODUCT';
 //card
 export const SAVE_CARD = 'SAVE_CARD';
+export const GET_BUSINESS_CARD = 'GET_BUSINESS_CARD';
+export const GET_MY_MEMBER_CARDS = 'GET_MY_MEMBER_CARDS';
 export const UPDATE_CARD = 'UPDATE_CARD';
 //post
 export const SAVE_POST = 'SAVE_POST';
