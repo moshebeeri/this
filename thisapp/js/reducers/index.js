@@ -10,6 +10,7 @@ import products from './productReducer';
 import follow_businesses from './followBusinessReducer'
 import user from './UserReducer';
 import comments from './commentReducer';
+import memberCards from './MemverCardsReducer';
 import notification from './notificationReducer';
 import instances from './instancesReducer';
 import activities from './activitiesReducer';
@@ -66,6 +67,7 @@ export default function getRootReducer() {
         categoriesForm:categoriesForm,
         phone:phone,
         render:render,
+        memberCards:memberCards,
         scannerForm:scannerForm,
         following:following,
         postForm:postForm,

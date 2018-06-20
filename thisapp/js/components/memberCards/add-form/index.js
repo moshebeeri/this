@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity} from 'react-native';
+import {Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity,View} from 'react-native';
 import {connect} from 'react-redux';
-import {Button, Container, Content, Footer, Header, Icon, Input, InputGroup, Item, Picker, View} from 'native-base';
 import * as cardAction from "../../../actions/cardAction";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
@@ -58,6 +57,11 @@ class AddMemberCard extends Component {
         this.props.navigation.goBack();
     }
 
+    componentWillMount() {
+        const businessId = this.getBusinessId(this.props.navigation);
+        this.props.actions.setBusinessCards(businessId);
+    }
+
     validateForm() {
         let result = true;
         Object.keys(this.refs).forEach(key => {
@@ -86,33 +90,35 @@ class AddMemberCard extends Component {
     }
 
     updateFormData() {
-        // const {navigation, actions, saving} = this.props;
-        // if (saving) {
-        //     return
-        // }
-        // Keyboard.dismiss();
-        // const card = this.createCard();
-        // if (this.validateForm()) {
-        //     const businessId = this.getBusinessId(navigation);
-        //     actions.updateProduct(card, businessId, navigation)
-        // }
+        const {navigation, actions, saving} = this.props;
+        if (saving) {
+            return
+        }
+        Keyboard.dismiss();
+        const card = this.createCard();
+        if (this.validateForm()) {
+            const businessId = this.getBusinessId(navigation);
+            actions.updateCard(card, businessId, navigation)
+        }
     }
 
     createCard() {
-        const {navigation} = this.props;
+        const {navigation,cards} = this.props;
         const businessId = this.getBusinessId(navigation);
         let card = {
             coverImage: this.state.coverImage,
             entity: {business: businessId},
             points: {
-                min_points: this.state.min_points,
-                points_ratio: this.state.points_ratio,
+                min_points: 0,
+                points_ratio: 1,
                 accumulate_ratio: this.state.accumulate_ratio,
             },
             add_policy: this.state.add_policy
         };
-        if (this.state.item) {
-            card._id = this.state.item._id;
+        let businessCard = cards[businessId];
+        if (businessCard) {
+            card._id = businessCard._id;
+            card.pictures = businessCard.pictures;
         }
         return card;
     }
@@ -133,13 +139,7 @@ class AddMemberCard extends Component {
         }
     }
 
-    handleCode(code) {
-        this.setState({barcode: code.data})
-    }
 
-    setCategory(categories) {
-        this.setState({categories: categories});
-    }
 
     setCoverImage(image) {
         this.setState({
@@ -175,7 +175,7 @@ class AddMemberCard extends Component {
                                          alignItems: 'center',
                                          justifyContent: 'center',
                                          width: StyleUtils.relativeHeight(30, 30),
-                                         height: StyleUtils.relativeHeight(30, 30),
+                                         height: StyleUtils.scale(220)
                                      }
                                  }} logo mandatory color='white' pickFromCamera
                                  setImage={this.setCoverImage.bind(this)}/>
@@ -206,9 +206,30 @@ class AddMemberCard extends Component {
         })
     }
 
+
+    getPolicy(code) {
+        if (code === 'OPEN') {
+            return strings.CardOpen;
+        }
+        if (code === 'INVITE') {
+            return strings.CardInvite;
+        }
+        return undefined;
+    }
+
+    dismissKeyboard(){
+        Keyboard.dismiss();
+    }
     createView() {
+        const {cards,navigation} = this.props;
+        const businessId = this.getBusinessId(navigation);
+        const businessCard = cards[businessId];
+        let addPolicyValue= this.state.add_policy;
+        if (Platform.OS === 'ios') {
+            addPolicyValue = this.getPolicy(this.state.add_policy);
+        }
         return <View>
-            {this.state.item ?
+            {businessCard ?
                 <FormHeader showBack submitForm={this.updateFormData.bind(this)} navigation={this.props.navigation}
                             title={strings.MemberCard} bgc="#FA8559"/> :
                 <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
@@ -220,37 +241,19 @@ class AddMemberCard extends Component {
 
                 {this.createCoverImageComponnent()}
 
-                <SimplePicker ref="cardPolicy"
+                <SimplePicker ref="cardPolicy" value={addPolicyValue}  selectedValue={addPolicyValue}
                               list={cardPolicy} itemTitle={strings.CardPolicy}
                               defaultHeader={strings.ChooseType}
                               isMandatory
                               onValueSelected={this.selectCardPolicy.bind(this)}/>
 
-                <View style={styles.inputTextLayout}>
 
-                    <TextInput field={strings.MinPointsTerm} value={this.state.min_points}
-                               returnKeyType='next' ref="min_points" refNext="points_ratio"
-                               keyboardType='numeric'
-                               validateContent={FormUtils.validateNumberic}
-                               onChangeText={(min_points) => this.setState({min_points})}
-                               isMandatory={true}/>
-                </View>
-                <View style={[styles.inputTextLayout, {flexDirection: 'column', width: StyleUtils.getWidth() - 15}]}>
-
-                    <TextInput field={strings.PointsRatio} value={this.state.points_ratio}
-                               returnKeyType='next' ref="points_ratio" refNext="accumulate_ratio"
-                               keyboardType='numeric'
-                               validateContent={FormUtils.validateNumberic}
-                               placeholder={strings.PointsRatioExample}
-                               onChangeText={(points_ratio) => this.setState({points_ratio})}
-                               isMandatory={true}/>
-
-                </View>
                 <View style={[styles.inputTextLayout, {flexDirection: 'column', width: StyleUtils.getWidth() - 15}]}>
 
                     <TextInput field={strings.PointsAccumulationRatio} value={this.state.accumulate_ratio}
                                returnKeyType='done' ref="accumulate_ratio" refNext="retail"
                                keyboardType='numeric'
+                               onSubmitEditing={this.dismissKeyboard.bind(this)}
                                validateContent={FormUtils.validatePercent}
                                placeholder={strings.PointsAccumulationExample}
                                onChangeText={(accumulate_ratio) => this.setState({accumulate_ratio})}

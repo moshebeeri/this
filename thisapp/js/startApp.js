@@ -16,6 +16,7 @@ import AddGroups from "./components/groups/add-form/index";
 import SelectUsersComponent from "./components/groups/selectUser/index";
 import AddProduct from "./components/product/add-form/index";
 import AddMemberCard from "./components/memberCards/add-form/index";
+import ChargeCard from "./components/memberCards/charge/index";
 import GroupFeed from "./components/groups/feeds/index";
 import Signup from "./components/signup/index";
 import Register from "./components/register/index";
@@ -78,6 +79,7 @@ const AppNavigator = StackNavigator({
         AddGroups: {screen: AddGroups},
         SelectUsersComponent: {screen: SelectUsersComponent},
         AddMemberCard: {screen: AddMemberCard},
+        ChargeCard: {screen: ChargeCard},
         GroupFeed: {screen: GroupFeed},
         Signup: {screen: Signup},
         realizePromotion: {screen: RealizePromotion},

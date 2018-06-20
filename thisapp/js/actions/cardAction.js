@@ -25,6 +25,63 @@ export function saveCard(card, businessId, navigation) {
     }
 }
 
+
+export function updateCard(card, businessId, navigation) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.UPDATE_CARD,
+                card: card,
+                businessId: businessId,
+                token: token
+            });
+            navigation.goBack();
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
+
+
+export function setBusinessCards(businessId) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.GET_BUSINESS_CARD,
+                businessId: businessId,
+                token: token
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
+
+
+export function setMyCards() {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.GET_MY_MEMBER_CARDS,
+                token: token
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
 //
 //
 // export function updateProduct(product, businessId, navigation) {

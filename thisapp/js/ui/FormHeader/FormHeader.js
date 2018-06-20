@@ -15,8 +15,6 @@ const TouchableOpacityFix = withPreventDoubleClick(TouchableOpacity);
 const {width, height} = Dimensions.get('window')
 const vh = height / 100
 
-
-
 class FormHeader extends Component {
     constructor(props) {
         super(props);
@@ -90,7 +88,8 @@ class FormHeader extends Component {
                 marginLeft: StyleUtils.scale(5),
                 marginRight: StyleUtils.scale(5)
             }} onPress={() => this.back()}>
-                <Icon active color={iconColor} size={Platform.OS === 'ios' ? StyleUtils.scale(40): StyleUtils.scale(25)} name={arrowName}/>
+                <Icon active color={iconColor}
+                      size={Platform.OS === 'ios' ? StyleUtils.scale(40) : StyleUtils.scale(25)} name={arrowName}/>
 
             </TouchableOpacityFix>
         }
@@ -153,8 +152,12 @@ class FormHeader extends Component {
                         {menu}
                         {filter && !this.state.showSearch &&
                         <TouchableOpacityFix transparent
-                                          style={{width:  StyleUtils.scale(50), alignItems: 'flex-end', justifyContent: 'flex-end'}}
-                                          onPress={() => this.filter()}>
+                                             style={{
+                                                 width: StyleUtils.scale(50),
+                                                 alignItems: 'flex-end',
+                                                 justifyContent: 'flex-end'
+                                             }}
+                                             onPress={() => this.filter()}>
                             <Icon style={{fontSize: StyleUtils.scale(30), color: "white"}} name="ios-search"/>
                         </TouchableOpacityFix>
                         }
@@ -163,22 +166,26 @@ class FormHeader extends Component {
                     </View> : <View style={styles.formHeaderSubmitButoon}>
                         {submitForm &&
                         <TouchableOpacityFix transparent
-                                          style={{
-                                              width:  StyleUtils.scale(50),
-                                              marginRight:  StyleUtils.scale(10),
-                                              alignItems: 'flex-end',
-                                              justifyContent: 'center'
-                                          }}
-                                          onPress={() => this.submitForm()}>
+                                             style={{
+                                                 width: StyleUtils.scale(50),
+                                                 marginRight: StyleUtils.scale(10),
+                                                 alignItems: 'flex-end',
+                                                 justifyContent: 'center'
+                                             }}
+                                             onPress={() => this.submitForm()}>
                             {icon}
                         </TouchableOpacityFix>
                         }
 
                         {filter && !this.state.showSearch &&
                         <TouchableOpacityFix transparent
-                                          style={{width:  StyleUtils.scale(50), alignItems: 'flex-end', justifyContent: 'flex-end'}}
-                                          onPress={() => this.filter()}>
-                            <Icon style={{fontSize:  StyleUtils.scale(30), color: "white"}} name="ios-search"/>
+                                             style={{
+                                                 width: StyleUtils.scale(50),
+                                                 alignItems: 'flex-end',
+                                                 justifyContent: 'flex-end'
+                                             }}
+                                             onPress={() => this.filter()}>
+                            <Icon style={{fontSize: StyleUtils.scale(30), color: "white"}} name="ios-search"/>
                         </TouchableOpacityFix>
                         }
 

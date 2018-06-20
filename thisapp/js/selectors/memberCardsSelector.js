@@ -1,16 +1,16 @@
 import {createSelector} from 'reselect'
-const getStateMyBusinesses = (state) => state.businesses;
+const getStateCards = (state) => state.memberCards;
 
-export const getMyCards = createSelector([getStateMyBusinesses],
-    (businesses) => {
+export const getMyCards = createSelector([getStateCards],
+    (memberCards) => {
         let cards = []
-        if (!_.isEmpty(businesses.businesses)) {
-            Object.keys(businesses.businesses).forEach(
-                key => {
+        if (!_.isEmpty(memberCards.memberCards)) {
+           memberCards.memberCards.forEach(
+                card => {
                     cards.push({
-                        business: businesses.businesses[key],
-                        _id : key + '_card',
-                        points: 250
+                        business: card.cardType.entity.business,
+                        _id : card._id,
+                        points: card.points
                     })
                 }
             )

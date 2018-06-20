@@ -116,6 +116,9 @@ const relativeHeight = (heightIos,heightAndroid) => {
     if(isLandscape()){
         vh = width / 100;
     }
+    if(isIphoneX()){
+        return heightIos * vh * 1.2
+    }
     if(isTablet()){
         if(Platform.OS ==='ios') {
             return heightIos * vh * 1.2
