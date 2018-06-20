@@ -10,6 +10,7 @@ const qrcodeController = require('../qrcode/qrcode.controller');
 const QRCode = require('../qrcode/qrcode.model');
 const utils = require('../../components/utils').createUtils();
 const QRCodeImg = require('qrcode');
+const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Card);
 
@@ -27,6 +28,14 @@ exports.show = function(req, res) {
     if(err) { return handleError(res, err); }
     if(!card) { return res.send(404); }
     return res.status(200).json(card);
+  });
+};
+
+exports.byCode = function(req, res) {
+  QRCode.findOne({code: req.params.code}, function (err, qrcode) {
+    if(err) { return handleError(res, err); }
+    if(!qrcode) { return res.status(404).send(); }
+    return res.status(200).send(qrcode);
   });
 };
 
@@ -56,6 +65,10 @@ exports.charge = function(req, res) {
       if(err) { return handleError(res, err)}
       if(!card) { return res.status(404).send()}
       card.points = card.points? card.points + req.params.points : req.params.points;
+      fireEvent.info('card', card._id, 'card_charged', {
+        cardId: card._id,
+        points: card.points
+      });
       return res.status(200).json(card);
     });
   });
@@ -72,6 +85,10 @@ exports.redeem = function(req, res) {
       if(card.points < req.params.points)
         return res.status(500).json(new Error(`insufficient points`));
       card.points =  card.points - req.params.points;
+      fireEvent.info('card', card._id, 'card_redeemed', {
+        cardId: card._id,
+        points: card.points
+      });
       return res.status(200).json(card);
     });
   });
