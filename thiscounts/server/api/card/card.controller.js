@@ -34,16 +34,14 @@ exports.chargeCode = function(req, res) {
   Card.findById(req.params.cardId, function (err, card) {
     if(err) { return handleError(res, err); }
     if(!card) { return res.status(404).send(); }
-    req.params.code = card.qrcode.code;
     QRCodeImg.toDataURL(JSON.stringify({
       t: 'lc',
-      opt: req.param.opt,
-      code: req.params.code
+      opt: req.params.opt,
+      code: card.qrcode.code
     }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
       if (err) {
         return res.status(500).send(err);
       }
-      res.setHeader('content-type', 'image/png');
       return res.status(200).send(url);
     });
   });
