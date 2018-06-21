@@ -1,12 +1,12 @@
 import React, {Component} from "react";
-import {Image, TouchableOpacity,Dimensions,BackHandler} from "react-native";
+import {Image, TouchableOpacity,Dimensions,BackHandler,Keyboard} from "react-native";
 import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Camera from './BetterCamera';
 import styles from "./styles";
 import {BusinessHeader,SubmitButton,GroupHeader} from '../../ui/index';
 import StyleUtils from '../../utils/styleUtils'
-import {ThisText} from '../../ui/index';
-
+import {ThisText,TextInput} from '../../ui/index';
+import CardItem from '../../components/memberCards/list-item/index'
 const {width, height} = Dimensions.get('window')
 import FeedPromotion from '../../components/generic-feed-manager/generic-feed/feed-components/feedPromotion'
 import strings from "../../i18n/i18n"
@@ -38,8 +38,15 @@ export default class BusinessFollow extends Component {
        // this.props.closeCamera();
     }
 
+    chargeCard(){
+
+    }
+    dismissKyeboard(){
+        Keyboard.dismiss();
+    }
+
     createView() {
-        const {followGroup,showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followGroupAction,followBusiness, groupFollowBusiness, scanResult, realizePromotion,ShowOutOffScope} = this.props;
+        const {followGroup,showNotAuthorizedMessage,showAssigmentMessageFailed,showAssigmentMessage,navigation, code, cameraOn, searching, business, instance, group, followGroupAction,followBusiness, groupFollowBusiness, scanResult, realizePromotion,ShowOutOffScope,card} = this.props;
         let followComponent = undefined;
         if (business) {
             let followStyle = {
@@ -173,6 +180,25 @@ export default class BusinessFollow extends Component {
                     </View>
                 </View>
                 }
+                {card &&
+                <View style={{height:200,alignItems:'center',justifyContent:'center' }}>
+                    <View style={{flex:3, backgroundColor:'white' ,alignItems:'center',justifyContent:'center' }}>
+                        <CardItem noAction item={card}/>
+                        <ThisText>{strings.CardChargePointsMessage.formatUnicorn(card.user.name)}</ThisText>
+                    </View>
+                    <View style={{flex:1, alignItems:'center',}}>
+
+                        <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
+                            <TextInput field={strings.Points} value={this.state.points} returnKeyType='next' ref="6"
+                                       refNext="6"
+                                       onSubmitEditing={this.dismissKyeboard.bind(this)}
+                                       onChangeText={(points) => this.setState({points})}/>
+                        </View>
+                        <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
+                            <SubmitButton color={'#2db6c8'} title={strings.Charge.toUpperCase()} onPress={() => this.chargeCard()}/>
+                        </View>
+                    </View>
+                </View>}
             </View>
         );
     }

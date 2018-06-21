@@ -46,6 +46,24 @@ export function updateCard(card, businessId, navigation) {
 }
 
 
+export function setCardQrcCode(card) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.GET_CARD_QRCODE,
+                card: card,
+                token: token
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
+
 
 export function setBusinessCards(businessId) {
     return async function (dispatch, getState) {
@@ -82,32 +100,6 @@ export function setMyCards() {
     }
 }
 
-//
-//
-// export function updateProduct(product, businessId, navigation) {
-//     return async function (dispatch, getState) {
-//         try {
-//             dispatch({
-//                 type: actions.PRODUCT_SAVING,
-//             });
-//             const token = getState().authentication.token;
-//             dispatch({
-//                 type: types.UPDATE_PRODUCT,
-//                 product: product,
-//                 businessId: businessId,
-//                 token: token
-//             });
-//             dispatch({
-//                 type: actions.PRODUCT_SAVING_DONE,
-//             });
-//             navigation.goBack();
-//             handler.handleSuccses(getState(), dispatch)
-//         } catch (error) {
-//             handler.handleError(error, dispatch)
-//             await logger.actionFailed('product-saveProduct')
-//         }
-//     }
-// }
 export function setCard(response, businessId) {
     return {
         type: actions.SET_BUSINESS_CARD,

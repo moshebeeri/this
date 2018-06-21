@@ -44,13 +44,18 @@ export default class CardListView extends Component {
             noProfile = true;
             businessView = true;
         }
+        const cardBusiness = card.business ? card.business : card.cardType.entity.business
         const styles = this.createStyle();
         let source = undefined;
         if(image){
             source = {uri: image.path};
         }else{
-            if(card.business && card.business.pictures && Object.keys(card.business.pictures).length > 0){
-                source = {uri: card.business.pictures[Object.keys(card.business.pictures).length - 1].pictures[0]};
+            if(cardBusiness && cardBusiness.pictures && Object.keys(cardBusiness.pictures).length > 0){
+                source = {uri: cardBusiness.pictures[Object.keys(cardBusiness.pictures).length - 1].pictures[0]};
+            }
+            if(card.cardType && card.cardType.pictures && card.cardType.pictures.length > 0){
+                source = {uri: card.cardType.pictures[Object.keys(card.cardType.pictures).length - 1].pictures[0]};
+
             }
         }
 
@@ -96,9 +101,9 @@ export default class CardListView extends Component {
                     backgroundColor: 'transparent',
                     width: StyleUtils.getWidth() - 15
                 }}>
-                    <BusinessHeader navigation={this.props.navigation} business={card.business}
-                                    businessLogo={card.business.logo}
-                                    businessName={card.business.name} noMargin
+                    <BusinessHeader navigation={this.props.navigation} business={cardBusiness}
+                                    businessLogo={cardBusiness.logo}
+                                    businessName={cardBusiness.name} noMargin
                                     headerWidth={100}
                                     noProfile={noProfile}
                                     hideMenu

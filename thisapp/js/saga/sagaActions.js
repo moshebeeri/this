@@ -70,6 +70,8 @@ export const SAVE_CARD = 'SAVE_CARD';
 export const GET_BUSINESS_CARD = 'GET_BUSINESS_CARD';
 export const GET_MY_MEMBER_CARDS = 'GET_MY_MEMBER_CARDS';
 export const UPDATE_CARD = 'UPDATE_CARD';
+export const GET_CARD_QRCODE = 'GET_CARD_QRCODE';
+export const CHARGE_CARD_BY_CODE = 'CHARGE_CARD_BY_CODE';
 //post
 export const SAVE_POST = 'SAVE_POST';
 
@@ -82,3 +84,6 @@ export const CHANGE_TAB = 'CHANGE_TAB';
 
 // user
 export const GET_USER_ENTITY_ROLES = 'GET_USER_ENTITY_ROLES';
+
+//scanner
+export const SCANNER_SHOW_CHARGE = 'SCANNER_SHOW_CHARGE';

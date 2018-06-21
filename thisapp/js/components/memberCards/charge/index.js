@@ -5,8 +5,8 @@ import strings from "../../../i18n/i18n"
 import {connect} from 'react-redux';
 import StyleUtils from "../../../utils/styleUtils";
 import CardItem from '../list-item/index'
-
-
+import {bindActionCreators} from "redux";
+import * as cardAction from "../../../actions/cardAction";
 class ChargeCard extends Component {
     static navigationOptions = {
         header: null
@@ -31,6 +31,11 @@ class ChargeCard extends Component {
     }
 
     componentWillUnmount() {
+        let card = this.props.navigation.state.params.card;
+        if(!card.qrCode) {
+            this.props.actions.setCardQrcCode(card);
+        }
+
     }
 
     async realize() {
@@ -40,7 +45,9 @@ class ChargeCard extends Component {
 
 
     render() {
-        let card = this.props.navigation.state.params.card;
+        const{memberCards} = this.props;
+        const cardId = this.props.navigation.state.params.card._id;
+        const card = memberCards.filter(card => card._id === cardId)[0];
 
         return (
             <ScrollView>
@@ -64,12 +71,12 @@ class ChargeCard extends Component {
                     }}>
                         <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.RealizeMessage1}</ThisText>
                         <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.RealizeMessage2}</ThisText>
-                        {this.state.image &&
+                        {card.qrCode &&
                         <Image style={{
                             width: StyleUtils.scale(300),
                             height: StyleUtils.scale(300),
                             resizeMode: Image.resizeMode.contain,
-                        }} source={{uri: this.state.image.qrcode}}/>
+                        }} source={{uri: card.qrCode}}/>
                         }
                     </View>
 
@@ -84,8 +91,10 @@ class ChargeCard extends Component {
 
 export default connect(
     state => ({
-        update: state.myPromotions.update,
-        myPromotions: state.myPromotions.feeds,
-        feedToSavedFeed: state.myPromotions.feedToSavedFeed,
+        memberCards: state.memberCards.memberCards,
+        update: state.memberCards.update
+    }),
+    (dispatch) => ({
+        actions: bindActionCreators(cardAction, dispatch),
     })
 )(ChargeCard);
