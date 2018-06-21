@@ -10,6 +10,7 @@ const qrcodeController = require('../qrcode/qrcode.controller');
 const QRCode = require('../qrcode/qrcode.model');
 const utils = require('../../components/utils').createUtils();
 const QRCodeImg = require('qrcode');
+const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Card);
 
@@ -30,20 +31,26 @@ exports.show = function(req, res) {
   });
 };
 
+exports.byCode = function(req, res) {
+  QRCode.findOne({code: req.params.code}, function (err, qrcode) {
+    if(err) { return handleError(res, err); }
+    if(!qrcode) { return res.status(404).send(); }
+    return res.status(200).send(qrcode);
+  });
+};
+
 exports.chargeCode = function(req, res) {
   Card.findById(req.params.cardId, function (err, card) {
     if(err) { return handleError(res, err); }
     if(!card) { return res.status(404).send(); }
-    req.params.code = card.qrcode.code;
     QRCodeImg.toDataURL(JSON.stringify({
       t: 'lc',
-      opt: req.param.opt,
-      code: req.params.code
+      opt: req.params.opt,
+      code: card.qrcode.code
     }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
       if (err) {
         return res.status(500).send(err);
       }
-      res.setHeader('content-type', 'image/png');
       return res.status(200).send(url);
     });
   });
@@ -58,6 +65,10 @@ exports.charge = function(req, res) {
       if(err) { return handleError(res, err)}
       if(!card) { return res.status(404).send()}
       card.points = card.points? card.points + req.params.points : req.params.points;
+      fireEvent.info('card', card._id, 'card_charged', {
+        cardId: card._id,
+        points: card.points
+      });
       return res.status(200).json(card);
     });
   });
@@ -74,6 +85,10 @@ exports.redeem = function(req, res) {
       if(card.points < req.params.points)
         return res.status(500).json(new Error(`insufficient points`));
       card.points =  card.points - req.params.points;
+      fireEvent.info('card', card._id, 'card_redeemed', {
+        cardId: card._id,
+        points: card.points
+      });
       return res.status(200).json(card);
     });
   });
