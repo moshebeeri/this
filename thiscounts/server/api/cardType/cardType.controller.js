@@ -46,13 +46,9 @@ function addEntityFollowerToCard(cardType, callback) {
   const entity = getCardEntity(cardType);
   let query = `MATCH (u:user)-[:FOLLOW]->(e{_id:'${entity}'})-[:LOYALTY_CARD]->(ct{_id:'${cardType._id}'}) 
                 return u._id as _id` ;
-  console.log('addEntityFollowerToCard');
-  console.log(query);
   graphModel.query(query, (err, results) => {
     if (err) return callback(err);
-    console.log(JSON.stringify(results));
     results.forEach(result => {
-      console.log(JSON.stringify(result));
       cardController.createCard(result._id, cardType._id, (err, card) => {
         if (err) { return callback(err); }
         return callback(null, card);

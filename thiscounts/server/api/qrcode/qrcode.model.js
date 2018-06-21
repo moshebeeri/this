@@ -23,6 +23,7 @@ let QRCodeSchema = new Schema({
   creator: {type: Schema.ObjectId, ref: 'User', required: true},
   assigned: { type: Boolean, required: true, default: false},
   assignment: {
+    card: {type: Schema.ObjectId, ref: 'Card', autopopulate: true},
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
     group: {type: Schema.ObjectId, ref: 'Group', autopopulate: true},
     shopping_chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},

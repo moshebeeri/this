@@ -112,6 +112,7 @@ exports.createAndAssign = function (userId, data, callback) {
       if (err) {
         return callback(err);
       }
+      console.log(`createAndAssign ${qrcode}`);
       return callback(null, qrcode);
     })
   });

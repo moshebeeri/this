@@ -35,7 +35,13 @@ exports.byCode = function(req, res) {
   QRCode.findOne({code: req.params.code}, function (err, qrcode) {
     if(err) { return handleError(res, err); }
     if(!qrcode) { return res.status(404).send(); }
-    return res.status(200).send(qrcode);
+    if(!qrcode.assignment || !qrcode.assignment.card)
+      return res.status(500).send(`no assignment found`);
+    Card.findById(qrcode.assignment.card).exec((err, card) => {
+      if(err) {return handleError(res, err)}
+      return res.status(200).json(card);
+    });
+
   });
 };
 
@@ -59,9 +65,9 @@ exports.chargeCode = function(req, res) {
 exports.charge = function(req, res) {
   QRCode.findOne({code: req.params.code}, function (err, qrcode) {
     if (err) {return handleError(res, err)}
-    if(!qrcode.assignment || !qrcode.assignment.cardId)
+    if(!qrcode.assignment || !qrcode.assignment.card)
       return handleError(res, new Error('no cardId found'));
-    Card.findById(qrcode.assignment.cardId, function (err, card) {
+    Card.findById(qrcode.assignment.card, function (err, card) {
       if(err) { return handleError(res, err)}
       if(!card) { return res.status(404).send()}
       card.points = card.points? card.points + req.params.points : req.params.points;
@@ -77,9 +83,9 @@ exports.charge = function(req, res) {
 exports.redeem = function(req, res) {
   QRCode.findOne({code: req.params.code}, function (err, qrcode) {
     if (err) {return handleError(res, err)}
-    if(!qrcode.assignment || !qrcode.assignment.cardId)
+    if(!qrcode.assignment || !qrcode.assignment.card)
       return handleError(res, new Error('no cardId found'));
-    Card.findById(qrcode.assignment.cardId, function (err, card) {
+    Card.findById(qrcode.assignment.card, function (err, card) {
       if(err) { return handleError(res, err)}
       if(!card) { return res.status(404).send()}
       if(card.points < req.params.points)
@@ -139,10 +145,11 @@ exports.createCard = function(userId, cardTypeId, callback) {
         if (err) {
           return callback(err)
         }
+        console.log(`createCard `)
         qrcodeController.createAndAssign(card.user, {
           type: 'LOYALTY_CARD',
           assignment: {
-            cardId: card._id
+            card: card._id
           }
         }, function (err, qrcode) {
           if (err) return callback(err);
