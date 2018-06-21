@@ -84,7 +84,7 @@ exports.charge = function(req, res) {
     Card.findById(qrcode.assignment.card, function (err, card) {
       if(err) { return handleError(res, err)}
       if(!card) { return res.status(404).send()}
-      card.points = card.points? card.points + req.params.points : req.params.points;
+      card.points = card.points? card.points + parseInt(req.params.points) : parseInt(req.params.points);
       card.save((err) => err? console.error(err) : null);
       fireEvent.info('card', card._id, 'card_charged', {
         cardId: card._id,
@@ -105,7 +105,7 @@ exports.redeem = function(req, res) {
       if(!card) { return res.status(404).send()}
       if(card.points < req.params.points)
         return res.status(500).json(new Error(`insufficient points`));
-      card.points =  card.points - req.params.points;
+      card.points =  card.points - parseInt(req.params.points);
       card.save((err) => err? console.error(err) : null);
       fireEvent.info('card', card._id, 'card_redeemed', {
         cardId: card._id,

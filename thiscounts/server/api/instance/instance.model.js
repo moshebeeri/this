@@ -23,6 +23,10 @@ let InstanceSchema = new Schema({
     type: {type: String},
     coordinates: []
   },
+  card: {
+    cardType: {type: Schema.ObjectId, ref:'CardType', autopopulate: true},
+    points: Number
+  },
   value: {
     percent: {type: Number, min: 1, max: 100},
 

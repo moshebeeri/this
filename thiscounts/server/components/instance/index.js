@@ -19,6 +19,7 @@ function Instances() {
 function createInstance(promotion, value, quantity, variation) {
   return {
     promotion: promotion._id,
+    card: promotion.card,
     type: promotion.type,
     variation: variation,
     location: promotion.location,
