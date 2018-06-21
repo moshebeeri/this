@@ -45,19 +45,33 @@ exports.byCode = function(req, res) {
   });
 };
 
+exports.byCardType = function(req, res) {
+  const query = `MATCH (u:user{_id:'${req.user._id}'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType{_id:'${req.params.cardType}'}) RETURN card._id as _id`;
+  graphModel.query_objects(Card, query,
+    'order by r.timestamp desc', 0, 1, function (err, cards) {
+      if (err) {return handleError(res, err)}
+      if (!cards) {return res.status(404).send()}
+      return res.status(200).json(cards[0]);
+    });
+};
+
 exports.chargeCode = function(req, res) {
   Card.findById(req.params.cardId, function (err, card) {
-    if(err) { return handleError(res, err); }
-    if(!card) { return res.status(404).send(); }
-    QRCodeImg.toDataURL(JSON.stringify({
-      t: 'lc',
-      opt: req.params.opt,
-      code: card.qrcode.code
-    }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
-      if (err) {
-        return res.status(500).send(err);
-      }
-      return res.status(200).send(url);
+    if (err) {return handleError(res, err)}
+    if (!card) {return res.status(404).send()}
+    QRCode.findById(card.qrcode, function (err, qrcode) {
+      if (err) {return handleError(res, err)}
+      if (!qrcode) {return res.status(404).send()}
+      QRCodeImg.toDataURL(JSON.stringify({
+        t: 'lc',
+        opt: req.params.opt,
+        code: qrcode.code
+      }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        return res.status(200).send(url);
+      });
     });
   });
 };
@@ -71,6 +85,7 @@ exports.charge = function(req, res) {
       if(err) { return handleError(res, err)}
       if(!card) { return res.status(404).send()}
       card.points = card.points? card.points + req.params.points : req.params.points;
+      card.save((err) => err? console.error(err) : null);
       fireEvent.info('card', card._id, 'card_charged', {
         cardId: card._id,
         points: card.points
@@ -91,6 +106,7 @@ exports.redeem = function(req, res) {
       if(card.points < req.params.points)
         return res.status(500).json(new Error(`insufficient points`));
       card.points =  card.points - req.params.points;
+      card.save((err) => err? console.error(err) : null);
       fireEvent.info('card', card._id, 'card_redeemed', {
         cardId: card._id,
         points: card.points

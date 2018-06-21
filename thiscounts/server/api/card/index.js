@@ -9,6 +9,7 @@ let router = express.Router();
 router.get('/search/:skip/:limit/:searchString', auth.isAuthenticated(), controller.search);
 
 router.get('/', auth.hasRole('admin'), controller.index);
+router.get('/by/type', auth.isAuthenticated(), controller.byCardType);
 router.get('/by/code/:code', auth.isAuthenticated(), controller.byCode);
 router.get('/code/:opt/:cardId', auth.isAuthenticated(), controller.chargeCode);
 router.get('/charge/:code/:points', auth.isAuthenticated(), controller.charge);
