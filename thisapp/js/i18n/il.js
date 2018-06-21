@@ -350,7 +350,9 @@ const il = {
     MemberCard                                    : "כרטיס מועדון",
     CardOpen                                      : "פתוח לכל הלקוחות",
     CardInvite                                    : "פתוח ללקוחות באישור העסק",
-    CardPolicy                                    : "מדיניות כרטיס"
+    CardPolicy                                    : "מדיניות כרטיס",
+    Charge                                        : "הוסף נקודות",
+    CardChargePointsMessage                       : "הוסף נקודות ל {0}",
 
 };
 

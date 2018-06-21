@@ -1,6 +1,7 @@
 const initialState = {
     business: undefined,
     instance: undefined,
+    card: undefined,
     searching: false,
     cameraOn: true,
     submitable: false,
@@ -22,6 +23,7 @@ export default function scannerForm(state = initialState, action) {
                 business: undefined,
                 instance: undefined,
                 followGroup: undefined,
+                card: undefined,
                 showAssigmentMessage: false,
                 searching: false,
                 cameraOn: true,
@@ -65,6 +67,11 @@ export default function scannerForm(state = initialState, action) {
             return {
                 ...state,
                 code: action.code,
+            };
+        case actions.SCANNER_SHOW_USER_CARD:
+            return {
+                ...state,
+                card: action.card,
             };
         case actions.SCANNER_SHOW_BUSINESS:
             return {

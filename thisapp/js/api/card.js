@@ -58,6 +58,39 @@ class CardApi {
         }, 'products', '/list');
     }
 
+    getCardChargeQrCode(cardId, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/cards/code/charge/${cardId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'products', '/charge/code','TEXT');
+    }
+
+    getCardByCode(cardCode, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/cards/by/code/${cardCode}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'products', '/charge/code');
+    }
+
+    chargeCardeByCode(cardCode,points, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/cards/charge/${cardCode}/${points}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'products', '/charge/byCode');
+    }
+
 }
 
 let cardApi = new CardApi();

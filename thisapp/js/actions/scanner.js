@@ -7,6 +7,7 @@ import ActionLogger from './ActionLogger'
 import * as errors from '../api/Errors'
 import handler from './ErrorHandler'
 import SyncUtils from "../sync/SyncerUtils";
+import * as types from '../saga/sagaActions';
 let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let groupApi = new GroupApi();
@@ -19,8 +20,16 @@ export function scanResult(barcode, businessAssign) {
             const token = getState().authentication.token;
             const user = getState().user.user;
             dispatch({type: actions.SCANNER_SHOW_CAMERA, cameraOn: false});
+            let data = JSON.parse(barcode.data);
+            if(data.opt ==='charge'){
+                dispatch({
+                    type: types.SCANNER_SHOW_CHARGE,
+                    code: data.code
+                });
+                return;
+            }
             if (businessAssign) {
-                let data = JSON.parse(barcode.data);
+
                 try {
                     let response = await businessApi.assihgnQrcCodeToBusinese(data, token, businessAssign);
                     dispatch({
@@ -35,7 +44,6 @@ export function scanResult(barcode, businessAssign) {
                 }
             }
             dispatch({type: actions.SCANNER_SHOW_SEARCH_SPIN, searching: true});
-            let data = JSON.parse(barcode.data);
             if (!data.code) {
                 dispatch({
                     type: actions.SCANNER_SHOW_QRCODE_ASSIGMEN_FAILED,

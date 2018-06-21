@@ -10,7 +10,9 @@ export const getMyCards = createSelector([getStateCards],
                     cards.push({
                         business: card.cardType.entity.business,
                         _id : card._id,
-                        points: card.points
+                        points: card.points,
+                        cardType: card.cardType,
+                        qrCode: card.qrCode
                     })
                 }
             )

@@ -329,6 +329,7 @@ const enUS = {
     PromotionName                                 : "Promotion Name",
     PromotioDescription                           : "Promotion Description",
     Version                                       : "Version {0}",
+    // need to translate
     Points                                        : "Points",
     PointsDiscount                                : "Points Discount",
     MinPointsTerm                                 : "Minimum Points For Redeem",
@@ -339,7 +340,9 @@ const enUS = {
     MemberCard                                    : "Loyalty Card",
     CardOpen                                      : "All Business Followers ",
     CardInvite                                    : "Business Approved Followers",
-    CardPolicy                                    : "Card Policy"
+    CardPolicy                                    : "Card Policy",
+    Charge                                        : "Charge Points",
+    CardChargePointsMessage                       : "Charge Points For {0} ",
 
 };
 

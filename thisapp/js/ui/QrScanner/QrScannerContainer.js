@@ -31,6 +31,7 @@ class BusinessFollow extends Component {
                 cameraOn={state.cameraOn}
                 searching={state.searching}
                 business={state.business}
+                card={state.card}
                 showNotAuthorizedMessage={state.notAuthotized}
                 ShowOutOffScope={state.conditionOutOfScope}
                 showAssigmentMessage ={state.showAssigmentMessage}
