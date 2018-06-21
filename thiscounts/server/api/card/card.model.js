@@ -13,7 +13,7 @@ let CardSchema = new Schema({
   gid: {type: Number, index: true},
   user: {type: Schema.ObjectId, ref: 'User', index: true, autopopulate: utils.userAutopopulateOptions},
   cardType: {type: Schema.ObjectId, ref: 'CardType', autopopulate: true},
-  qrcode: {type: Schema.ObjectId, ref:'QRCode', autopopulate: true},
+  qrcode: {type: Schema.ObjectId, ref:'QRCode'},
 });
 CardSchema.plugin(autopopulate);
 

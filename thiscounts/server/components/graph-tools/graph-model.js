@@ -373,13 +373,10 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
         return callback(null, objects)
       });
     }else{
-      console.log(`schema.find ${JSON.stringify(_ids)}`);
       schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
         if (err) {
-          console.error(`schema.find err ${JSON.stringify(err)}`);
           return callback(err, null)
         }
-        console.log(`query_objects ${JSON.stringify(objects)}`);
         return callback(null, objects)});
     }
   });

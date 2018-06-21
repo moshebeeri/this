@@ -119,24 +119,6 @@ exports.mine = function (req, res) {
   const query = `MATCH (u:user{_id:'${req.user._id}'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType) RETURN card._id as _id`;
   graphModel.query_objects(Card, query,
     'order by r.timestamp desc', paginate.skip, paginate.limit, function (err, cards) {
-      console.log(`mine`);
-      if (err) {
-        console.error(err);
-        return handleError(res, err)
-      }
-      if (!cards) {
-        return res.status(404).send();
-      }
-      return res.status(200).json(cards);
-    });
-};
-
-exports.mine2 = function (req, res) {
-  let paginate = utils.to_paginate(req);
-  const query = `MATCH (u:user{_id:'5b1f88a58068657ed0b2a1d6'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType) RETURN card._id as _id`;
-  graphModel.query_objects(Card, query,
-    'order by r.timestamp desc', paginate.skip, paginate.limit, function (err, cards) {
-      console.log(`mine`);
       if (err) {
         console.error(err);
         return handleError(res, err)
