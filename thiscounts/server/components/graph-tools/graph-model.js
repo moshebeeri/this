@@ -355,13 +355,13 @@ GraphModel.prototype.query_ids_relation = function query_ids(from_id, rel, to_id
 };
 
 GraphModel.prototype.query_objects = function query_objects(schema, query, order, skip, limit, callback){
+
   let sort = null;
   if(order.mongoose) {
     sort = order.mongoose ? order.mongoose : null;
     order = order.neo4j ? order.neo4j : '';
     // otherwise order is string in neo4j syntax
   }
-
   this.query_ids(query, order, skip, limit, function(err, _ids) {
     if (err) { callback(err, null) }
     if(!_ids) _ids = [];
@@ -372,12 +372,15 @@ GraphModel.prototype.query_objects = function query_objects(schema, query, order
         if (err) { return callback(err, null) }
         return callback(null, objects)
       });
-
     }else{
+      console.log(`schema.find ${JSON.stringify(_ids)}`);
       schema.find({}).where('_id').in(_ids).exec(function (err, objects) {
-        if (err) { return callback(err, null) }
+        if (err) {
+          console.error(`schema.find err ${JSON.stringify(err)}`);
+          return callback(err, null)
+        }
+        console.log(`query_objects ${JSON.stringify(objects)}`);
         return callback(null, objects)});
-
     }
   });
 };
