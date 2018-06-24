@@ -116,6 +116,26 @@ exports.redeem = function(req, res) {
   });
 };
 
+exports.doRedeem = function(userId, cardTypeId, points, callback) {
+  const query = `MATCH (u:user{_id:'${userId}'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType{_id:'${cardTypeId}'}) RETURN card._id as _id`;
+  console.log(`doRedeem: ${query}`);
+  graphModel.query_objects(Card, query,
+    'order by r.timestamp desc', 0, 1, function (err, cards) {
+    if(err) {return callback(err)}
+    if(cards.length === 0 ) { return callback(`no card found`)}
+    const card = cards[0];
+    if(card.points < points)
+      return callback(new Error(`insufficient points`));
+    card.points =  card.points - parseInt(points);
+    card.save((err) => err? console.error(err) : null);
+    fireEvent.info('card', card._id, 'card_redeemed', {
+      cardId: card._id,
+      points: card.points
+    });
+    return callback(null, card);
+  });
+};
+
 exports.touch = function (req, res) {
   touch(req.user._id, req.params.cardId, function (err) {
     if (err) console.error(err.message);

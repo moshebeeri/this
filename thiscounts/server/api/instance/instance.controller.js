@@ -1,5 +1,4 @@
 'use strict';
-
 const _ = require('lodash');
 const Instance = require('./instance.model.js');
 const Realize = require('../realize/realize.model');
@@ -14,10 +13,8 @@ const activity = require('../../components/activity').createActivity();
 const pricing = require('../../components/pricing');
 const Notifications = require('../../components/notification');
 const SavedInstanceController = require('../savedInstance/savedInstance.controller');
-
-
+const cardController = require('../card/card.controller');
 exports.search = MongodbSearch.create(Instance);
-
 // Get list of instances
 exports.index = function (req, res) {
   Instance.find(function (err, instances) {
@@ -27,7 +24,6 @@ exports.index = function (req, res) {
     return res.json(200, instances);
   });
 };
-
 // Get a single instance
 exports.show = function (req, res) {
   Instance.findById(req.params.id, function (err, instance) {
@@ -40,7 +36,6 @@ exports.show = function (req, res) {
     return res.json(instance);
   });
 };
-
 // Creates a new instance in the DB.
 exports.create = function (req, res) {
   Instance.create(req.body, function (err, instance) {
@@ -55,7 +50,6 @@ exports.create = function (req, res) {
     return res.json(201, instance);
   });
 };
-
 // Updates an existing instance in the DB.
 exports.update = function (req, res) {
   if (req.body._id) {
@@ -77,7 +71,6 @@ exports.update = function (req, res) {
     });
   });
 };
-
 // Deletes a instance from the DB.
 exports.destroy = function (req, res) {
   Instance.findById(req.params.id, function (err, instance) {
@@ -95,7 +88,6 @@ exports.destroy = function (req, res) {
     });
   });
 };
-
 //'/available/:id'
 exports.available = function (req, res) {
   Instance
@@ -157,6 +149,7 @@ function initializePunchCard(instance) {
     days: instance.value.punch_card.days,
   };
 }
+
 function initializeHappyHour(instance) {
   return {
     redeemTimes: [],
@@ -188,7 +181,6 @@ function createSavedInstance(instance, user_id, context, callback) {
     type: instance.type,
     savedData: {}
   };
-
   if (instance.type === 'INCREASING') {
     savedInstance.savedData.increasing = initializeIncreasing(instance)
   } else if (instance.type === 'DOUBLING') {
@@ -219,7 +211,6 @@ function relateSavedInstance(userId, savedInstance, instance, callback) {
   let save_time = new Date();
   instance.realize_code = realize_code;
   instance.save_time = save_time;
-
   graphModel.relate_ids(userId, 'SAVED', savedInstance._id, `{code: '${realize_code}',timestamp: '${save_time}'}`, function (err) {
     if (err) {
       return callback(err)
@@ -251,7 +242,7 @@ function saveInstance(userId, instance, context, callback) {
             if (err) return callback(err);
             graphModel.relate_ids(userId, 'SAVED', instance.promotion._id);
             return callback(null, si);
-            })
+          })
         });
       });
     });
@@ -259,7 +250,7 @@ function saveInstance(userId, instance, context, callback) {
 }
 
 function isRealizedInstance(status) {
-  return status.map(s=> s.status === 'REALIZED' || s.status === 'SAVED')
+  return status.map(s => s.status === 'REALIZED' || s.status === 'SAVED')
     .reduce((accumulator, currentValue) => accumulator || currentValue, false);
 }
 
@@ -285,15 +276,13 @@ exports.save = function (req, res) {
           console.error(err);
           return res.status(500).json(err);
         }
-
-        return saveInstance(req.user._id, instance, {}, (err, si) =>{
-          if(err) handleError(res, err);
+        return saveInstance(req.user._id, instance, {}, (err, si) => {
+          if (err) handleError(res, err);
           return res.status(200).json(si);
         })
       });
     });
 };
-
 //'/unsave/:id'
 exports.unsave = function (req, res) {
   Instance
@@ -321,7 +310,7 @@ function createRealizeMongodbReport(user_id, instance_id, callback) {
     instance: instance_id,
     timestamp: Date.now()
   }, function (err, realize) {
-    if(err) {
+    if (err) {
       console.error(err);
       return callback(err)
     }
@@ -335,9 +324,8 @@ function createRealizeMongodbReport(user_id, instance_id, callback) {
         if (instance.remaining <= 0)
           return callback(new Error('instance remaining <= 0'));
         instance.remaining -= 1;
-        if(!instance.realizations) instance.realizations = [];
+        if (!instance.realizations) instance.realizations = [];
         instance.realizations.push(realize._id);
-
         instance.save(function (err) {
           if (err) {
             return callback(err)
@@ -360,16 +348,15 @@ function firstSecondRedeemTimeLogic(obj, callback) {
 
 function redeemTimeLogic(obj, callback) {
   if (obj.redeemTime)
-    return callback( new Error('redeem time already set'));
+    return callback(new Error('redeem time already set'));
   obj.redeemTime = Date.now();
   return callback(null, obj);
 }
 
-
-function savedInstanceEligibleActivity(userId, savedInstance){
+function savedInstanceEligibleActivity(userId, savedInstance) {
   Instance.findById(savedInstance.instance).exec((err, instance) => {
-    if(err) return console.error(err);
-    if(!instance) return console.error(new Error(`instance id:${savedInstance.instance} not found`));
+    if (err) return console.error(err);
+    if (!instance) return console.error(new Error(`instance id:${savedInstance.instance} not found`));
     let act = {
       savedInstance: savedInstance._id,
       instance: instance._id,
@@ -379,8 +366,8 @@ function savedInstanceEligibleActivity(userId, savedInstance){
     };
     const entity = instance.promotion.entity;
     act.actor_business = entity.business;
-    activity.create(act, function(err, activity){
-      if(err) return console.error(err);
+    activity.create(act, function (err, activity) {
+      if (err) return console.error(err);
       pricing.chargeActivityDistribution(entity, activity);
     });
   })
@@ -395,9 +382,9 @@ function allocatePunchCardInstance(user, instance, callback) {
       graphModel.query(`MATCH (i:instance { _id:'${instance.id}'}) SET i.quantity=i.quantity-1`, function (err) {
         if (err) return callback(err);
         createSavedInstance(instance, user._id, {}, (err, si) => {
-          if(err) callback(err);
+          if (err) callback(err);
           relateSavedInstance(user._id, si, instance, (err => {
-            if(err) return callback(err);
+            if (err) return callback(err);
             savedInstanceEligibleActivity(user._id, si);
             let note = {
               note: 'saved_instance_eligible',
@@ -413,9 +400,6 @@ function allocatePunchCardInstance(user, instance, callback) {
     }
   });
 }
-
-
-
 
 function redeemPunchCard(saved, callback) {
   let punch_card = saved.savedData.punch_card;
@@ -449,14 +433,15 @@ function redeemPunchCard(saved, callback) {
       graphModel.query(`MATCH (saved:SavedInstance) 
                         WHERE saved._id = '${saved._id}' 
                         SET saved.won = true;
-                        `, (err)=>{if(err) console.error(err)});
+                        `, (err) => {
+        if (err) console.error(err)
+      });
       allocatePunchCardInstance(saved.user, saved.instance);
       return callback(null, {
         terminate: true,
         savedInstance: savedInstance
       })
     })
-
   }
   else if (punch_card.redeemTimes.length < punch_card.number_of_punches - 1) {
     punch(saved, function (err) {
@@ -464,7 +449,6 @@ function redeemPunchCard(saved, callback) {
       punch_card.redeemTimes.push(Date.now());
       saved.save(function (err, savedInstance) {
         if (err) return callback(err);
-
         return callback(null, {
           terminate: false,
           savedInstance: savedInstance
@@ -490,7 +474,7 @@ function redeemSavedInstance(saved, callback) {
 }
 
 function redeemIncreasing(saved, callback) {
-  firstSecondRedeemTimeLogic(saved.savedData.increasing, function(err, increasing){
+  firstSecondRedeemTimeLogic(saved.savedData.increasing, function (err, increasing) {
     if (err) return callback(err);
     saved.savedData.increasing = increasing;
     saved.save(function (err, saved) {
@@ -504,10 +488,10 @@ function redeemIncreasing(saved, callback) {
 }
 
 function redeemDoubling(saved, callback) {
-  firstSecondRedeemTimeLogic(saved.savedData.doubling, function(err, doubling){
+  firstSecondRedeemTimeLogic(saved.savedData.doubling, function (err, doubling) {
     if (err) return callback(err);
     saved.savedData.doubling = doubling;
-    if(doubling.firstRedeemTime && doubling.secondRedeemTime)
+    if (doubling.firstRedeemTime && doubling.secondRedeemTime)
       saved.savedData.doubling.value = 2 * saved.savedData.doubling.value;
     saved.save(function (err, saved) {
       if (err) return callback(err);
@@ -520,10 +504,10 @@ function redeemDoubling(saved, callback) {
 }
 
 function redeemGrow(saved, callback) {
-  firstSecondRedeemTimeLogic(saved.savedData.grow, function(err, grow){
+  firstSecondRedeemTimeLogic(saved.savedData.grow, function (err, grow) {
     if (err) return callback(err);
     saved.savedData.grow = grow;
-    if(grow.firstRedeemTime && !grow.secondRedeemTime)
+    if (grow.firstRedeemTime && !grow.secondRedeemTime)
       saved.savedData.grow.value = grow.value + grow.by;
     saved.save(function (err, saved) {
       if (err) return callback(err);
@@ -536,14 +520,13 @@ function redeemGrow(saved, callback) {
 }
 
 function redeemPrepayDiscount(saved, callback) {
-  firstSecondRedeemTimeLogic(saved.savedData.prepay, function(err, prepay){
+  firstSecondRedeemTimeLogic(saved.savedData.prepay, function (err, prepay) {
     if (err) return callback(err);
     saved.savedData.prepay = prepay;
-
     saved.save(function (err, saved) {
-      if(err) callback(err);
-      if( (prepay.firstRedeemTime && prepay.secondRedeemTime) &&
-        !(prepay.firstRedeemTime <= Date.now() && Date.now() <= prepay.secondRedeemTime )){
+      if (err) callback(err);
+      if ((prepay.firstRedeemTime && prepay.secondRedeemTime) &&
+        !(prepay.firstRedeemTime <= Date.now() && Date.now() <= prepay.secondRedeemTime )) {
         if (err) return callback(new Error('redeem time out of range'));
       }
       return callback(null, {
@@ -552,7 +535,6 @@ function redeemPrepayDiscount(saved, callback) {
       })
     })
   })
-
 }
 
 function redeemCashBack(saved, callback) {
@@ -605,19 +587,19 @@ function redeemHappyHour(saved, data, callback) {
       graphModel.query(query, callback)
     })
   }
-  if(!data || !data.day || !data.hours || !data.minutes) {
+
+  if (!data || !data.day || !data.hours || !data.minutes) {
     const err = new Error(`data object is not preset or not valid ${JSON.stringify(data)}`);
     console.error(err);
     return callback(err);
   }
   realize_happy_hour(saved, function (err) {
     if (err) return callback(err);
-    if(!data || !data.day|| !data.hours || !data.minutes) {
+    if (!data || !data.day || !data.hours || !data.minutes) {
       return callback(new Error('data object is not preset or not valid'));
     }
-
-    let now_seconds = data.hours*60*60+data.minutes*60;
-    if( happy_hour.days.includes(data.day) &&
+    let now_seconds = data.hours * 60 * 60 + data.minutes * 60;
+    if (happy_hour.days.includes(data.day) &&
       happy_hour.from <= now_seconds && now_seconds <= happy_hour.until) {
       happy_hour.redeemTimes.push(Date.now());
       saved.save(function (err, savedInstance) {
@@ -627,32 +609,46 @@ function redeemHappyHour(saved, data, callback) {
           savedInstance: savedInstance
         })
       })
-    }else
+    } else
       return callback(new Error('Redeem is out of happy hour time'))
   });
 }
 
-function handleRealizeBySavedInstanceType(saved, data, callback) {
-  let type = saved.instance.type;
-  switch (type) {
-    case 'INCREASING':
-      return redeemIncreasing(saved, callback);
-    case 'DOUBLING':
-      return redeemDoubling(saved, callback);
-    case 'GROW':
-      return redeemGrow(saved, callback);
-    case 'PREPAY_DISCOUNT':
-      return redeemPrepayDiscount(saved, callback);
-    case 'PUNCH_CARD':
-      return redeemPunchCard(saved, callback);
-    case 'HAPPY_HOUR':
-      return redeemHappyHour(saved, data, callback);
-    case 'CASH_BACK':
-      return redeemCashBack(saved, callback);
-    case 'EARLY_BOOKING':
-      return redeemEarlyBooking(saved, callback);
-    default:
-      return redeemSavedInstance(saved, callback);
+function handleRealizeBySavedInstanceType(userId, saved, data, callback) {
+  function doHandle() {
+    let type = saved.instance.type;
+    switch (type) {
+      case 'INCREASING':
+        return redeemIncreasing(saved, callback);
+      case 'DOUBLING':
+        return redeemDoubling(saved, callback);
+      case 'GROW':
+        return redeemGrow(saved, callback);
+      case 'PREPAY_DISCOUNT':
+        return redeemPrepayDiscount(saved, callback);
+      case 'PUNCH_CARD':
+        return redeemPunchCard(saved, callback);
+      case 'HAPPY_HOUR':
+        return redeemHappyHour(saved, data, callback);
+      case 'CASH_BACK':
+        return redeemCashBack(saved, callback);
+      case 'EARLY_BOOKING':
+        return redeemEarlyBooking(saved, callback);
+      default:
+        return redeemSavedInstance(saved, callback);
+    }
+  }
+
+  if (saved.instance.card) {
+    cardController.doRedeem(userId,
+      saved.instance.card.cardType._id,
+      saved.instance.card.points,
+      (err) => {
+        if (err) return callback(err);
+        return doHandle();
+      })
+  } else {
+    return doHandle();
   }
 }
 
@@ -660,11 +656,11 @@ function realizeSavedInstance(user, savedInstance, rel, res, data) {
   SavedInstance.findById(savedInstance._id).exec(function (err, saved) {
     if (err) return handleError(res, err);
     if (!saved) return handleError(res, new Error('no saved Instance found'));
-    handleRealizeBySavedInstanceType(saved, data, function (err, status) {
+    handleRealizeBySavedInstanceType(user._id, saved, data, function (err, status) {
       if (err) return handleError(res, err);
       let terminate = status.terminate;
       let savedInstance = status.savedInstance;
-      fireEvent.info('user', user._id, 'saved_instance_realized', {savedInstance: savedInstance._id.toString()  });
+      fireEvent.info('user', user._id, 'saved_instance_realized', {savedInstance: savedInstance._id.toString()});
       if (terminate) {
         graphModel.relate_ids(user._id, 'REALIZED', savedInstance._id, `{code: '${rel.properties.code}', timestamp: '${ new Date()}'}`, function (err) {
           if (err) return handleError(res, err);
@@ -677,7 +673,7 @@ function realizeSavedInstance(user, savedInstance, rel, res, data) {
             });
           })
         })
-      }else{
+      } else {
         return res.status(200).json({savedInstance});
       }
     });
@@ -692,16 +688,13 @@ exports.realize = function (req, res) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
       return res.status(404).send(`realize code mismatch`);
-
     if (objects.length > 1)
       return res.status(500).send('multiple instances found');
-
     let promotion = objects[0].promotion;
     let instance = objects[0].instance;
     let savedInstance = objects[0].savedInstance;
     let rel = objects[0].rel;
     let user = objects[0].user;
-
     if (promotion.validate_barcode) {
       graphModel.query(`MATCH (pn:promotion)-[:PRODUCT]->(pt:product)-[:BARCODE]->(barcode:barcode) where id(pn)=${promotion.id} return barcode`,
         function (err, barcodes) {
@@ -717,7 +710,6 @@ exports.realize = function (req, res) {
     }
   });
 };
-
 //TODO: validate sale_point_code
 exports.post_realize = function (req, res) {
   const query = `MATCH (promotion:promotion)<-[:INSTANCE_OF]-(instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:SAVED{code: '${req.params.code}'}]-(user:user) 
@@ -726,16 +718,13 @@ exports.post_realize = function (req, res) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
       return res.status(404).send(`realize code mismatch`);
-
     if (objects.length > 1)
       return res.status(500).send('multiple instances found');
-
     let promotion = objects[0].promotion;
     let instance = objects[0].instance;
     let savedInstance = objects[0].savedInstance;
     let rel = objects[0].rel;
     let user = objects[0].user;
-
     if (promotion.validate_barcode) {
       graphModel.query(`MATCH (pn:promotion)-[:PRODUCT]->(pt:product)-[:BARCODE]->(barcode:barcode) where id(pn)=${promotion.id} return barcode`,
         function (err, barcodes) {
@@ -751,7 +740,6 @@ exports.post_realize = function (req, res) {
     }
   });
 };
-
 exports.realized = function (req, res) {
   const query = `MATCH (instance:instance)<-[sf:SAVE_OF]-(savedInstance:SavedInstance)<-[rel:REALIZED{code: '${req.params.code}'}]-(user:user) 
                 return instance,savedInstance,rel,user`;
@@ -759,19 +747,16 @@ exports.realized = function (req, res) {
     if (err) return handleError(res, err);
     if (objects.length === 0)
       return res.status(404).send(`realize code mismatch`);
-
     if (objects.length === 1)
       return res.status(200).send(objects[0]);
   });
 };
-
 exports.qrcode = function (req, res) {
   const query = `MATCH (savedInstance:SavedInstance{_id:"${req.params.id}"})<-[rel:SAVED]-(user:user{_id:"${req.user._id}"}) return rel.code`;
   graphModel.query(query, function (err, codes) {
     if (err) return handleError(res, err);
     if (codes.length === 0)
       return res.status(404).send(`realize code mismatch`);
-
     if (codes.length > 1) {
       console.error(`multiple instances found for ${req.params.id}`);
       return res.status(500).send('multiple instances found');
