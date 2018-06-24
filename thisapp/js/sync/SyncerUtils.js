@@ -12,7 +12,7 @@ function addMyBusinessSync(businessId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages["business_" + businessId] && state.syncServer.syncMessages["business_" + businessId]=== response ){
+            if (state.syncServer.syncMessages["business_" + businessId] && state.syncServer.syncMessages["business_" + businessId] === response) {
                 return;
             }
             dispatch({
@@ -21,17 +21,16 @@ function addMyBusinessSync(businessId) {
             })
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  "business_permissions" + businessId,
+                id: "business_permissions" + businessId,
                 lastMessage: response
             })
         }
     });
     asyncListener.addListener("business_promotions" + businessId, (snap) => {
         let response = snap.val();
-        if (response && !response.markAsRead ) {
-
+        if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages["business_promotions" + businessId] && state.syncServer.syncMessages["business_promotions" + businessId]=== response ){
+            if (state.syncServer.syncMessages["business_promotions" + businessId] && state.syncServer.syncMessages["business_promotions" + businessId] === response) {
                 return;
             }
             dispatch({
@@ -41,7 +40,7 @@ function addMyBusinessSync(businessId) {
             })
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  "business_permissions" + businessId,
+                id: "business_permissions" + businessId,
                 lastMessage: response
             })
         }
@@ -50,7 +49,7 @@ function addMyBusinessSync(businessId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages["business_permissions" + businessId] && state.syncServer.syncMessages["business_permissions" + businessId]=== response ){
+            if (state.syncServer.syncMessages["business_permissions" + businessId] && state.syncServer.syncMessages["business_permissions" + businessId] === response) {
                 return;
             }
             dispatch({
@@ -58,7 +57,6 @@ function addMyBusinessSync(businessId) {
                 businessId: businessId,
                 token: token,
             })
-
             dispatch({
                 type: types.GET_USER_ENTITY_ROLES,
                 entityId: businessId,
@@ -66,7 +64,7 @@ function addMyBusinessSync(businessId) {
             })
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  "business_permissions" + businessId,
+                id: "business_permissions" + businessId,
                 lastMessage: response
             })
         }
@@ -75,7 +73,7 @@ function addMyBusinessSync(businessId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages["business_products" + businessId] && state.syncServer.syncMessages["business_products" + businessId]=== response ){
+            if (state.syncServer.syncMessages["business_products" + businessId] && state.syncServer.syncMessages["business_products" + businessId] === response) {
                 return;
             }
             dispatch({
@@ -83,13 +81,11 @@ function addMyBusinessSync(businessId) {
                 businessId: businessId,
                 token: token,
             })
-
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  "business_products" + businessId,
+                id: "business_products" + businessId,
                 lastMessage: response
             })
-
         }
     });
 }
@@ -116,10 +112,8 @@ function addGroupChatSync(groupId) {
     asyncListener.addListener("group_chat_" + groupId, (snap) => {
         let response = snap.val();
         if (response && !response.markAsRead) {
-
-
             let groupId = snap.key.substring('group_chat_'.length);
-            if(state.syncServer.syncMessages["group_chat_" + groupId] && state.syncServer.syncMessages["group_chat_" + groupId]=== response ){
+            if (state.syncServer.syncMessages["group_chat_" + groupId] && state.syncServer.syncMessages["group_chat_" + groupId] === response) {
                 return;
             }
             const token = state.authentication.token;
@@ -154,7 +148,7 @@ function addGroupChatSync(groupId) {
             });
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  "group_chat_" + groupId,
+                id: "group_chat_" + groupId,
                 lastMessage: response
             })
         }
@@ -172,9 +166,9 @@ function addGroupChatSync(groupId) {
     });
     asyncListener.addListener('deleteMessage_' + groupId, (snap) => {
         let response = snap.val();
-        if (response && !response.markAsRead ) {
+        if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages['deleteMessage_' + groupId] && state.syncServer.syncMessages['deleteMessage_' + groupId]=== response ){
+            if (state.syncServer.syncMessages['deleteMessage_' + groupId] && state.syncServer.syncMessages['deleteMessage_' + groupId] === response) {
                 return;
             }
             dispatch({
@@ -186,10 +180,9 @@ function addGroupChatSync(groupId) {
                 type: types.SAVE_GROUPS_REQUEST,
                 token: token,
             });
-
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  'deleteMessage_' + groupId,
+                id: 'deleteMessage_' + groupId,
                 lastMessage: response
             })
         }
@@ -204,10 +197,9 @@ function addChatSync(generalId, entities) {
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
             let entitiesComents = state.entityComments.entityCommentsOrder[generalId];
-            if(state.syncServer.syncMessages['instanceMessage_' + generalId] && state.syncServer.syncMessages['instanceMessage_' + generalId]=== response ){
+            if (state.syncServer.syncMessages['instanceMessage_' + generalId] && state.syncServer.syncMessages['instanceMessage_' + generalId] === response) {
                 return;
             }
-
             if (entitiesComents) {
                 dispatch({
                     type: types.FEED_SYNC_CHAT,
@@ -224,20 +216,18 @@ function addChatSync(generalId, entities) {
                     generalId: generalId,
                     lastChatId: 0
                 })
-
                 dispatch({
                     type: actions.SYNC_MESSAGE,
-                    id:  'instanceMessage_' + generalId,
+                    id: 'instanceMessage_' + generalId,
                     lastMessage: response
                 })
             }
         }
     })
-
     asyncListener.addListener('deleteMessage_' + generalId, (snap) => {
         let response = snap.val();
-        if (response && !response.markAsRead ) {
-            if(state.syncServer.syncMessages['deleteMessage_' + generalId] && state.syncServer.syncMessages['deleteMessage_' + generalId]=== response ){
+        if (response && !response.markAsRead) {
+            if (state.syncServer.syncMessages['deleteMessage_' + generalId] && state.syncServer.syncMessages['deleteMessage_' + generalId] === response) {
                 return;
             }
             dispatch({
@@ -245,10 +235,9 @@ function addChatSync(generalId, entities) {
                 messageId: response,
                 generalId: generalId
             });
-
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  'deleteMessage_' + generalId,
+                id: 'deleteMessage_' + generalId,
                 lastMessage: response
             })
         }
@@ -262,10 +251,9 @@ function addChatGroupEntitySync(groupId, generalId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages['instanceMessage_' + generalId] && state.syncServer.syncMessages['instanceMessage_' + generalId]=== response ){
+            if (state.syncServer.syncMessages['instanceMessage_' + generalId] && state.syncServer.syncMessages['instanceMessage_' + generalId] === response) {
                 return;
             }
-
             let groupInstancesComments = [];
             if (state.commentInstances.groupCommentsOrder[groupId]) {
                 groupInstancesComments = state.commentInstances.groupCommentsOrder[groupId][generalId];
@@ -279,7 +267,7 @@ function addChatGroupEntitySync(groupId, generalId) {
             });
             dispatch({
                 type: actions.SYNC_MESSAGE,
-                id:  'instanceMessage_' + generalId,
+                id: 'instanceMessage_' + generalId,
                 lastMessage: response
             })
         }
@@ -296,21 +284,19 @@ function syncGroup(groupId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages['user_follow_group_' + groupId] && state.syncServer.syncMessages['user_follow_group_' + groupId]=== response ){
+            if (state.syncServer.syncMessages['user_follow_group_' + groupId] && state.syncServer.syncMessages['user_follow_group_' + groupId] === response) {
                 return;
             }
-
             dispatch({
                 type: types.SAVE_GROUPS_REQUEST,
                 token: token,
             });
-
             dispatch({
                 type: types.GET_NEXT_GROUPS_FOLLOWERS,
                 token: token,
-                groupId:groupId,
-                skip:0,
-                limit:0
+                groupId: groupId,
+                skip: 0,
+                limit: 0
             });
             dispatch({
                 type: actions.SYNC_MESSAGE,
@@ -324,15 +310,13 @@ function syncGroup(groupId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             const feedOrder = state.groups.groupFeedOrder[groupId];
-
             const user = state.user.user;
             let group = state.groups.groups[groupId];
             const token = state.authentication.token;
             if (feedOrder) {
-                if(state.syncServer.syncMessages['feed_' + groupId] && state.syncServer.syncMessages['feed_' + groupId]=== response ){
+                if (state.syncServer.syncMessages['feed_' + groupId] && state.syncServer.syncMessages['feed_' + groupId] === response) {
                     return;
                 }
-
                 if (feedOrder && feedOrder.length > 0) {
                     dispatch({
                         type: types.GROUP_FEED_SET_TOP_FEED,
@@ -362,13 +346,12 @@ function syncSocialState(entity) {
     // sync social
     asyncListener.addListener('social_' + entity, (snap) => {
         let response = snap.val();
-        if (response && !response.markAsRead ) {
+        if (response && !response.markAsRead) {
             let instanceId = snap.key.substring('social_'.length);
             const token = state.authentication.token;
-            if(state.syncServer.syncMessages['social_' + entity] && state.syncServer.syncMessages['social_' + entity]=== response ){
+            if (state.syncServer.syncMessages['social_' + entity] && state.syncServer.syncMessages['social_' + entity] === response) {
                 return;
             }
-
             dispatch({
                 type: types.FEED_SET_SOCIAL_STATE,
                 token: token,
@@ -395,6 +378,22 @@ function syncSocialState(entity) {
     })
 }
 
+function syncMemberCard(memberCard) {
+    let dispatch = store.dispatch;
+    let state = store.getState();
+    // sync social
+    asyncListener.addListener('card_' + memberCard._id, (snap) => {
+        let response = snap.val();
+        if (response) {
+            const token = state.authentication.token;
+            dispatch({
+                type: types.GET_MY_MEMBER_CARDS,
+                token: token,
+            });
+        }
+    })
+}
+
 function syncPromotion(promotionId) {
     let dispatch = store.dispatch;
     let state = store.getState();
@@ -402,18 +401,18 @@ function syncPromotion(promotionId) {
         let response = snap.val();
         if (response && !response.markAsRead) {
             let promotionId = snap.key.substring('promotion_'.length);
-
-            if(state.syncServer.syncMessages['promotion_' + promotionId] && state.syncServer.syncMessages['promotion_' + promotionId]=== response ){
+            if (state.syncServer.syncMessages['promotion_' + promotionId] && state.syncServer.syncMessages['promotion_' + promotionId] === response) {
                 return;
             }
-
             const token = state.authentication.token;
-            if(!state.businesses.businessesPromotions){
+            if (!state.businesses.businessesPromotions) {
                 return
             }
             let promotions = [];
-            Object.keys(state.businesses.businessesPromotions).forEach(bussinesid => {promotions.push.apply(promotions, state.businesses.businessesPromotions[bussinesid])} );
-            let promotionsMap = promotions.reduce(function(map, obj) {
+            Object.keys(state.businesses.businessesPromotions).forEach(bussinesid => {
+                promotions.push.apply(promotions, state.businesses.businessesPromotions[bussinesid])
+            });
+            let promotionsMap = promotions.reduce(function (map, obj) {
                 map[obj._id] = obj;
                 return map;
             }, {});
@@ -428,7 +427,6 @@ function syncPromotion(promotionId) {
                         businessId: businessId,
                         item: promotion
                     });
-
                     dispatch({
                         type: actions.SYNC_MESSAGE,
                         id: 'promotion_' + promotionId,
@@ -488,6 +486,7 @@ export default {
     invokeAllDone,
     invokeSyncChatTyping,
     invokeBusinessChange,
+    syncMemberCard,
     addChatSync,
     addMyBusinessSync,
     syncGroup,

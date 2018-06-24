@@ -31,10 +31,7 @@ class ChargeCard extends Component {
     }
 
     componentWillUnmount() {
-        let card = this.props.navigation.state.params.card;
-        if(!card.qrCode) {
-            this.props.actions.setCardQrcCode(card);
-        }
+
 
     }
 

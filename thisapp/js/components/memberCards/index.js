@@ -10,6 +10,7 @@ import {getMyCards} from '../../selectors/memberCardsSelector'
 import {bindActionCreators} from "redux";
 import {FormHeader} from '../../ui/index';
 import navigationUtils from '../../utils/navigationUtils'
+import SyncUtils from '../../sync/SyncerUtils'
 import strings from "../../i18n/i18n"
 
 class MemberCards extends Component {
@@ -29,6 +30,17 @@ class MemberCards extends Component {
         this.props.actions.setMyCards();
     }
 
+    componentDidUpdate(){
+        const { cards} = this.props;
+        if(cards.length > 0){
+            cards.forEach(card => {
+                if(!card.qrCode) {
+                    this.props.actions.setCardQrcCode(card);
+                    SyncUtils.syncMemberCard(card);
+                }
+            })
+        }
+    }
 
     onBoardingPromotion() {
         const {business, navigation, onBoardingPromotion} = this.props;

@@ -53,12 +53,16 @@ function* updateCard(action) {
 function* getMyMemverCards(action) {
     try {
         let memberCards = yield call(cardApi.getMyMemberCards, action.token);
-        console.log(memberCards);
         if (memberCards.length > 0) {
             yield put({
                 type: actions.SET_MY_MEMBER_CARDS,
                 memberCards: memberCards
             })
+            yield put({
+                type: actions.SYNC_CARD,
+                memberCards: memberCards
+            })
+
 
         }
     } catch (error) {

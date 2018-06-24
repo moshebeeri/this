@@ -39,12 +39,7 @@ export default class BusinessListView extends Component {
         super(props);
     }
 
-    componentWillMount() {
-        const {item, actions} = this.props;
-        if (!item.categoryTitle) {
-            actions.updateBusinesCategory(item)
-        }
-    }
+
 
     showBusiness(p) {
         const {item, navigation, actions} = this.props;

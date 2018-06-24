@@ -41,6 +41,7 @@ export default class BusinessFollow extends Component {
     chargeCard(){
         const{chargePoints,card,code} = this.props;
         chargePoints(this.state.points,card,code);
+        this.back();
     }
 
     dismissKyeboard(){
