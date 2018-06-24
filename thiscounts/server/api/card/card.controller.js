@@ -118,6 +118,7 @@ exports.redeem = function(req, res) {
 
 exports.doRedeem = function(userId, cardTypeId, points, callback) {
   const query = `MATCH (u:user{_id:'${userId}'})-[r:LOYALTY_CARD]->(card:card)<-[:CARD_OF_TYPE]-(cardType:cardType{_id:'${cardTypeId}'}) RETURN card._id as _id`;
+  console.log(`doRedeem: ${query}`);
   graphModel.query_objects(Card, query,
     'order by r.timestamp desc', 0, 1, function (err, cards) {
     if(err) {return callback(err)}

@@ -641,7 +641,7 @@ function handleRealizeBySavedInstanceType(userId, saved, data, callback) {
 
   if (saved.instance.card) {
     cardController.doRedeem(userId,
-      saved.instance.card.cardType,
+      saved.instance.card.cardType._id,
       saved.instance.card.points,
       (err) => {
         if (err) return callback(err);
