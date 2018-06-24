@@ -92,6 +92,20 @@ class RealizePromotion extends Component {
                                            titleValue={item.promotionValue} term={item.promotionTerm}/>
 
 
+                    {item.points && <View style={{
+                        marginTop: StyleUtils.scale(5),
+                        marginBottom: StyleUtils.scale(5),
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: StyleUtils.getWidth()
+                    }}>
+                        <ThisText style={{
+                            marginLeft: StyleUtils.scale(10),
+                            marginRight: StyleUtils.scale(10),
+                            color: '#839192',
+                            fontSize: StyleUtils.scale(13),
+                        }}>{strings.PointsPromotionMessage.formatUnicorn(item.points)}</ThisText>
+                    </View>}
                     <View style={{marginTop: 5, flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
 
                         <PromotionSeperator narrowWidth={StyleUtils.scale(30)}/>

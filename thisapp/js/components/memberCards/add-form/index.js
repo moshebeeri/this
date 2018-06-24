@@ -174,7 +174,7 @@ class AddMemberCard extends Component {
                                      triggerWrapper: {
                                          alignItems: 'center',
                                          justifyContent: 'center',
-                                         width: StyleUtils.relativeHeight(30, 30),
+                                         width: StyleUtils.relativeHeight(30, 50),
                                          height: StyleUtils.scale(220)
                                      }
                                  }} logo mandatory color='white' pickFromCamera
@@ -237,6 +237,7 @@ class AddMemberCard extends Component {
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
+
             }} style={styles.contentContainer}>
 
                 {this.createCoverImageComponnent()}

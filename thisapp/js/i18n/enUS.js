@@ -343,6 +343,8 @@ const enUS = {
     CardPolicy                                    : "Card Policy",
     Charge                                        : "Charge Points",
     CardChargePointsMessage                       : "Charge Points For {0} ",
+    PointsPromotionsDescription                   : "Membership Points For Redeem ",
+    PointsPromotionMessage                        : "* Illegible For {0} MemberShip Points ",
 
 };
 

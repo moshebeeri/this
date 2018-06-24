@@ -72,6 +72,7 @@ export default function scannerForm(state = initialState, action) {
             return {
                 ...state,
                 card: action.card,
+                code: action.code
             };
         case actions.SCANNER_SHOW_BUSINESS:
             return {

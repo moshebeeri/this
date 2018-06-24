@@ -8,6 +8,7 @@ import * as errors from '../api/Errors'
 import handler from './ErrorHandler'
 import SyncUtils from "../sync/SyncerUtils";
 import * as types from '../saga/sagaActions';
+
 let userApi = new UserApi();
 let businessApi = new BusinessApi();
 let groupApi = new GroupApi();
@@ -21,15 +22,15 @@ export function scanResult(barcode, businessAssign) {
             const user = getState().user.user;
             dispatch({type: actions.SCANNER_SHOW_CAMERA, cameraOn: false});
             let data = JSON.parse(barcode.data);
-            if(data.opt ==='charge'){
+            if (data.opt === 'charge') {
                 dispatch({
                     type: types.SCANNER_SHOW_CHARGE,
+                    token: token,
                     code: data.code
                 });
                 return;
             }
             if (businessAssign) {
-
                 try {
                     let response = await businessApi.assihgnQrcCodeToBusinese(data, token, businessAssign);
                     dispatch({
@@ -116,11 +117,11 @@ export function isIn(days,
                      hours,
                      minutes) {
     var now_seconds = hours * 60 * 60 + minutes * 60;
-    if (days.includes(day) && ( from <= now_seconds && now_seconds <=   until ) )
+    if (days.includes(day) && ( from <= now_seconds && now_seconds <= until ))
         return true;
     if (days.includes(day - 1)) {
         now_seconds = (24 + hours) * 60 * 60 + minutes * 60;
-        if (from <= now_seconds && now_seconds <=   until)
+        if (from <= now_seconds && now_seconds <= until)
             return true;
     }
     return false;
@@ -147,13 +148,27 @@ export function resetForm() {
         dispatch({type: actions.SCANNER_RESET});
     }
 }
+
 export function closeCamera() {
     return function (dispatch) {
-        dispatch({type: actions.SCANNER_SHOW_CAMERA,cameraOn:false});
+        dispatch({type: actions.SCANNER_SHOW_CAMERA, cameraOn: false});
     }
 }
 
+export function chargePoints(points,card,code){
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        try {
+            dispatch({type: types.CHARGE_CARD_BY_CODE,points:points, code:code,token:token});
 
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch, 'scanner-realizePromotion')
+            await logger.actionFailed('scanner-realizePromotion')
+        }
+    }
+
+}
 
 export function followBusiness(businessId) {
     return async function (dispatch, getState) {
@@ -195,7 +210,6 @@ export function groupFollowBusiness(groupid, businessId) {
             await logger.actionFailed('scanner-groupFollowBusiness')
         }
     }
-
 }
 
 export function followGroupAction(group) {
@@ -204,14 +218,13 @@ export function followGroupAction(group) {
             dispatch({type: actions.SCANNER_RESET});
             const token = getState().authentication.token;
             const user = getState().user.user;
-            await groupApi.addUserToGroup(user._id,group._id,token)
+            await groupApi.addUserToGroup(user._id, group._id, token)
             handler.handleSuccses(getState(), dispatch)
         } catch (error) {
             handler.handleError(error, dispatch, 'scanner-groupFollowBusiness')
             await logger.actionFailed('scanner-groupFollowBusiness')
         }
     }
-
 }
 
 

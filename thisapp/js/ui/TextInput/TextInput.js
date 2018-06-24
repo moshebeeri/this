@@ -70,7 +70,7 @@ export default class TextInputField extends Component {
     }
 
     render() {
-        const {fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory, keyboardType, disabled, secureTextEntry, multiline, numberOfLines, textArea} = this.props;
+        const {containerDefaultStyle, style,fieldColor, field, placeholder, value, returnKeyType, refNext, isMandatory, keyboardType, disabled, secureTextEntry, multiline, numberOfLines, textArea} = this.props;
         let textStyle = styles.textInputTextStyle;
         let mandatoryIconColor = 'red';
         if (fieldColor === 'white') {
@@ -81,12 +81,20 @@ export default class TextInputField extends Component {
         if (this.state.invalid) {
             textInputStyle = styles.textInputInvalidComponentStyle;
         }
+
+        if(style){
+            textInputStyle = style;
+        }
+
         let containerStyle = styles.textInputNoFiledContainer;
         if (field) {
             containerStyle = styles.textInputContainer;
         }
         if (textArea) {
             containerStyle = styles.textAreaContainer;
+        }
+        if(containerDefaultStyle){
+            containerStyle = containerDefaultStyle;
         }
         let stringValue = '';
         if (value) {

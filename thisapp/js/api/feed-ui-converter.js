@@ -407,6 +407,9 @@ class FeedConverter {
                 responseFeed.categoryTitle = instance.promotion.entity.business.categoryTitle;
             }
             responseFeed.itemType = 'PROMOTION';
+            if(promotion.card){
+                responseFeed.points = promotion.card.points
+            }
         } catch (error) {
             console.log('error');
         }
@@ -578,6 +581,9 @@ class FeedConverter {
             }
             if (promotion.entity && promotion.entity.business) {
                 responseFeed.business = promotion.entity.business;
+            }
+            if(promotion.card){
+                responseFeed.points = promotion.card.points
             }
             responseFeed.itemType = 'PROMOTION';
         } catch (error) {

@@ -15,6 +15,7 @@ module.exports = {
     textInputNoFiledContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
+
         height: StyleUtils.scale(55),
     },
     textInputComponentLayout: {

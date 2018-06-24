@@ -53,6 +53,7 @@ function* updateCard(action) {
 function* getMyMemverCards(action) {
     try {
         let memberCards = yield call(cardApi.getMyMemberCards, action.token);
+        console.log(memberCards);
         if (memberCards.length > 0) {
             yield put({
                 type: actions.SET_MY_MEMBER_CARDS,
@@ -89,9 +90,11 @@ function* chargeCardByCode(action) {
 function* getCardByCode(action) {
     try {
        let card =  yield call(cardApi.getCardByCode, action.code,  action.token);
+        console.log(card);
         yield put({
             type: actions.SCANNER_SHOW_USER_CARD,
             card: card,
+            code: action.code,
         })
     } catch (error) {
         console.log("failed  create card");

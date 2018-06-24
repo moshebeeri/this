@@ -39,8 +39,10 @@ export default class BusinessFollow extends Component {
     }
 
     chargeCard(){
-
+        const{chargePoints,card,code} = this.props;
+        chargePoints(this.state.points,card,code);
     }
+
     dismissKyeboard(){
         Keyboard.dismiss();
     }
@@ -181,15 +183,30 @@ export default class BusinessFollow extends Component {
                 </View>
                 }
                 {card &&
-                <View style={{height:200,alignItems:'center',justifyContent:'center' }}>
-                    <View style={{flex:3, backgroundColor:'white' ,alignItems:'center',justifyContent:'center' }}>
+                <View style={{alignItems:'center',justifyContent:'center',backgroundColor:'white' }}>
+                    <View style={{ backgroundColor:'white' ,height:StyleUtils.scale(220),alignItems:'center',justifyContent:'center' }}>
                         <CardItem noAction item={card}/>
-                        <ThisText>{strings.CardChargePointsMessage.formatUnicorn(card.user.name)}</ThisText>
-                    </View>
-                    <View style={{flex:1, alignItems:'center',}}>
 
+                    </View>
+                    <View style={{ alignItems:'center',backgroundColor:'white'}}>
+                        <ThisText>{strings.CardChargePointsMessage.formatUnicorn(card.user.name)}</ThisText>
                         <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
-                            <TextInput field={strings.Points} value={this.state.points} returnKeyType='next' ref="6"
+                            <TextInput
+                                keyboardType='numeric'
+                                containerDefaultStyle={{   flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    width: StyleUtils.scale(200),
+                                    height: StyleUtils.scale(55),}}
+                                style={{
+                                backgroundColor: 'white',
+                                borderColor:'#839192',
+                                justifyContent: 'flex-start',
+                                flex: 1,
+                                borderWidth:1,
+                                textAlignVertical: "top",
+                                borderRadius: 2,
+                                marginBottom: StyleUtils.scale(10),
+                                fontSize: StyleUtils.scale(16),width:StyleUtils.getWidth()}} value={this.state.points} returnKeyType='next' ref="6"
                                        refNext="6"
                                        onSubmitEditing={this.dismissKyeboard.bind(this)}
                                        onChangeText={(points) => this.setState({points})}/>

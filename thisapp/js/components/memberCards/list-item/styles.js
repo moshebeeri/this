@@ -8,7 +8,7 @@ module.exports = {
         borderColor: '#e7e7e7',
         alignItems:'center',
         justifyContent:'center',
-        borderTopWidth: 5,
+
     },
     bannerImageContainer:{
         flex: -1,
@@ -17,7 +17,6 @@ module.exports = {
         height:  StyleUtils.getWidth() * 9 / 16,
 
         width: width,
-        borderWidth: 1,
     },
 
 };
