@@ -47,7 +47,8 @@ export default class SubmitButton extends Component {
             backgroundColor: bgc
         }}
                                     onPress={onPress}>
-            <ThisText style={{color: defaultTextColor, fontSize: defaultFontSize}}>{buttonTitle}</ThisText>
+            <ThisText style={{alignItems: 'center',
+                justifyContent: 'center',color: defaultTextColor, fontSize: defaultFontSize}}>{buttonTitle}</ThisText>
         </TouchableOpacityFix>
     }
 }

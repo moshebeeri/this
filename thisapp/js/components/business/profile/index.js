@@ -312,11 +312,12 @@ class BusinessProfile extends Component {
                             </TouchableOpacity>}
 
                             {business.description &&  <View onPress={() => this.call()}
-                                                                 style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                                                                 style={[styles.inputFullTextLayout, {width:  StyleUtils.getWidth() -15}]}>
                                 <MaterialIcons size={StyleUtils.scale(20)} name={"description"}/>
                                 <ThisText note style={{
                                     fontSize: StyleUtils.scale(20),
                                     color: '#A9A9A9',
+                                    width: StyleUtils.scale(270),
                                     marginLeft: 15
                                 }}>{business.description}</ThisText>
 

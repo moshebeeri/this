@@ -213,7 +213,7 @@ export default class BusinessFollow extends Component {
                                        onChangeText={(points) => this.setState({points})}/>
                         </View>
                         <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
-                            <SubmitButton color={'#2db6c8'} title={strings.Charge.toUpperCase()} onPress={() => this.chargeCard()}/>
+                            <SubmitButton width = {200}color={'#2db6c8'} title={strings.Charge.toUpperCase()} onPress={() => this.chargeCard()}/>
                         </View>
                     </View>
                 </View>}
