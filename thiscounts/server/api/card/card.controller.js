@@ -8,8 +8,8 @@ let graphModel = graphTools.createGraphModel('card');
 let MongodbSearch = require('../../components/mongo-search');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const QRCode = require('../qrcode/qrcode.model');
-const utils = require('../../components/utils').createUtils();
 const QRCodeImg = require('qrcode');
+const utils = require('../../components/utils').createUtils();
 const fireEvent = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Card);

@@ -6,8 +6,9 @@ const autopopulate = require('mongoose-autopopulate');
 
 let CardTypeSchema = new Schema({
   name: String,
+  creator: {type: Schema.ObjectId, ref: 'User', required: true},
   gid: { type: Number, index: true},
-  info: String,
+  description: String,
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
   entity: {
     business: {type: Schema.ObjectId, ref: 'Business', autopopulate: true},
@@ -37,6 +38,7 @@ let CardTypeSchema = new Schema({
 CardTypeSchema.plugin(autopopulate);
 CardTypeSchema.index({
   name: 'text',
+  description: 'text',
   'entity.business.name': 'text',
   'entity.shopping_chain.name': 'text',
   'entity.mall.name': 'text',

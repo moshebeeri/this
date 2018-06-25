@@ -4,6 +4,10 @@
   "ASK_JOIN_GROUP_JOIN_BODY": "You have request to join %s group",
   "ASK_INVITE_GROUP_JOIN_TITLE": "Invitation to join group",
   "ASK_INVITE_GROUP_JOIN_BODY": "You have new invitation to %s group",
+  "ASK_JOIN_CARD_TYPE_TITLE": "Loyalty card Invitation",
+  "ASK_JOIN_CARD_TYPE_BODY": "You have new invitation to %s loyalty card",
+  "ASK_INVITE_CARD_TYPE_TITLE": "Loyalty card Invitation",
+  "ASK_INVITE_CARD_TYPE_BODY": "You have new invitation to %s loyalty card",
   "NEW_PROMOTION_ELIGIBLE_TITLE": "New discount from %s",
   "NEW_PROMOTION_ELIGIBLE_BODY": "%s",
   "RE_PROMOTION_ELIGIBLE_TITLE": "You have gained one more promotion"
