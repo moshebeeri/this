@@ -353,6 +353,9 @@ const il = {
     CardPolicy                                    : "מדיניות כרטיס",
     Charge                                        : "הוסף נקודות",
     CardChargePointsMessage                       : "הוסף נקודות ל {0}",
+    PointsPromotionsDescription                   : "מספר נקודות למימוש ההנחה",
+    PointsPromotionMessage                        : "* מספר נקודות חבר מועדון למימוש {0}",
+
 
 };
 

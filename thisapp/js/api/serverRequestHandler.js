@@ -7,7 +7,7 @@ class ServerRequestHandler {
     handleServerRequest(status) {
         if (status < 400) {
             return '';
-        } else if (status === 401 || status === 403 ) {
+        } else if (status === 401 || status === 403) {
             return errors.UN_AUTHOTIZED_ACCESS;
         } else if (status === 402) {
             return errors.PAYMENT_REQUIRED;
@@ -21,57 +21,72 @@ class ServerRequestHandler {
     }
 
     fetch_handler(url, options, entity, api, type = 'JSON') {
-        return new Promise(async (resolve, reject) => {
-            const start = new Date();
-            fetch(url, options)
-                .then(
-                    response => {
-                        const status = parseInt(response.status);
-                        let statusValidate = this.handleServerRequest(status);
-                        if (statusValidate) {
-                            return reject(statusValidate);
-                        }
-                        if(status === 404){
-                            return reject({
-                                message: 'No Content',
-                            });
-                        }
-                        if(status === 204){
-                           return resolve({
-                                message: 'No Content',
-                            });
-                        }
-                        timer.logTime(start, new Date(), entity, api);
-                        switch (type) {
-                            case 'JSON':
-                                try {
-                                    response.json().then(responseData => {
-                                        return resolve(responseData);
-                                    });
-                                }catch (e){
-                                    console.log(entity + api +' failed');
-                                }
-                                break;
-                            case 'TEXT':
-                                return resolve(response._bodyText)
-                                break;
-                            case 'BOOLEAN':
-                                return resolve(true);
-                                break;
-                        }
-                    }
-                ).catch(
-                err => {
-                    let ret;
-                    if (err.message === 'Network request failed')
-                        ret = errors.NETWORK_ERROR;
-                    else
-                        ret = errors.UNHANDLED_ERROR;
-                    timer.logTime(start, new Date(), entity, api);
-                    return reject(ret)
+        try {
+            let tokenFound = true;
+            if(options.headers.Authorization ) {
+                let token = options.headers.Authorization.substring(7);
+                if(!token){
+                    tokenFound = false;
                 }
-            );
-        })
+            }
+            if (tokenFound) {
+                return new Promise(async (resolve, reject) => {
+                    const start = new Date();
+                    fetch(url, options)
+                        .then(
+                            response => {
+                                const status = parseInt(response.status);
+                                let statusValidate = this.handleServerRequest(status);
+                                if (statusValidate) {
+                                    return reject(statusValidate);
+                                }
+                                if (status === 404) {
+                                    return reject({
+                                        message: 'No Content',
+                                    });
+                                }
+                                if (status === 204) {
+                                    return resolve({
+                                        message: 'No Content',
+                                    });
+                                }
+                                timer.logTime(start, new Date(), entity, api);
+                                switch (type) {
+                                    case 'JSON':
+                                        try {
+                                            response.json().then(responseData => {
+                                                return resolve(responseData);
+                                            });
+                                        } catch (e) {
+                                            console.log(entity + api + ' failed');
+                                        }
+                                        break;
+                                    case 'TEXT':
+                                        return resolve(response._bodyText)
+                                        break;
+                                    case 'BOOLEAN':
+                                        return resolve(true);
+                                        break;
+                                }
+                            }
+                        ).catch(
+                        err => {
+                            let ret;
+                            if (err.message === 'Network request failed')
+                                ret = errors.NETWORK_ERROR;
+                            else
+                                ret = errors.UNHANDLED_ERROR;
+                            timer.logTime(start, new Date(), entity, api);
+                            return reject(ret)
+                        }
+                    );
+                })
+            } else {
+                console.log('missing token');
+            }
+        }catch (error){
+            console.log('missing token or bad request');
+        }
     }
 }
 

@@ -6,6 +6,7 @@ const initialState = {
     promotions: [],
     chats: {},
     chatsGroups: {},
+    memberCards: {},
     chatsGroupInstance: {}
 };
 import * as actions from './reducerActions';
@@ -70,6 +71,9 @@ export default function syncServer(state = initialState, action) {
             return syncServerState;
         case actions.SYNC_MESSAGE:
             syncServerState.syncMessages[action.id] = action.lastMessage;
+            return syncServerState;
+        case actions.SYNC_CARD:
+            syncServerState.memberCards = action.memberCards;
             return syncServerState;
         default:
             return state;

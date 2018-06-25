@@ -57,10 +57,6 @@ class AddMemberCard extends Component {
         this.props.navigation.goBack();
     }
 
-    componentWillMount() {
-        const businessId = this.getBusinessId(this.props.navigation);
-        this.props.actions.setBusinessCards(businessId);
-    }
 
     validateForm() {
         let result = true;
@@ -111,7 +107,7 @@ class AddMemberCard extends Component {
             points: {
                 min_points: 0,
                 points_ratio: 1,
-                accumulate_ratio: this.state.accumulate_ratio,
+                accumulate_ratio: 100,
             },
             add_policy: this.state.add_policy
         };
@@ -157,8 +153,7 @@ class AddMemberCard extends Component {
         const business = navigation.state.params.business;
         let card = {
             business: business,
-            points: 0,
-            members: 1,
+            members: 0,
         }
         let cardItem = <CardItem image={this.state.coverImage} showStats noAction item={card}/>
         return <TouchableOpacity onPress={this.openMenu.bind(this)}
@@ -174,7 +169,7 @@ class AddMemberCard extends Component {
                                      triggerWrapper: {
                                          alignItems: 'center',
                                          justifyContent: 'center',
-                                         width: StyleUtils.relativeHeight(30, 30),
+                                         width: StyleUtils.relativeHeight(30, 50),
                                          height: StyleUtils.scale(220)
                                      }
                                  }} logo mandatory color='white' pickFromCamera
@@ -237,6 +232,7 @@ class AddMemberCard extends Component {
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
+
             }} style={styles.contentContainer}>
 
                 {this.createCoverImageComponnent()}
@@ -248,18 +244,6 @@ class AddMemberCard extends Component {
                               onValueSelected={this.selectCardPolicy.bind(this)}/>
 
 
-                <View style={[styles.inputTextLayout, {flexDirection: 'column', width: StyleUtils.getWidth() - 15}]}>
-
-                    <TextInput field={strings.PointsAccumulationRatio} value={this.state.accumulate_ratio}
-                               returnKeyType='done' ref="accumulate_ratio" refNext="retail"
-                               keyboardType='numeric'
-                               onSubmitEditing={this.dismissKeyboard.bind(this)}
-                               validateContent={FormUtils.validatePercent}
-                               placeholder={strings.PointsAccumulationExample}
-                               onChangeText={(accumulate_ratio) => this.setState({accumulate_ratio})}
-                               isMandatory={true}/>
-
-                </View>
 
 
             </ScrollView>

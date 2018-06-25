@@ -31,10 +31,7 @@ class ChargeCard extends Component {
     }
 
     componentWillUnmount() {
-        let card = this.props.navigation.state.params.card;
-        if(!card.qrCode) {
-            this.props.actions.setCardQrcCode(card);
-        }
+
 
     }
 
@@ -53,16 +50,15 @@ class ChargeCard extends Component {
             <ScrollView>
                 <FormHeader showBack  navigation={this.props.navigation}
                             title={strings.MemberCard} bgc="#FA8559"/>
-                <View style={{flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{flex: 1,marginTop:2, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center'}}>
 
 
                     <CardItem  noAction item={card}/>
-                    <View style={{marginTop: 5, flex: 0.2, width: StyleUtils.getWidth() - 30, height: 20,}}>
+                    <View style={{marginTop: 0, flex: 0.2, width: StyleUtils.getWidth() - 30, height: StyleUtils.scale(15),}}>
 
                         <PromotionSeperator narrowWidth={StyleUtils.scale(30)}/>
                     </View>
                     <View style={{
-                        marginBottom: 5,
                         flex: 4,
                         width: StyleUtils.getWidth() - 30,
                         backgroundColor: 'white',
@@ -73,8 +69,8 @@ class ChargeCard extends Component {
                         <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.RealizeMessage2}</ThisText>
                         {card.qrCode &&
                         <Image style={{
-                            width: StyleUtils.scale(300),
-                            height: StyleUtils.scale(300),
+                            width: StyleUtils.scale(250),
+                            height: StyleUtils.scale(250),
                             resizeMode: Image.resizeMode.contain,
                         }} source={{uri: card.qrCode}}/>
                         }

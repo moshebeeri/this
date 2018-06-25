@@ -26,6 +26,7 @@ class DataSync {
     initDataLysteners() {
         this.syncUser(store.getState(), store.dispatch, store.getState().user.user);
         this.syncGroups(store.getState().syncServer.groups);
+        this.syncMemberCards(store.getState().syncServer.memberCards);
         this.syncMyBusinesses(store.getState().syncServer.businesses);
         this.syncSocialState(store.getState().syncServer.socialState,);
         this.syncPromotions(store.getState().syncServer.promotions);
@@ -151,6 +152,15 @@ class DataSync {
             Object.values(groups).forEach(groupId => {
                     //sync group chat
                     SyncUtils.syncGroup(groupId);
+                }
+            )
+        }
+    }
+    syncMemberCards(memberCards) {
+        if (Object.values(memberCards)) {
+            Object.values(memberCards).forEach(memberCard => {
+                    //sync group chat
+                    SyncUtils.syncMemberCard(memberCard);
                 }
             )
         }

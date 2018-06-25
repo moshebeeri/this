@@ -3,10 +3,8 @@
  */
 import React, {Component} from 'react';
 import {Dimensions, Linking, TouchableOpacity} from 'react-native';
-import InViewPort from '../../../../utils/inviewport'
 import instanceUtils from '../../../../utils/instanceUtils'
 import navigationUtils from '../../../../utils/navigationUtils'
-
 import {actions} from 'react-native-navigation-redux-helpers';
 import {
     Button,
@@ -64,10 +62,10 @@ export default class FeedPromotion extends Component {
 
     shouldComponentUpdate() {
         const {item, shouldUpdateFeeds} = this.props;
-        if(!shouldUpdateFeeds){
+        if (!shouldUpdateFeeds) {
             return true;
         }
-        if(shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined){
+        if (shouldUpdateFeeds[item.id] || shouldUpdateFeeds[item.id] === undefined) {
             return true
         }
         return false;
@@ -80,18 +78,16 @@ export default class FeedPromotion extends Component {
         Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + encodeAddress);
     }
 
-    componentDidUpdate(){
-        if(this.props.actions && this.props.actions.finishUpdateItem) {
+    componentDidUpdate() {
+        if (this.props.actions && this.props.actions.finishUpdateItem) {
             this.props.actions.finishUpdateItem(this.props.item.id)
         }
-
     }
-
 
     render() {
         const {
             showActions, item, save, shared, like, unlike, showUsers, comment, token, location, hideSocial, realize,
-            scanner, group,minimizeSize
+            scanner, group, minimizeSize
         }
             = this.props;
         let categoruTitle = item.categoryTitle;
@@ -106,16 +102,27 @@ export default class FeedPromotion extends Component {
             promotaionDesc = styles.promotiosShareDescription;
         }
         const result =
-            <View style={[container, {width: StyleUtils.getWidth() - minimizeSize,backgroundColor:`white`}]}>
-                <View style={[styles.promotion_card, {backgroundColor:'white',width: StyleUtils.getWidth() - minimizeSize}]}>
-                    {item.actionOff && <View style={{marginLeft:StyleUtils.scale(5),alignItems:'flex-start',justifyContent:'center',width:StyleUtils.getWidth()}}>
-                        <ThisText style={{fontSize: StyleUtils.scale(19),
-                            color: '#2db6c8',}}>{strings.eligibleForNewPromotion}</ThisText>
+            <View style={[container, {width: StyleUtils.getWidth() - minimizeSize, backgroundColor: `white`}]}>
+                <View style={[styles.promotion_card, {
+                    backgroundColor: 'white',
+                    width: StyleUtils.getWidth() - minimizeSize
+                }]}>
+                    {item.actionOff && <View style={{
+                        marginLeft: StyleUtils.scale(5),
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                        width: StyleUtils.getWidth()
+                    }}>
+                        <ThisText style={{
+                            fontSize: StyleUtils.scale(19),
+                            color: '#2db6c8',
+                        }}>{strings.eligibleForNewPromotion}</ThisText>
                     </View>}
-                    {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor:'white'}}>
+                    {!scanner ? <View style={{width: StyleUtils.getWidth(), backgroundColor: 'white'}}>
                             <View style={[promotaionDesc, {backgroundColor: 'white', width: StyleUtils.getWidth()}]}>
                                 <PromotionHeader item={item} type={item.promotion} feed titleText={item.promotionTitle}
-                                                 titleValue1={item.promotionValue1} titleValue2={item.promotionValue2} titleValue={item.promotionValue} term={item.promotionTerm}/>
+                                                 titleValue1={item.promotionValue1} titleValue2={item.promotionValue2}
+                                                 titleValue={item.promotionValue} term={item.promotionTerm}/>
                             </View>
 
                         </View> :
@@ -128,7 +135,20 @@ export default class FeedPromotion extends Component {
                                              titleValue={item.promotionValue} term={item.promotionTerm}/>
                         </View>}
 
+                    {item.points && <View style={{
 
+                        marginBottom: StyleUtils.scale(5),
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                        width: StyleUtils.getWidth()
+                    }}>
+                        <ThisText style={{
+                            marginLeft: StyleUtils.scale(10),
+                            marginRight: StyleUtils.scale(10),
+                            color: '#839192',
+                            fontSize: StyleUtils.scale(13),
+                        }}>{strings.PointsPromotionMessage.formatUnicorn(item.points)}</ThisText>
+                    </View>}
                     {image}
 
 
@@ -147,7 +167,7 @@ export default class FeedPromotion extends Component {
                         <View style={styles.editButtonContainer}>
                             <SubmitButton
                                 title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                onPress={() => navigationUtils.doAction(save,item.id)}/>
+                                onPress={() => navigationUtils.doAction(save, item.id)}/>
                         </View>
                         }
                         {instanceUtils.showRedeem(item) &&
@@ -240,10 +260,10 @@ export default class FeedPromotion extends Component {
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
                     height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 10)),
-                    position:'absolute',
+                    position: 'absolute',
                     justifyContent: 'flex-end',
                     backgroundColor: 'transparent',
-                    bottom:1,
+                    bottom: 1,
                     alignItems: 'flex-end',
                     width: StyleUtils.getWidth()
                 }}>

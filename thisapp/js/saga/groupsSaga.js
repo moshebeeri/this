@@ -10,11 +10,13 @@ let groupsApi = new GroupsApi();
 
 function* saveGroupsRequest(action) {
     try {
-        let response = yield call(groupsApi.getAll, action.token, 0, 100);
-        handleSucsess();
-        if (response.length > 0) {
-            yield put(setGroups(response));
-            yield* updateGroupsListeners(response);
+        if(action.token) {
+            let response = yield call(groupsApi.getAll, action.token, 0, 100);
+            handleSucsess();
+            if (response.length > 0) {
+                yield put(setGroups(response));
+                yield* updateGroupsListeners(response);
+            }
         }
     } catch (error) {
         console.log("failed saveGroupsRequest");

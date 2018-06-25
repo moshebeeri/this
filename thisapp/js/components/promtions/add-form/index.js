@@ -18,7 +18,6 @@ import * as promotionsAction from "../../../actions/promotions";
 import PromotionApi from "../../../api/promotion";
 import * as businessAction from "../../../actions/business";
 import PercentComponent from "./percent/index";
-import PointsComponent from "./points/index";
 import PunchCardComponent from "./punch-card/index";
 import XPlusYComponent from "./xPlusY/index";
 import GiftComponent from "./gift/index";
@@ -163,7 +162,7 @@ class AddPromotion extends Component {
 
     constructor(props) {
         let defaultDate = new Date();
-        defaultDate.setDate(defaultDate.getDate() + 1);
+        defaultDate.setMonth((new Date().getMonth()+ 1) %12 );
         super(props);
         this.state = {
             token: '',
@@ -176,7 +175,6 @@ class AddPromotion extends Component {
             product: '',
             productList: [],
             percent: {},
-            points: {},
             amount: '',
             retail_price: '',
             total_discount: '',
@@ -193,6 +191,7 @@ class AddPromotion extends Component {
             quantity: 100,
             otherBusinessPermittedUser: '',
             otherBusiness: '',
+            points:'',
             promotion: {},
             toggle: false,
         }
@@ -450,6 +449,16 @@ class AddPromotion extends Component {
                 from: this.state.happy_hour.values.from,
             };
         }
+
+        if(this.state.points){
+            const{cards}= this.props;
+            const businessId = this.getBusinessId();
+            const card = cards[businessId];
+            promotion.card = {
+                cardType : card,
+                points : this.state.points
+            };
+        }
         return promotion;
     }
 
@@ -508,13 +517,7 @@ class AddPromotion extends Component {
         let discountForm = undefined;
         if (this.state.type) {
             switch (this.state.type) {
-                case 'POINTS':
-                    discountForm =
-                        <PointsComponent currencySymbol={currencySymbol} toggle={this.state.toggle}
-                                          navigation={this.props.navigation} api={this}
-                                          state={this.state}
-                                          ref={"points"} setState={this.setReduxState.bind(this)}/>;
-                    break;
+
                 case 'PERCENT':
                     discountForm =
                         <PercentComponent currencySymbol={currencySymbol} toggle={this.state.toggle}
@@ -817,6 +820,7 @@ class AddPromotion extends Component {
     }
 
     createView(header, conditionForm, proximityForm, distributionForm, saving, savingFailed) {
+        const{cards}= this.props;
         const typeToString = types.reduce(function(map, obj) {
             map[obj.value] = obj.label;
             return map;})
@@ -825,7 +829,8 @@ class AddPromotion extends Component {
             map[obj.value] = obj.label;
             return map;})
         promotiontypeToString[promotion_type[0].value] = promotion_type[0].label
-
+        const businessId = this.getBusinessId();
+        const card = cards[businessId];
         return <View>
             <FormHeader showBack submitForm={this.saveFormData.bind(this)} navigation={this.props.navigation}
                         title={strings.AddPromotion} bgc="#FA8559"/>
@@ -933,7 +938,15 @@ class AddPromotion extends Component {
                                onSubmitEditing={this.dismiss.bind(this)}
                                onChangeText={(info) => this.setReduxState({info})}/>
                 </View>}
-
+                {this.state.toggle && card && <View style={[styles.textLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <ThisText style={{color: '#FA8559', marginLeft: 8, marginRight: 8}}>{strings.PointsPromotionsDescription}</ThisText>
+                </View>}
+                {this.state.toggle && card && <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+                    <TextInput field={strings.Points} value={this.state.points}
+                               returnKeyType='next' ref="points" refNext="4"
+                               onSubmitEditing={this.dismiss.bind(this)}
+                               onChangeText={(points) => this.setReduxState({points})} isMandatory={false}/>
+                </View>}
                 <View style={[styles.conditionForm, {width: StyleUtils.getWidth()}]}>
                     {conditionForm}
                 </View>
@@ -1057,6 +1070,7 @@ class AddPromotion extends Component {
 
 export default connect(
     state => ({
+        cards: state.businesses.businessesCard,
         promotions: state.promotions,
         templatePromotion: state.promotions.templatePromotion,
         saving: state.promotions.savingForm,

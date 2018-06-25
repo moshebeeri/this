@@ -58,6 +58,11 @@ function* getMyMemverCards(action) {
                 type: actions.SET_MY_MEMBER_CARDS,
                 memberCards: memberCards
             })
+            yield put({
+                type: actions.SYNC_CARD,
+                memberCards: memberCards
+            })
+
 
         }
     } catch (error) {
@@ -89,9 +94,11 @@ function* chargeCardByCode(action) {
 function* getCardByCode(action) {
     try {
        let card =  yield call(cardApi.getCardByCode, action.code,  action.token);
+        console.log(card);
         yield put({
             type: actions.SCANNER_SHOW_USER_CARD,
             card: card,
+            code: action.code,
         })
     } catch (error) {
         console.log("failed  create card");

@@ -60,26 +60,27 @@ export default class CardListView extends Component {
         }
 
         return <View style={[styles.promotion_container, {
-            marginTop: 0.5,
+
             marginBottom: 9.5,
+            backgroundColor:'transparent',
             width: StyleUtils.getWidth()
         }]}>
 
 
             <View style={[styles.promotion_card, {
-                padding: 5,
-                borderWidth: 1,
+
+                //borderWidth: 1,
                 borderRadius: 20,
                 // borderColor: '#ddd',
-                borderColor: 'gray',
+               // borderColor: 'gray',
                 borderBottomWidth: 0,
-                shadowOffset: {width: 0, height: 0},
-                shadowOpacity: 0.2,
-                shadowRadius: 5,
+               // shadowOffset: {width: 0, height: 0},
+                //shadowOpacity: 0.2,
+               // shadowRadius: 5,
                 height: StyleUtils.scale(200),
-                elevation: 10,
+               // elevation: 10,
                 overflow: 'hidden',
-                backgroundColor: 'white',
+                backgroundColor: 'transparent',
                 justifyContent: 'center',
                 alignItems: 'flex-start',
                 width: StyleUtils.getWidth() - 15
@@ -104,7 +105,7 @@ export default class CardListView extends Component {
                     <BusinessHeader navigation={this.props.navigation} business={cardBusiness}
                                     businessLogo={cardBusiness.logo}
                                     businessName={cardBusiness.name} noMargin
-                                    headerWidth={100}
+                                    headerWidth={StyleUtils.scale(300)}
                                     noProfile={noProfile}
                                     hideMenu
                                     businessView={businessView}
