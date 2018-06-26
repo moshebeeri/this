@@ -192,6 +192,7 @@ function isPNSOnly(note){
   switch(note) {
     case 'approve_invite':
     case 'ask_invite':
+    case 'card_ask_invite':
     case 'ADD_GROUP_FOLLOW_ON_ACTION':
     case 'ADD_BUSINESS_FOLLOW_ON_ACTION':
       return false;

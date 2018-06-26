@@ -119,12 +119,12 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
         if (type === 'card_ask_join') {
           return {
             title: 'ASK_JOIN_CARD_TYPE_TITLE',
-            body: util.format(i18n.get('ASK_JOIN_CARD_TYPE_BODY', user.locale), cardType.name)
+            body: util.format(i18n.get('ASK_JOIN_CARD_TYPE_BODY', user.locale), '')
           }
         }else if(type === 'card_ask_invite'){
           return {
             title: 'ASK_INVITE_CARD_TYPE_TITLE',
-            body: util.format(i18n.get('ASK_INVITE_CARD_TYPE_BODY', user.locale), cardType.name)
+            body: util.format(i18n.get('ASK_INVITE_CARD_TYPE_BODY', user.locale), '')
           }
         }
         throw new Error('unsupported type')
@@ -139,7 +139,7 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
           actor_user: actor_user,
           timestamp: Date.now()
         };
-        Notifications.notifyUser(note, user._id, false);
+        Notifications.notifyUser(note, user._id, true);
       }catch(err){
         console.error(err)
       }

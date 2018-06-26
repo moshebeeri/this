@@ -666,7 +666,7 @@ function sendGroupNotification(actor_user, audience, group, type) {
           actor_user: actor_user,
           timestamp: Date.now()
         };
-        Notifications.notifyUser(note, user._id, false);
+        Notifications.notfifyUser(note, user._id, true);
       }catch(err){
         console.error(err)
       }
