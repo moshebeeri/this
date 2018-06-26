@@ -116,12 +116,12 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
       if(!user) return console.error(new Error(`User not found for id ${to}`));
 
       function generateText() {
-        if (type === 'ask_join') {
+        if (type === 'card_ask_join') {
           return {
             title: 'ASK_JOIN_CARD_TYPE_TITLE',
             body: util.format(i18n.get('ASK_JOIN_CARD_TYPE_BODY', user.locale), cardType.name)
           }
-        }else if(type === 'ask_invite'){
+        }else if(type === 'card_ask_invite'){
           return {
             title: 'ASK_INVITE_CARD_TYPE_TITLE',
             body: util.format(i18n.get('ASK_INVITE_CARD_TYPE_BODY', user.locale), cardType.name)
@@ -139,7 +139,7 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
           actor_user: actor_user,
           timestamp: Date.now()
         };
-        Notifications.notifyUser(note, user._id, true);
+        Notifications.notifyUser(note, user._id, false);
       }catch(err){
         console.error(err)
       }
@@ -158,7 +158,7 @@ exports.invite = function (req, res) {
     console.log(`invite_cardType q=${create}`);
     graphModel.query(create, function (err) {
       if (err) return handleError(res, err);
-      sendCardTypeNotification(userId, [user], cardType, 'ask_invite');
+      sendCardTypeNotification(userId, [user], cardType, 'card_ask_invite');
       return res.status(200).json(cardType);
     })
   }
