@@ -189,14 +189,13 @@ exports.inviteAccepted = function (req, res) {
   let userId = req.user._id;
   let cardTypeId = req.params.cardTypeId;
   let query = `MATCH (u:user {_id:'${userId}'})-[r:INVITE_CARD_TYPE]->(g:cardType{_id:"${cardTypeId}"}) return r, type(r) as type`;
-  console.log(`approve_invite_cardType q=${query}`);
   graphModel.query(query, function (err, rs) {
     if (err) return handleError(res, err);
     if (rs.length === 0)
       return res.status(404).json('user not invited');
     cardController.createCard(userId, cardTypeId, function (err, card) {
       if (err) return handleError(res, err);
-      graphModel.unrelate_ids(userId, 'INVITE_CARD_TYPE', cardTypeId);
+      //graphModel.unrelate_ids(userId, 'INVITE_CARD_TYPE', cardTypeId);
       return res.status(200).json(card);
     })
   });
