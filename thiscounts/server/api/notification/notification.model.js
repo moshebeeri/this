@@ -34,6 +34,7 @@ let NotificationSchema = new Schema({
   mall: {type: Schema.ObjectId, ref: 'Mall', autopopulate: true},
   chain: {type: Schema.ObjectId, ref: 'ShoppingChain', autopopulate: true},
   card: {type: Schema.ObjectId, ref: 'Card', autopopulate: true},
+  cardType: {type: Schema.ObjectId, ref: 'CardType', autopopulate: true},
   activity: {type: Schema.ObjectId, ref: 'Activity', autopopulate: true},
   comment: {type: Schema.ObjectId, ref: 'Comment', autopopulate: true},
   actor_user: {type: Schema.ObjectId, ref: 'User', autopopulate: utils.userAutopopulateOptions},

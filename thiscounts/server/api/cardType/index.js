@@ -15,7 +15,7 @@ router.get('/list/:entity', auth.isAuthenticated(), controller.entity);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.isAuthenticated(), controller.destroy);
-router.get('/invite/ask/:cardType/:user', auth.isAuthenticated(), controller.invite);
-router.get('/invite/accept/:cardType', auth.isAuthenticated(), controller.inviteAccepted);
+router.get('/invite/ask/:cardTypeId/:user', auth.isAuthenticated(), controller.invite);
+router.get('/invite/accept/:cardTypeId', auth.isAuthenticated(), controller.inviteAccepted);
 
 module.exports = router;

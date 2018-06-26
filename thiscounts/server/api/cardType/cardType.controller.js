@@ -32,13 +32,13 @@ exports.show = function(req, res) {
   });
 };
 
-function getCardEntity(card){
-  if(!card.entity) return null;
-  if(card.entity.business      ) return card.entity.business      ;
-  if(card.entity.shopping_chain) return card.entity.shopping_chain;
-  if(card.entity.mall          ) return card.entity.mall          ;
-  if(card.entity.brand         ) return card.entity.brand         ;
-  if(card.entity.group         ) return card.entity.group         ;
+function getCardEntity(cardType){
+  if(!cardType.entity) return null;
+  if(cardType.entity.business      ) return cardType.entity.business      ;
+  if(cardType.entity.shopping_chain) return cardType.entity.shopping_chain;
+  if(cardType.entity.mall          ) return cardType.entity.mall          ;
+  if(cardType.entity.brand         ) return cardType.entity.brand         ;
+  if(cardType.entity.group         ) return cardType.entity.group         ;
   return null;
 }
 
@@ -98,7 +98,7 @@ exports.create = function(req, res) {
           }, function (err, qrcode) {
             if (err) {return handleError(res, err)}
             cardType.qrcode = qrcode;
-            cardType.save().exec((err, cardType)=>{
+            cardType.save((err, cardType)=>{
               if (err) {return handleError(res, err)}
               return res.status(201).json(cardType);
             })
@@ -116,15 +116,15 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
       if(!user) return console.error(new Error(`User not found for id ${to}`));
 
       function generateText() {
-        if (type === 'ask_join') {
+        if (type === 'card_ask_join') {
           return {
             title: 'ASK_JOIN_CARD_TYPE_TITLE',
-            body: util.format(i18n.get('ASK_JOIN_CARD_TYPE_BODY', user.locale), cardType.name)
+            body: util.format(i18n.get('ASK_JOIN_CARD_TYPE_BODY', user.locale), '')
           }
-        }else if(type === 'ask_invite'){
+        }else if(type === 'card_ask_invite'){
           return {
             title: 'ASK_INVITE_CARD_TYPE_TITLE',
-            body: util.format(i18n.get('ASK_INVITE_CARD_TYPE_BODY', user.locale), cardType.name)
+            body: util.format(i18n.get('ASK_INVITE_CARD_TYPE_BODY', user.locale), '')
           }
         }
         throw new Error('unsupported type')
@@ -149,27 +149,32 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
 
 exports.invite = function (req, res) {
   let userId = req.user._id;
-  let cardType = req.params.cardType;
+  let cardTypeId = req.params.cardTypeId;
   let user = req.params.user;
 
   function invite(cardType) {
-    let create = `MATCH (g:cardType{_id:"${cardType._id}"}), (u:user {_id:'${user}'})
-                  CREATE UNIQUE (u)-[:INVITE_CARD_TYPE]->(g)`;
-    console.log(`invite_cardType q=${create}`);
-    graphModel.query(create, function (err) {
+    let invited = `MATCH (u:user {_id:'${user}'})-[i:INVITE_CARD_TYPE]->(g:cardType{_id:"${cardType._id}"}) return count(i)>0 as invited`;
+    console.log(invited);
+    graphModel.query(invited, function (err, results) {
       if (err) return handleError(res, err);
-      sendCardTypeNotification(userId, [user], cardType, 'ask_invite');
-      return res.status(200).json(cardType);
+      console.log(JSON.stringify(results));
+      if (results[0].invited) return handleError(res, new Error('user already invited'));
+      let create = `MATCH (g:cardType{_id:"${cardType._id}"}), (u:user {_id:'${user}'})
+                  CREATE UNIQUE (u)-[:INVITE_CARD_TYPE]->(g)`;
+      graphModel.query(create, function (err) {
+        if (err) return handleError(res, err);
+        sendCardTypeNotification(userId, [user], cardType, 'card_ask_invite');
+        return res.status(200).json(cardType);
+      })
     })
   }
 
-  CardType.findById(cardType, function (err, cardType) {
+
+  CardType.findById(cardTypeId, function (err, cardType) {
     if (err) return handleError(res, err);
     if (!cardType) return res.status(404).send('no cardType');
-    if (cardType.admins.indexOf(userId) > -1)
-      return invite(cardType);
-    else if (cardType.add_policy === 'INVITE') {
-      let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:cardType{_id:"${cardType._id}"}) return r`;
+    if (cardType.add_policy === 'INVITE') {
+      let query = `MATCH (u:user {_id:'${userId}'})-[r:ROLE]->(e{_id:"${getCardEntity(cardType)._id}"}) return r`;
       graphModel.query(query, function (err, rs) {
         if (err) return handleError(res, err);
         if (rs.length === 0)
@@ -243,5 +248,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err.message);
   return res.status(500).send(err);
 }

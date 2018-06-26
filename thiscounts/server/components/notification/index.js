@@ -50,6 +50,7 @@ function toPayloadData(notification, callback){
   if( notification.mall           ) data = {model: 'mall'         , _id: notification.mall._id          };
   if( notification.chain          ) data = {model: 'chain'        , _id: notification.chain._id         };
   if( notification.card           ) data = {model: 'card'         , _id: notification.card._id          };
+  if( notification.cardType       ) data = {model: 'cardType'     , _id: notification.cardType._id      };
   if( notification.activity       ) data = {model: 'activity'     , _id: notification.activity._id      };
   if( notification.comment        ) data = {model: 'comment'      , _id: notification.comment._id       };
 
@@ -191,6 +192,7 @@ function isPNSOnly(note){
   switch(note) {
     case 'approve_invite':
     case 'ask_invite':
+    case 'card_ask_invite':
     case 'ADD_GROUP_FOLLOW_ON_ACTION':
     case 'ADD_BUSINESS_FOLLOW_ON_ACTION':
       return false;

@@ -666,7 +666,7 @@ function sendGroupNotification(actor_user, audience, group, type) {
           actor_user: actor_user,
           timestamp: Date.now()
         };
-        Notifications.notifyUser(note, user._id, true);
+        Notifications.notfifyUser(note, user._id, true);
       }catch(err){
         console.error(err)
       }
@@ -758,13 +758,17 @@ exports.invite_group = function (req, res) {
   let user = req.params.user;
 
   function invite(group) {
-    let create = `MATCH (g:group{_id:"${group._id}"}), (u:user {_id:'${user}'})
-                  CREATE UNIQUE (u)-[:INVITE_GROUP]->(g)`;
-    console.log(`invite_group q=${create}`);
-    graphModel.query(create, function (err) {
+    let invited = `MATCH (u:user {_id:'${user}'})-[i:INVITE_GROUP]->(g:group{_id:"${group._id}"}) return count(i)>0 as invited`;
+    graphModel.query(invited, function (err, results) {
       if (err) return handleError(res, err);
-      sendGroupNotification(userId, [user], group, 'ask_invite');
-      return res.status(200).json(group);
+      if (results[0].invited) return handleError(res, new Error('user already invited'));
+      let create = `MATCH (g:group{_id:"${group._id}"}), (u:user {_id:'${user}'})
+                  CREATE UNIQUE (u)-[:INVITE_GROUP]->(g)`;
+      graphModel.query(create, function (err) {
+        if (err) return handleError(res, err);
+        sendGroupNotification(userId, [user], group, 'ask_invite');
+        return res.status(200).json(group);
+      })
     })
   }
 
