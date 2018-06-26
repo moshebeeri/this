@@ -3,6 +3,7 @@ package com.groupys;
 import android.app.Application;
 import com.ianlin.RNCarrierInfo.RNCarrierInfoPackage;
 import com.facebook.react.ReactApplication;
+import com.dylanvann.fastimage.FastImageViewPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
@@ -102,6 +103,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNCarrierInfoPackage(),
             new ReactNativeExceptionHandlerPackage(),
             new ReactNativeRestartPackage(),
+            new FastImageViewPackage(),
             new VectorIconsPackage()
       );
     }

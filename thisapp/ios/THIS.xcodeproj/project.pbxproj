@@ -80,6 +80,7 @@
 		F66BD8F31FF2A0D0000E6352 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F66BD8F21FF2A0D0000E6352 /* Info.plist */; };
 		F66F9B3A203947C00043F180 /* libRNCarrierInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F66F9B39203947930043F180 /* libRNCarrierInfo.a */; };
 		F68506CF1FF2E5DF00CEDE6A /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F68506CE1FF2E5BE00CEDE6A /* libRNFIRMessaging.a */; };
+		F6A31BDF20E2630E00EA8AF8 /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6A31BA120E262EE00EA8AF8 /* libFastImage.a */; };
 		F6DC17FB2056A72D00294468 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */; };
 		F6DD540C1FFCF8D9002B5D74 /* libRCTBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6DD54051FFCF57E002B5D74 /* libRCTBraintree.a */; };
 		F6DDCBF9202C86E200599466 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6DDCBEF202C860A00599466 /* libRNFetchBlob.a */; };
@@ -520,6 +521,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
 		};
+		F6A31BA020E262EE00EA8AF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F6A31B9820E262EE00EA8AF8 /* FastImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A287971D1DE0C0A60081BDFA;
+			remoteInfo = FastImage;
+		};
 		F6A8EC231ED4019200576916 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F996B2183AFB4029A2398FE9 /* CodePush.xcodeproj */;
@@ -736,6 +744,7 @@
 		F66F9B34203947930043F180 /* RNCarrierInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCarrierInfo.xcodeproj; path = "../node_modules/react-native-carrier-info/ios/RNCarrierInfo.xcodeproj"; sourceTree = "<group>"; };
 		F67ABCAB205EE30B0011E6D1 /* THIS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = THIS.entitlements; path = THIS/THIS.entitlements; sourceTree = "<group>"; };
 		F68506C91FF2E5BE00CEDE6A /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
+		F6A31B9820E262EE00EA8AF8 /* FastImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FastImage.xcodeproj; path = "../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; };
 		F6B4B75D20C502E9004D4F1B /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F6B4B7A320C50344004D4F1B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		F6DC17FA2056A72C00294468 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "THIS/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -773,6 +782,7 @@
 				F63143761FF27890001339E2 /* Firebase.h in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
+				F6A31BDF20E2630E00EA8AF8 /* libFastImage.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
 				F667CABB2011F37800E05859 /* RNFIRAnalytics.h in Frameworks */,
 				F63646C220A06FC1001D0AC2 /* libReactNativeConfig.a in Frameworks */,
@@ -1115,6 +1125,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				F6A31B9820E262EE00EA8AF8 /* FastImage.xcodeproj */,
 				F63646BC20A06F74001D0AC2 /* ReactNativeConfig.xcodeproj */,
 				4694E23120456A6500A55418 /* imageCropPicker.xcodeproj */,
 				F66F9B34203947930043F180 /* RNCarrierInfo.xcodeproj */,
@@ -1372,6 +1383,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F6A31B9920E262EE00EA8AF8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F6A31BA120E262EE00EA8AF8 /* libFastImage.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F6A8EC201ED4019200576916 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1561,6 +1580,10 @@
 				{
 					ProductGroup = F6A8EC201ED4019200576916 /* Products */;
 					ProjectRef = F996B2183AFB4029A2398FE9 /* CodePush.xcodeproj */;
+				},
+				{
+					ProductGroup = F6A31B9920E262EE00EA8AF8 /* Products */;
+					ProjectRef = F6A31B9820E262EE00EA8AF8 /* FastImage.xcodeproj */;
 				},
 				{
 					ProductGroup = 4694E23220456A6500A55418 /* Products */;
@@ -2125,6 +2148,13 @@
 			fileType = archive.ar;
 			path = libBVLinearGradient.a;
 			remoteRef = F69712AC1EF6BD6300F468A8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F6A31BA120E262EE00EA8AF8 /* libFastImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFastImage.a;
+			remoteRef = F6A31BA020E262EE00EA8AF8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F6A8EC241ED4019200576916 /* libCodePush.a */ = {
