@@ -32,13 +32,13 @@ exports.show = function(req, res) {
   });
 };
 
-function getCardEntity(card){
-  if(!card.entity) return null;
-  if(card.entity.business      ) return card.entity.business      ;
-  if(card.entity.shopping_chain) return card.entity.shopping_chain;
-  if(card.entity.mall          ) return card.entity.mall          ;
-  if(card.entity.brand         ) return card.entity.brand         ;
-  if(card.entity.group         ) return card.entity.group         ;
+function getCardEntity(cardType){
+  if(!cardType.entity) return null;
+  if(cardType.entity.business      ) return cardType.entity.business      ;
+  if(cardType.entity.shopping_chain) return cardType.entity.shopping_chain;
+  if(cardType.entity.mall          ) return cardType.entity.mall          ;
+  if(cardType.entity.brand         ) return cardType.entity.brand         ;
+  if(cardType.entity.group         ) return cardType.entity.group         ;
   return null;
 }
 
@@ -98,7 +98,7 @@ exports.create = function(req, res) {
           }, function (err, qrcode) {
             if (err) {return handleError(res, err)}
             cardType.qrcode = qrcode;
-            cardType.save().exec((err, cardType)=>{
+            cardType.save((err, cardType)=>{
               if (err) {return handleError(res, err)}
               return res.status(201).json(cardType);
             })
@@ -166,10 +166,9 @@ exports.invite = function (req, res) {
   CardType.findById(cardType, function (err, cardType) {
     if (err) return handleError(res, err);
     if (!cardType) return res.status(404).send('no cardType');
-    if (cardType.admins.indexOf(userId) > -1)
-      return invite(cardType);
-    else if (cardType.add_policy === 'INVITE') {
-      let query = `MATCH (u:user {_id:'${userId}'})-[r:FOLLOW]->(g:cardType{_id:"${cardType._id}"}) return r`;
+    if (cardType.add_policy === 'INVITE') {
+      let query = `MATCH (u:user {_id:'${userId}'})-[r:ROLE]->(e{_id:"${getCardEntity(cardType)._id}"}) return r`;
+      console.log(query);
       graphModel.query(query, function (err, rs) {
         if (err) return handleError(res, err);
         if (rs.length === 0)
@@ -243,5 +242,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.error(err.message);
   return res.status(500).send(err);
 }
