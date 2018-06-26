@@ -149,13 +149,15 @@ function sendCardTypeNotification(actor_user, audience, cardType, type) {
 
 exports.invite = function (req, res) {
   let userId = req.user._id;
-  let cardType = req.params.cardType;
+  let cardTypeId = req.params.cardTypeId;
   let user = req.params.user;
 
   function invite(cardType) {
     let invited = `MATCH (u:user {_id:'${user}'})-[i:INVITE_CARD_TYPE]->(g:cardType{_id:"${cardType._id}"}) return count(i)>0 as invited`;
+    console.log(invited);
     graphModel.query(invited, function (err, results) {
       if (err) return handleError(res, err);
+      console.log(JSON.stringify(results));
       if (results[0].invited) return handleError(res, new Error('user already invited'));
       let create = `MATCH (g:cardType{_id:"${cardType._id}"}), (u:user {_id:'${user}'})
                   CREATE UNIQUE (u)-[:INVITE_CARD_TYPE]->(g)`;
@@ -168,7 +170,7 @@ exports.invite = function (req, res) {
   }
 
 
-  CardType.findById(cardType, function (err, cardType) {
+  CardType.findById(cardTypeId, function (err, cardType) {
     if (err) return handleError(res, err);
     if (!cardType) return res.status(404).send('no cardType');
     if (cardType.add_policy === 'INVITE') {
