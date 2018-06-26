@@ -153,22 +153,26 @@ exports.invite = function (req, res) {
   let user = req.params.user;
 
   function invite(cardType) {
-    let create = `MATCH (g:cardType{_id:"${cardType._id}"}), (u:user {_id:'${user}'})
-                  CREATE UNIQUE (u)-[:INVITE_CARD_TYPE]->(g)`;
-    console.log(`invite_cardType q=${create}`);
-    graphModel.query(create, function (err) {
+    let invited = `MATCH (u:user {_id:'${user}'})-[i:INVITE_CARD_TYPE]->(g:cardType{_id:"${cardType._id}"}) return count(i)>0 as invited`;
+    graphModel.query(invited, function (err, results) {
       if (err) return handleError(res, err);
-      sendCardTypeNotification(userId, [user], cardType, 'card_ask_invite');
-      return res.status(200).json(cardType);
+      if (results[0].invited) return handleError(res, new Error('user already invited'));
+      let create = `MATCH (g:cardType{_id:"${cardType._id}"}), (u:user {_id:'${user}'})
+                  CREATE UNIQUE (u)-[:INVITE_CARD_TYPE]->(g)`;
+      graphModel.query(create, function (err) {
+        if (err) return handleError(res, err);
+        sendCardTypeNotification(userId, [user], cardType, 'card_ask_invite');
+        return res.status(200).json(cardType);
+      })
     })
   }
+
 
   CardType.findById(cardType, function (err, cardType) {
     if (err) return handleError(res, err);
     if (!cardType) return res.status(404).send('no cardType');
     if (cardType.add_policy === 'INVITE') {
       let query = `MATCH (u:user {_id:'${userId}'})-[r:ROLE]->(e{_id:"${getCardEntity(cardType)._id}"}) return r`;
-      console.log(query);
       graphModel.query(query, function (err, rs) {
         if (err) return handleError(res, err);
         if (rs.length === 0)
