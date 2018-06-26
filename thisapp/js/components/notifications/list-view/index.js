@@ -64,7 +64,13 @@ export default class NotificationListView extends Component {
         switch (item.note) {
             case notification.APPROVE_GROUP_INVITATION:
             case notification.ASK_GROUP_INVITATION:
-                return this.createApproveUi(item);
+                if (item.group) {
+                    return this.createApproveUi(item);
+                } else {
+                    return <View></View>
+                }
+            case notification.ASK_CARD_INVITATION:
+                return this.createApproveCardUi(item);
             case notification.ADD_FOLLOW_PROMOTION:
                 return this.createFollowUi(item);
             case notification.ADD_BUSINESS_FOLLOW_ON_ACTION:
@@ -126,7 +132,6 @@ export default class NotificationListView extends Component {
     //
     //     );
     // }
-
     createBusinessFollowOn(item) {
         const viewItem = item;
         const business = viewItem.business;
@@ -306,7 +311,7 @@ export default class NotificationListView extends Component {
     }
 
     getAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.actionDone|| viewItem.actioned)  {
+        if (viewItem.actionDone || viewItem.actioned) {
             return undefined;
         }
         return <View style={actionStyle}>
@@ -316,8 +321,24 @@ export default class NotificationListView extends Component {
         </View>
     }
 
+    getCardInviteAction(viewItem, actionStyle, redeemStyle) {
+        if (viewItem.actionDone || viewItem.actioned) {
+            return undefined;
+        }
+        return <View style={actionStyle}>
+            <SubmitButton title={strings.Accept.toUpperCase()} color={'#2db6c8'}
+                          onPress={() => this.acceptCardInvite()}/>
+
+        </View>
+    }
+
+    acceptCardInvite(){
+        const {item, actions} = this.props;
+        actions.acceptInviteCard(item.cardType);
+    }
+
     getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle) {
-        if (viewItem.actionDone || viewItem.actioned)  {
+        if (viewItem.actionDone || viewItem.actioned) {
             return undefined;
         }
         return <View style={actionStyle}>
@@ -374,11 +395,9 @@ export default class NotificationListView extends Component {
                             </View>
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
                                 <View style={{padding: 10,}}>
-                                    <ThisText  numberOfLines={2} style={{
-
+                                    <ThisText numberOfLines={2} style={{
                                         width: StyleUtils.scale(250),
-
-                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name,viewItem.group.name)}</ThisText>
+                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name, viewItem.group.name)}</ThisText>
 
                                 </View>
 
@@ -398,10 +417,79 @@ export default class NotificationListView extends Component {
                             </View>
                             <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
                                 <View style={{padding: 10,}}>
-                                    <ThisText  numberOfLines={2}  style={{
+                                    <ThisText numberOfLines={2} style={{
                                         width: StyleUtils.scale(250),
+                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name, viewItem.group.name)}</ThisText>
 
-                                    }}>{strings.InvitesYouToJoinGroup.formatUnicorn(user.name,viewItem.group.name)}</ThisText>
+                                </View>
+
+                            </View>
+                        </TouchableOpacity>
+                        {action}
+                    </View>}
+
+            </View>
+        );
+    }
+
+    createApproveCardUi(item) {
+        const viewItem = item;
+        const redeemStyle = {
+            flex: -1,
+            justifyContent: 'center',
+            marginLeft: StyleUtils.getWidth() / 4,
+            borderWidth: 1,
+            flexDirection: 'row',
+            height: 40,
+            width: StyleUtils.getWidth() / 2,
+            backgroundColor: 'white',
+            borderColor: '#2db6c8',
+        };
+        const business = item.cardType.entity.business;
+        const image = this.extractImage(item.cardType.entity.business);
+        const backgroundColor = this.getNotificationColor(viewItem);
+        const actionStyle = this.getActionStyle(viewItem);
+        const action = this.getCardInviteAction(viewItem, actionStyle, redeemStyle);
+        return (
+            <View style={{marginTop: StyleUtils.scale(5), backgroundColor: '#eaeaea'}} regular>
+
+                {viewItem.read ? <View>
+                        <View style={{
+                            flex: -1,
+                            backgroundColor: backgroundColor,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <View style={{marginLeft: 10}}>
+                                {image}
+                            </View>
+                            <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
+                                <View style={{padding: 10,}}>
+                                    <ThisText numberOfLines={2} style={{
+                                        width: StyleUtils.scale(250),
+                                    }}>{strings.nvitesYouToJoinCard.formatUnicorn(business.name)}</ThisText>
+
+                                </View>
+
+                            </View>
+                        </View>
+                        {action}
+                    </View> :
+                    <View>
+                        <TouchableOpacity onPress={() => this.read(viewItem._id)} style={{
+                            flex: -1,
+                            backgroundColor: backgroundColor,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <View style={{marginLeft: 10}}>
+                                {image}
+                            </View>
+                            <View style={{flexDirection: 'column', width: StyleUtils.getWidth() - 50, height: vh * 10}}>
+                                <View style={{padding: 10,}}>
+                                    <ThisText numberOfLines={2} style={{
+                                        width: StyleUtils.scale(250),
+                                    }}>{strings.nvitesYouToJoinCard.formatUnicorn(business.name)}</ThisText>
 
                                 </View>
 

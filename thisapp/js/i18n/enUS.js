@@ -345,6 +345,8 @@ const enUS = {
     CardChargePointsMessage                       : "Charge Points For {0} ",
     PointsPromotionsDescription                   : "Membership Points For Redeem ",
     PointsPromotionMessage                        : "* Illegible For {0} MemberShip Points ",
+    InviteUser                                    : "Invite User ",
+    nvitesYouToJoinCard                          : "{0} invites you to join his loyalty member card  ",
 
 };
 

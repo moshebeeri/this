@@ -15,6 +15,9 @@ export const getNotification = createSelector([getStateNotification],
                 if(notification.note === notificationTypes.ADD_FOLLOW_PROMOTION){
                     return true;
                 }
+                if(notification.note === notificationTypes.ASK_CARD_INVITATION){
+                    return true;
+                }
                 if(notification.note === notificationTypes.ASK_GROUP_INVITATION){
                     return true;
                 }

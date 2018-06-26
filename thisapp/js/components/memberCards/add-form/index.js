@@ -1,15 +1,34 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity,View} from 'react-native';
+import {
+    Dimensions,
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import {connect} from 'react-redux';
 import * as cardAction from "../../../actions/cardAction";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
 import styles from './styles'
-import {FormHeader, ImagePicker, SimplePicker, Spinner, TextInput, ThisText} from '../../../ui/index';
+import {
+    FormHeader,
+    ImageController,
+    ImagePicker,
+    SimplePicker,
+    Spinner,
+    SubmitButton,
+    TextInput,
+    ThisText
+} from '../../../ui/index';
 import strings from "../../../i18n/i18n"
+import {Button} from 'native-base';
 import StyleUtils from "../../../utils/styleUtils";
-import FormUtils from "../../../utils/fromUtils";
 import CardItem from '../list-item/index'
+import Icon2 from 'react-native-vector-icons/MaterialIcons';
 
 const cardPolicy = [
     {
@@ -53,10 +72,14 @@ class AddMemberCard extends Component {
         }
     }
 
+    componentWillMount() {
+        const {actions} = this.props;
+        actions.resetForm();
+    }
+
     replaceRoute(route) {
         this.props.navigation.goBack();
     }
-
 
     validateForm() {
         let result = true;
@@ -99,7 +122,7 @@ class AddMemberCard extends Component {
     }
 
     createCard() {
-        const {navigation,cards} = this.props;
+        const {navigation, cards} = this.props;
         const businessId = this.getBusinessId(navigation);
         let card = {
             coverImage: this.state.coverImage,
@@ -126,6 +149,80 @@ class AddMemberCard extends Component {
         return navigation.state.params.business._id;
     }
 
+    searchUser() {
+        const {actions} = this.props;
+        actions.searchUser(this.state.searchString);
+    }
+
+    createSearchUser() {
+        const {searchUser} = this.props;
+        if (this.state.add_policy === 'INVITE') {
+            return <View>
+                <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
+
+                    <TextInput field={strings.InviteUser} value={this.state.searchString}
+                               returnKeyType='done' ref="1" refNext="1"
+                               onSubmitEditing={this.searchUser.bind(this)}
+                               onChangeText={(searchString) => this.setState({searchString})}/>
+
+
+                    <Button style={{position: 'absolute', right: 5, top: StyleUtils.scale(25)}} large transparent
+                            onPress={() => this.searchUser()}>
+                        <Icon2 size={StyleUtils.scale(40)} style={styles.productIcon} name="search"/>
+
+                    </Button>
+
+
+                </View>
+                {searchUser && <Spinner/>}
+                {this.createUserView()}
+            </View>
+        }
+        return <View></View>
+    }
+
+    createUserPic(user) {
+        if (user.pictures && user.pictures.length > 0) {
+            const path = user.pictures[user.pictures.length - 1].pictures[0];
+            return <ImageController thumbnail size={StyleUtils.scale(50)} source={{uri: path}}/>
+        }
+        return <ImageController thumbnail size={StyleUtils.scale(50)} source={noPic}/>;
+    }
+
+    createSelectTag(item) {
+        return <SubmitButton color={'#FA8559'} title={strings.Invite.toUpperCase()} onPress={this.inviteUser.bind(this,item)}/>
+    }
+
+    inviteUser(user) {
+        const {cards, actions, navigation} = this.props;
+        const businessId = this.getBusinessId(navigation);
+        let businessCard = cards[businessId];
+        actions.inviteUser(user, businessCard);
+    }
+
+    createUserView() {
+        const {users} = this.props;
+        if (users && users.length > 0) {
+            const usersView = users.map(user => {
+                const pic = this.createUserPic(user);
+                return <View style={[styles.user_view, {
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: StyleUtils.scale(60),
+                    width: StyleUtils.getWidth() - 20
+                }]}>
+                    <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                        {pic}
+                        <ThisText style={{fontSize: StyleUtils.scale(14), margin: 10}}>{user.name}</ThisText>
+                    </View>
+                    {this.createSelectTag(user)}
+                </View>
+            })
+            return <View>{usersView}</View>
+        }
+        return <View></View>
+    }
+
     focusNextField(nextField) {
         if (this.refs[nextField].wrappedInstance) {
             this.refs[nextField].wrappedInstance.focus()
@@ -134,8 +231,6 @@ class AddMemberCard extends Component {
             this.refs[nextField].focus()
         }
     }
-
-
 
     setCoverImage(image) {
         this.setState({
@@ -201,7 +296,6 @@ class AddMemberCard extends Component {
         })
     }
 
-
     getPolicy(code) {
         if (code === 'OPEN') {
             return strings.CardOpen;
@@ -212,14 +306,15 @@ class AddMemberCard extends Component {
         return undefined;
     }
 
-    dismissKeyboard(){
+    dismissKeyboard() {
         Keyboard.dismiss();
     }
+
     createView() {
-        const {cards,navigation} = this.props;
+        const {cards, navigation} = this.props;
         const businessId = this.getBusinessId(navigation);
         const businessCard = cards[businessId];
-        let addPolicyValue= this.state.add_policy;
+        let addPolicyValue = this.state.add_policy;
         if (Platform.OS === 'ios') {
             addPolicyValue = this.getPolicy(this.state.add_policy);
         }
@@ -232,19 +327,16 @@ class AddMemberCard extends Component {
             <ScrollView keyboardShouldPersistTaps={true} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
-
             }} style={styles.contentContainer}>
 
                 {this.createCoverImageComponnent()}
 
-                <SimplePicker ref="cardPolicy" value={addPolicyValue}  selectedValue={addPolicyValue}
+                <SimplePicker ref="cardPolicy" value={addPolicyValue} selectedValue={addPolicyValue}
                               list={cardPolicy} itemTitle={strings.CardPolicy}
                               defaultHeader={strings.ChooseType}
                               isMandatory
                               onValueSelected={this.selectCardPolicy.bind(this)}/>
-
-
-
+                {this.createSearchUser()}
 
             </ScrollView>
         </View>;
@@ -258,6 +350,8 @@ class AddMemberCard extends Component {
 export default connect(
     state => ({
         cards: state.businesses.businessesCard,
+        searchUser: state.memberCards.searchUser,
+        users: state.memberCards.users,
         currentScreen: state.render.currentScreen,
     }),
     (dispatch) => ({

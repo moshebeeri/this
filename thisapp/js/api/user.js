@@ -130,11 +130,22 @@ class UserApi {
         }, 'user', 'delete /like/:id', 'BOOLEAN')
     }
 
-    async getUserByPhone(phone) {
-        let token = await store.get('token');
+    async getUserByPhone(phone,token) {
         let callingCode = await CallingCallUtils.getCallingCode();
         let phoneNumber = PhoneUtils.clean_phone_number(phone);
         return serverRequestHandler.fetch_handler(`${server_host}/api/users/get/user/by/phone/${callingCode}/${phoneNumber}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
+            }
+        }, 'user', 'get/user/by/phone');
+    }
+
+
+    async searcUser(searchString,token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/users/search/0/10/${searchString}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
