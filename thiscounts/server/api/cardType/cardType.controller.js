@@ -154,10 +154,8 @@ exports.invite = function (req, res) {
 
   function invite(cardType) {
     let invited = `MATCH (u:user {_id:'${user}'})-[i:INVITE_CARD_TYPE]->(g:cardType{_id:"${cardType._id}"}) return count(i)>0 as invited`;
-    console.log(invited);
     graphModel.query(invited, function (err, results) {
       if (err) return handleError(res, err);
-      console.log(JSON.stringify(results));
       if (results[0].invited) return handleError(res, new Error('user already invited'));
       let create = `MATCH (g:cardType{_id:"${cardType._id}"}), (u:user {_id:'${user}'})
                   CREATE UNIQUE (u)-[:INVITE_CARD_TYPE]->(g)`;
@@ -196,10 +194,10 @@ exports.inviteAccepted = function (req, res) {
     if (err) return handleError(res, err);
     if (rs.length === 0)
       return res.status(404).json('user not invited');
-    cardController.createCard(userId, cardTypeId, function (err) {
+    cardController.createCard(userId, cardTypeId, function (err, card) {
       if (err) return handleError(res, err);
       graphModel.unrelate_ids(userId, 'INVITE_CARD_TYPE', cardTypeId);
-      return res.status(200).json(cardTypeId);
+      return res.status(200).json(card);
     })
   });
 };
