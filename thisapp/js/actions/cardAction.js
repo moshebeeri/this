@@ -63,6 +63,57 @@ export function setCardQrcCode(card) {
     }
 }
 
+export function searchUser(searchString) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type:actions.CARD_SEARCHING
+            });
+            dispatch({
+                type: types.CARD_SEARCH_USER,
+                searchString: searchString,
+                token: token
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
+export function inviteUser(user,card) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.CARD_INVITE_USER,
+                user: user,
+                token: token,
+                card: card
+            });
+            handler.handleSuccses(getState(), dispatch)
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
+export function resetForm() {
+    return async function (dispatch) {
+        try {
+            dispatch({
+                type: actions.CARD_RESET,
+            });
+        } catch (error) {
+            handler.handleError(error, dispatch)
+            await logger.actionFailed('product-saveCard')
+        }
+    }
+}
+
 
 
 export function setBusinessCards(businessId) {

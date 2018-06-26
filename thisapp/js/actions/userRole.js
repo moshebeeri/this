@@ -52,6 +52,7 @@ export function saveRole(user, businessId, userRole, navigation) {
 
 export function search(phoneNumber) {
     return async function (dispatch,getState) {
+        const token = getState().authentication.token;
         try {
             dispatch({
                 type: actions.USER_ROLE_SHOW_SPINNER,
@@ -62,7 +63,7 @@ export function search(phoneNumber) {
                 show: false,
                 message: '',
             });
-            let user = await userApi.getUserByPhone(phoneNumber);
+            let user = await userApi.getUserByPhone(phoneNumber,token);
             if (user) {
                 dispatch({
                     type: actions.USER_ROLE_SET_USER,

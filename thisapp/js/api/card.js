@@ -24,6 +24,28 @@ class CardApi {
         }, 'products', '/create');
     }
 
+    inviteUser(card, user, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/cardTypes/invite/ask/${card._id}/${user._id}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'products', '/invite');
+    }
+
+    acceptInvatation(card, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/cardTypes/invite/accept/${card._id}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token,
+            },
+        }, 'products', '/invite');
+    }
+
     updateCardType(card, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/cardTypes/${card._id}`, {
             method: 'PUT',
@@ -66,7 +88,7 @@ class CardApi {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer ' + token,
             },
-        }, 'products', '/charge/code','TEXT');
+        }, 'products', '/charge/code', 'TEXT');
     }
 
     getCardByCode(cardCode, token) {
@@ -80,7 +102,7 @@ class CardApi {
         }, 'products', '/charge/code');
     }
 
-    chargeCardeByCode(cardCode,points, token) {
+    chargeCardeByCode(cardCode, points, token) {
         return serverRequestHandler.fetch_handler(`${server_host}/api/cards/charge/${cardCode}/${points}`, {
             method: 'GET',
             headers: {
@@ -90,7 +112,6 @@ class CardApi {
             },
         }, 'products', '/charge/byCode');
     }
-
 }
 
 let cardApi = new CardApi();

@@ -50,4 +50,9 @@ module.exports = {
         justifyContent: 'center',
         alignItems: 'center',
     },
+    user_view: {
+        backgroundColor: 'white', flexDirection: 'row',
+        width: width - 20, margin: 3
+    },
+
 };

@@ -72,6 +72,9 @@ export const GET_MY_MEMBER_CARDS = 'GET_MY_MEMBER_CARDS';
 export const UPDATE_CARD = 'UPDATE_CARD';
 export const GET_CARD_QRCODE = 'GET_CARD_QRCODE';
 export const CHARGE_CARD_BY_CODE = 'CHARGE_CARD_BY_CODE';
+export const CARD_SEARCH_USER = 'CARD_SEARCH_USER';
+export const CARD_INVITE_USER = 'CARD_INVITE_USER';
+export const CARD_ACCEPT_INVITE = 'CARD_ACCEPT_INVITE';
 //post
 export const SAVE_POST = 'SAVE_POST';
 

@@ -15,16 +15,10 @@ class Business extends Component {
     }
 
     componentWillMount() {
-        const {businesses} = this.props;
+        const {businesses,businessesCard,cardAction} = this.props;
         if (!businesses || businesses.length === 0) {
             this.props.actions.onEndReached();
-        }
-    }
-
-
-    componentDidUpdate(){
-        const {businesses,businessesCard,cardAction} = this.props;
-        if (businesses && businesses.length > 0) {
+        }else{
             businesses.forEach(business => {
                 if(!businessesCard[business.business._id]){
                     cardAction.setBusinessCards(business.business._id);
@@ -32,6 +26,8 @@ class Business extends Component {
             })
         }
     }
+
+
 
     render() {
         const {businesses, navigation, update, actions, user} = this.props;

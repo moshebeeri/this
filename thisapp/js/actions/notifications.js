@@ -25,6 +25,21 @@ export function setTopNotification() {
     }
 }
 
+export function acceptInviteCard(card) {
+    return async function (dispatch, getState) {
+        try {
+            const token = getState().authentication.token;
+            dispatch({
+                type: types.CARD_ACCEPT_INVITE,
+                token: token, card: card
+            });
+        } catch (error) {
+            handler.handleError(error, dispatch, 'notification-setTopNotification')
+            await logger.actionFailed('notification-setTopNotification')
+        }
+    }
+}
+
 export function readNotification(notificationId) {
     return async function (dispatch, getState) {
         try {
