@@ -746,7 +746,7 @@ exports.approve_join_group = function (req, res) {
       return res.status(401).send('unauthorized');
     user_follow_group(userId, group, function (err) {
       if (err) return handleError(res, err);
-      graphModel.unrelate_ids(user, 'ASK_JOIN_GROUP', group);
+      //graphModel.unrelate_ids(user, 'ASK_JOIN_GROUP', group);
       //sendGroupNotification(userId, [user], group, 'approve_join');
       return res.status(200).json(group);
     });
