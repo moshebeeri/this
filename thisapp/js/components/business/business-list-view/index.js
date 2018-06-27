@@ -107,7 +107,7 @@ export default class BusinessListView extends Component {
                             {permissionsButton}
                             {productsButton}
                             {promotionButton}
-                            {/*{memberButton}*/}
+                            {memberButton}
 
                         </View>}
                         {item.business && item.business.review && item.business.review.state === 'validation' &&

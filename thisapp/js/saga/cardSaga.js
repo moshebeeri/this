@@ -110,6 +110,9 @@ function* searchUser(action) {
     try {
         let users = yield call(userApi.searcUser, action.searchString, action.token);
         yield put({
+            type: actions.CARD_RESET,
+        })
+        yield put({
             type: actions.CARD_SET_POTENTIAL_USERS,
             users: users,
         })
@@ -120,11 +123,25 @@ function* searchUser(action) {
 
 function* inviteUser(action) {
     try {
-        yield call(cardApi.inviteUser, action.card, action.user, action.token);
+        if(!action.card._id) {
+            let createdCard = action.card;
+            if (action.card.coverImage) {
+                let imageResponse = yield call(ImageApi.uploadImage, action.token, action.card.coverImage, 'image');
+                createdCard.pictures = imageResponse.pictures;
+            }
+            createdCard = yield call(cardApi.createCardType, createdCard, action.token);
+            yield call(cardApi.inviteUser, createdCard, action.user, action.token);
+            yield put(setCard(createdCard, action.businessId));
+        } else {
+            yield call(cardApi.inviteUser, action.card, action.user, action.token);
+        }
         yield put({
             type: actions.CARD_RESET,
         })
     } catch (error) {
+        yield put({
+            type: actions.CARD_USER_ALREADY_INVITED,
+        })
         console.log("failed invite user")
     }
 }

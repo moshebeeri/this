@@ -355,6 +355,9 @@ const il = {
     CardChargePointsMessage                       : "הוסף נקודות ל {0}",
     PointsPromotionsDescription                   : "מספר נקודות למימוש ההנחה",
     PointsPromotionMessage                        : "* מספר נקודות חבר מועדון למימוש {0}",
+    InviteUser                                    : "הזמן לקוח",
+    UserAlreadyInvited                            : "הלקוח כבר הוזמן",
+    invitesYouToJoinCard                          : "{0}  מזמין אותך להצתרף לכרטיס חבר מועדון",
 
 
 };

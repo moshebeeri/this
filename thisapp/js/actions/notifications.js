@@ -25,7 +25,7 @@ export function setTopNotification() {
     }
 }
 
-export function acceptInviteCard(card) {
+export function acceptInviteCard(card,notificationId) {
     return async function (dispatch, getState) {
         try {
             const token = getState().authentication.token;
@@ -33,6 +33,7 @@ export function acceptInviteCard(card) {
                 type: types.CARD_ACCEPT_INVITE,
                 token: token, card: card
             });
+
         } catch (error) {
             handler.handleError(error, dispatch, 'notification-setTopNotification')
             await logger.actionFailed('notification-setTopNotification')

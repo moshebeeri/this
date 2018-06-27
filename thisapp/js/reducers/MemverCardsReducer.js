@@ -1,4 +1,4 @@
-const initialState = {memberCards: [], update: false, users: {}, searchUser: false};
+const initialState = {memberCards: [], update: false, users: {}, searchUser: false, showUserAlreadyInvitedMessage:false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -35,11 +35,17 @@ export default function memberCards(state = initialState, action) {
                 ...state,
                 searchUser: true,
             };
+        case actions.CARD_USER_ALREADY_INVITED:
+            return {
+                ...state,
+                showUserAlreadyInvitedMessage: true,
+            };
         case actions.CARD_RESET:
             return {
                 ...state,
                 users: '',
                 searchUser: false,
+                showUserAlreadyInvitedMessage: false,
             };
         case actions.SET_CARD_QRCODE:
             let card = memberCardsState.memberCards.filter(card => card._id === action.cardId)[0];

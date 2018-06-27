@@ -212,28 +212,28 @@ showMemberCards() {
                                 }}>{strings.Businesses}</ThisText>
                         </TouchableOpacityFix>
                     </View>
-                    {/*<View style={{*/}
-                        {/*borderBottomWidth: 1,*/}
-                        {/*height: StyleUtils.scale(70),*/}
-                        {/*width: deviceWidth / 5 * 4,*/}
-                        {/*flexDirection: 'column',*/}
-                        {/*borderColor: '#E5E5E5'*/}
-                    {/*}}>*/}
-                        {/*<TouchableOpacityFix onPress={() => this.showMemberCards()}*/}
-                                             {/*style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>*/}
-                            {/*<Entypo style={{marginLeft: StyleUtils.scale(17), marginBottom: -6}} color="white"*/}
-                                    {/*size={StyleUtils.scale(32)} name="credit-card"/>*/}
+                    <View style={{
+                        borderBottomWidth: 1,
+                        height: StyleUtils.scale(70),
+                        width: deviceWidth / 5 * 4,
+                        flexDirection: 'column',
+                        borderColor: '#E5E5E5'
+                    }}>
+                        <TouchableOpacityFix onPress={() => this.showMemberCards()}
+                                             style={{flex: 1, flexDirection: 'row', alignItems: 'center'}} regular>
+                            <Entypo style={{marginLeft: StyleUtils.scale(17), marginBottom: -6}} color="white"
+                                    size={StyleUtils.scale(32)} name="credit-card"/>
 
 
-                            {/*<ThisText*/}
-                                {/*style={{*/}
-                                    {/*color: 'white',*/}
-                                     {/*fontStyle: 'normal',*/}
-                                    {/*marginLeft: StyleUtils.scale(20),*/}
-                                    {/*fontSize: StyleUtils.scale(16)*/}
-                                {/*}}>{strings.MemberCard}</ThisText>*/}
-                        {/*</TouchableOpacityFix>*/}
-                    {/*</View>*/}
+                            <ThisText
+                                style={{
+                                    color: 'white',
+                                     fontStyle: 'normal',
+                                    marginLeft: StyleUtils.scale(20),
+                                    fontSize: StyleUtils.scale(16)
+                                }}>{strings.MemberCard}</ThisText>
+                        </TouchableOpacityFix>
+                    </View>
                     <View style={{
                         height: StyleUtils.scale(70),
                         width: deviceWidth / 5 * 4,

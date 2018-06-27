@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import * as cardAction from "../../../actions/cardAction";
 import * as businessAction from "../../../actions/business";
 import {bindActionCreators} from "redux";
+const noPic = require('../../../../images/client_1.png');
 import styles from './styles'
 import {
     FormHeader,
@@ -155,9 +156,9 @@ class AddMemberCard extends Component {
     }
 
     createSearchUser() {
-        const {searchUser} = this.props;
+        const {searchUser,showUserAlreadyInvitedMessage} = this.props;
         if (this.state.add_policy === 'INVITE') {
-            return <View>
+            return <View style={{alignItems:'center',justifyContent:'center'}} >
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
 
                     <TextInput field={strings.InviteUser} value={this.state.searchString}
@@ -174,6 +175,8 @@ class AddMemberCard extends Component {
 
 
                 </View>
+                {showUserAlreadyInvitedMessage && <ThisText style={{marginTop:StyleUtils.scale(8),marginBottom:StyleUtils.scale(8), color:'red'}}>{strings.UserAlreadyInvited}</ThisText>}
+
                 {searchUser && <Spinner/>}
                 {this.createUserView()}
             </View>
@@ -197,7 +200,13 @@ class AddMemberCard extends Component {
         const {cards, actions, navigation} = this.props;
         const businessId = this.getBusinessId(navigation);
         let businessCard = cards[businessId];
+        if(!businessCard){
+            businessCard = this.createCard();
+        }
         actions.inviteUser(user, businessCard);
+        this.setState({
+            searchString:""
+        })
     }
 
     createUserView() {
@@ -250,7 +259,7 @@ class AddMemberCard extends Component {
             business: business,
             members: 0,
         }
-        let cardItem = <CardItem image={this.state.coverImage} showStats noAction item={card}/>
+        let cardItem = <CardItem image={this.state.coverImage}  noAction item={card}/>
         return <TouchableOpacity onPress={this.openMenu.bind(this)}
                                  style={[styles.product_upper_container, {width: StyleUtils.getWidth()}]}>
             {saving && <Spinner/>}
@@ -291,6 +300,18 @@ class AddMemberCard extends Component {
     }
 
     async selectCardPolicy(value) {
+        if(value === strings.CardInvite){
+            this.setState({
+                add_policy: 'INVITE'
+            })
+            return;
+        }
+        if(value === strings.CardOpen){
+            this.setState({
+                add_policy: 'OPEN'
+            })
+            return;
+        }
         this.setState({
             add_policy: value
         })
@@ -311,7 +332,7 @@ class AddMemberCard extends Component {
     }
 
     createView() {
-        const {cards, navigation} = this.props;
+        const {cards, navigation,showUserAlreadyInvitedMessage} = this.props;
         const businessId = this.getBusinessId(navigation);
         const businessCard = cards[businessId];
         let addPolicyValue = this.state.add_policy;
@@ -351,6 +372,7 @@ export default connect(
     state => ({
         cards: state.businesses.businessesCard,
         searchUser: state.memberCards.searchUser,
+        showUserAlreadyInvitedMessage: state.memberCards.showUserAlreadyInvitedMessage,
         users: state.memberCards.users,
         currentScreen: state.render.currentScreen,
     }),

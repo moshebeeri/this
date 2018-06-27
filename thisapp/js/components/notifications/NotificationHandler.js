@@ -111,8 +111,10 @@ class NotificationHandler {
                     break;
                 default:
                     if (notification && notification.title) {
-                        actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
+
+                       // actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
                         this.setNotifications(notifications, dispatch, user, token);
+                        actions.redirectToNotification();
                     }
                     break;
             }

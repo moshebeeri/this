@@ -190,6 +190,14 @@ class ApplicationManager extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleAndroidBackBehavior.bind(this));
     }
 
+    goToNotification(){
+        if (this.refs["tabs"]) {
+            this.refs["tabs"].goToPage(3);
+        }
+        this.props.actions.redirectNotificationDone();
+    }
+
+
     handleAndroidBackBehavior() {
         if (this.props.currentScreen === 'GroupFeed') {
             return true;
@@ -242,6 +250,13 @@ class ApplicationManager extends Component {
 
     componentDidMount() {
         dataSync.syncData();
+
+    }
+    componentDidUpdate() {
+        // const{redirectNotification} = this.props;
+        // if(redirectNotification){
+        //     this.goToNotification();
+        // }
     }
 
     savePromotionFromPopup(id, navigation, feed) {
@@ -256,7 +271,7 @@ class ApplicationManager extends Component {
             stateReady, showAdd, showComponent, notifications, feedAction,
             item, location, showPopup, token, notificationTitle,
             notificationAction, notificationGroup, notificationBusiness,
-            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults, notificationOnAction
+            showSearchResults, businesses, businessActions, groups, groupsActions, showSearchGroupResults, notificationOnAction,
         } = this.props;
         if (!stateReady) {
             return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}><Spinner/></View>
@@ -264,6 +279,7 @@ class ApplicationManager extends Component {
         if (!showComponent) {
             return <View></View>
         }
+
         let notificationPopupHeight = 350;
         let notificationnTopPadding = 150;
         let leftPadding = 10;
@@ -457,6 +473,7 @@ const mapStateToProps = (state) => {
         showPopup: state.mainTab.showPopup,
         notifications: countUnreadNotifications(state),
         showAdd: showAddAction(state),
+        redirectNotification: state.mainTab.redirectNotification,
         addComponent: addComponent(state),
         showComponent: showCompoenent(state),
         serFollower: state.user.followers,

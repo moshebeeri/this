@@ -335,6 +335,7 @@ export default class NotificationListView extends Component {
     acceptCardInvite(){
         const {item, actions} = this.props;
         actions.acceptInviteCard(item.cardType);
+        actions.doNotification(item._id)
     }
 
     getPromotioBusinessnAction(viewItem, actionStyle, redeemStyle) {
@@ -467,7 +468,7 @@ export default class NotificationListView extends Component {
                                 <View style={{padding: 10,}}>
                                     <ThisText numberOfLines={2} style={{
                                         width: StyleUtils.scale(250),
-                                    }}>{strings.nvitesYouToJoinCard.formatUnicorn(business.name)}</ThisText>
+                                    }}>{strings.invitesYouToJoinCard.formatUnicorn(business.name)}</ThisText>
 
                                 </View>
 
@@ -489,7 +490,7 @@ export default class NotificationListView extends Component {
                                 <View style={{padding: 10,}}>
                                     <ThisText numberOfLines={2} style={{
                                         width: StyleUtils.scale(250),
-                                    }}>{strings.nvitesYouToJoinCard.formatUnicorn(business.name)}</ThisText>
+                                    }}>{strings.invitesYouToJoinCard.formatUnicorn(business.name)}</ThisText>
 
                                 </View>
 

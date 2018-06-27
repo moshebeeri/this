@@ -68,6 +68,23 @@ export function resetBadge() {
     }
 }
 
+export function redirectNotificationDone() {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.REDIRECT_TO_NOTIFICATION,
+            value: false
+        });
+    }
+}
+export function redirectToNotification() {
+    return async function (dispatch) {
+        dispatch({
+            type: actions.REDIRECT_TO_NOTIFICATION,
+            value: true
+        });
+    }
+}
+
 export function setCurrencySymbol() {
     return async function (dispatch) {
         let currencySymbol = await LocalToCallingCode.getCurrencySymbol();
@@ -173,6 +190,7 @@ export function showBusinessPopup(businessId, notificationId, notificationTitle,
         }
     }
 }
+
 
 export function closePopup(notificationId) {
     return async function (dispatch) {

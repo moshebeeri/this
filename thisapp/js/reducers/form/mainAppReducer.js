@@ -20,6 +20,7 @@ const initialState = {
     notificationTitle: '',
     notificationId: '',
     notificationAction: '',
+    redirectNotification: false,
     notificationGroup: undefined,
     notificationBusiness: undefined
 };
@@ -29,7 +30,7 @@ export default function mainTab(state = initialState, action) {
         // retrive stored data for reducer callApi
         const savedData = action.payload || initialState;
         return {
-            ...state, ...savedData.mainTab, stateReady: true
+            ...state, ...savedData.mainTab, stateReady: true,redirectNotification: false,
         };
     }
     switch (action.type) {
@@ -71,6 +72,11 @@ export default function mainTab(state = initialState, action) {
             return {
                 ...state,
                 showAdd: action.showAdd,
+            };
+            case actions.REDIRECT_TO_NOTIFICATION :
+            return {
+                ...state,
+                redirectNotification: action.value,
             };
         case actions.APP_SHOW_PROMOTION_POPUP :
             return {
