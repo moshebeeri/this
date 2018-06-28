@@ -446,6 +446,9 @@ export default class NotificationListView extends Component {
             backgroundColor: 'white',
             borderColor: '#2db6c8',
         };
+        if(!item.cardType){
+            return <View></View>
+        }
         const business = item.cardType.entity.business;
         const image = this.extractImage(item.cardType.entity.business);
         const backgroundColor = this.getNotificationColor(viewItem);

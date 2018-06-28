@@ -60,7 +60,7 @@ class MemberCards extends Component {
         return (
             <View style={{flex: 1}}>
                 <FormHeader showBack navigation={this.props.navigation}
-                            title='Member Cards' bgc="white"
+                            title={strings.MemberCard} bgc="white"
 
 
                             titleColor="#FA8559" backIconColor="#FA8559"/>
