@@ -23,7 +23,7 @@ const geolib = require('geolib');
 const fireEvent = require('../../components/firebaseEvent');
 const suggest = require('../../components/suggest');
 const config = require('../../config/environment');
-//const Promise = require('bluebird');
+const twilio = require('twilio')(config.twilio.accountSid, config.twilio.authToken);
 exports.search = MongodbSearch.create(Business);
 const cardController = require('../card/card.controller');
 
@@ -547,6 +547,20 @@ exports.review = function (req, res) {
   })
 };
 
+
+function send_sms_message(phone_number, businessName) {
+  twilio.messages.create({
+    body: `new business $(businessName) joined and should be reviewed`,
+    to: phone_number,
+    from: config.twilio.number
+  }, function (err, message) {
+    if (err)
+      console.log("failed to send sms verification err: " + err.message);
+    else
+      console.log("sms verification sent sid: " + message.sid);
+  });
+}
+
 function validate_email(businessId, validationCode, callback) {
   Business.findById(businessId).exec((err, business) => {
     if (err) return callback(err);
@@ -559,6 +573,10 @@ function validate_email(businessId, validationCode, callback) {
       if (err) callback(err);
       if (business.review.status !== 'reviewed') {
         reviewRequest(business);
+      }
+      if(config.env === 'production'){
+        send_sms_message('+972-543133943', business.name);
+        send_sms_message('+972-544402680', business.name);
       }
       fireEvent.info('business', businessId, 'validate_email', {status: business.review.status});
       return callback(null, business);
