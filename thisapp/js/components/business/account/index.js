@@ -124,7 +124,7 @@ class BusinessAccount extends Component {
 
                         </View>
                         <View style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                            <TextInput field={strings.Points} disabled value={points}
+                            <TextInput field={strings.CreditPoints} disabled value={points}
 
                             />
 
@@ -139,7 +139,7 @@ class BusinessAccount extends Component {
 
                         </View>
                         <View style={{marginTop: 20}}>
-                            <SubmitButton color='#FA8559' title={strings.AddPoints}
+                            <SubmitButton color='#FA8559' title={strings.AddCreditPoints}
                                           onPress={this.chargeAccount.bind(this)}/>
                         </View>
 
