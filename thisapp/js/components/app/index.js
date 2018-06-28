@@ -154,6 +154,7 @@ class ApplicationManager extends Component {
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
             activeTab: 'feed',
             currentTab: '',
+            redirectToNotification:false,
         }
     }
 
@@ -185,7 +186,7 @@ class ApplicationManager extends Component {
         AppState.addEventListener('change', this._handleAppStateChange.bind(this));
         this.props.userActions.resetForm();
         let notification = await  FCM.getInitialNotification();
-        NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch);
+        NotificationHandler.handleBackNotification(notification, this.props.actions, this.props.navigation, reduxStore.getState(), reduxStore.dispatch,this.setState);
         this.props.actions.setCurrencySymbol();
         BackHandler.addEventListener('hardwareBackPress', this.handleAndroidBackBehavior.bind(this));
     }
@@ -250,6 +251,10 @@ class ApplicationManager extends Component {
 
     componentDidMount() {
         dataSync.syncData();
+        if(this.state.redirectToNotification){
+            this.goToNotification();
+            this.setState({redirectToNotification:false});
+        }
 
     }
     componentDidUpdate() {

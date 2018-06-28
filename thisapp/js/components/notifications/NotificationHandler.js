@@ -80,7 +80,7 @@ class NotificationHandler {
         });
     }
 
-    handleBackNotification(notification, actions, navigation, state, dispatch) {
+    handleBackNotification(notification, actions, navigation, state, dispatch,setState) {
         if(!notification){
             return;
         }
@@ -114,7 +114,7 @@ class NotificationHandler {
 
                        // actions.showGenericPopup(notification.title, notification.notificationId, notification.action);
                         this.setNotifications(notifications, dispatch, user, token);
-                        actions.redirectToNotification();
+                        setState({redirectToNotification: true})
                     }
                     break;
             }

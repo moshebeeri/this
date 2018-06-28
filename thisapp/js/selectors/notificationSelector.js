@@ -3,37 +3,42 @@
  */
 import {createSelector} from 'reselect'
 import * as notificationTypes from "../components/notifications/list-view/notofications";
+
 const getStateNotification = (state) => state.notification;
 export const getNotification = createSelector([getStateNotification],
     (notification) => {
-        let notifications =  notification.notification;
+        let notifications = notification.notification;
         if (!_.isEmpty(notifications)) {
-            let results = notifications.filter(notification =>{
-                if(notification.note === notificationTypes.ADD_BUSINESS_FOLLOW_ON_ACTION){
+            let results = notifications.filter(notification => {
+                if (notification.note === notificationTypes.ADD_BUSINESS_FOLLOW_ON_ACTION) {
                     return true;
                 }
-                if(notification.note === notificationTypes.ADD_FOLLOW_PROMOTION){
+                if (notification.note === notificationTypes.ADD_FOLLOW_PROMOTION) {
                     return true;
                 }
-                if(notification.note === notificationTypes.ASK_CARD_INVITATION){
+                if (notification.note === notificationTypes.ASK_CARD_INVITATION) {
                     return true;
                 }
-                if(notification.note === notificationTypes.ASK_GROUP_INVITATION){
+                if (notification.note === notificationTypes.ASK_GROUP_INVITATION) {
                     return true;
                 }
-                if(notification.note === notificationTypes.APPROVE_GROUP_INVITATION){
+                if (notification.note === notificationTypes.APPROVE_GROUP_INVITATION) {
                     return true;
                 }
                 return false;
             })
-            return results.sort(function(a, b){
-                if(a.read && !b.read){
-                    return true;
+            return results.sort(function (a, b) {
+                if (!a.read) {
+                    return -1;
                 }
-                if(!a.read && b.read){
-                    return false;
+                if (!b.read) {
+                    return 11;
                 }
-                return a._id < b._id  ;
+                if (a._id < b._id)
+                    return 1;
+                if (a._id > b._id)
+                    return -1;
+                return 0;
             });
         }
         return [];

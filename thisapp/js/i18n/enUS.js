@@ -347,7 +347,7 @@ const enUS = {
     PointsPromotionMessage                        : "* Illegible For {0} MemberShip Points ",
     InviteUser                                    : "Invite User ",
     UserAlreadyInvited                            : "User Already Invited ",
-    invitesYouToJoinCard                           : "{0} invites you to join his loyalty member card  ",
+    invitesYouToJoinCard                          : "{0} invites you to join his loyalty member card ",
 
 };
 
