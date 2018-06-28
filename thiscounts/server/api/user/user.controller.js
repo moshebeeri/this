@@ -47,7 +47,7 @@ function getKey(data) {
 }
 
 exports.terms = function (req, res) {
-  if(req.params.ver === '1.0')
+  if(req.params.ver === '1.0.16')
     return res.sendFile(path.join(__dirname, '../../config/terms/Terms Of Service.htm'));
   return res.status(404).send('Not Found');
 };
