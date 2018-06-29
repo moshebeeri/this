@@ -337,7 +337,7 @@ const enUS = {
     PointsAccumulationRatio                       : "Point Accumulation Ratio (%)",
     PointsAccumulationExample                     : "10 means pay 100 Accumulate 10 points",
     PointsRatioExample                            : "2 means 2 points worth 1 Local Currency ",
-    MemberCard                                    : "Loyalty Card",
+    MemberCard                                    : "Loyalty Cards",
     CardOpen                                      : "All Business Followers ",
     CardInvite                                    : "Business Approved Followers",
     CardPolicy                                    : "Card Policy",
