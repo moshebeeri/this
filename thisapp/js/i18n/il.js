@@ -340,7 +340,7 @@ const il = {
     PromotionName                                 : "כותרת ההנחה",
     PromotioDescription                           : "תאור / הסבר",
     Version                                       : "גירסה {0}",
-    Points                                        : "הנחת נקודות",
+    Points                                        : "נקודות הנחה",
     PointsDiscount                                : "הנחת נקודות",
     MinPointsTerm                                 : "מספר נקודות מינימלי המאפשרות מימוש",
     PointsRatio                                   : "היחס בין נקדוה לשקל",
@@ -355,9 +355,9 @@ const il = {
     CardChargePointsMessage                       : "הוסף נקודות ל {0}",
     PointsPromotionsDescription                   : "מספר נקודות למימוש ההנחה",
     PointsPromotionMessage                        : "* מספר נקודות חבר מועדון למימוש {0}",
-    InviteUser                                    : "הזמן לקוח",
-    UserAlreadyInvited                            : "הלקוח כבר הוזמן",
-    invitesYouToJoinCard                          : "{0}  מזמין אותך להצתרף לכרטיס חבר מועדון",
+    InviteUser                                    : "הזמן משתמש",
+    UserAlreadyInvited                            : "משתמש כבר הוזמן",
+    invitesYouToJoinCard                          : "{0}  מזמין אותך להצטרף לכרטיס חבר מועדון",
 
 
 };
