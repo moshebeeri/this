@@ -126,7 +126,7 @@ class ChangePassword extends Component {
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                         {message}
                     </View>
-                    {saving && <Spinner/>}
+
                 </View>
 
             </View>

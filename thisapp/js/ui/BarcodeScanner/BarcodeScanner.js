@@ -17,7 +17,8 @@ export default class BarcodeScanner extends Component {
         super(props);
         this.state = {
             searchText: '',
-            showCamera: false
+            showCamera: false,
+            code: props.barcode ? {data: props.barcode} : ''
         }
     }
 
@@ -34,6 +35,11 @@ export default class BarcodeScanner extends Component {
     }
 
     render() {
+
+        let showBarcode = false;
+        if(this.state.code ){
+            showBarcode = true;
+        }
         return <View>
             <View style={{
                 flexDirection: 'row',
@@ -43,7 +49,7 @@ export default class BarcodeScanner extends Component {
                 marginRight: 10
             }}>
                 <ThisText style={{fontSize: StyleUtils.scale(14)}}>{strings.AssignBarcode}</ThisText>
-                {this.state.code && <ThisText>{this.state.code.data}</ThisText>}
+                {showBarcode && <ThisText>{this.state.code.data}</ThisText>}
                 <TouchableOpacityFix onPress={this.showScanner.bind(this)}>
 
                     <Icon size={StyleUtils.scale(35)} color={'#FA8559'} name='ios-barcode-outline'/>

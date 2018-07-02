@@ -78,9 +78,9 @@ const il = {
     Buy: 'קנה ₪',
     Pay: 'שלם ₪',
     NumberOfPunches: 'מספר ניקובים',
-    GlobalDiscount: 'הנחה כללית',
+    GlobalDiscount: 'הנחה כללית על מוצרי העסק',
     ProductDiscount: 'מוצר בהנחה',
-    RetailPrice: 'מחיר לצרכן',
+    RetailPrice: 'מחיר רגיל לצרכן',
     Price: 'מחיר',
     Discount: 'הנחה',
     PercentDiscount: 'אחוז הנחה',
@@ -358,7 +358,7 @@ const il = {
     InviteUser                                    : "הזמן משתמש",
     UserAlreadyInvited                            : "משתמש כבר הוזמן",
     invitesYouToJoinCard                          : "{0}  מזמין אותך להצטרף לכרטיס חבר מועדון",
-
+    InActive                                      : "לא ניתן כרגע למימוש",
 
 };
 

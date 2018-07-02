@@ -5,7 +5,6 @@ module.exports = {
     productContainer: {
         backgroundColor: 'white',
         flexDirection: 'row',
-        height: StyleUtils.scale(80),
         alignItems: 'center',
         borderBottomWidth: 0.3,
         borderColor: '#e6e6e6'

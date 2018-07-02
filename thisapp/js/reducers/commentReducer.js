@@ -52,8 +52,10 @@ export default function comment(state = initialState, action) {
 
         case actions.DELETE_MESSAGE:
             if(action.messageId) {
-                groupsComment[action.groupId][action.messageId] = undefined;
-                currentState.groupCommentsOrder[action.groupId] = currentState.groupCommentsOrder[action.groupId].filter(id => id !== action.messageId)
+                if( groupsComment[action.groupId]) {
+                    groupsComment[action.groupId][action.messageId] = undefined;
+                    currentState.groupCommentsOrder[action.groupId] = currentState.groupCommentsOrder[action.groupId].filter(id => id !== action.messageId)
+                }
             }
             return currentState;
 

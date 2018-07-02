@@ -71,7 +71,7 @@ export default class ImagePickerComponent extends Component {
         try {
             let image = await ImagePicker.openCamera({
                 mediaType: 'photo',
-                cropping: cropping,
+                cropping: false,
                 width: width,
                 height: height,
                 compressImageQuality: 1,
@@ -152,7 +152,7 @@ export default class ImagePickerComponent extends Component {
         }
         try {
             let image = await ImagePicker.openPicker({
-                cropping: cropping,
+                cropping: false,
                 mediaType: 'photo',
                 width: width,
                 height: height,
@@ -204,14 +204,6 @@ export default class ImagePickerComponent extends Component {
                 {trigger}
             </MenuTrigger>
             <MenuOptions>
-                <MenuOption onSelect={this.pickPictureNoCropp.bind(this)}>
-                    <ThisText style={{
-                        fontSize: StyleUtils.scale(14),
-                        padding: 10,
-                        paddingBottom: 0,
-                        paddingTop: 10
-                    }}>{strings.FastPick}</ThisText>
-                </MenuOption>
                 <MenuOption onSelect={this.pickFromCamera.bind(this)}>
                     <ThisText style={{
                         fontSize: StyleUtils.scale(14),

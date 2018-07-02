@@ -75,10 +75,11 @@ export default class PromotionListView extends Component {
 
                 {this.createImageTage(item, styles)}
 
-                <View style={[styles.promotion_card, {padding: 5, width: StyleUtils.getWidth()}]}>
+                <View style={[styles.promotion_card, {padding: 5,alignItems:'center', width: StyleUtils.getWidth()}]}>
 
                     <PromotionHeader item={item} type={promotionItem.type} titleText={item.promotionTitle}
                                      titleValue={item.promotionValue} term={item.promotionTerm}/>
+                    <ThisText style={{ marginTop: 2,marginRight:5,marginLeft:5,fontWeight:'bold',backgroundColor:'transparent', color:'#839192'}}>{item.name}</ThisText>
 
 
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>

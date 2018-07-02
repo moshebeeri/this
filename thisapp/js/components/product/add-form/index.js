@@ -22,16 +22,10 @@ class AddProduct extends Component {
         if (props.navigation.state.params && props.navigation.state.params.item) {
             let item = props.navigation.state.params.item;
             let picture = undefined;
-            if (item.pictures.length > 0 && item.pictures[0].pictures[1]) {
-                picture = item.pictures[0].pictures[1]
+            if (item.pictures.length > 0) {
+                picture = item.pictures[item.pictures.length-1].pictures[1]
             }
-            let categories = []
-            if(item.category) {
-                categories = item.category.split(',');
-                if (categories.length > 0) {
-                    categories = categories.filter(catString => catString).map(catString => parseInt(catString));
-                }
-            }
+
             this.state = {
                 name: item.name,
                 coverImage: {path: picture},
@@ -39,10 +33,11 @@ class AddProduct extends Component {
                 info: item.info,
                 retail_price: item.retail_price ? item.retail_price.toString() : '',
                 SKU: item.SKU,
+                barcode: item.barcode,
                 token: '',
                 item: item,
+                categories: [],
                 updateMode: true,
-                categories: categories
             };
         } else {
             this.state = {
@@ -56,7 +51,6 @@ class AddProduct extends Component {
                 updateMode: false,
             };
         }
-        props.actions.setProductCategories("root");
     }
 
     replaceRoute(route) {
@@ -260,7 +254,7 @@ class AddProduct extends Component {
                 </View>
 
                 <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
-                    <BarcodeScanner handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
+                    <BarcodeScanner barcode={this.state.barcode} handleCode={this.handleCode.bind(this)} navigation={this.props.navigation}/>
                 </View>
                 <View style={{height: StyleUtils.scale(30),width: StyleUtils.getWidth()}}></View>
 

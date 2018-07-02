@@ -43,6 +43,7 @@ const vh = height / 100;
 export default class FeedPromotion extends Component {
     constructor() {
         super();
+        this.state={savePressed: false};
     }
 
     componentWillMount() {
@@ -82,6 +83,15 @@ export default class FeedPromotion extends Component {
         if (this.props.actions && this.props.actions.finishUpdateItem) {
             this.props.actions.finishUpdateItem(this.props.item.id)
         }
+    }
+
+    saveInstance(){
+        const{save,item} = this.props;
+        this.setState({
+            savePressed: true,
+        })
+
+        navigationUtils.doAction(save, item.id)
     }
 
     render() {
@@ -150,8 +160,7 @@ export default class FeedPromotion extends Component {
                         }}>{strings.PointsPromotionMessage.formatUnicorn(item.points)}</ThisText>
                     </View>}
                     {image}
-
-
+                    <ThisText style={{ marginTop: 2,marginRight:5,marginLeft:5,fontWeight:'bold',backgroundColor:'transparent', color:'#839192'}}>{item.name}</ThisText>
                     {!shared && location &&
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
                         <TouchableOpacity onPress={() => this.showAddress()} style={styles.promotionLoctionContainer}>
@@ -163,14 +172,14 @@ export default class FeedPromotion extends Component {
                             <View><ThisText style={styles.detailsTitleText}>{strings.Expire}</ThisText></View>
                             <View><ThisText style={styles.detailsText}>{item.endDate}</ThisText></View>
                         </View>
-                        {instanceUtils.showClaim(item) &&
+                        {instanceUtils.showClaim(item) && !this.state.savePressed &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton
                                 title={strings.Claim.toUpperCase()} color={'#2db6c8'}
-                                onPress={() => navigationUtils.doAction(save, item.id)}/>
+                                onPress={this.saveInstance.bind(this)}/>
                         </View>
                         }
-                        {instanceUtils.showRedeem(item) &&
+                        {instanceUtils.showRedeem(item, this.state.savePressed) &&
                         <View style={styles.editButtonContainer}>
                             <SubmitButton title={strings.Realize.toUpperCase()} color={'#2db6c8'}
                                           onPress={() => realize(item)}/>
@@ -189,8 +198,7 @@ export default class FeedPromotion extends Component {
                         </View>}
                         {instanceUtils.showInActive(item) &&
                         <View style={styles.editButtonContainer}>
-                            <SubmitButton disabled title={strings.InActive.toUpperCase()} color={'#cccccc'}
-                                          onPress={() => realize(item)}/>
+                            <ThisText style={{width: StyleUtils.scale(100) , color: '#839192'}}>{strings.InActive}</ThisText>
                         </View>}
 
                     </View>}
@@ -255,7 +263,6 @@ export default class FeedPromotion extends Component {
                                  source={{uri: item.banner.uri}}>
                 </ImageController>
 
-
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
@@ -280,10 +287,11 @@ export default class FeedPromotion extends Component {
                                     bgColor={'transparent'}
                                     textColor={'white'}
                                     hideMenu={hideMenu}
-                                    subTitle={item.name}
+
                                     size={60}
                                     id={item.activityId} showActions={showActions}
                     />}
+
                 </LinearGradient>
             </View>
         }

@@ -76,19 +76,12 @@ class Product extends Component {
         );
     }
 
-
-    shouldComponentUpdate() {
-        if (this.props.currentScreen === 'Products' || this.props.currentScreen ==='AddProduct') {
-            return true;
-        }
-        return false;
-    }
 }
 
 export default connect(
     state => ({
         products: getBusinessProducts(state),
-        update: state.businesses.update,
+        update: state.products.update,
         productsLoading: state.products.loadingDone,
         productsChange: state.products,
         currentScreen: state.render.currentScreen,

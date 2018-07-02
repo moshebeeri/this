@@ -41,7 +41,9 @@ function* saveProduct(action) {
 
 function* updateProduct(action) {
     try {
-        let updatedProduct = yield call(productApi.updateProduct, action.product, action.token);
+        let product = action.product;
+        product.category = [247183, 247467];
+        let updatedProduct = yield call(productApi.updateProduct, product, action.token);
         handleSucsess();
         let pictures = [];
         let uploadCoverImage = false;

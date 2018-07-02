@@ -1,4 +1,4 @@
-const initialState = {products: {}, categories: [],savingForm:false,loadingDone:{},productsPictures:[]};
+const initialState = {products: {}, categories: [],savingForm:false,loadingDone:{},productsPictures:[],update:false};
 import {REHYDRATE} from "redux-persist/constants";
 import * as actions from "./reducerActions";
 
@@ -50,8 +50,8 @@ export default function products(state = initialState, action) {
                 savingForm: false,
             };
         case actions.PRODUCT_LOADING_DONE:
-            productsState.loadingDone[action.businessId] = true
-
+            productsState.loadingDone[action.businessId] = true;
+            productsState.update = !productsState.update ;
             return productsState;
 
         case actions.PRODUCT_SAVING_DONE:
