@@ -350,7 +350,8 @@ const enUS = {
     invitesYouToJoinCard                          : "{0} invites you to join his loyalty member card ",
     PromotionsWasCanceled                         : "Promotions Was Canceled",
     percentTerm                                   : "Get {0} with special price {1} ",
-    Following                                     : "Following"
+    Following                                     : "Following",
+    Joined                                        : "Joined"
 
 };
 

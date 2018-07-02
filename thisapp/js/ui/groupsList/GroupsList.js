@@ -5,8 +5,9 @@ import styles from "./styles";
 import {GroupHeader, SubmitButton, ThisText} from '../../ui/index';
 import strings from '../../i18n/i18n';
 import navigationUtils from '../../utils/navigationUtils'
+import {connect} from 'react-redux';
 
-export default class GroupsList extends Component {
+class GroupsList extends Component {
     static navigationOptions = {
         header: null
     };
@@ -18,21 +19,20 @@ export default class GroupsList extends Component {
         }
     }
 
-    showScanner() {
-        const {group} = this.props;
-        navigationUtils.doNavigation(navigation, 'ReadQrCode', {group: group});
-    }
+
 
     back() {
         this.props.navigation.goBack();
     }
 
     createView() {
-        const {groups, joinGroup} = this.props;
+        const {groups, joinGroup,followingGroups} = this.props;
         let navigation = this.props.navigation;
         let rows = undefined;
         if (groups && groups.length > 0) {
             rows = groups.map(function (group) {
+                let groupsFollowing = followingGroups[group._id];
+
                 return <View key={group._id} style={{padding: 5, backgroundColor: '#eaeaea'}}>
                     <View style={{
                         flex: -1,
@@ -46,6 +46,7 @@ export default class GroupsList extends Component {
                             <GroupHeader group={group}/>
                         </View>
 
+                        {groupsFollowing  ?
 
                         <View
                             style={{
@@ -58,9 +59,24 @@ export default class GroupsList extends Component {
 
                                 alignItems: 'center',
                             }}>
-                            <SubmitButton color='#2db6c8' title={strings.Join}
+                            <SubmitButton disabled color='#2db6c8' title={strings.Joined}
                                           onPress={() => joinGroup(group._id, navigation)}/>
-                        </View>
+                        </View>:
+
+                            <View
+                                style={{
+                                    flex: 1,
+                                    marginTop:-20,
+                                    marginLeft: 20,
+
+
+                                    flexDirection: 'row',
+
+                                    alignItems: 'center',
+                                }}>
+                                <SubmitButton color='#2db6c8' title={strings.Join}
+                                              onPress={() => joinGroup(group._id, navigation)}/>
+                            </View>}
 
                     </View>
                 </View>
@@ -81,3 +97,9 @@ export default class GroupsList extends Component {
     }
 }
 
+
+
+export default connect(state => ({
+        followingGroups: state.groups.groups
+    })
+)(GroupsList);

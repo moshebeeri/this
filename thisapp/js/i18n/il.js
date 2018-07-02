@@ -361,7 +361,8 @@ const il = {
     InActive                                      : "לא ניתן כרגע למימוש",
     PromotionsWasCanceled                         : "ההנחה בוטלה",
     percentTerm                                   : "קבל {0} במחיר מיוחד {1}",
-    Following                                     : "עוקב"
+    Following                                     : "עוקב",
+    Joined                                        : "מצורף"
 
 };
 
