@@ -24,12 +24,12 @@ class BusinessList extends Component {
     }
 
     createView() {
-        const {businesses, followBusiness, currentBusinesses} = this.props;
+        const {businesses, followingBusinesses, followBusiness} = this.props;
         let navigation = this.props.navigation;
         let rows = undefined;
         if (businesses && businesses.length > 0) {
             rows = businesses.map(function (businees) {
-                let businessFollowed = currentBusinesses[businees._id];
+                let businessFollowed = followingBusinesses.filter(businessFollow => businees._id === businessFollow);
                 return <View key={businees._id}
                              style={{height: StyleUtils.scale(80), padding: 5, backgroundColor: 'white'}}>
                     <View style={{
@@ -45,7 +45,7 @@ class BusinessList extends Component {
                                             businessName={businees.name}/>
                         </View>
 
-                        {businessFollowed ?
+                        {businessFollowed.length > 0 ?
                             <View
                                 style={{
                                     marginTop: 10,
@@ -90,7 +90,7 @@ class BusinessList extends Component {
 }
 
 export default connect(state => ({
-        currentBusinesses: state.businesses.businesses,
+    followingBusinesses: state.following.followBusiness,
     })
 )(BusinessList);
 
