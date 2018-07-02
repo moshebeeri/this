@@ -120,7 +120,7 @@ export default class FeedBusiness extends Component {
                         </View>
                     </View>
 
-
+                    {item.social &&
                     <View style={[styles.promotion_bottomContainer, {width: StyleUtils.getWidth()}]}>
                         <SocialState feed comments={item.social.comments} onPressComment={comment}
                                      like={item.social.like} likes={item.social.likes}
@@ -132,7 +132,7 @@ export default class FeedBusiness extends Component {
                                      share={item.social.share} shares={item.social.shares} shareAction={showUsers}/>
 
 
-                    </View>
+                    </View>}
                 </View>
             </View>;
         return result;

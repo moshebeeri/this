@@ -33,7 +33,6 @@ class FeedConverter {
         if (feed.activity.action === 'share') {
             return this.createShared(feed);
         }
-
         return response;
     }
 
@@ -57,7 +56,7 @@ class FeedConverter {
         }
         if (feed.activity.post.video) {
             responseFeed.video = feed.activity.post.video.url;
-            if(!responseFeed.video){
+            if (!responseFeed.video) {
                 responseFeed.video = feed.activity.post.video.path;
             }
         }
@@ -279,7 +278,8 @@ class FeedConverter {
             let date = new Date(instance.promotion.end);
             responseFeed.id = id;
             responseFeed.isRealized = instanceLifeCycle.isReedemed(id);
-            responseFeed.isActive = instanceLifeCycle.isActive(id) || instance.type === 'PUNCH_CARD';;
+            responseFeed.isActive = instanceLifeCycle.isActive(id) || instance.type === 'PUNCH_CARD';
+            ;
             responseFeed.isExpired = instanceLifeCycle.isExpired(id, date) && instance.type !== 'PUNCH_CARD';
             responseFeed.isSaved = true;
             responseFeed.fid = id;
@@ -313,8 +313,9 @@ class FeedConverter {
                     break;
                 case "PERCENT":
                     if (promotion.condition.product) {
+                        let price = parseInt(promotion.condition.product.retail_price) - (parseInt(promotion.percent.values[0]) / 100 * parseInt(promotion.condition.product.retail_price));
                         responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
-                        responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                        responseFeed.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name, price)
                     } else {
                         //responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.PercentTerm.formatUnicorn(promotion.percent.values[0])
@@ -408,7 +409,7 @@ class FeedConverter {
                 responseFeed.categoryTitle = instance.promotion.entity.business.categoryTitle;
             }
             responseFeed.itemType = 'PROMOTION';
-            if(promotion.card){
+            if (promotion.card) {
                 responseFeed.points = promotion.card.points
             }
         } catch (error) {
@@ -459,8 +460,10 @@ class FeedConverter {
             responseFeed.uploading = true;
             responseFeed.entities = [{instance: instance._id}];
             if (instanceLifeCycle) {
-                responseFeed.isActive = instanceLifeCycle.isActive(instance._id) ||  instance.type === 'PUNCH_CARD';;
-                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date)   && instance.type !== 'PUNCH_CARD';;
+                responseFeed.isActive = instanceLifeCycle.isActive(instance._id) || instance.type === 'PUNCH_CARD';
+                ;
+                responseFeed.isExpired = instanceLifeCycle.isExpired(instance._id, date) && instance.type !== 'PUNCH_CARD';
+                ;
                 responseFeed.isSaved = instanceLifeCycle.isSaved(instance._id);
                 responseFeed.isRealized = instanceLifeCycle.isReedemed(instance._id);
                 if (instance.social_state) {
@@ -493,7 +496,7 @@ class FeedConverter {
                     if (promotion.condition.product) {
                         let price = parseInt(promotion.condition.product.retail_price) - (parseInt(promotion.percent.values[0]) / 100 * parseInt(promotion.condition.product.retail_price))
                         responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
-                        responseFeed.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name,price)
+                        responseFeed.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name, price)
                     } else {
                         responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.PercentTerm.formatUnicorn(promotion.percent.values[0])
@@ -585,7 +588,7 @@ class FeedConverter {
             if (promotion.entity && promotion.entity.business) {
                 responseFeed.business = promotion.entity.business;
             }
-            if(promotion.card){
+            if (promotion.card) {
                 responseFeed.points = promotion.card.points
             }
             responseFeed.itemType = 'PROMOTION';
@@ -622,8 +625,8 @@ class FeedConverter {
             case "PERCENT":
                 if (promotion.condition.product) {
                     let price = parseInt(promotion.condition.product.retail_price) - (parseInt(promotion.percent.values[0]) / 100 * parseInt(promotion.condition.product.retail_price))
-                    responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
-                    responseFeed.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name,price)
+                    response.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                    response.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name, price)
                 } else {
                     response.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                     response.promotionTerm = strings.PercentTerm.formatUnicorn(promotion.percent.values[0])
@@ -640,7 +643,7 @@ class FeedConverter {
                 response.promotionColor = '#ff66b3';
                 response.promotionTitle = strings.XForYTitle;
                 response.promotionValue = promotion.x_for_y.values[0].pay;
-                response.promotionTerm =this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
+                response.promotionTerm = this.getXforYDescrition(promotion.x_for_y.values[0].eligible, promotion.condition.product.name, promotion.x_for_y.values[0].pay);
                 response.quantity = promotion.x_for_y.quantity;
                 break;
             case "X+N%OFF":
@@ -726,11 +729,10 @@ class FeedConverter {
         return strings.XYPattern.formatUnicorn(buy, name, eligible, eligibleName);
     }
 
-    getXforYDescrition(buy, name,pay) {
-        if (buy === 1)  {
+    getXforYDescrition(buy, name, pay) {
+        if (buy === 1) {
             return strings.XForYTitleBuyOnePattern.formatUnicorn(name, pay);
         }
-
         return strings.XForYTitlePattern.formatUnicorn(buy, name, pay);
     }
 
