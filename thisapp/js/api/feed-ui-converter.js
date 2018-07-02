@@ -284,6 +284,7 @@ class FeedConverter {
             responseFeed.isSaved = true;
             responseFeed.fid = id;
             responseFeed.key = id;
+            responseFeed.deleted = promotion.deleted;
             responseFeed.promotionItem = promotion;
             responseFeed.location = instance.location;
             responseFeed.name = instance.promotion.name;
@@ -445,6 +446,7 @@ class FeedConverter {
             responseFeed.id = instance._id;
             responseFeed.fid = feed._id;
             responseFeed.key = feed._id;
+            responseFeed.deleted = promotion.deleted;
             if (feed.activity) {
                 responseFeed.activityId = feed.activity._id;
                 responseFeed.sharable = feed.activity.sharable;

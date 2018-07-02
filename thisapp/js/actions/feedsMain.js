@@ -418,9 +418,6 @@ export function setSavedInstance(response) {
 export function* updateFeedsTop(feeds) {
     if (feeds) {
         let collectionDispatcher = new CollectionDispatcher();
-        feeds.forEach(feed => {
-            console.log(feed);
-        })
         let disassemblerItems = feeds.map(item => assemblers.disassembler(item, collectionDispatcher));
         let keys = Object.keys(collectionDispatcher.events);
         let eventType;
@@ -429,6 +426,24 @@ export function* updateFeedsTop(feeds) {
                 type: eventType,
                 item: collectionDispatcher.events[eventType]
             });
+
+            if(eventType === actions.UPSERT_PROMOTION){
+
+                let promotions =  collectionDispatcher.events[eventType]
+                if(promotions && promotions.length >0) {
+                    let promotion;
+                    while (promotion = promotions.pop()) {
+                        yield put({
+                            type: actions.PROMOTION_LISTENER,
+                            item: promotion
+                        });
+                        SyncerUtils.syncPromotion(promotion._id);
+                    }
+                }
+
+
+            }
+
         }
         while (feedItem = disassemblerItems.pop()) {
             yield put({

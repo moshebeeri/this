@@ -53,6 +53,12 @@ export default function promotion(state = initialState, action) {
             }
             promotionsState.promotions = currentPromotions;
             return promotionsState;
+        case actions.REMOVE_GLOBAL_PROMOTION:
+            if( currentPromotions[action.id]) {
+                currentPromotions[action.id].deleted = true;
+                promotionsState.promotions = currentPromotions;
+            }
+            return promotionsState;
         case actions.PROMOTION_SAVING:
             return {
                 ...state,

@@ -704,6 +704,18 @@ export function clearUserBusinessByPhoneForm() {
     };
 }
 
+export function deletePromotion(promotionId, businessId) {
+    return async function (dispatch, getState) {
+        const token = getState().authentication.token;
+        dispatch({
+            type: types.DELETE_PROMOTION,
+            token: token,
+            id: promotionId,
+            businessId: businessId,
+        });
+    };
+}
+
 export function* setBusiness(createdBusiness) {
     yield put({
         type: actions.UPSERT_MY_BUSINESS_SINGLE,

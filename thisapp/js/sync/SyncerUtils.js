@@ -399,8 +399,14 @@ function syncPromotion(promotionId) {
     let state = store.getState();
     asyncListener.addListener('promotion_' + promotionId, (snap) => {
         let response = snap.val();
-        if (response && !response.markAsRead) {
-            let promotionId = snap.key.substring('promotion_'.length);
+        if (response ) {
+            if(response.type === "promotion_deleted"){
+                dispatch({
+                    type: actions.REMOVE_GLOBAL_PROMOTION,
+                    id: promotionId,
+                });
+                return;
+            }
             if (state.syncServer.syncMessages['promotion_' + promotionId] && state.syncServer.syncMessages['promotion_' + promotionId] === response) {
                 return;
             }

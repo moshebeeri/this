@@ -40,6 +40,9 @@ export const getFeeds = createSelector([getStateFeeds, getStatePosts, getStateBu
                     assembledFeeds = feedTemp.concat(assembledFeeds);
                 }
                 feedsUi = assembledFeeds.map(feed => {
+                    if(feed.activity && feed.activity.promotion && feed.activity.promotion.deleted){
+                       return undefined;
+                    }
                     try {
                         return feedUiConverter.createFeed(feed, instanceLifeCycle);
                     } catch (err) {

@@ -29,6 +29,18 @@ class PromotionApi {
         }, 'promotions', 'update campaign');
     }
 
+
+    deletePromotion(id, token) {
+        return serverRequestHandler.fetch_handler(`${server_host}/api/promotions/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': 'Bearer ' + token
+            },
+        }, 'promotions', 'update campaign');
+    }
+
     async save(id) {
         let token = await store.get('token');
         return serverRequestHandler.fetch_handler(`${server_host}/api/instances/save/${id}`, {

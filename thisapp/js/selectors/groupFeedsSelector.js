@@ -44,7 +44,12 @@ export const getFeeds = createSelector([getStateFeeds, getPosts, getInstance, ge
                 if(tempFeeds[groupId]){
                     assembledFeeds = tempFeeds[groupId].concat(assembledFeeds);
                 }
-                let newFeedsList = assembledFeeds.map(feed => feedUiConverter.createFeed(feed, instanceLifeCycle));
+                let newFeedsList = assembledFeeds.map(feed => {
+                    if(feed.activity && feed.activity.promotion && feed.activity.promotion.deleted){
+                        return undefined;
+                    }
+                    return feedUiConverter.createFeed(feed, instanceLifeCycle)
+                });
                 newFeedsList = newFeedsList.filter(feed => feed);
                 newFeedsList = newFeedsList.filter(feed => feed.id);
                 newFeedsList = newFeedsList.filter(feed => !feed.blocked);

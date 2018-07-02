@@ -359,6 +359,7 @@ const il = {
     UserAlreadyInvited                            : "משתמש כבר הוזמן",
     invitesYouToJoinCard                          : "{0}  מזמין אותך להצטרף לכרטיס חבר מועדון",
     InActive                                      : "לא ניתן כרגע למימוש",
+    PromotionsWasCanceled                         : "ההנחה בוטלה",
 
 };
 

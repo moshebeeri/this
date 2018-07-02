@@ -161,7 +161,7 @@ export default class FeedPromotion extends Component {
                     </View>}
                     {image}
                     <ThisText style={{ marginTop: 2,marginRight:5,marginLeft:5,fontWeight:'bold',backgroundColor:'transparent', color:'#839192'}}>{item.name}</ThisText>
-                    {!shared && location &&
+                    {!shared && location && !item.deleted &&
                     <View style={[styles.promotionDetailsContainer, {width: StyleUtils.getWidth()}]}>
                         <TouchableOpacity onPress={() => this.showAddress()} style={styles.promotionLoctionContainer}>
                             <View><ThisText style={styles.detailsTitleText}>{strings.Location}</ThisText></View>
@@ -202,6 +202,7 @@ export default class FeedPromotion extends Component {
                         </View>}
 
                     </View>}
+                    {item.deleted  && <ThisText style={styles.detailsTitleText}>{strings.PromotionsWasCanceled}</ThisText>}
 
                     {!hideSocial && item.social &&
                     <View style={[styles.promotion_bottomContainer, {width: StyleUtils.getWidth()}]}>

@@ -725,6 +725,19 @@ export function* updateFeedsTop(feeds, group, user) {
                 type: eventType,
                 item: collectionDispatcher.events[eventType]
             });
+            if (eventType === actions.UPSERT_PROMOTION) {
+                let promotions = collectionDispatcher.events[eventType]
+                if (promotions && promotions.length > 0) {
+                    let promotion;
+                    while (promotion = promotions.pop()) {
+                        yield put({
+                            type: actions.PROMOTION_LISTENER,
+                            item: promotion
+                        });
+                        SyncerUtils.syncPromotion(promotion._id);
+                    }
+                }
+            }
         }
         yield put({
             type: actions.UPSERT_GROUP_FEEDS_TOP,

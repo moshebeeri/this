@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+  import React, {Component} from "react";
 import {Image, TouchableOpacity,Dimensions,BackHandler,Keyboard} from "react-native";
 import {Button, Input, Item, Spinner, Text, View} from "native-base";
 import Camera from './BetterCamera';
@@ -161,12 +161,12 @@ export default class BusinessFollow extends Component {
 
                     />
                     </View>
-                    <View style={{ alignItems:'center'}}>
+                    {!instance.deleted && <View style={{ alignItems:'center'}}>
                         <View style={{height:60,width:StyleUtils.getWidth(),backgroundColor:'white', alignItems:'center',justifyContent:'flex-start' }}>
                             {comnfirmLastPunc ? <SubmitButton width={200} color={'#2db6c8'} title={strings.ConfirmLast.toUpperCase()} onPress={() => realizePromotion(code)}/> :
                                 <SubmitButton color={'#2db6c8'} title={strings.Confirm.toUpperCase()} onPress={() => realizePromotion(code)}/>}
                         </View>
-                    </View>
+                    </View>}
                 </View>
                 }
                 {followGroup && <View style={{height:200,alignItems:'center',justifyContent:'center' }}>

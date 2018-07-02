@@ -348,6 +348,7 @@ const enUS = {
     InviteUser                                    : "Invite User ",
     UserAlreadyInvited                            : "User Already Invited ",
     invitesYouToJoinCard                          : "{0} invites you to join his loyalty member card ",
+    PromotionsWasCanceled                         : "Promotions Was Canceled",
 
 };
 

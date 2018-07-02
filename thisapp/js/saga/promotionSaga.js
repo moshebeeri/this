@@ -125,6 +125,19 @@ function* updatePromotionSocialState(action) {
     }
 }
 
+function* deletePromotion(action) {
+    try {
+        yield call(promotionApi.deletePromotion, action.id, action.token);
+        yield put({
+            type: actions.REMOVE_PROMOTION,
+            id: action.id,
+            businessId: action.businessId
+        })
+    } catch (error) {
+        console.log("failed saveMyPromotionsRequest");
+    }
+}
+
 function* handleNotification(action) {
     try {
         yield call(notificationApi.readNotification, action.token, action.notificationId);
@@ -141,6 +154,7 @@ function* handleNotification(action) {
 }
 
 function* promotionSaga() {
+    yield throttle(2000, sagaActions.DELETE_PROMOTION, deletePromotion);
     yield throttle(2000, sagaActions.SAVE_PROMOTION, savePromotion);
     yield throttle(2000, sagaActions.UPDATE_PROMOTION, updatePromotionSocialState);
     yield throttle(2000, sagaActions.PROMOTION_NOTIFICATION, handleNotification);
