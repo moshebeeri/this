@@ -205,10 +205,10 @@ class BusinessHeader extends Component {
                 {back}
             </View>
             {this.createBusinessLog()}
-            <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', justifyContent: 'center'}}>
+            <View style={{flex: 1, marginLeft: 10, flexDirection: 'column', height:StyleUtils.scale(80),justifyContent: 'center'}}>
                 <ThisText style={[nameTextStyle, {color: textColor, fontWeight: 'bold'}]}
                           note>{businessName}</ThisText>
-                <ThisText style={[nameTextStyle, {color: textColor}]}
+                <ThisText style={[nameTextStyle, {color: textColor,paddingBottom:StyleUtils.scale(15)}]}
                           note>{subTitle}</ThisText>
             </View>
             {showEdit ? <View style={{flexDirection: 'row', alignItems: 'center',}}>

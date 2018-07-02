@@ -89,9 +89,7 @@ class UserPermittedRoles extends Component {
         );
     }
 
-    shouldComponentUpdate() {
-        return this.props.currentScreen === 'userPermittedRoles' || this.props.currentScreen === 'addPermittedUser';
-    }
+    
 }
 
 export default connect(

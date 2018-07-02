@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {actions} from 'react-native-navigation-redux-helpers';
 import {Icon, Thumbnail,} from 'native-base';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import styles from './styles'
 import StyleUtils from '../../../utils/styleUtils';
 import {EditButton, ImageController, SubmitButton, ThisText} from '../../../ui/index';
@@ -17,7 +17,7 @@ export default class ProductListView extends Component {
     createImage(item) {
         if (item.pictures && item.pictures.length > 0) {
             return <ImageController thumbnail size={StyleUtils.scale(50)} square
-                                    source={{uri: this.props.item.pictures[item.pictures.length -1].pictures[3]}}/>
+                                    source={{uri: this.props.item.pictures[item.pictures.length - 1].pictures[3]}}/>
         } else {
             return <ImageController thumbnail size={StyleUtils.scale(50)}
                                     source={require('../../../../images/client_1.png')}/>
@@ -33,9 +33,9 @@ export default class ProductListView extends Component {
         return <EditButton color={"#FA8559"} onPress={this.navigateToEdit.bind(this, item)}/>
     }
 
-    deleteProduct(item){
-        const {actions,businessId} = this.props;
-        actions.deleteBusinessProduct(item,businessId);
+    deleteProduct(item) {
+        const {actions, businessId} = this.props;
+        actions.deleteBusinessProduct(item, businessId);
     }
 
     createSelectTag(item) {
@@ -52,7 +52,7 @@ export default class ProductListView extends Component {
             <View style={styles.productMainContainer}>
                 <View style={styles.productDescContainer}>
                     <ThisText style={{fontSize: StyleUtils.scale(14)}}>{item.name}</ThisText>
-                    {item.info ? <ThisText style={{fontSize: StyleUtils.scale(14)}}>{item.info}</ThisText> : <View/>}
+                    {item.info ? <ThisText style={{color:'#839192',fontSize: StyleUtils.scale(14)}}>{item.info}</ThisText> : <View/>}
                 </View>
                 <View style={styles.productPriceContainer}>
                     <ThisText style={styles.retailTextStyle} note>{ILS}{item.retail_price}</ThisText>
@@ -62,7 +62,7 @@ export default class ProductListView extends Component {
                 {this.createEditTag(item)}
 
             </View>}
-            {!select &&  <View style={{flex: 0.5, justifyContent: 'center'}}>
+            {!select && <View style={{flex: 0.5, justifyContent: 'center'}}>
                 <EditButton iconName={'delete'} color={'#FA8559'} onPress={this.deleteProduct.bind(this, item)}/>
             </View>}
 

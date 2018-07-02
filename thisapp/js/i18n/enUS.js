@@ -287,7 +287,7 @@ const enUS = {
     postMessage                                   : "{0} posted",
     GroupChat                                     : "Group Chat",
     Expired                                       : "Expired",
-    InActive                                      : "Inactive",
+    InActive                                      : "Terms are out of scope",
     CreatedByBusiness                             : "Created by {0}",
     ReducedAmountInvalidCondition                 : "Buy amount should be greater then payment amount",
     PercentTerm                                   : "Global Discount {0}% Off",
