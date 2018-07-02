@@ -4,9 +4,10 @@ import {Button, Input, Item, Spinner} from "native-base";
 import styles from "./styles";
 import {BusinessHeader, SubmitButton, ThisText} from '../../ui/index';
 import strings from '../../i18n/i18n';
-import navigationUtils from '../../utils/navigationUtils'
+import StyleUtils from '../../utils/styleUtils'
+import {connect} from 'react-redux';
 
-export default class BusinessList extends Component {
+class BusinessList extends Component {
     static navigationOptions = {
         header: null
     };
@@ -18,50 +19,56 @@ export default class BusinessList extends Component {
         }
     }
 
-    showScanner() {
-        const {group,navigation} = this.props;
-        navigationUtils.doNavigation(navigation, 'ReadQrCode', {group: group});
-
-    }
-
     back() {
         this.props.navigation.goBack();
     }
 
     createView() {
-        const {businesses, followBusiness} = this.props;
+        const {businesses, followBusiness, currentBusinesses} = this.props;
         let navigation = this.props.navigation;
         let rows = undefined;
         if (businesses && businesses.length > 0) {
             rows = businesses.map(function (businees) {
-                return <View key={businees._id} style={{padding: 5, backgroundColor: '#eaeaea'}}>
+                let businessFollowed = currentBusinesses[businees._id];
+                return <View key={businees._id}
+                             style={{height: StyleUtils.scale(80), padding: 5, backgroundColor: 'white'}}>
                     <View style={{
-                        flex: -1,
-                        padding: 5,
-                        backgroundColor: 'white',
                         flexDirection: 'row',
                         alignItems: 'center',
+                        height: StyleUtils.scale(80),
                         justifyContent: 'space-between'
                     }}>
-                        <View style={{width: 200}}>
-                            <BusinessHeader hideMenu navigation={navigation} business={businees}
+                        <View style={{width: StyleUtils.scale(200)}}>
+                            <BusinessHeader bgColor={'white'} heaedrSize={60} hideMenu navigation={navigation}
+                                            headerWidth={StyleUtils.scale(240)} business={businees}
                                             businessLogo={businees.logo}
                                             businessName={businees.name}/>
                         </View>
 
-
-                        <View
-                            style={{
-                                marginTop: 10,
-                                marginLeft: 20,
-                                height: 50,
-                                flexDirection: 'row',
-                                width: 120,
-                                alignItems: 'center',
-                            }}>
-                            <SubmitButton color='#2db6c8' title={strings.Follow}
-                                          onPress={() => followBusiness(businees._id, navigation)}/>
-                        </View>
+                        {businessFollowed ?
+                            <View
+                                style={{
+                                    marginTop: 10,
+                                    marginLeft: 20,
+                                    height: 50,
+                                    flexDirection: 'row',
+                                    width: 120,
+                                    alignItems: 'center',
+                                }}>
+                                <SubmitButton disabled title={strings.Following}
+                                              onPress={() => followBusiness(businees._id, navigation)}/>
+                            </View> : <View
+                                style={{
+                                    marginTop: 10,
+                                    marginLeft: 20,
+                                    height: 50,
+                                    flexDirection: 'row',
+                                    width: 120,
+                                    alignItems: 'center',
+                                }}>
+                                <SubmitButton color='#2db6c8' title={strings.Follow}
+                                              onPress={() => followBusiness(businees._id, navigation)}/>
+                            </View>}
 
                     </View>
                 </View>
@@ -81,4 +88,9 @@ export default class BusinessList extends Component {
         return this.createView();
     }
 }
+
+export default connect(state => ({
+        currentBusinesses: state.businesses.businesses,
+    })
+)(BusinessList);
 

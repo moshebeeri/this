@@ -360,6 +360,8 @@ const il = {
     invitesYouToJoinCard                          : "{0}  מזמין אותך להצטרף לכרטיס חבר מועדון",
     InActive                                      : "לא ניתן כרגע למימוש",
     PromotionsWasCanceled                         : "ההנחה בוטלה",
+    percentTerm                                   : "קבל {0} במחיר מיוחד {1}",
+    Following                                     : "עוקב"
 
 };
 

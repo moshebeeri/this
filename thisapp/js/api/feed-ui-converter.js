@@ -491,8 +491,9 @@ class FeedConverter {
                     break;
                 case "PERCENT":
                     if (promotion.condition.product) {
+                        let price = parseInt(promotion.condition.product.retail_price) - (parseInt(promotion.percent.values[0]) / 100 * parseInt(promotion.condition.product.retail_price))
                         responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
-                        responseFeed.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                        responseFeed.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name,price)
                     } else {
                         responseFeed.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                         responseFeed.promotionTerm = strings.PercentTerm.formatUnicorn(promotion.percent.values[0])
@@ -620,8 +621,9 @@ class FeedConverter {
                 break;
             case "PERCENT":
                 if (promotion.condition.product) {
-                    response.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
-                    response.promotionTerm = strings.PercentTermWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                    let price = parseInt(promotion.condition.product.retail_price) - (parseInt(promotion.percent.values[0]) / 100 * parseInt(promotion.condition.product.retail_price))
+                    responseFeed.itemTitle = strings.PercentWithTerm.formatUnicorn(promotion.condition.product.name, promotion.percent.values[0]);
+                    responseFeed.promotionTerm = strings.percentTerm.formatUnicorn(promotion.condition.product.name,price)
                 } else {
                     response.itemTitle = "Get " + promotion.percent.values[0] + ' % Off ';
                     response.promotionTerm = strings.PercentTerm.formatUnicorn(promotion.percent.values[0])

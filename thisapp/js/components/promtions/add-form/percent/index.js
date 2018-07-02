@@ -185,6 +185,7 @@ export default class PercentComponent extends Component {
                     <TextInput field={strings.RetailPrice} value={this.props.state.percent.retail_price}
                                returnKeyType='next' ref="retail" refNext="retail"
                                keyboardType='numeric'
+                               onSubmitEditing={this.done.bind(this)}
                                onChangeText={(value) => this.setRetailPrice(value)} isMandatory={true}/>
                 </View>
                     <View style={[styles.inputTextLayout, {width: StyleUtils.getWidth() - 15}]}>
