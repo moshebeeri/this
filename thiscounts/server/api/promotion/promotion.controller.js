@@ -24,6 +24,7 @@ const Instance = require('../../components/instance');
 const groupCtrl = require('../group/group.controller');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const QRCode = require('../qrcode/qrcode.model');
+const fireEvent = require('../firebaseEvent');
 
 exports.search = MongodbSearch.create(Promotion);
 
@@ -559,13 +560,16 @@ exports.destroy = function (req, res) {
       return handleError(res, err);
     }
     if (!promotion) {
-      return res.send(404);
+      console.log('promotion not found');
+      return res.status(404).json('promotion not found');
     }
-    promotion.remove(function (err) {
+    promotion.deleted = true;
+    promotion.save(function (err) {
       if (err) {
         return handleError(res, err);
       }
-      return res.send(204);
+      fireEvent.info('promotion', req.params.id, 'promotion_deleted', {promotionId: req.params.id});
+      return res.status(200).json(promotion);
     });
   });
 };

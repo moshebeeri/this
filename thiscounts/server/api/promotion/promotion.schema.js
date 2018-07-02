@@ -39,6 +39,7 @@ const Variations = ['SINGLE', 'RANGE', 'VALUES'];
 let PromotionSchemaObject = {
   social_state : {},
   qrcode: {type: Schema.ObjectId, ref:'QRCode'},
+  deleted: {type: Boolean, default: false},
   qrcode_action: {
     action: {
       type: String,

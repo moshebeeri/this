@@ -1,14 +1,15 @@
 'use strict';
 
-let _ = require('lodash');
-let Product = require('./product.model');
-let Business = require('../business/business.model');
-let graphTools = require('../../components/graph-tools');
-let graphModel = graphTools.createGraphModel('product');
-let barcodeGraphModel = graphTools.createGraphModel('barcode');
+const _ = require('lodash');
+const Product = require('./product.model');
+const Business = require('../business/business.model');
+const graphTools = require('../../components/graph-tools');
+const graphModel = graphTools.createGraphModel('product');
+const barcodeGraphModel = graphTools.createGraphModel('barcode');
 const utils = require('../../components/utils').createUtils();
-let activity = require('../../components/activity').createActivity();
-let MongodbSearch = require('../../components/mongo-search');
+const activity = require('../../components/activity').createActivity();
+const MongodbSearch = require('../../components/mongo-search');
+const fireEvent = require('../firebaseEvent');
 
 barcodeGraphModel.model.setUniqueKey('code', true);
 
@@ -292,6 +293,7 @@ exports.destroy = function (req, res) {
       if (err) {
         return handleError(res, err);
       }
+      fireEvent.info('product', req.params.id, 'product_deleted', {productId: req.params.id});
       return res.status(200).json(product);
     });
   });
