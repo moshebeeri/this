@@ -34,33 +34,37 @@ exports.byEntity = function(req, res) {
       }    },
     function (err, results) {
       if (err) {
-        return console.log(err);
-      } else {
-        let qrcode;
-        let t;
-        for(let key in results) {
-          if(results[key].qrcode) {
-            qrcode = results[key].qrcode;
-            t = key;
-            break;
-          }
-        }
-        if(!qrcode)
-          return handleError(res, new Error(`no entity with qrcode found for id: {}`))
-        QRCode.findById(qrcode, function (err, qrcode) {
-          if (err) {return handleError(res, err)}
-          if (!qrcode) {return res.status(404).send()}
-          QRCodeImg.toDataURL(JSON.stringify({
-            t: t,
-            code: qrcode.code
-          }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
-            if (err) {
-              return res.status(500).send(err);
-            }
-            return res.status(200).send(url);
-          });
-        });
+        res.setHeader('content-type', 'text/html');
+        return res.status(500).send(`<html><body><h2>500 Internal Error - ${err.message}</h2></body></html>`);
       }
+      console.log(JSON.stringify(results));
+      let qrcode;
+      let t;
+      for(let key in results) {
+        if(results[key] && results[key].qrcode) {
+          qrcode = results[key].qrcode;
+          t = key;
+          break;
+        }
+      }
+      if(!qrcode){
+        res.setHeader('content-type', 'text/html');
+        return res.status(404).send(`<html><body><h2>No entity found with qrcode for id: ${id}</h2></body></html>`);
+      }
+      QRCode.findById(qrcode, function (err, qrcode) {
+        if (err) {return handleError(res, err)}
+        if (!qrcode) {return res.status(404).send()}
+        QRCodeImg.toDataURL(JSON.stringify({
+          t: t,
+          code: qrcode.code
+        }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          res.setHeader('content-type', 'text/html');
+          return res.status(200).send(`<html><body><img src="${url}"/></body></html>`);
+        });
+      });
     });
 };
 
