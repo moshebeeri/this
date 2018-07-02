@@ -24,7 +24,7 @@ const Instance = require('../../components/instance');
 const groupCtrl = require('../group/group.controller');
 const qrcodeController = require('../qrcode/qrcode.controller');
 const QRCode = require('../qrcode/qrcode.model');
-const fireEvent = require('../firebaseEvent');
+const fireEvent     = require('../../components/firebaseEvent');
 
 exports.search = MongodbSearch.create(Promotion);
 
