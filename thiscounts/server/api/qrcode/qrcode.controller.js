@@ -1,11 +1,72 @@
 'use strict';
-let QRCode = require('./qrcode.model');
+const QRCode = require('./qrcode.model');
 const QRCodeImg = require('qrcode');
 const randomstring = require("randomstring");
 const fs = require('fs');
 const path = require('path');
 const rootDir = path.normalize(`${path.resolve(__dirname)}`);
 const qr_opt = {errorCorrectionLevel: 'H', scale: 16};
+
+const async = require('async');
+const Card = require('../card/card.model');
+const CardType = require('../cardType/cardType.model');
+const Promotion = require('../promotion/promotion.model');
+const Group = require('../group/group.model');
+const Business = require('../business/business.model');
+
+exports.byEntity = function(req, res) {
+  const id= req.params.entity;
+  async.parallel({
+      business: function (callback) {
+        Business.findById(id, callback);
+      },
+      group: function (callback) {
+        Group.findById(id, callback);
+      },
+      promotion: function (callback) {
+        Promotion.findById(id, callback);
+      },
+      card: function (callback) {
+        Card.findById(id, callback);
+      },
+      cardType: function (callback) {
+        CardType.findById(id, callback);
+      }    },
+    function (err, results) {
+      if (err) {
+        res.setHeader('content-type', 'text/html');
+        return res.status(500).send(`<html><body><h2>500 Internal Error - ${err.message}</h2></body></html>`);
+      }
+      console.log(JSON.stringify(results));
+      let qrcode;
+      let t;
+      for(let key in results) {
+        if(results[key] && results[key].qrcode) {
+          qrcode = results[key].qrcode;
+          t = key;
+          break;
+        }
+      }
+      if(!qrcode){
+        res.setHeader('content-type', 'text/html');
+        return res.status(404).send(`<html><body><h2>No entity found with qrcode for id: ${id}</h2></body></html>`);
+      }
+      QRCode.findById(qrcode, function (err, qrcode) {
+        if (err) {return handleError(res, err)}
+        if (!qrcode) {return res.status(404).send()}
+        QRCodeImg.toDataURL(JSON.stringify({
+          t: t,
+          code: qrcode.code
+        }), {errorCorrectionLevel: 'H', scale: 16}, function (err, url) {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          res.setHeader('content-type', 'text/html');
+          return res.status(200).send(`<html><body><img src="${url}"/></body></html>`);
+        });
+      });
+    });
+};
 
 function allocate(quantity, userId) {
   function allocated(err, qrcode) {

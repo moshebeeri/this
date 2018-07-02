@@ -9,7 +9,7 @@ const barcodeGraphModel = graphTools.createGraphModel('barcode');
 const utils = require('../../components/utils').createUtils();
 const activity = require('../../components/activity').createActivity();
 const MongodbSearch = require('../../components/mongo-search');
-const fireEvent = require('../firebaseEvent');
+const fireEvent     = require('../../components/firebaseEvent');
 
 barcodeGraphModel.model.setUniqueKey('code', true);
 
