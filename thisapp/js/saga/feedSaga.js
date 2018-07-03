@@ -31,8 +31,7 @@ function* feedScrollDown(action) {
             yield put(loadingFeedsDone());
         } else {
             yield put(scrolling());
-            let keys = Object.keys(action.feeds);
-            let id = action.feeds[keys.length - 1].id;
+            let id = action.feeds[action.feeds.length - 1];
             response = yield call(feedApi.getAll, 'down', id, action.token, action.user);
             handleSucsess();
             if (response.length === 0) {

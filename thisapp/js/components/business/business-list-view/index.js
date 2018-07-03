@@ -184,7 +184,7 @@ export default class BusinessListView extends Component {
                                     businessName={item.business.name} noMargin businessView
                                     editButton={editButton}
                                     bgColor={'transparent'}
-                                    size={60}
+                                    size={55}
                                     textColor={'white'}/>
 
 

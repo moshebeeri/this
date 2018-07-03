@@ -54,20 +54,20 @@ class BusinessHeader extends Component {
         }
         if (businessLogo) {
             if (noProfile) {
-                return <View style={{margin: 10}}>
+                return <View style={{marginTop:15,margin: 10}}>
                     <View>
                         <ImageController thumbnail size={StyleUtils.scale(60)} source={{uri: businessLogo}}/>
                     </View>
                 </View>
             }
             if (small) {
-                return <TouchableOpacityFix style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
+                return <TouchableOpacityFix style={{marginTop:15,margin: 10}} onPress={this.showBusiness.bind(this)}>
                     <View>
                         <ImageController thumbnail size={StyleUtils.scale(36)} source={{uri: businessLogo}}/>
                     </View>
                 </TouchableOpacityFix>
             }
-            return <TouchableOpacityFix style={{margin: 10}} onPress={this.showBusiness.bind(this)}>
+            return <TouchableOpacityFix style={{marginTop:15,margin: 10}} onPress={this.showBusiness.bind(this)}>
                 <View>
                     <ImageController thumbnail size={defaultSize} source={{uri: businessLogo}}/>
                 </View>

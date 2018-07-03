@@ -51,7 +51,7 @@ export function setNextFeeds(feeds) {
         }
         dispatch({
             type: types.FEED_SCROLL_DOWN,
-            feeds: feeds,
+            feeds: getState().feeds.feedView,
             token: token,
             user: user,
         });

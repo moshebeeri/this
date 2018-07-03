@@ -55,6 +55,12 @@ export default function feeds(state = initialState, action) {
         case actions.SINGLE_FEED_FINISH_UPDATED:
             feedstate.shouldUpdateFeeds[action.id] = false;
             return feedstate;
+        case actions.SET_LOCATION:
+            Object.keys(feedstate.shouldUpdateFeeds).forEach(
+                key => feedstate.shouldUpdateFeeds[key] = true
+            );
+            feedstate.updated = true;
+            return feedstate;
         case actions.FEEDS_UPDATED: {
             return {
                 ...state,

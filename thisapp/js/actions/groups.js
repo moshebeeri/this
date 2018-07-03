@@ -233,9 +233,10 @@ export function setNextFeeds(feeds, token, group) {
         if (getState().groups.maxFeedReturned[group._id]) {
             return;
         }
+
         dispatch({
             type: types.GROUP_FEED_SCROLL_DOWN,
-            feeds: feeds,
+            feeds: getState().groups.groupFeedOrder[group._id],
             token: token,
             user: user,
             group: group,

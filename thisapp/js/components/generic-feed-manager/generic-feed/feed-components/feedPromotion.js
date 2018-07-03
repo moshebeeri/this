@@ -46,9 +46,6 @@ export default class FeedPromotion extends Component {
         this.state={savePressed: false};
     }
 
-    componentWillMount() {
-        const {item} = this.props;
-    }
 
     visited(visible) {
         const {item, actions, group} = this.props;
@@ -267,7 +264,7 @@ export default class FeedPromotion extends Component {
                 <LinearGradient start={{x: 1, y: 1}} end={{x: 1, y: 0}}
                                 locations={[0, 0.8]}
                                 colors={['#00000099', 'transparent']} style={{
-                    height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 10)),
+                    height: (item.promotion === 'PUNCH_CARD' ? StyleUtils.relativeHeight(30, 35) : StyleUtils.relativeHeight(15, 12)),
                     position: 'absolute',
                     justifyContent: 'flex-end',
                     backgroundColor: 'transparent',
@@ -289,7 +286,7 @@ export default class FeedPromotion extends Component {
                                     textColor={'white'}
                                     hideMenu={hideMenu}
 
-                                    size={60}
+                                    size={55}
                                     id={item.activityId} showActions={showActions}
                     />}
 
