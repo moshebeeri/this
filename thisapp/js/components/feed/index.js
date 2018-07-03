@@ -13,7 +13,9 @@ import {createSelector} from "reselect";
 import {View} from 'react-native';
 import {Fab,} from 'native-base';
 import navigationUtils from '../../utils/navigationUtils'
-
+import getStore from "../../store";
+import * as actionsConst from "../../reducers/reducerActions";
+const reduxStore = getStore();
 class Feed extends Component {
     constructor(props) {
         super(props);
@@ -21,10 +23,17 @@ class Feed extends Component {
             showFab: true,
             renderNow: true
         }
+        navigator.geolocation.getCurrentPosition((position) => {
+            reduxStore.dispatch({
+                type: actionsConst.SET_LOCATION,
+                currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
+            });
+        })
     }
 
     componentWillMount() {
         const {feeds, actions} = this.props;
+
         if (!feeds || feeds.length === 0) {
             actions.setNextFeeds(feeds);
         }else{
@@ -78,7 +87,7 @@ class Feed extends Component {
     }
 
     render() {
-        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem, visibleFeeds,shouldUpdateFeeds} = this.props;
+        const {activityAction, navigation, loadingDone, showTopLoader, feeds, userFollower, actions, token, user, location, nextBulkLoad, visibleItem, visibleFeeds,shouldUpdateFeeds,phone} = this.props;
         let icon = <Icon2 active size={40} name="md-create"/>;
         return (
             <View style={{flex: 1, backgroundColor: '#cccccc'}}>
@@ -138,6 +147,7 @@ const mapStateToProps = state => {
         feeds: getFeeds(state),
         shouldUpdateFeeds : state.feeds.shouldUpdateFeeds,
         location: state.phone.currentLocation,
+        phone:  state.phone,
         visibleItem: state.feeds.visibleFeed,
         visibleFeeds: state.feeds.visibleFeeds,
         isMain: state.render.isMain,

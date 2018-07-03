@@ -149,6 +149,14 @@ class ApplicationManager extends Component {
         FCM.getFCMToken().then(token => {
             PageRefresher.updateUserFireBase(token);
         });
+        navigator.geolocation.getCurrentPosition((position) => {
+            reduxStore.dispatch({
+                type: actions.SET_LOCATION,
+                currentLocation: {lat: position.coords.latitude, long: position.coords.longitude}
+            });
+        })
+
+
         this.state = {
             orientation: StyleUtils.isPortrait() ? 'portrait' : 'landscape',
             devicetype: StyleUtils.isTablet() ? 'tablet' : 'phone',
@@ -163,6 +171,7 @@ class ApplicationManager extends Component {
     }
 
     async componentWillMount() {
+
         this.props.myPromotionsAction.setFirstTime();
         this.props.groupsActions.fetchGroups();
         codePush.sync({
