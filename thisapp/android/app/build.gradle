@@ -120,8 +120,8 @@ android {
         applicationId "com.this"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 16
-        versionName "1.0.16"
+        versionCode 17
+        versionName "1.0.17"
         multiDexEnabled true
         resValue "string", "build_config_package", "com.groupys"
         ndk {
