@@ -4,11 +4,12 @@ import {
     Image,
     Keyboard,
     KeyboardAvoidingView,
+    Linking,
     Platform,
     ScrollView,
     Switch,
     TouchableOpacity,
-    View
+    View,
 } from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles'
@@ -32,6 +33,7 @@ import StyleUtils from '../../../utils/styleUtils'
 import {bindActionCreators} from "redux";
 import strings from "../../../i18n/i18n"
 import navigationUtils from '../../../utils/navigationUtils'
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const noPic = require('../../../../images/client_1.png');
 const {width, height} = Dimensions.get('window');
@@ -425,12 +427,11 @@ class AddGroup extends Component {
             width: StyleUtils.getWidth() - 10,
             flexDirection: 'row',
             backgroundColor: 'white',
-            alignItems:'center',
-
+            alignItems: 'center',
             height: StyleUtils.scale(70)
         }}>
             <ImageController thumbnail size={StyleUtils.scale(50)} source={source}/>
-            <ThisText style={{marginLeft:10,marginRight:10}}>{item.item.name}</ThisText>
+            <ThisText style={{marginLeft: 10, marginRight: 10}}>{item.item.name}</ThisText>
 
         </View>
     }
@@ -483,6 +484,11 @@ class AddGroup extends Component {
 
             </View>
         );
+    }
+
+    showQrcode() {
+        let group = this.props.navigation.state.params.group;
+        Linking.openURL(`${server_host}/api/qrcodes/` + group._id);
     }
 
     createView(qrcodeView, selectedGroupPolicy, BusinessPiker) {
@@ -555,7 +561,7 @@ class AddGroup extends Component {
 
                 </View>
 
-                {this.state.info &&  <View style={styles.inputTextLayour}>
+                {this.state.info && <View style={styles.inputTextLayour}>
 
                     {this.state.viewOnly ? <View>
                             <ThisText
@@ -579,6 +585,22 @@ class AddGroup extends Component {
                     </View>
                 </View>}
 
+                {this.state.viewOnly &&
+                <TouchableOpacity onPress={() => this.showQrcode()}
+                                  style={[styles.inputFullTextLayout, {marginTop:StyleUtils.scale(5),width: StyleUtils.getWidth() - 15}]}>
+                    <ThisText note
+                              style={{
+                                  fontSize: StyleUtils.scale(14),
+                                  color: '#A9A9A9',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  height: StyleUtils.scale(20),
+                                  marginLeft: 15
+                              }}>{strings.downloadGroupQrCode}</ThisText>
+
+                </TouchableOpacity>
+                }
+
                 {!this.state.updateMode && <View style={styles.groupSelectUserContainer}>
                     <SelectButton
                         client ref="selectUsers" selectedValue={this.state.selectedUsers} isMandatory
@@ -591,12 +613,12 @@ class AddGroup extends Component {
                 </View>}
                 <View style={{height: StyleUtils.scale(30), width: StyleUtils.getWidth()}}></View>
 
-                {(this.state.viewOnly ||  this.state.updateMode) &&  groupsFollowers[this.state.group._id] &&   <View style={styles.inputTextLayour}>
-                        <ThisText
-                            style={{marginLeft: 10, fontSize: 14, color: '#A9A9A9'}}>{strings.Members}</ThisText>
-                    </View>}
+                {(this.state.viewOnly || this.state.updateMode) && groupsFollowers[this.state.group._id] &&
+                <View style={styles.inputTextLayour}>
+                    <ThisText
+                        style={{marginLeft: 10, fontSize: 14, color: '#A9A9A9'}}>{strings.Members}</ThisText>
+                </View>}
                 {(this.state.viewOnly || this.state.updateMode) && groupsFollowers[this.state.group._id] && groupsFollowers[this.state.group._id].length > 0 &&
-
                 <GenericListManager rows={groupsFollowers[this.state.group._id]}
                                     onEndReached={this.nextGroupFollowers.bind(this)}
                                     ItemDetail={this.renderFollowerItem.bind(this)}/>

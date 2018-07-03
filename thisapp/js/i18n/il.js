@@ -362,7 +362,8 @@ const il = {
     PromotionsWasCanceled                         : "ההנחה בוטלה",
     percentTerm                                   : "קבל {0} במחיר מיוחד {1}",
     Following                                     : "עוקב",
-    Joined                                        : "מצורף"
+    Joined                                        : "מצורף",
+    downloadQrCode                                : "להורדת הקוד של העסק"
 
 };
 

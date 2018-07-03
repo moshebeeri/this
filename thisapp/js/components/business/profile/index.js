@@ -29,10 +29,11 @@ import ThisText from "../../../ui/ThisText/ThisText";
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import GenericListManager from '../../generic-list-manager'
 
 const noPic = require('../../../../images/client_1.png');
-
+//http://this.deals:9000/api/qrcodes/5b36066a4625e94a9e995fa3
 class BusinessProfile extends Component {
     static navigationOptions = ({navigation}) => ({
         header: null
@@ -210,6 +211,11 @@ class BusinessProfile extends Component {
         Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + encodeAddress);
     }
 
+    showQrcode() {
+        let business = this.getBusiness();
+        Linking.openURL(`${server_host}/api/qrcodes/` + business._id);
+    }
+
     getBusiness() {
         const {businesses} = this.props
         let business = businesses[this.props.navigation.state.params.businesses._id];
@@ -284,7 +290,7 @@ class BusinessProfile extends Component {
                                                                    style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"web"}/>
                                 <ThisText note style={{
-                                    fontSize: StyleUtils.scale(20),
+                                    fontSize: StyleUtils.scale(16),
                                     color: '#A9A9A9',
                                     marginLeft: 15
                                 }}>{business.website}</ThisText>
@@ -294,7 +300,7 @@ class BusinessProfile extends Component {
                                               style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"email-outline"}/>
                                 <ThisText note style={{
-                                    fontSize: StyleUtils.scale(20),
+                                    fontSize: StyleUtils.scale(16),
                                     color: '#A9A9A9',
                                     marginLeft: 15
                                 }}>{business.email}</ThisText>
@@ -304,7 +310,7 @@ class BusinessProfile extends Component {
                                               style={[styles.inputFullTextLayout, {width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons size={StyleUtils.scale(20)} name={"phone"}/>
                                 <ThisText note style={{
-                                    fontSize: StyleUtils.scale(20),
+                                    fontSize: StyleUtils.scale(16),
                                     color: '#A9A9A9',
                                     marginLeft: 15
                                 }}>{business.phone}</ThisText>
@@ -315,7 +321,7 @@ class BusinessProfile extends Component {
                                                                  style={[styles.inputFullTextLayout, {width:  StyleUtils.getWidth() -15}]}>
                                 <MaterialIcons size={StyleUtils.scale(20)} name={"description"}/>
                                 <ThisText note style={{
-                                    fontSize: StyleUtils.scale(20),
+                                    fontSize: StyleUtils.scale(16),
                                     color: '#A9A9A9',
                                     width: StyleUtils.scale(270),
                                     marginLeft: 15
@@ -326,7 +332,14 @@ class BusinessProfile extends Component {
                                               style={[styles.inputFullTextLayout, { width: StyleUtils.getWidth() - 15}]}>
                                 <MaterialCommunityIcons  size={StyleUtils.scale(20)} name={"map-marker"}/>
                                 <ThisText note
-                                          style={{fontSize:StyleUtils.scale(20), color: '#A9A9A9', alignItems:'center',justifyContent:'center',height:StyleUtils.scale(20),marginLeft: 15}}>{address}</ThisText>
+                                          style={{fontSize:StyleUtils.scale(16), color: '#A9A9A9', alignItems:'center',justifyContent:'center',height:StyleUtils.scale(20),marginLeft: 15}}>{address}</ThisText>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.showQrcode()}
+                                              style={[styles.inputFullTextLayout, { width: StyleUtils.getWidth() - 15}]}>
+                                <FontAwesome  size={StyleUtils.scale(20)} name={"qrcode"}/>
+                                <ThisText note
+                                          style={{fontSize:StyleUtils.scale(16), color: '#A9A9A9', alignItems:'center',justifyContent:'center',height:StyleUtils.scale(20),marginLeft: 15}}>{strings.downloadQrCode}</ThisText>
 
                             </TouchableOpacity>
                         </View>

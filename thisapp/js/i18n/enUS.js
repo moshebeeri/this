@@ -351,7 +351,9 @@ const enUS = {
     PromotionsWasCanceled                         : "Promotions Was Canceled",
     percentTerm                                   : "Get {0} with special price {1} ",
     Following                                     : "Following",
-    Joined                                        : "Joined"
+    Joined                                        : "Joined",
+    downloadQrCode                                : "Download Business QrCode",
+    downloadGroupQrCode                           : "Download Group QrCode"
 
 };
 
