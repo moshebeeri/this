@@ -321,6 +321,23 @@ const ar = {
     XYPatternGetOne                               : "اشترِ {0} {1} احصل على {2} مجانًا" ,
     XYPatternBuyOneGetOne                         : "اشترِ {0} احصل على {1} مجانًا" ,
     XForYTitleBuyOnePattern                       : "اشترِ {0} ادفع فقط {1}" ,
+    Points                                        : " نقاط الخصم ",
+    MinPointsTerm                                 : " العدد  الادنى من النقاط ",
+    PointsRatio                                   : "النسبه بين النقطه للشيكل",
+    PointsRatioExample                            : " على سبيل المثال : نقطتان تساوي شيكل واحد ",
+    PointsAccumulationRatio                       : " نسبه تجميع النقاط (%)",
+    PointsAccumulationExample                     : "على سبيل المثال ، 10 تعني أن المشتري 100 سيحصل على 10",
+    MemberCard                                    : "بطاقة  عضو",
+    CardOpen                                      : "مفتوح لكافة العملاء",
+    CardInvite                                    : "مفتوح للعملاء بأذن صاحب المصلحه",
+    CardPolicy                                    : "سياسة بطاقه العضويه",
+    Charge                                        : "اضف نقاط",
+    CardChargePointsMessage                       : "اضف نقاط ل  {0}",
+    PointsPromotionsDescription                   : "عدد النقاط لاستغلال الخصم",
+    PointsPromotionMessage                        : "* عدد نقاط العضويه للممارسة {0}",
+    InviteUser                                    : "ادعو مستخدم",
+    UserAlreadyInvited                            : "قد تم دعو المستخدم",
+    invitesYouToJoinCard                          : "{0} ادعوك للأنضمام لبطاقه العضويه"
 };
 
 export default ar;

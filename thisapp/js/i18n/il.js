@@ -346,7 +346,7 @@ const il = {
     PointsRatio                                   : "היחס בין נקדוה לשקל",
     PointsRatioExample                            : "לדוגמא 2 המשמעות היא ש 2 נקודות שוות 1 שקל",
     PointsAccumulationRatio                       : " יחס צבירת נקודות (%)",
-    PointsAccumulationExample                     : "לדוגמא 10 המשמעות שבקנייה של 100 נצבר 10 ",
+    PointsAccumulationExample                     : "לדוגמה, 10 פירושו ברכישה של 100 יקבל 10",
     MemberCard                                    : "כרטיס מועדון",
     CardOpen                                      : "פתוח לכל הלקוחות",
     CardInvite                                    : "פתוח ללקוחות באישור העסק",
